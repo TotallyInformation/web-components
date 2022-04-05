@@ -1,0 +1,23 @@
+{
+  "name": "@totallyinformation/web-components",
+  "version": "1.0.0",
+  "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TotallyInformation/web-components.git"
+  },
+  "keywords": [],
+  "author": "Julian Knight (Totally Information)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TotallyInformation/web-components/issues"
+  },
+  "homepage": "https://github.com/TotallyInformation/web-components#readme"
+}
