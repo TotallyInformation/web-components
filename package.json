@@ -1,19 +1,24 @@
 {
   "name": "@totallyinformation/web-components",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs": "docsify serve ./docs",
+    "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
+    "analyse": "npx web-component-analyzer ./components --format markdown"
+  },
+  "directories": {
+    "example": "./examples",
+    "doc": "./docs",
+    "lib": "./libs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TotallyInformation/web-components.git"
   },
-  "keywords": [],
+  "browserslist": ["> 0.5%", "maintained node versions", "last 2 versions", "not dead", "not ie > 0"],
+  "keywords": ["web-components", "node-red", "uibuilder", "node-red-contrib-uibuilder", "html"],
   "author": "Julian Knight (Totally Information)",
   "license": "Apache-2.0",
   "bugs": {
