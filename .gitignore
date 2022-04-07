@@ -105,4 +105,4 @@ dist
 
 # TI
 web-components.code-workspace
-_*
+.vscode/
