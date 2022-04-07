@@ -93,7 +93,7 @@ const returnHighlight = function (json) {
     return myHtml
 } // --- End of syntaxHighlight --- //
 
-export class SyntaxHighlight extends HTMLElement {
+export default class SyntaxHighlight extends HTMLElement {
 
     constructor() {
         super()
