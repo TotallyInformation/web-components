@@ -54,6 +54,18 @@ Components will automatically recognise when uibuilder is being used. They will 
 
 See the [component documentation](docs) for specific usage information for each component.
 
+### Visual Studio Code (VSCode) Intelligence
+
+VSCode supposts the use of HTML and CSS Custom Data JSON files that describe custom web components and CSS in a way that gives some intelligence to the editor when writing HTML and CSS code.
+
+This collection of web components uses [Web Component Analyzer](https://github.com/runem/web-component-analyzer) to help document the components. It is also used to create an html custom data file that can be added to VSCode or to a specific workspace or folder settings to provide additional Intellisense help for the components.
+
+To do so, find the html custom data setting in VSCode settings and add:
+
+```
+/path/to/totallyinformation/web-components/vscode-descriptors/ti-web-components.html-data.json
+```
+
 ## Discussions and suggestions
 
 The best place to ask questions, or suggest improvements about these components is the [GitHub discussion board for this repository](https://github.com/TotallyInformation/web-components/discussions).
