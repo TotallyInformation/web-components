@@ -18,7 +18,7 @@
     "url": "git+https://github.com/TotallyInformation/web-components.git"
   },
   "browserslist": ["> 0.5%", "maintained node versions", "last 2 versions", "not dead", "not ie > 0"],
-  "keywords": ["web-components", "node-red", "uibuilder", "node-red-contrib-uibuilder", "html"],
+  "keywords": ["web-components", "node-red", "uibuilder", "node-red-contrib-uibuilder", "html", "javascript", "web-components-library"],
   "author": "Julian Knight (Totally Information)",
   "license": "Apache-2.0",
   "bugs": {
