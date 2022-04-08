@@ -9,6 +9,6 @@ See the main README for how to install and use.
 
 ## Components
 
-* [`syntax-highlight`](./syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
 * [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data.
 * [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
+* [`syntax-highlight`](./syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
