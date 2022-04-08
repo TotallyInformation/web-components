@@ -3,7 +3,85 @@
   "tags": [
     {
       "name": "button-send",
-      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperties:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_data` - Create the output for _meta.data from the data-* attributes @type {*}\n\n  * `_name` - Grab the HTML name attribute for use in the output _meta.name @type {string}\n\n  * `_msg` - Put together the output data {topic, payload, _meta} @type {object}\n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent}",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: string | { [x: string]: string | undefined; }; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - The topic to include in the output @type {string}\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - The topic to include in the output @type {string}\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_msg` - The output msg @type {object}\n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: string | {}; _meta: { id: string; name: string | null; data: {}; }; }>`} - Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent}",
+      "attributes": [
+        {
+          "name": "topic",
+          "description": "`topic` {string} - The topic to include in the output @type {string}\n\nProperty: topic\n\nDefault: "
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
+          "values": [
+            {
+              "name": "any"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onbutton-send:click",
+          "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: string | { [x: string]: string | undefined; }; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuibuilder.send",
+          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set."
+        }
+      ]
+    },
+    {
+      "name": "button-send",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperties:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "attributes": [
+        {
+          "name": "payload",
+          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload",
+          "values": [
+            {
+              "name": "any"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "topic",
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n"
+        },
+        {
+          "name": "onbutton-send:click",
+          "description": "`button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuibuilder.send",
+          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set."
+        }
+      ]
+    },
+    {
+      "name": "definition-list",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperties:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
       "attributes": [
         {
           "name": "payload",
