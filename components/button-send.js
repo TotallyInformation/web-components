@@ -4,7 +4,7 @@
  * 
  * See ./docs/button-send.md for detailed documentation on installation and use.
  * 
- * @version: 1.0.0 2022-04-07
+ * @version: 1.0.1 2022-04-07
  * 
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  * 
@@ -112,23 +112,44 @@ export default class ButtonSend extends HTMLElement {
         return this.shadowRoot && this.shadowRoot.querySelector(selection)
     }
 
+    /** fn to run when the button is clicked
+     * @param {MouseEvent} evt The event object
+     */
+    handleClick(evt) {
+        evt.preventDefault()
+        this._msg.topic = this.topic
+        this._msg.payload = this.payload ? this.payload : {...this.dataset}
+        const meta = this._msg._meta
+        meta.altKey = evt.altKey
+        meta.ctrlKey = evt.ctrlKey
+        meta.shiftKey = evt.shiftKey
+        meta.metaKey = evt.metaKey
+        
+        /** Output a custom document event `button-send:click`, data is in evt.details */
+        document.dispatchEvent(this._clickEvt)
+        /** Send a message to uibuilder with the output data */
+        this.uibuilder.send(this._msg)
+    }
+
     constructor() {
         super()
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
-        /** Create the output for _meta.data from the data-* attributes @type {*} */
-        this._data = {...this.dataset} // All of the data-* attributes as an object
-        /** Grab the HTML name attribute for use in the output _meta.name @type {string} */
-        this._name = this.getAttribute('name')
-        /** Put together the output data {topic, payload, _meta} @type {object} */
+        const mydata = {...this.dataset}
+
+        /** The topic to include in the output @type {string} */
+        this.topic = ''
+        /** The payload to include in the output @type {string|object} */
+        this.payload = ''
+        /** The output msg @type {object} */
         this._msg = {
-            'topic': this.topic,
-            'payload': this.payload ? this.payload : this._data,
-            '_meta': {
+            topic: this.topic,
+            payload: this.payload ? this.payload : mydata,
+            _meta: {
                 id: this.id,
-                name: this._name,
-                data: this._data, // All of the data-* attributes as an object
+                name: this.getAttribute('name'),
+                data: mydata, // All of the data-* attributes as an object
             }
         }
 
@@ -137,34 +158,17 @@ export default class ButtonSend extends HTMLElement {
 
         /** Get a reference to the uibuilder FE client library if possible */
         try {
+            // @ts-ignore
             this.uibuilder = window.uibuilder
         } catch (e) {
             this.uibuilder = undefined
         }
 
-        /** Listen for the button click */
-        this.addEventListener('click', evt => {
-            evt.preventDefault()
-            this._msg._meta = {
-                id: this.id,
-                name: this._name,
-                data: this._data, // All of the data-* attributes as an object
-                altKey: evt.altKey,
-                ctrlKey: evt.ctrlKey,
-                shiftKey: evt.shiftKey,
-                metaKey: evt.metaKey,
-            }
-            /** Output a custom document event `button-send:click`, data is in evt.details */
-            document.dispatchEvent(this._clickEvt)
-            /** Send a message to uibuilder with the output data */
-            this.uibuilder.send(this._msg)
-        })
-
     }
 
-    static get observedAttributes() {
-        return ['topic', 'payload']
-    }
+    static get observedAttributes() { return [
+        'topic', 'payload'
+    ] }
 
     attributeChangedCallback(name, oldVal, newVal) {
 
@@ -172,12 +176,18 @@ export default class ButtonSend extends HTMLElement {
 
         this[name] = newVal
 
-        //console.log('>> attrib change >>', name, newVal)
-
     } // --- end of attributeChangedCallback --- //
 
-    // when the component is added to doc
-    //connectedCallback() {}
+    // when the component is added to the dom
+    connectedCallback() {
+        /** Listen for the button click */
+        this.addEventListener('click', this.handleClick)      
+    }
+
+    // when the component is removed from the dom
+    disconnectedCallback() {
+        this.removeEventListener('click', this.handleClick)
+    }
 
 } // ---- End of ButtonSend class definition ---- //
 

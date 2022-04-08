@@ -3,13 +3,17 @@ title: button-send
 description: >
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-lastUpdated: 2022-04-07 17:42:47
+lastUpdated: 2022-04-07 21:16:54
 ---
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name
 
 ## Usage
+
+You can use this with or without Node-RED and uibuilder but it is most use when used with uibuilder since the button will, on clicking, send a message back to Node-RED with no JavaScript code required.
+
+When used without uibuilder, you need to detect the custom event that is fired on the document object.
 
 ### Without uibuilder
 
@@ -22,7 +26,7 @@ includes a _meta object showing whether any modifier keys were used, the element
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Can load the web components here as type=module but you have to load them in the right order.
+    <!-- Can load the web components here as type=module but you have to load everything in the right order.
          Alternatively, use a dynamic import in index.js -->
     <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script>
 
@@ -163,10 +167,8 @@ document.addEventListener('button-send:click', function (e) {
 // Start up uibuilder
 uibuilder.start() 
 
-// Listen for incoming messages from Node-RED
-// uibuilder.onChange('msg', function (msg) {
-//     console.log('>> msg recvd >>', msg)
-// })
+// No code is needed for the buttons to send messages back to Node-RED via uibuilder
+// this happens behind the scenes in the component.
 
 // If we want to pass a complex payload, we have to use this method
 // because element attributes can only be a string.
@@ -175,12 +177,11 @@ btn.payload = {
     "a":"one",
     "b":"two"
 }
-
-// Listen for the custom click event. e.detail contains the same data as the msg to uibuilder
-document.addEventListener('button-send:click', function (e) {
-    console.log('>> EVENT button-send:click >>', e.detail)
-})
 ```
+
+----
+
+The remainder of this documentation is produced using [web-component-analyzer](https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc)
 
 ## Attributes
 
@@ -189,25 +190,26 @@ document.addEventListener('button-send:click', function (e) {
 | `data-*`  | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
 | `id`      | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
 | `name`    | `string` | Optional. HTML name attribute. Included in output _meta prop. |
-| `topic`   | `string` | Optional. Topic string to use. Mostly for node-red messages |
 
 ## Properties
 
-| Property  | Attribute | Type          | Description                                      |
-|-----------|-----------|---------------|--------------------------------------------------|
-| `payload` | `payload` | `any\|string` | Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only. |
+| Property  | Attribute | Type          | Default | Description                                      |
+|-----------|-----------|---------------|---------|--------------------------------------------------|
+| `payload` | `payload` | `any\|string` | ""      | Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only. |
+| `topic`   | `topic`   | `string`      | ""      | The topic to include in the output @type {string} |
 
 ## Methods
 
-| Method | Type                                             | Description                                      |
-|--------|--------------------------------------------------|--------------------------------------------------|
-| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement \| HTMLObjectElement \| HTMLAnchorElement \| ... 66 more ... \| null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+| Method        | Type                                             | Description                                      |
+|---------------|--------------------------------------------------|--------------------------------------------------|
+| `$`           | `(selection: keyof HTMLElementTagNameMap): `<br>`  HTMLElement \| HTMLObjectElement \| HTMLAnchorElement \|`<br>`  ... 66 more ... \| null` | Mini jQuery-like shadow dom selector |
+| `handleClick` | `(evt: MouseEvent): void`                        | fn to run when the button is clicked<br /><br />**evt**: The event object |
 
 ## Events
 
 | Event               | Type                                             | Description                                      |
 |---------------------|--------------------------------------------------|--------------------------------------------------|
-| `button-send:click` | `CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
+| `button-send:click` | `CustomEvent<{ topic: string; payload: string \|`<br>` { [x: string]: string \| undefined; };`<br>`_meta: { id: string; name: string \|`<br>` null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |        
 | `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
 
 ## Slots
