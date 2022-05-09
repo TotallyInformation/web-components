@@ -2,21 +2,42 @@
 
 A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.
 
+> **NOTE**: Currently, all of the components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change. Also note that the documentation is incomplete and may be wrong in places.
+
 Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.
+
+## Components
+
+Please note the warning about these being experimental right now. But please do give them a go and let me have some feedback.
+
+Note that all of these components make use of the new `uib-brand.css` stylesheet which is light/dark switchable and all based off CSS variables and calculations so is very flexible.
+
+| Name                | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
+| `button-send`       | A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data. |
+| `data-list`         | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
+| `definition-list`   | Similar to `data-list` but outputs a DL instead.             |
+| `html-include`      | Dynamically load external HTML content very easily without needing an iFrame. |
+| `simple-card`       | A card container with optional header and footer. |
+| `simple-container`  | A UI container for easy, automated layout of contained elements (specifically cards). |
+| `syntax-highlight`  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
+| `uib-theme-changer` | This only works with the `uib-brand` stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours. |
+
 
 ## Requirements
 
 These are the requirements for any web component to be included in this repository.
 
-* MUST be standalone with no external requirements. Common include library modules may be permitted however.
-* MUST be useable in the majority of modern browsers. IE will not be supported.
+* MUST be standalone with no external requirements. Common internal library modules may be permitted however.
+* MUST be useable in the majority of modern browsers, anything supporting ES2019+ should be usable. IE will not be supported.
 * MUST use ES6+. Maxumum JavaScript version should be 2 years behind the leading edge and only features supported by the majority of mainstream browsers are allowed. Other features MAY be permitted as long as they are optional and do not produce errors.
-* MUST be linted using ESLINT. SHOULD use JavaScript Standard format.
+* MUST be linted using ESLINT. SHOULD use JavaScript Standard format (with some variations documented in the `.eslintrc.js` file).
 * MUST self-register the custom tag using `customElements.define`.
 * MUST use a Class name using a _CamelCase_ version of the component name with an initial upper-case letter (e.g. `syntax-highlight` will be `export default class SyntaxHighlight extends HTMLElement { ... }` ).
   
 * SHOULD have a `<slot>` to allow nested rich content (where it makes sense).
 * SHOULD export a _camelCase_ version of the component-name which contains any useful methods and data. (e.g. `syntax-highlight` should export `syntaxHighlight`).
+* SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
 
 ### HTML Standards limitations
 
@@ -27,20 +48,55 @@ These are the requirements for any web component to be included in this reposito
 
 You can use these components directly from the jsdelivr CDN by referencing like: `https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js`. So no install is required if you are happy to load from the Internet.
 
+### Local installation
+
 If you wish to install locally, you can npm install from the GitHub repository with `npm install totallyinformation/web-components`. If these ever get published to npm, you would install with `npm install @totallyinformation/web-components`. However, note that, at this point, I am not intending to publish them quickly as they are still evolving quite rapidly.
 
 If installing locally, you will need to make the installed `web-components/components/` folder available to your web server as a static resource folder.
 
+### Using with Node-RED and uibuilder
+
 If using with Node-RED, you can install the components with the help of node-red-contrib-uibuilder. The uibuilder node has a library manager feature and you should use that to install the repository direct from GitHub (requires uibuilder v5+). In that case, uibuilder adds the repository to its web server and you can access them as: `../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js`. See below for details.
+
+Also for Node-RED, you may wish to try out the experimental `libs/uibuilder.module.js` front-end library. See the documentation in the same folder. And you will probably want to use the css file from that same folder.
+
+### Loading components into your web page
 
 The individual component documentation contains details on how to load the component files. In general, however, there are two choices on how to load them. 
 
-You can either load them in your HTML file as `<script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script>` for example (or from the local resource of course). 
+#### Load as an ECMA module
 
-Alternatively, you can load them in your main JavaScript script using dynamic imports as `import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')` (requires a modern browser supporting ES6+ so no Internet Explorer without some pollyfills). The potential advantage of this approach is that you can access exported variables and methods from the component if any are available (see the syntax-highlight component for an example). Typically, each component will at least export a camelCase equivalent of the component name (e.g. `button-send` with export `buttonSend`) with useful methods and data for use without uibuilder. Dynamic imports are supported by all common modern browsers and you don't need to load you main script as a module in order to use it. However, if you do load your index.js as a module as with `<script type="module" src="./index.js"></script>` in the head, then you can use a static import if you prefer.
+This is the preferred method. However, it is generally best to load via a script module. While you can load them via your HTML as a script link, you loose some capability this way.
 
-Please do note that dynamic imports are async. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level 
+```html
+<script type="module" async>
+   import '../uibuilder/vendor/@totallyinformation/web-components/components/simple-container.js'
+</script>
+```
 
+#### Load from HTML with a script tag
+
+They **must** be loaded as a type "module".
+
+```html
+<script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script>
+```
+
+Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.
+
+#### Load from a standard script
+
+Alternatively, you can load them in your main JavaScript script using dynamic imports as:
+
+```html
+<script defer async>
+   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
+</script>
+```
+
+The disadvantage of this method is that the import function is asynchronous and so your own code may try to execute before the module has loaded. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level async or the promise-style then/catch.
+
+The potential advantage of this approach is that you can access exported variables and methods from the component if any are available (see the syntax-highlight component for an example). 
 
 
 ## Stand-alone use
