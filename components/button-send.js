@@ -104,6 +104,24 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ `
  * @csspart button - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class ButtonSend extends HTMLElement {
+    sendEvents = true
+    /** The topic to include in the output
+     * @type {string|undefined} */
+    topic
+    /** The payload to include in the output
+     * @type {any} */
+    payload
+    /** Standard _ui object to include in msgs */
+    _ui = {
+        type: 'button-send',
+        event: undefined,
+        id: undefined,
+        name: undefined,
+        data: undefined, // All of the data-* attributes as an object
+    }
+    /** The output msg @type {object} */
+    _msg = {}
+    
 
     /** Mini jQuery-like shadow dom selector
      * @param {keyof HTMLElementTagNameMap} selection HTML element selector
@@ -112,59 +130,57 @@ export default class ButtonSend extends HTMLElement {
         return this.shadowRoot && this.shadowRoot.querySelector(selection)
     }
 
+    _setMsg(evtName) {
+        const mydata = {...this.dataset}
+        this._msg.topic = this.topic
+        this._msg.payload = this.payload ? this.payload : mydata
+        this._msg._ui = {...this._ui}
+        if (evtName) this._msg._ui.event = evtName
+        if ( this.id !== '') this._msg._ui.id = this.id
+        const n = this.getAttribute('name')
+        if ( n !== null ) this._msg._ui.name = n
+        this._msg._ui.data = mydata // All of the data-* attributes as an object
+    }
+
     /** fn to run when the button is clicked
      * @param {MouseEvent} evt The event object
      */
     handleClick(evt) {
         evt.preventDefault()
-        this._msg.topic = this.topic
-        this._msg.payload = this.payload ? this.payload : {...this.dataset}
-        const meta = this._msg._meta
-        meta.altKey = evt.altKey
-        meta.ctrlKey = evt.ctrlKey
-        meta.shiftKey = evt.shiftKey
-        meta.metaKey = evt.metaKey
+        this._setMsg('click')
+        this._msg._ui.altKey = evt.altKey
+        this._msg._ui.ctrlKey = evt.ctrlKey
+        this._msg._ui.shiftKey = evt.shiftKey
+        this._msg._ui.metaKey = evt.metaKey
         
         /** Output a custom document event `button-send:click`, data is in evt.details */
         document.dispatchEvent(this._clickEvt)
         /** Send a message to uibuilder with the output data */
-        this.uibuilder.send(this._msg)
+        if (window.uibuilder) window.uibuilder.send(this._msg)
+        // else console.debug('[ButtonSend:handleClick] uibuilder not available, cannot send')
     }
 
     constructor() {
+
         super()
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
         const mydata = {...this.dataset}
 
-        /** The topic to include in the output @type {string} */
-        this.topic = ''
-        /** The payload to include in the output @type {string|object} */
-        this.payload = ''
         /** The output msg @type {object} */
-        this._msg = {
-            topic: this.topic,
-            payload: this.payload ? this.payload : mydata,
-            _meta: {
-                id: this.id,
-                name: this.getAttribute('name'),
-                data: mydata, // All of the data-* attributes as an object
-            }
-        }
+        this._setMsg('component load')
 
         /** Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent} */
         this._clickEvt = new CustomEvent('button-send:click', {'detail': this._msg})
 
-        /** Get a reference to the uibuilder FE client library if possible */
-        try {
-            // @ts-ignore
-            this.uibuilder = window.uibuilder
-        } catch (e) {
-            this.uibuilder = undefined
-        }
+        /** Registration event @type {CustomEvent} */
+        // document.dispatchEvent( new CustomEvent('button-send:loaded', {'detail': {}}) )
+        //
+        // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
 
-    }
+
+    } // --- end of constructor --- //
 
     static get observedAttributes() { return [
         'topic', 'payload'
@@ -176,12 +192,25 @@ export default class ButtonSend extends HTMLElement {
 
         this[name] = newVal
 
+        // Event
+        this._setMsg('attribute change')
+        document.dispatchEvent( new CustomEvent('button-send:attributeChangedCallback', {'detail': {name:name,oldVal:oldVal,newVal:newVal}}) )
+        if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({
+            payload: {name:name,oldVal:oldVal,newVal:newVal},
+            _ui: {...this._ui}
+        })
+
     } // --- end of attributeChangedCallback --- //
 
     // when the component is added to the dom
     connectedCallback() {
         /** Listen for the button click */
-        this.addEventListener('click', this.handleClick)      
+        this.addEventListener('click', this.handleClick)
+
+        /** Instance registration event @type {CustomEvent} */
+        // this._setMsg('instance load')
+        // document.dispatchEvent( new CustomEvent('button-send:instanceAdded', {'detail': this._msg._ui}) )
+        // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
     }
 
     // when the component is removed from the dom
@@ -190,6 +219,12 @@ export default class ButtonSend extends HTMLElement {
     }
 
 } // ---- End of ButtonSend class definition ---- //
+
+/** Self register the class to global
+ * Enables new data lists to be dynamically added via JS
+ * and lets the static methods be called
+ */
+ window.ButtonSend = ButtonSend
 
 // Add the class as a new Custom Element to the window object
 customElements.define('button-send', ButtonSend)
