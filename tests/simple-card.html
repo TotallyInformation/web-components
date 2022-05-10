@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <title>Web Component Test: simple-container and simple-card</title>
+
+    <style>
+        @import url("../libs/uib-brand.css");
+        /* Can override the base hue and the accent colours and other things too */
+        /* :root {
+            --brand-hue: 200;
+            --accent-offset: 30;
+        } */
+    </style>
+
+    <script type="module" async >
+        // These assume you are using Node-RED/uibuilder
+        import '../libs/uibuilder.module.js'  // Adds `uibuilder` and `$` to globals
+        import '../components/simple-container.js'
+        import '../components/simple-card.js'
+        import '../components/uib-theme-changer.js'
+
+        // An EventListener added here cannot pick up the initial setup but will pick up later events
+        // However, uibuilder and $ are available.
+        uibuilder.start()
+
+    </script>
+
+</head><body>
+    <uib-theme-changer></uib-theme-changer>
+    <h1>Demonstrating Web Components</h1>
+    <p>This example uses <code>&lt;simple-container</code> and <code>&lt;simple-card></code>.</p>
+    <p>
+        The container component uses a flex row layout. The card component has header and footer slots.
+    </p>
+
+    <simple-container>
+        <simple-card>
+            Hello, in a card
+            <span slot="header">Some other header</span>
+            <span slot="footer">Some footer</span>
+        </simple-card>
+        <simple-card name="This Is a name">
+            Another card
+        </simple-card>
+        <simple-card id="card3" data-something="Hello">
+            Card #3
+        </simple-card>
+    </simple-container>
+
+    <script>
+        // Event Listeners set in module scripts wont get set up early enough to pick up the initial component load events
+        // BUT an ordinary script like this WILL trigger early enough.
+        // HOWEVER, this triggers so early that if you load uibuilder in a module script, it
+        //   wont be available here immediately. You would have to wait for ~300 ms.
+
+        // document.addEventListener('simple-card:connected', e => {
+        //     console.log('>> (document) EVENT simple-card:connected >>', e.target, e.detail)
+        // })
+
+        // This CAN pick up the initial setup event
+        // document.addEventListener('simple-card:attribChanged', e => {
+        //     console.log('>> (document) EVENT simple-card:attribChanged >>', e.target, e.detail)
+        // })
+
+        // Things set up in uibuilder won't be available here for ~300ms
+        // setTimeout(function(){
+        //     console.log('HELLO', window.$)
+        //     $('#card3').setAttribute("name", "helloButton")
+        // }, 300)
+
+        // We can also listen at the component instance level:
+        // const sc = document.getElementsByTagName('simple-card')
+        // for (const i of sc) {
+        //     // When the component constructor is run
+        //     // i.addEventListener('simple-card:construction', e => {
+        //     //     console.log('>> EVENT simple-card:construction >>', e)
+        //     // })
+            
+        //     // When the component instance is connected to the DOM
+        //     // i.addEventListener('simple-card:connected', e => {
+        //     //     console.log('>> EVENT simple-card:connected >>', e)
+        //     // })
+
+        //     // When the component instance is disconnected from the DOM
+        //     // i.addEventListener('simple-card:disconnected', e => {
+        //     //     console.log('>> EVENT simple-card:disconnected >>', e)
+        //     // })
+
+        // }
+    </script>
+</body></html>
