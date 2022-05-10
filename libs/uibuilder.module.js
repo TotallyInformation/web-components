@@ -332,7 +332,7 @@ export const Uib = class Uib {
             // Can only set headers when polling
             polling: {
                 extraHeaders: {
-                    'x-clientid': `uibuilderfe; ${self.clientId}`,
+                    'x-clientid': `uibuilderfe; ${this.clientId}`,
                     //Authorization: 'test', //TODO: Replace with self.jwt variable? // Authorization: `Bearer ${your_jwt}`
                 }
             },
@@ -653,7 +653,7 @@ export const Uib = class Uib {
             if (!compToAdd.slot) compToAdd.slot = payload
             if (compToAdd.slot) {
                 // If DOMPurify is loaded, apply it now
-                if (window.DOMPurify) compToAdd.slot = DOMPurify.sanitize(compToAdd.slot)
+                if (window['DOMPurify']) compToAdd.slot = window['DOMPurify'].sanitize(compToAdd.slot)
                 // Set the component content to the msg.payload or the slot property
                 if (compToAdd.slot !== undefined && compToAdd.slot !== null && compToAdd.slot !== '')
                     newEl.innerHTML = compToAdd.slot ? compToAdd.slot : payload
@@ -661,23 +661,23 @@ export const Uib = class Uib {
             //#endregion
 
             //#region Add Slot Markdown content to innerHTML IF marked library is available
-            if (window.markdownit && compToAdd.slotMarkdown) {
+            if (window['markdownit'] && compToAdd.slotMarkdown) {
                 const opts = {
                     html: true, linkify: true, _highlight: true, langPrefix: 'language-',
                     highlight(str, lang) {
-                        if (lang && window.hljs && window.hljs.getLanguage(lang)) {
+                        if (lang && window['hljs'] && window['hljs'].getLanguage(lang)) {
                             try {
                                 return `<pre class="highlight" data-language="${lang.toUpperCase()}">
-                                        <code class="language-${lang}">${window.hljs.highlightAuto(str).value}</code></pre>`
+                                        <code class="language-${lang}">${window['hljs'].highlightAuto(str).value}</code></pre>`
                             } finally { }
                         }
                         return `<pre class="highlight"><code>${md.utils.escapeHtml(str)}</code></pre>`
                     },
                 }
-                const md = window.markdownit(opts)
+                const md = window['markdownit'](opts)
                 compToAdd.slotMarkdown = md.render(compToAdd.slotMarkdown)
                 // If DOMPurify is loaded, apply it now
-                if (window.DOMPurify) compToAdd.slotMarkdown = DOMPurify.sanitize(compToAdd.slotMarkdown)
+                if (window['DOMPurify']) compToAdd.slotMarkdown = window['DOMPurify'].sanitize(compToAdd.slotMarkdown)
                 // Set the component content to the msg.payload or the slot property
                 if (compToAdd.slotMarkdown !== undefined && compToAdd.slotMarkdown !== null && compToAdd.slotMarkdown !== '')
                     newEl.innerHTML += compToAdd.slotMarkdown ? compToAdd.slotMarkdown : payload
