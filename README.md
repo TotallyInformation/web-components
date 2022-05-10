@@ -23,6 +23,34 @@ Note that all of these components make use of the new `uib-brand.css` stylesheet
 | `syntax-highlight`  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
 | `uib-theme-changer` | This only works with the `uib-brand` stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours. |
 
+## Other supporting files and folders
+
+* `docs/` - documentation.
+
+* `tests/` - stand-alone web pages that demonstrate the components.
+
+  Note that to test these from within Node-RED, you will need to use a URL something like:
+
+  `http://localhost:1880/uibuilder/vendor/@totallyinformation/web-components/tests/simple-card.html`
+
+  Note that loading direct like this, the uibuilder connection will not work unless you change the `uibuilder.start()` parameters to match a deployed uibuilder instance. It is better to copy the test files into the `src` folder of a deployed uibuilder node and to adjust the URL's accordingly. The normal urls for the components when copied to your own uibuilder instance will be `../uibuilder/vendor/@totallyinformation/web-components/components/simple-card.js`, `../uibuilder/vendor/@totallyinformation/web-components/libs/uibuilder.module.js`, etc.
+
+  If you want to use the files with CDN versions of the modules, you will need to copy them and change all of the URL's. The test files are set up to work from having the repo installed under uibuilder in Node-RED.
+
+* `vscode-descriptors/ti-web-components.html-data.json`
+
+  Enables IntelliSense for the components while editing HTML in VSCode.
+
+  May not always be in step with the code until everything is finalised.
+
+* `libs/uibuilder.module.js` - an alternative, uibuilder v5 compatible client library specifically designed for use as an ECMA module. Not quite feature comparible with the standard `uibuilderfe.js` library but is the future direction of the client. Written as a class, self-loads the correct socket.io client library, has brand new logging features. Provides a simple, jQuery like `$` selector function.
+
+  Most importantly, it contains a new, data-driven UI creator that lets you send configuration messages to build a UI dynamically.
+
+  Still a work in progress but quite usable already.
+
+* `libs/uib-brand.css` - a copy of the alternate (new) stylesheet from uibuilder that these components can use.
+
 
 ## Requirements
 

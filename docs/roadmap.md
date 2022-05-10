@@ -10,24 +10,6 @@ lastUpdated: 2022-05-09 19:49:19
 
 Please see the main README file.
 
-## Other supporting files and folders
-
-* `docs/`
-
-* `vscode-descriptors/ti-web-components.html-data.json`
-
-  Enables IntelliSense for the components while editing HTML in VSCode.
-
-  May not always be in step with the code until everything is finalised.
-
-* `libs/uibuilder.module.js` - an alternative, uibuilder v5 compatible client library specifically designed for use as an ECMA module. Not quite feature comparible with the standard `uibuilderfe.js` library but is the future direction of the client. Written as a class, self-loads the correct socket.io client library, has brand new logging features. Provides a simple, jQuery like `$` selector function.
-
-  Most importantly, it contains a new, data-driven UI creator that lets you send configuration messages to build a UI dynamically.
-
-  Still a work in progress but quite usable already.
-
-* `libs/uib-brand.css` - a copy of the alternate (new) stylesheet from uibuilder that these components can use.
-
 ## Changes/Improvements to Existing Components
 
 * 
