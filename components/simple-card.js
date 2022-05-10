@@ -61,7 +61,12 @@ if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matc
 // const bgStyle = window.getComputedStyle(document.body.children[0], null)
 // console.log('bgStyle', bgStyle.color, bgStyle.background, bgStyle)
 
-function html(strings) { return strings } // just for syntax highlighting in VSCode
+// just for syntax highlighting in VSCode
+function html(strings, ...keys) {
+    return strings.map( (s, i) => {
+        return s + (keys[i] || '')
+    }).join('')
+}
 
 const template = document.createElement('template')
 template.innerHTML = html`

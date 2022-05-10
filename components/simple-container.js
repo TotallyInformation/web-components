@@ -26,8 +26,15 @@
  * limitations under the License.
  **/
 
+// just for syntax highlighting in VSCode
+function html(strings, ...keys) {
+    return strings.map( (s, i) => {
+        return s + (keys[i] || '')
+    }).join('')
+}
+
 const template = document.createElement('template')
-template.innerHTML = /*html*/ `
+template.innerHTML = html`
     <style>
         :host {
             display:flex;
