@@ -15,9 +15,11 @@ Note that all of these components make use of the new `uib-brand.css` stylesheet
 | Name                | Description                                                  |
 | ------------------- | ------------------------------------------------------------ |
 | `button-send`       | A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data. |
+| `container-br`      | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
 | `data-list`         | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
 | `definition-list`   | Similar to `data-list` but outputs a DL instead.             |
 | `html-include`      | Dynamically load external HTML content very easily without needing an iFrame. |
+| `labelled-value`    | Text output with a label.                                    |
 | `simple-card`       | A card container with optional header and footer. |
 | `simple-container`  | A UI container for easy, automated layout of contained elements (specifically cards). |
 | `syntax-highlight`  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
