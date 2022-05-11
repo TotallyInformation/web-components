@@ -1,18 +1,18 @@
 /** A zero dependency button web component that sends a msg or a document event when clicked.
  *  Contains relevant data from data-*, topic and payload attributes (or properties),
  *  includes a _meta object showing whether any modifier keys were used, the element id/name.
- * 
+ *
  * See ./docs/button-send.md for detailed documentation on installation and use.
- * 
+ *
  * @version: 1.0.1 2022-04-07
- * 
+ *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
- * 
+ *
  * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
  *     or paste into https://runem.github.io/web-component-analyzer/
  * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
  *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
- * 
+ *
  * To Do:
  * - Allow colour and background colour to be controlled with standard names (e.g. info, warning, error, etc)
  * - Create a unique identifier to use when id/name not specified.
@@ -35,11 +35,16 @@
   limitations under the License.
 */
 
+// tagged template - just for syntax highlighting in VSCode
+function html(strings, ...keys) {
+    return strings.map( (s, i) => {
+        return s + (keys[i] || '')
+    }).join('')
+}
+
 const template = document.createElement('template')
-template.innerHTML = /** @type {HTMLTemplateElement} */ `
+template.innerHTML = html`
     <style>
-        :host {
-        }
         button, input[type="button" i] {
             margin-top: .5em;
             margin-bottom: .5em;
@@ -85,22 +90,22 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ `
 /** A Zero dependency button web component that sends a msg or a document event when clicked.
  *  Contains relevant data from data-*, topic and payload attributes (or properties),
  *  includes a _meta object showing whether any modifier keys were used, the element id/name
- * 
+ *
  * @element button-send
- * 
+ *
  * @fires button-send:click - Document object event. evt.details contains the data
  * @fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
- * 
+ *
  * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
  * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
  * @attr {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
  * @attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- * 
+ *
  * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
- * 
+ *
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
- * 
+ *
  * @csspart button - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class ButtonSend extends HTMLElement {
@@ -119,9 +124,9 @@ export default class ButtonSend extends HTMLElement {
         name: undefined,
         data: undefined, // All of the data-* attributes as an object
     }
+
     /** The output msg @type {object} */
     _msg = {}
-    
 
     /** Mini jQuery-like shadow dom selector
      * @param {keyof HTMLElementTagNameMap} selection HTML element selector
@@ -131,10 +136,10 @@ export default class ButtonSend extends HTMLElement {
     }
 
     _setMsg(evtName) {
-        const mydata = {...this.dataset}
+        const mydata = { ...this.dataset }
         this._msg.topic = this.topic
         this._msg.payload = this.payload ? this.payload : mydata
-        this._msg._ui = {...this._ui}
+        this._msg._ui = { ...this._ui }
         if (evtName) this._msg._ui.event = evtName
         if ( this.id !== '') this._msg._ui.id = this.id
         const n = this.getAttribute('name')
@@ -152,11 +157,11 @@ export default class ButtonSend extends HTMLElement {
         this._msg._ui.ctrlKey = evt.ctrlKey
         this._msg._ui.shiftKey = evt.shiftKey
         this._msg._ui.metaKey = evt.metaKey
-        
+
         /** Output a custom document event `button-send:click`, data is in evt.details */
         document.dispatchEvent(this._clickEvt)
         /** Send a message to uibuilder with the output data */
-        if (window.uibuilder) window.uibuilder.send(this._msg)
+        if (window['uibuilder']) window['uibuilder'].send(this._msg)
         // else console.debug('[ButtonSend:handleClick] uibuilder not available, cannot send')
     }
 
@@ -166,19 +171,18 @@ export default class ButtonSend extends HTMLElement {
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
-        const mydata = {...this.dataset}
+        // const mydata = { ...this.dataset }
 
         /** The output msg @type {object} */
         this._setMsg('component load')
 
         /** Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent} */
-        this._clickEvt = new CustomEvent('button-send:click', {'detail': this._msg})
+        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg })
 
         /** Registration event @type {CustomEvent} */
         // document.dispatchEvent( new CustomEvent('button-send:loaded', {'detail': {}}) )
         //
         // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
-
 
     } // --- end of constructor --- //
 
@@ -194,11 +198,11 @@ export default class ButtonSend extends HTMLElement {
 
         // Event
         this._setMsg('attribute change')
-        document.dispatchEvent( new CustomEvent('button-send:attributeChangedCallback', {'detail': {name:name,oldVal:oldVal,newVal:newVal}}) )
-        if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({
-            payload: {name:name,oldVal:oldVal,newVal:newVal},
-            _ui: {...this._ui}
-        })
+        document.dispatchEvent( new CustomEvent('button-send:attributeChangedCallback', { 'detail': { name: name, oldVal: oldVal, newVal: newVal } }) )
+        if ( window['uibuilder'] && this.sendEvents ) { window['uibuilder'].send( {
+            payload: { name: name, oldVal: oldVal, newVal: newVal },
+            _ui: { ...this._ui }
+        } ) }
 
     } // --- end of attributeChangedCallback --- //
 
@@ -224,8 +228,7 @@ export default class ButtonSend extends HTMLElement {
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
- window.ButtonSend = ButtonSend
+window['ButtonSend'] = ButtonSend
 
 // Add the class as a new Custom Element to the window object
 customElements.define('button-send', ButtonSend)
-

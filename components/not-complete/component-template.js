@@ -1,17 +1,17 @@
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
- * 
+ *
  * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'SimpleContainer' and 'simple-container' & change version below
- * 
- * @version 0.2 2022-05-1 Pre-release
- * 
+ *
+ * @version 0.2 2022-05-1 Early-release
+ *
  * See: https://web.dev/custom-elements-v1/, https://web.dev/shadowdom-v1/
- * 
+ *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
  *     or paste into https://runem.github.io/web-component-analyzer/
  * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
  *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
- * 
+ *
  **/
 /**
  * Copyright (c) 2022 Julian Knight (Totally Information)
@@ -30,11 +30,18 @@
  * limitations under the License.
  **/
 
+// just for syntax highlighting in VSCode
+function html(strings, ...keys) {
+    return strings.map( (s, i) => {
+        return s + (keys[i] || '')
+    }).join('')
+}
+
 const componentName = 'simple-container'
 const className = 'SimpleContainer'
 
-let template = document.createElement('template');
-template.innerHTML = /*html*/ `
+const template = document.createElement('template')
+template.innerHTML = html`
     <style>
         :host {
             display: block;   /* default is inline */
@@ -45,28 +52,26 @@ template.innerHTML = /*html*/ `
 `
 
 // Define the class and make it the default export
-/** 
+/**
  * @element simple-container
- * 
+ *
  * @fires simple-container:construction - Document object event. evt.details contains the data
  * @fires simple-container:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
  * @fires simple-container:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
  * @fires simple-container:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
- * 
+ *
  * @attr {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- * 
+ *
  * @prop {string} name - Sync'd from name attribute
- * 
+ *
  * @slot Container contents
- * 
+ *
  * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class SimpleContainer extends HTMLElement {
     //#region ---- Class Variables ----
-    
-    name = undefined
 
     /** Standard _ui object to include in msgs */
     _ui = {
@@ -77,35 +82,38 @@ export default class SimpleContainer extends HTMLElement {
         data: undefined, // All of the data-* attributes as an object
     }
 
+    /** Mini jQuery-like shadow dom selector (see constructor) */
+    $
+
+    /** Holds the name for this instance of the component */
+    name = undefined
+
+    /** Holds a count of how many instances of this component are on the page */
     static _iCount = 0
 
     //#endregion ---- ---- ---- ----
 
     //#region ---- Utility Functions ----
 
-    /** Mini jQuery-like shadow dom selector
-     * @param {keyof HTMLElementTagNameMap} selection HTML element selector
-     */
-    $(selection) {
-        return this.shadowRoot && this.shadowRoot.querySelector(selection)
-    }
 
     //#endregion ---- ---- ---- ----
-    
+
     constructor() {
 
         super()
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
-        this.dispatchEvent(new Event(`${componentName}:construction`, {bubbles: true, composed: true}))
+        this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
+
+        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
 
     } // ---- end of constructor ----
 
     // List all attribs we want to observe
     static get observedAttributes() { return [
         'name'
-    ]}
+    ] }
 
     // Runs when an observed attribute changes - Note: values are always strings
     attributeChangedCallback(name, oldVal, newVal) {
@@ -117,7 +125,8 @@ export default class SimpleContainer extends HTMLElement {
         this[name] = newVal
 
         this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
-            bubbles: true, composed: true,
+            bubbles: true,
+            composed: true,
             detail: {
                 id: this.id,
                 name: this.name,
@@ -141,7 +150,8 @@ export default class SimpleContainer extends HTMLElement {
         }
 
         this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
-            bubbles: true, composed: true,
+            bubbles: true,
+            composed: true,
             detail: {
                 id: this.id,
                 name: this.name
@@ -155,7 +165,8 @@ export default class SimpleContainer extends HTMLElement {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
 
         this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
-            bubbles: true, composed: true,
+            bubbles: true,
+            composed: true,
             detail: {
                 id: this.id,
                 name: this.name

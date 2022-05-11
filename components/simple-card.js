@@ -1,6 +1,9 @@
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @version 0.1 2022-05-1 Pre-release
+ * TODO: color const not really needed, convert to make direct changes to style (see theme changer for code)
+ *       Use uib-brand.css rather than trying to do local css processing for light/dark
+ *
+ * @version 0.2 2022-05-10 Early-release
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
@@ -61,7 +64,7 @@ if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matc
 // const bgStyle = window.getComputedStyle(document.body.children[0], null)
 // console.log('bgStyle', bgStyle.color, bgStyle.background, bgStyle)
 
-// just for syntax highlighting in VSCode
+// tagged template - just for syntax highlighting in VSCode
 function html(strings, ...keys) {
     return strings.map( (s, i) => {
         return s + (keys[i] || '')
@@ -72,6 +75,7 @@ const template = document.createElement('template')
 template.innerHTML = html`
     <style>
         :host {
+            display: block;
             border: 1px solid ${color.border};
             border-radius: 0.5rem;
             margin: 0.2rem;

@@ -33,7 +33,7 @@
 const componentName = 'uib-theme-changer'
 const className = 'UibThemeChanger'
 
-// just for syntax highlighting in VSCode
+// tagged template - just for syntax highlighting in VSCode
 function html(strings, ...keys) {
     return strings.map( (s, i) => {
         return s + (keys[i] || '')
