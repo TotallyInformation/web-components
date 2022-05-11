@@ -54,8 +54,8 @@ template.innerHTML = html`
             border: none;
             padding: .5rem 1rem;
             text-decoration: none;
-            background-color: rgb(var(--uib-color-info));
-            color: rgb(var(--uib-color-dark));
+            background-color: var(--info);
+            color: var(--text2);
             font-family: inherit;
             font-size: 1rem;
             line-height: 1.4;
