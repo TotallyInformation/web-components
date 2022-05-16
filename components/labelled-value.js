@@ -58,7 +58,7 @@ template.innerHTML = html`
             text-align: right;
         }
     </style>
-    <div id="label"></div><div class="value" aria-labelledby="label"></div><slot></slot>
+    <div id="label"></div><div id="value" class="value" aria-labelledby="label"></div><slot></slot>
 `
 
 // Define the class and make it the default export
@@ -83,6 +83,9 @@ template.innerHTML = html`
 export default class LabelledValue extends HTMLElement {
     //#region ---- Class Variables ----
 
+    /** Holds a count of how many instances of this component are on the page Must be static (accumulates across instances) */
+    static #iCount = 0
+
     /** Standard _ui object to include in msgs */
     _ui = {
         type: componentName,
@@ -101,18 +104,26 @@ export default class LabelledValue extends HTMLElement {
     label = undefined
     value = undefined
 
-    /** Holds a count of how many instances of this component are on the page */
-    static _iCount = 0
-
     //#endregion ---- ---- ---- ----
 
     //#region ---- Utility Functions ----
 
-    setUpUibListener() {
-        document.addEventListener( 'uibuilder:stdMsgReceived', (evt) => {
-            const msg = evt['detail']
-            console.log('[labelled-value] uibuilder msg received', msg)
-        })
+    /** Make sure that the component instance has an ID */
+    _ensureId() {
+        this.name = this.getAttribute('name')
+        if (!this.id) {
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `${componentName}-${LabelledValue.#iCount}`
+        }
+    }
+
+    _uibMsgHandler(evt) {
+        // If there is a payload, we want to replace the VALUE
+        if ( evt['detail'].payload ) {
+            const el = this.shadowRoot.getElementById('value')
+            el.innerHTML = evt['detail'].payload
+        }
+        // TODO allow evt['detail'].value and evt['detail'].label
     }
 
     //#endregion ---- ---- ---- ----
@@ -125,7 +136,7 @@ export default class LabelledValue extends HTMLElement {
 
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
-        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+        document.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
 
     } // ---- end of constructor ----
 
@@ -158,7 +169,7 @@ export default class LabelledValue extends HTMLElement {
             }
         }
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+        document.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
             bubbles: true,
             composed: true,
             detail: {
@@ -174,18 +185,15 @@ export default class LabelledValue extends HTMLElement {
 
     // Runs when an instance is added to the DOM
     connectedCallback() {
-        ++LabelledValue._iCount // increment total instance count
+        ++LabelledValue.#iCount // increment total instance count
 
         // Create an id from name or calculation if needed
-        this.name = this.getAttribute('name')
-        if (!this.id) {
-            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
-            else this.id = `sc-${LabelledValue._iCount}`
-        }
+        this._ensureId()
 
-        this.setUpUibListener()
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
+        document.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
             bubbles: true,
             composed: true,
             detail: {
@@ -200,7 +208,9 @@ export default class LabelledValue extends HTMLElement {
     disconnectedCallback() {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
+
+        document.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,
             composed: true,
             detail: {
