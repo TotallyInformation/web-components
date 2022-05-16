@@ -2,6 +2,7 @@
  *
  * TODO: color const not really needed, convert to make direct changes to style (see theme changer for code)
  *       Use uib-brand.css rather than trying to do local css processing for light/dark
+ *       Improve slot change handlers and remove on disconnect
  *
  * @version 0.2 2022-05-10 Early-release
  *
@@ -58,7 +59,6 @@ const color = {
 }
 if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
     color.mode = 'dark'
-    console.log('Color Scheme', color.mode, window.matchMedia('(color-scheme: dark)') )
 }
 
 // const bgStyle = window.getComputedStyle(document.body.children[0], null)
@@ -145,6 +145,98 @@ export default class SimpleCard extends HTMLElement {
         return this.shadowRoot && this.shadowRoot.querySelector(selection)
     }
 
+    /** Set colour variant to use as background colour
+     * @param {string} value colour variant to use
+     */
+    _setVariant(value) {
+        switch (value) {
+            case 'information':
+            case 'info': {
+                this.style.setProperty('color', 'var(--text1)')
+                this.style.setProperty('background-color', 'var(--info)')
+                break
+            }
+
+            case 'success': {
+                this.style.setProperty('color', 'var(--text1)')
+                this.style.setProperty('background-color', 'var(--success)')
+                break
+            }
+
+            case 'warn':
+            case 'warning': {
+                this.style.setProperty('color', 'var(--text1)')
+                this.style.setProperty('background-color', 'var(--warning)')
+                break
+            }
+
+            case 'error':
+            case 'failure': {
+                this.style.setProperty('color', 'var(--text1)')
+                this.style.setProperty('background-color', 'var(--failure)')
+                break
+            }
+
+            default: {
+                this.style.removeProperty('color')
+                this.style.removeProperty('background-color')
+                break
+            }
+        }
+    }
+
+    // #endregion ---- ---- ---- ----
+
+    // #region ---- Event Handlers ----
+
+    _uibMsgHandler(evt) {
+        // TODO: add footer/header & variant
+
+        // If there is a payload, we want to replace the slot - easiest done from the light DOM
+        if ( evt['detail'].slot ) {
+            const el = document.getElementById(this.id)
+            el.innerHTML = evt['detail'].slot
+        } else if ( evt['detail'].payload ) {
+            const el = document.getElementById(this.id)
+            el.innerHTML = evt['detail'].payload
+        }
+
+        if ( evt['detail'].variant ) {
+            this._setVariant(evt['detail'].variant)
+        }
+
+        if ( evt['detail'].header ) {
+            let el = document.querySelector(`#${this.id} > *[slot=header]`)
+            if ( el ) {
+                // Was found so replace it
+                el.innerHTML = evt['detail'].header
+            } else {
+                // Was not found so create new element
+                el = document.getElementById(this.id)
+                const el2 = document.createElement('div')
+                el2.setAttribute('slot', 'header')
+                el2.innerHTML = evt['detail'].header
+                el.appendChild(el2)
+            }
+        }
+
+        if ( evt['detail'].footer ) {
+            let el = document.querySelector(`#${this.id} > *[slot=footer]`)
+            if ( el ) {
+                // Was found so replace it
+                el.innerHTML = evt['detail'].footer
+            } else {
+                // Was not found so create new element
+                el = document.getElementById(this.id)
+                const el2 = document.createElement('div')
+                el2.setAttribute('slot', 'footer')
+                el2.innerHTML = evt['detail'].footer
+                el.appendChild(el2)
+            }
+        }
+
+    }
+
     // #endregion ---- ---- ---- ----
 
     constructor() {
@@ -156,6 +248,61 @@ export default class SimpleCard extends HTMLElement {
             .append(template.content.cloneNode(true))
 
         this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+
+    } // ---- end of constructor ---- //
+
+    // List all attribs we want to observe
+    static get observedAttributes() { return [
+        'name', 'variant'
+    ] }
+
+    // Runs when an observed attribute changes - Note: values are always strings
+    attributeChangedCallback(name, oldVal, newVal) {
+
+        // Don't bother if the new value same as old
+        if (oldVal === newVal) return
+
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[name] = newVal
+
+        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name,
+                attribute: name,
+                newVal: newVal,
+                oldVal: oldVal,
+            }
+        }))
+
+        if (name === 'variant') {
+            this._setVariant(newVal)
+        }
+
+    } // --- end of attributeChangedCallback --- //
+
+    // Runs when an instance is added to the DOM
+    connectedCallback() {
+        ++SimpleCard._iCount // increment total instance count
+
+        // Invert the heading text/bg colours
+        // const divStyle = window.getComputedStyle(this, null)
+        // Object.assign(this.shadowRoot.querySelector('slot[name="header"]').style, {
+        //     color: color.bg,
+        //     backgroundColor: color.fg,
+        // })
+
+        // Create an id from name or calculation if needed
+        this.name = this.getAttribute('name')
+        if (!this.id) {
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `${componentName}-${SimpleCard._iCount}`
+        }
+
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
 
         // Check if header/footer slots get content and turn on border if so
         const slots = this.shadowRoot.querySelectorAll('slot')
@@ -191,54 +338,6 @@ export default class SimpleCard extends HTMLElement {
             } else slot.style.display = 'none'
         })
 
-    } // ---- end of constructor ---- //
-
-    // List all attribs we want to observe
-    static get observedAttributes() { return [
-        'name'
-    ] }
-
-    // Runs when an observed attribute changes - Note: values are always strings
-    attributeChangedCallback(name, oldVal, newVal) {
-
-        // Don't bother if the new value same as old
-        if (oldVal === newVal) return
-
-        // Create a property from the value - WARN: Be careful with name clashes
-        this[name] = newVal
-
-        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name,
-                attribute: name,
-                newVal: newVal,
-                oldVal: oldVal,
-            }
-        }))
-
-    } // --- end of attributeChangedCallback --- //
-
-    // Runs when an instance is added to the DOM
-    connectedCallback() {
-        ++SimpleCard._iCount // increment total instance count
-
-        // Invert the heading text/bg colours
-        // const divStyle = window.getComputedStyle(this, null)
-        // Object.assign(this.shadowRoot.querySelector('slot[name="header"]').style, {
-        //     color: color.bg,
-        //     backgroundColor: color.fg,
-        // })
-
-        // Create an id from name or calculation if needed
-        this.name = this.getAttribute('name')
-        if (!this.id) {
-            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
-            else this.id = `${componentName}-${SimpleCard._iCount}`
-        }
-
         this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
             bubbles: true,
             composed: true,
@@ -253,6 +352,8 @@ export default class SimpleCard extends HTMLElement {
     // Runs when an instance is removed from the DOM
     disconnectedCallback() {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
+
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,
