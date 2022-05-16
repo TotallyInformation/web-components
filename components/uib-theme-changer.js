@@ -3,8 +3,14 @@
  * TODO:
  *   - Compact layout
  *   - Other attribs for controlling scheme, etc
+ *   - Settings for accessibility
+ *   - Reset button
+ *   - Move event handlers to fns and remove them on disconnect
  *
  * @version 0.2 2022-05-09 Early-release
+ *
+ * References:
+ *   - https://web.dev/building-a-color-scheme/
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
@@ -44,7 +50,9 @@ const template = document.createElement('template')
 template.innerHTML = html`
     <style>
         :host {
-            display: block;
+            --size: 2rem;
+            --w: 4rem;
+            display: flex;
             position: sticky;
             top: 0;
             background-color: var(--surface1);
@@ -57,17 +65,18 @@ template.innerHTML = html`
             box-sizing: border-box;
             box-shadow: var(--shadow2);
         }
+        form {
+            margin: .2rem 1rem;
+        }
         button {
-            --size: 2rem;
-            
             background: none;
             color: var(--text3);
             border: none;
             padding: 0;
-            
+            aspect-ratio: 1;
             inline-size: var(--size);
             block-size: var(--size);
-            aspect-ratio: 1;
+            
             border-radius: 50%;
 
             cursor: pointer;
@@ -76,9 +85,14 @@ template.innerHTML = html`
             outline-offset: 5px;
         }
         @media (hover: none) {
-            button {
+            :host {
                 --size: 48px;
             }
+        }
+        input[type=submit] {
+            inline-size: var(--w);
+            block-size: var(--size);
+            margin-left: 1rem;
         }
         .sun-and-moon {
             inline-size: 100%;
@@ -93,6 +107,7 @@ template.innerHTML = html`
         }
 
     </style>
+    <div id="s-and-m">
     <button name="color-scheme-toggle" title="Toggles between light & dark color schemes" 
         aria-label="auto" aria-live="polite"
         onclick="this.getRootNode().host.evtClickToggle(event)"
@@ -116,6 +131,8 @@ template.innerHTML = html`
             </svg>
         </svg>
     </button>
+    </div>
+    <input type="submit" value="Reset" onclick="this.getRootNode().host.evtClickReset(event)">
     <form>
         <div name="color-scheme-choose" onclick="this.getRootNode().host.evtClickChooser(event)">
             <b>Color scheme:</b>
@@ -124,27 +141,12 @@ template.innerHTML = html`
             <label><input type="radio" name="input-color-scheme-choose" value="dark">dark</label>
         </div>
         
-        <!-- 
-        <div>
+        <div onclick="this.getRootNode().host.evtClickContrast(event)">
             <b>Contrast:</b>
-            <label>
-                <input type="radio" name="contrast" value="no-preference">
-        
-                no-preference
-            </label>
-        
-            <label>
-                <input type="radio" name="contrast" value="more">
-        
-                more
-            </label>
-        
-            <label>
-                <input type="radio" name="contrast" value="less">
-        
-                less
-            </label>
-        </div> -->
+            <label><input type="radio" name="contrast" value="standard">standard</label>
+            <label><input type="radio" name="contrast" value="more">more</label>
+            <label><input type="radio" name="contrast" value="less">less</label>
+        </div>
     
         <div>
             <b>Brand Hue angle:</b>
@@ -162,14 +164,14 @@ template.innerHTML = html`
 `
 
 // Define the class and make it the default export
-/** A simple card component
+/** A Theme Changer component
  *
- * @element simple-card
+ * @element uib-theme-changer
  *
- * @fires simple-card:construction - Document object event. evt.details contains the data
- * @fires simple-card:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires simple-card:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires simple-card:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * @fires uib-theme-changer:construction - Document object event. evt.details contains the data
+ * @fires uib-theme-changer:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires uib-theme-changer:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires uib-theme-changer:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * @attr {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
@@ -177,14 +179,15 @@ template.innerHTML = html`
  *
  * @prop {string} name - Sync'd from name attribute
  *
- * @slot Container contents
- * @slot header - Content to go in the header section
- * @slot footer - Content to go in the footer section
+ * slot Container contents
  *
  * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class UibThemeChanger extends HTMLElement {
     //#region ---- Class Variables ----
+
+    /** Holds a count of how many instances of this component are on the page */
+    static #iCount = 0
 
     /** Holds the uib theme settings for all pages in this domain (from/to localStorage) */
     uibThemeSettings = {}
@@ -207,12 +210,18 @@ export default class UibThemeChanger extends HTMLElement {
     /** Holds the name for this instance of the component */
     name = undefined
 
-    /** Holds a count of how many instances of this component are on the page */
-    static _iCount = 0
-
     //#endregion ---- ---- ---- ----
 
     //#region ---- Utility Functions ----
+
+    /** Make sure that the component instance has an ID */
+    _ensureId() {
+        this.name = this.getAttribute('name')
+        if (!this.id) {
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `${componentName}-${UibThemeChanger.#iCount}`
+        }
+    }
 
     setTheme(theme) {
         const $ = this.shadowRoot.querySelector.bind(this.shadowRoot)
@@ -236,11 +245,21 @@ export default class UibThemeChanger extends HTMLElement {
                 $('.divider').style.opacity = 0
                 break
             }
-            case 'auto':
-            default: {
+            case 'auto': {
                 this.scheme = 'auto'
                 docRoot.classList.remove('light')
                 docRoot.classList.remove('dark')
+                $('.sun').style.opacity = 1
+                $('.moon').style.opacity = 1
+                $('.divider').style.opacity = 1
+                break
+            }
+            case 'none':
+            default: {
+                this.scheme = undefined
+                docRoot.classList.remove('light')
+                docRoot.classList.remove('dark')
+                docRoot.classList.remove('auto')
                 $('.sun').style.opacity = 1
                 $('.moon').style.opacity = 1
                 $('.divider').style.opacity = 1
@@ -254,17 +273,19 @@ export default class UibThemeChanger extends HTMLElement {
 
     //#region ---- Event Handlers ----
 
-    /** Handle the icon
+    /** TODO Handle the icon
      * @param {MouseEvent} evt
      */
     evtClickToggle(evt) {
-        console.log('more direct: ', evt.target.tagName)
+        console.log('icon click: ', evt.target.tagName)
     }
 
-    /** Handle the chooser
+    /** Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html
      * @param {MouseEvent} evt
      */
     evtClickChooser(evt) {
+        if (evt.target.name !== 'input-color-scheme-choose') return
+
         try {
             this.uibThemeSettings[window.location.pathname].theme = evt.target.value
             localStorage.setItem('uibThemeSettings', JSON.stringify(this.uibThemeSettings))
@@ -272,6 +293,64 @@ export default class UibThemeChanger extends HTMLElement {
 
         // TODO: Consider moving to a getter/setter
         this.setTheme(evt.target.value)
+    }
+
+    /** Handle reset button. Override contrast css variables and set appropriate class on html
+     * @param {MouseEvent} evt
+     */
+    evtClickReset(evt) {
+        this.setTheme('none')
+        const els = this.shadowRoot.querySelectorAll('input[name=input-color-scheme-choose]')
+        for (let i = 0; i < els.length; i++) {
+            els[i].checked = false
+        }
+
+        this.evtClickContrast({ target: { name: 'contrast', value: 'standard' } })
+        const els1 = this.shadowRoot.querySelectorAll('input[name=contrast]')
+        for (let i = 0; i < els1.length; i++) {
+            els1[i].checked = false
+        }
+
+        delete this.uibThemeSettings[window.location.pathname]
+        localStorage.setItem('uibThemeSettings', JSON.stringify(this.uibThemeSettings))
+    }
+
+    /** Handle contrast click. Override contrast css variables and set appropriate class on html
+     * @param {MouseEvent} evt Click event
+     */
+    evtClickContrast(evt) {
+        if (evt.target.name !== 'contrast') return
+
+        const docRoot = document.documentElement
+
+        if ( evt.target.value === 'more' ) {
+            docRoot.style.setProperty('--text-bias', '1')
+            docRoot.style.setProperty('--surfaces-bias', '1')
+            docRoot.style.setProperty('--saturation-bias', '1')
+            docRoot.classList.remove('standard')
+            docRoot.classList.remove('less')
+            docRoot.classList.add('more')
+        } else if ( evt.target.value === 'less' ) {
+            docRoot.style.setProperty('--text-bias', '-.1')
+            docRoot.style.setProperty('--surfaces-bias', '-.05')
+            docRoot.style.setProperty('--saturation-bias', '-.05')
+            docRoot.classList.remove('standard')
+            docRoot.classList.remove('more')
+            docRoot.classList.add('less')
+        } else {
+            docRoot.style.removeProperty('--text-bias')
+            docRoot.style.removeProperty('--surfaces-bias')
+            docRoot.style.removeProperty('--saturation-bias')
+            docRoot.classList.remove('standard')
+            docRoot.classList.remove('more')
+            docRoot.classList.remove('less')
+
+        }
+
+        try {
+            this.uibThemeSettings[window.location.pathname].contrast = evt.target.value
+            localStorage.setItem('uibThemeSettings', JSON.stringify(this.uibThemeSettings))
+        } catch (e) {}
     }
 
     //#endregion ---- ---- ---- ----
@@ -284,23 +363,7 @@ export default class UibThemeChanger extends HTMLElement {
 
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
-        const docRoot = document.documentElement
-
-        this.$('[name=brand-hue]').addEventListener('change', function(evt) {
-            docRoot.style.setProperty('--brand-hue', evt.target.value)
-        })
-        this.$('[name=brand-hue]').addEventListener('input', function(evt) {
-            this.nextElementSibling.value = this.value
-        })
-
-        this.$('[name=accent-offset]').addEventListener('change', function(evt) {
-            docRoot.style.setProperty('--accent-offset', evt.target.value)
-        })
-        this.$('[name=accent-offset]').addEventListener('input', function(evt) {
-            this.nextElementSibling.value = this.value
-        })
-
-        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+        document.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
 
     } // ---- end of constructor ---- //
 
@@ -318,7 +381,7 @@ export default class UibThemeChanger extends HTMLElement {
         // Create a property from the value - WARN: Be careful with name clashes
         this[name] = newVal
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+        document.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
             bubbles: true,
             composed: true,
             detail: {
@@ -334,29 +397,60 @@ export default class UibThemeChanger extends HTMLElement {
 
     // Runs when an instance is added to the DOM
     connectedCallback() {
-        ++UibThemeChanger._iCount // increment total instance count
+        ++UibThemeChanger.#iCount // increment total instance count
 
         // Create an id from name or calculation if needed
-        this.name = this.getAttribute('name')
-        if (!this.id) {
-            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
-            else this.id = `${componentName}-${UibThemeChanger._iCount}`
-        }
+        this._ensureId()
 
         if ( !getComputedStyle(this).getPropertyValue('--uib-css').includes('uib-brand') ) {
             console.warn('[uib-theme-changer] WARNING: It appears that you are not using uibuilder\'s uib-brand.css stylesheet. This component may not work as expected.')
         }
 
-        //#region --- theme switcher ---
+        // Try to retrieve theme settings for this page
         try {
             this.uibThemeSettings = JSON.parse(localStorage.getItem('uibThemeSettings')) || this.uibThemeSettings
         } catch (e) {}
         if ( !this.uibThemeSettings[window.location.pathname] ) this.uibThemeSettings[window.location.pathname] = {}
 
-        // If theme is manually set, remove saved setting for this page (not needed)
         const docRoot = document.documentElement
+
+        this.$('[name=brand-hue]').addEventListener('change', function(evt) {
+            docRoot.style.setProperty('--brand-hue', evt.target.value)
+        })
+        this.$('[name=brand-hue]').addEventListener('input', function(evt) {
+            this.nextElementSibling.value = this.value
+        })
+
+        this.$('[name=accent-offset]').addEventListener('change', function(evt) {
+            docRoot.style.setProperty('--accent-offset', evt.target.value)
+        })
+        this.$('[name=accent-offset]').addEventListener('input', function(evt) {
+            this.nextElementSibling.value = this.value
+        })
+
+        //#region --- set contrast ---
+
+        // If contrast is manually set, remove saved setting for this page (not needed)
+        if ( docRoot.classList.contains('standard') || docRoot.classList.contains('more')  || docRoot.classList.contains('less')) {
+            try {
+                delete this.uibThemeSettings[window.location.pathname].contrast
+                localStorage.setItem('uibThemeSettings', JSON.stringify(this.uibThemeSettings))
+            } catch (e) {}
+            this.shadowRoot.querySelector(`input[value=${docRoot.classList[0]}][name=contrast]`).checked = true
+        } else if ( this.uibThemeSettings[window.location.pathname] && this.uibThemeSettings[window.location.pathname].contrast ) {
+            // not manually set but does have a saved page setting
+            this.shadowRoot.querySelector(`input[value=${this.uibThemeSettings[window.location.pathname].contrast}][name=contrast]`).checked = true
+            this.evtClickContrast({ target: { name: 'contrast', value: this.uibThemeSettings[window.location.pathname].contrast } })
+        } else {
+            this.shadowRoot.querySelector('input[value=standard][name=contrast]').checked = true
+        }
+
+        //#endregion --- --- ---
+
+        //#region --- set theme ---
+
+        // If theme is manually set, remove saved setting for this page (not needed)
         if ( docRoot.classList.contains('light') || docRoot.classList.contains('dark')  || docRoot.classList.contains('auto')) {
-            console.log('classList', docRoot.classList[0])
             try {
                 delete this.uibThemeSettings[window.location.pathname].theme
                 localStorage.setItem('uibThemeSettings', JSON.stringify(this.uibThemeSettings))
@@ -369,9 +463,10 @@ export default class UibThemeChanger extends HTMLElement {
         } else {
             this.shadowRoot.querySelector('input[value=auto][name=input-color-scheme-choose]').checked = true
         }
+
         //#endregion --- --- ---
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
+        document.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
             bubbles: true,
             composed: true,
             detail: {
@@ -384,9 +479,9 @@ export default class UibThemeChanger extends HTMLElement {
 
     // Runs when an instance is removed from the DOM
     disconnectedCallback() {
-        // NB: Dont decrement UibThemeChanger._iCount because that could lead to id nameclashes
+        // NB: Dont decrement this.#iCount because that could lead to id nameclashes
 
-        this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
+        document.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,
             composed: true,
             detail: {
