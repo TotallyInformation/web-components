@@ -29,10 +29,11 @@ export class HtmlInclude extends HTMLElement {
      *  We are reflecting the src attrib and the src prop.
      */
     get src() {
-        return this.getAttribute('src');
+        return this.getAttribute('src')
     }
+
     set src(value) {
-        this.setAttribute('src', value);
+        this.setAttribute('src', value)
     }
 
     // attribute change
@@ -44,7 +45,7 @@ export class HtmlInclude extends HTMLElement {
             const response = await fetch(newValue)
 
             if (!response.ok) {
-                throw new Error(`html-include fetch failed: ${response.statusText}`);
+                throw new Error(`html-include fetch failed: ${response.statusText}`)
             }
 
             const contentType = response.headers.get('content-type')
@@ -66,9 +67,9 @@ export class HtmlInclude extends HTMLElement {
                     const newDoc = parser.parseFromString( this.text, 'text/html' )
                     this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
                     this.shadowRoot.appendChild(newDoc.body)
-                    break;
+                    break
                 }
-            
+
                 case 'json': {
                     this.json = await response.json()
                     this.text = JSON.stringify(this.json, null, 4)
@@ -76,24 +77,24 @@ export class HtmlInclude extends HTMLElement {
                     const myHtml = document.createElement('pre')
                     myHtml.textContent = this.text
                     this.shadowRoot.appendChild( myHtml )
-                    break;
+                    break
                 }
-            
+
                 case 'form': {
                     this.json = await response.formData()
                     this.text = JSON.stringify(this.json)
                     this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
                     this.shadowRoot.append(this.text)
-                    break;
+                    break
                 }
-            
+
                 default: {
                     this.text = await response.text()
                     this.shadowRoot.append(this.text)
-                    break;
+                    break
                 }
             }
-            
+
         }
 
     }
