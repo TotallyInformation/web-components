@@ -4,6 +4,8 @@
  *
  * See ./docs/button-send.md for detailed documentation on installation and use.
  *
+ * TODO: - Add variants (see simple-card)
+ *
  * @version: 1.0.1 2022-04-07
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
@@ -34,6 +36,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+
+const componentName = 'button-send'
+const className = 'ButtonSend'
 
 // tagged template - just for syntax highlighting in VSCode
 function html(strings, ...keys) {
@@ -109,6 +114,11 @@ template.innerHTML = html`
  * @csspart button - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class ButtonSend extends HTMLElement {
+    //#region ---- Class Variables ----
+
+    /** Holds a count of how many instances of this component are on the page */
+    static #iCount = 0
+
     sendEvents = true
     /** The topic to include in the output
      * @type {string|undefined} */
@@ -116,6 +126,8 @@ export default class ButtonSend extends HTMLElement {
     /** The payload to include in the output
      * @type {any} */
     payload
+    /** Mini jQuery-like shadow dom selector (see constructor) */
+    $
     /** Standard _ui object to include in msgs */
     _ui = {
         type: 'button-send',
@@ -128,12 +140,9 @@ export default class ButtonSend extends HTMLElement {
     /** The output msg @type {object} */
     _msg = {}
 
-    /** Mini jQuery-like shadow dom selector
-     * @param {keyof HTMLElementTagNameMap} selection HTML element selector
-     */
-    $(selection) {
-        return this.shadowRoot && this.shadowRoot.querySelector(selection)
-    }
+    //#endregion ---- ---- ---- ----
+
+    //#region ---- Utility Functions ----
 
     _setMsg(evtName) {
         const mydata = { ...this.dataset }
@@ -145,6 +154,23 @@ export default class ButtonSend extends HTMLElement {
         const n = this.getAttribute('name')
         if ( n !== null ) this._msg._ui.name = n
         this._msg._ui.data = mydata // All of the data-* attributes as an object
+    }
+
+    /** Make sure that the component instance has an ID */
+    _ensureId() {
+        this.name = this.getAttribute('name')
+        if (!this.id) {
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `${componentName}-${ButtonSend.#iCount}`
+        }
+    }
+
+    _uibMsgHandler(evt) {
+        // If there is a payload, we want to replace the slot - easiest done from the light DOM
+        if ( evt['detail'].payload ) {
+            const el = document.getElementById(this.id)
+            el.innerHTML = evt['detail'].payload
+        }
     }
 
     /** fn to run when the button is clicked
@@ -159,11 +185,18 @@ export default class ButtonSend extends HTMLElement {
         this._msg._ui.metaKey = evt.metaKey
 
         /** Output a custom document event `button-send:click`, data is in evt.details */
-        document.dispatchEvent(this._clickEvt)
+        document.dispatchEvent( new CustomEvent(`${componentName}:click`, {
+            bubbles: true,
+            composed: true,
+            'detail': this._msg
+        }) )
+
         /** Send a message to uibuilder with the output data */
         if (window['uibuilder']) window['uibuilder'].send(this._msg)
         // else console.debug('[ButtonSend:handleClick] uibuilder not available, cannot send')
     }
+
+    //#endregion ---- ---- ---- ----
 
     constructor() {
 
@@ -171,18 +204,16 @@ export default class ButtonSend extends HTMLElement {
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
+        this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
+
         // const mydata = { ...this.dataset }
 
         /** The output msg @type {object} */
         this._setMsg('component load')
 
-        /** Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent} */
-        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg })
-
-        /** Registration event @type {CustomEvent} */
-        // document.dispatchEvent( new CustomEvent('button-send:loaded', {'detail': {}}) )
-        //
         // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
+
+        document.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
 
     } // --- end of constructor --- //
 
@@ -196,18 +227,34 @@ export default class ButtonSend extends HTMLElement {
 
         this[name] = newVal
 
-        // Event
         this._setMsg('attribute change')
-        document.dispatchEvent( new CustomEvent('button-send:attributeChangedCallback', { 'detail': { name: name, oldVal: oldVal, newVal: newVal } }) )
+
         if ( window['uibuilder'] && this.sendEvents ) { window['uibuilder'].send( {
             payload: { name: name, oldVal: oldVal, newVal: newVal },
             _ui: { ...this._ui }
         } ) }
 
+        document.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name,
+                attribute: name,
+                newVal: newVal,
+                oldVal: oldVal,
+            }
+        }))
+
     } // --- end of attributeChangedCallback --- //
 
     // when the component is added to the dom
     connectedCallback() {
+        ++ButtonSend.#iCount // increment total instance count
+
+        // Create an id from name or calculation if needed
+        this._ensureId()
+
         /** Listen for the button click */
         this.addEventListener('click', this.handleClick)
 
@@ -215,11 +262,33 @@ export default class ButtonSend extends HTMLElement {
         // this._setMsg('instance load')
         // document.dispatchEvent( new CustomEvent('button-send:instanceAdded', {'detail': this._msg._ui}) )
         // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
+
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+
+        document.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        }))
     }
 
     // when the component is removed from the dom
     disconnectedCallback() {
         this.removeEventListener('click', this.handleClick)
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
+
+        document.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        }))
     }
 
 } // ---- End of ButtonSend class definition ---- //
@@ -228,7 +297,7 @@ export default class ButtonSend extends HTMLElement {
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['ButtonSend'] = ButtonSend
+window[className] = ButtonSend
 
 // Add the class as a new Custom Element to the window object
-customElements.define('button-send', ButtonSend)
+customElements.define(componentName, ButtonSend)
