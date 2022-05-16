@@ -201,10 +201,13 @@ In previous versions of the library, a custom event feature was used. In this ve
 
 Each event name starts with `uibuilder:` to avoid name clashes.
 
-The two current events are (other events may be added later):
+The current events are (other events may be added later):
 
-* `uibuilder:stdMsgReceived`
-* `uibuilder:propertyChanged`
+* `uibuilder:stdMsgReceived` - triggered when a non-control msg arrives from Node-RED
+* `uibuilder:propertyChanged` - triggered when any uibuilder managed property is changed
+* `uibuilder:msg:topic:${msg.topic}` - triggered when an incoming msg contains a `msg.topic` property allowing specific topics to be monitored
+* `uibuilder:msg:_ui` - triggered when an incoming msg contains a `msg._ui` property (used for UI automation using web components)
+* `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}` - triggered when the incoming msg contains `msg._ui.add`, `msg._ui.update`, or `msg._ui.remove` for UI automation. For the update action, the `msg._ui.id` property links the msg to a specific on-page element by its HTML id attribute.
 
 You can watch for these events in your own code using something like:
 
@@ -217,6 +220,8 @@ document.addEventListener('uibuilder:propertyChanged', function (evt) {
 In each case, `evt.detail` contains the relevant custom data.
 
 In general, you should not need to use these events. There are more focused features that are easier to use such as `onChange` and `onTopic`.
+
+Of particular note are the `_ui` events. These are used by uibuilder-aware web components for UI automation.
 
 ### setPing function
 

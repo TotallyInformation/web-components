@@ -929,6 +929,38 @@ export const Uib = class Uib {
         this._send(msg, this.#ioChannels.client, originator)
     }
 
+    _dispatchCustomEvent(title, details) {
+        const event = new CustomEvent(title, { detail: details })
+        document.dispatchEvent(event)
+    }
+
+    // Handle msg._ui - emit specific events on document that make it easy for coders to use
+    _msgRcvdEvents(msg) {
+
+        // Message received
+        this._dispatchCustomEvent('uibuilder:stdMsgReceived', msg)
+
+        // Topic
+        if ( msg.topic ) this._dispatchCustomEvent(`uibuilder:msg:topic:${msg.topic}`, msg)
+
+        // msg._ui events
+        if ( msg._ui ) {
+            this._dispatchCustomEvent('uibuilder:msg:_ui', msg)
+
+            msg._ui.forEach( action => {
+                if ( action.method ) {
+                    action.payload = msg.payload
+                    action.topic = msg.topic
+                    this._dispatchCustomEvent(
+                        `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}`,
+                        action
+                    )
+                }
+            })
+        }
+
+    } // --- end of _msgRcvdEvents ---
+
     /** Callback handler for messages from Node-RED
      * NOTE: `this` is the class here rather the `socket` as would be normal since we bind the correct `this` in the call.
      *       Use this._socket if needing reference to the socket.
@@ -959,16 +991,15 @@ export const Uib = class Uib {
         // Save the msg for further processing
         this.set('msg', receivedMsg)
 
-        // trigger an event on the msg.topic
-        const event = new CustomEvent('uibuilder:stdMsgReceived', { detail: receivedMsg })
-        document.dispatchEvent(event)
-
         // Track how many messages have been received
         this.set('msgsReceived', ++this.msgsReceived)
 
+        // Emit specific document events on msg receipt that make it easy for coders to use
+        this._msgRcvdEvents(receivedMsg)
+
         log('info', 'Uib:ioSetup:stdMsgFromServer', `Channel '${this.#ioChannels.server}'. Received msg #${this.msgsReceived}.`, receivedMsg)()
 
-        //! NOTE: Don't try to handle specialist messages here. Add onChange('msg', ...) callbacks in start()
+        // ! NOTE: Don't try to handle specialist messages here. Add onChange('msg', ...) callbacks in start()
 
     } // -- End of websocket receive DATA msg from Node-RED -- //
 
