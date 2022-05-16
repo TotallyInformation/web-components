@@ -36,4 +36,5 @@ Please see the main README file.
 | `simple-dialog` | Simple wrapper for a [dialog box](https://www.tutorialrepublic.com/codelab.php?topic=html5&file=dialog-tag) with options for modal, button list |
 | `simple-pie` | https://dev.to/dannyengelman/web-components-using-unknownhtmlelements-for-better-semantic-html-5d8c |
 | `nav-bar` | |
+| `toast-msg` | |
 
