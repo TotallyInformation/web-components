@@ -95,6 +95,22 @@ export default class SimpleContainer extends HTMLElement {
 
     //#region ---- Utility Functions ----
 
+    //#endregion ---- ---- ---- ----
+
+    //#region ---- Event Handlers ----
+
+    _uibMsgHandler(evt) {
+        // If there is a payload, we want to replace the slot - easiest done from the light DOM
+        // if ( evt['detail'].payload ) {
+        //     const el = document.getElementById(this.id)
+        //     el.innerHTML = evt['detail'].payload
+        // }
+        // If there is a payload, we want to replace the VALUE
+        // if ( evt['detail'].payload ) {
+        //     const el = this.shadowRoot.getElementById('value')
+        //     el.innerHTML = evt['detail'].payload
+        // }
+    }
 
     //#endregion ---- ---- ---- ----
 
@@ -149,6 +165,9 @@ export default class SimpleContainer extends HTMLElement {
             else this.id = `sc-${SimpleContainer._iCount}`
         }
 
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+
         this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
             bubbles: true,
             composed: true,
@@ -163,6 +182,8 @@ export default class SimpleContainer extends HTMLElement {
     // Runs when an instance is removed from the DOM
     disconnectedCallback() {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
+
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,
