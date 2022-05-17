@@ -30,15 +30,15 @@
  * limitations under the License.
  **/
 
+const componentName = 'simple-container'
+const className = 'SimpleContainer'
+
 // just for syntax highlighting in VSCode
 function html(strings, ...keys) {
     return strings.map( (s, i) => {
         return s + (keys[i] || '')
     }).join('')
 }
-
-const componentName = 'simple-container'
-const className = 'SimpleContainer'
 
 const template = document.createElement('template')
 template.innerHTML = html`
@@ -99,6 +99,9 @@ export default class SimpleContainer extends HTMLElement {
 
     //#region ---- Event Handlers ----
 
+    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
+     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
+     */
     _uibMsgHandler(evt) {
         // If there is a payload, we want to replace the slot - easiest done from the light DOM
         // if ( evt['detail'].payload ) {
@@ -183,6 +186,7 @@ export default class SimpleContainer extends HTMLElement {
     disconnectedCallback() {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
 
+        // @ts-ignore
         document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {

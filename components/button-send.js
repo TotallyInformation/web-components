@@ -165,6 +165,9 @@ export default class ButtonSend extends HTMLElement {
         }
     }
 
+    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
+     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
+     */
     _uibMsgHandler(evt) {
         // If there is a payload, we want to replace the slot - easiest done from the light DOM
         if ( evt['detail'].payload ) {
