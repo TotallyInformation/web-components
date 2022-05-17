@@ -6,6 +6,9 @@
  *   - Settings for accessibility
  *   - Reset button
  *   - Move event handlers to fns and remove them on disconnect
+ *   - Add inbound uibuilder msg handler
+ *   - Add hidden attrib to allow for just msg handling
+ *   - Update documentation
  *
  * @version 0.2 2022-05-09 Early-release
  *
@@ -273,6 +276,22 @@ export default class UibThemeChanger extends HTMLElement {
 
     //#region ---- Event Handlers ----
 
+    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
+     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
+     */
+    _uibMsgHandler(evt) {
+        // If there is a payload, we want to replace the slot - easiest done from the light DOM
+        // if ( evt['detail'].payload ) {
+        //     const el = document.getElementById(this.id)
+        //     el.innerHTML = evt['detail'].payload
+        // }
+        // If there is a payload, we want to replace the VALUE
+        // if ( evt['detail'].payload ) {
+        //     const el = this.shadowRoot.getElementById('value')
+        //     el.innerHTML = evt['detail'].payload
+        // }
+    }
+
     /** TODO Handle the icon
      * @param {MouseEvent} evt
      */
@@ -406,6 +425,9 @@ export default class UibThemeChanger extends HTMLElement {
             console.warn('[uib-theme-changer] WARNING: It appears that you are not using uibuilder\'s uib-brand.css stylesheet. This component may not work as expected.')
         }
 
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+
         // Try to retrieve theme settings for this page
         try {
             this.uibThemeSettings = JSON.parse(localStorage.getItem('uibThemeSettings')) || this.uibThemeSettings
@@ -414,6 +436,7 @@ export default class UibThemeChanger extends HTMLElement {
 
         const docRoot = document.documentElement
 
+        // TODO: Replace fns with named fns so that listeners can be removed
         this.$('[name=brand-hue]').addEventListener('change', function(evt) {
             docRoot.style.setProperty('--brand-hue', evt.target.value)
         })
@@ -480,6 +503,9 @@ export default class UibThemeChanger extends HTMLElement {
     // Runs when an instance is removed from the DOM
     disconnectedCallback() {
         // NB: Dont decrement this.#iCount because that could lead to id nameclashes
+
+        // @ts-ignore
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         document.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,
