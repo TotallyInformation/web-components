@@ -69,21 +69,33 @@ There are some features from the old `uibuilderfe.js` library that haven't (yet)
 
   Other versions may be made available if I can work out how to deliver them.
 
-* Ability to load JavaScript and CSS from a msg send from Node-RED.
-  
-  This will almost certainly return. Though possbily in a different format. It can be worked around by watching for an appropriate msg and adding the script dynamically with something like `document.getElementsByTagName('body')[0].appendChild(newScript)` and `document.head.appendChild(newStyles)`.
-
-  Obviously care must always be taken with a feature like this since it may open your UI to security issues.
 
 * `Toast` - the ability to show a pop-over `toast` message.
   
   This will almost certainly return but possibly in a very different format. This was only ever a convenience anyway and future developments should see better ways of achieving the same ends.
 
+
+## What has been removed?
+
 * VueJS specific features.
   
-  To be honest, these are unlikely to ever return in their previous form. I am focussed on a more generic approach to adding and using dynamic web components. Hopefully, that approach should work no matter what framework is being used. The previous Vue features were tied to bootstrap-vue and VueJS v2.
+  This new ECMA Module version is completely framework agnostic. The UI automation features don't rely on any framework or external library. Please switch to using those features along with suitable web or framework components.
 
   These features were only ever a convenience and should hopefully no longer be needed in the future.
+
+* The older feature to load JavaScript and CSS from a msg send from Node-RED (option in advanced config)
+  
+  The old feature will not work with this library.
+
+  However, you can load ECMA Modules (e.g. web components), and scripts from a URL.
+
+  You can also load scripts from text in a message.
+
+  These use the new style `msg._ui` data schema.
+
+  Obviously care must always be taken with a feature like this since it may open your UI to security issues.
+
+  See [Dynamic Load](#method-load) below.
 
 ---
 
@@ -418,9 +430,9 @@ Other future possibilities: `reset`
 
 ### Method: load
 
-The load method allows you to dynamically load external web components, ECMA modules, and plain JavaScript.
+The load method allows you to dynamically load external web components, ECMA modules, plain JavaScript, and CSS stylesheets. It also allows loading of JavaScript and CSS Styles from given text input.
 
-!> Please take note of the limitations and caveats of the load method. It works well for loading web components before adding them dynamically to your UI but there are a lot of things that can catch you out. If having issues, use an import statement or a script tag.
+!> Please take note of the limitations and caveats of the load method. It works well for loading web components before adding them dynamically to your UI. Also works well for dynamic changes to scripts and css. However, there are a lot of things that can catch you out. If having issues, use an import statement or a script tag.
 
 #### Caveats and limitations
 
@@ -442,6 +454,10 @@ The load method allows you to dynamically load external web components, ECMA mod
   
   * `txtScripts` entries must be text, you cannot pass an actual JavaScript function. This is normally OK since Node-RED should convert a function to text as it pushes the data through Socket.IO.
 
+* For the `srcStyles` and `txtStyles` arrays
+  
+  * Styles loaded this way are added to the end of the HTML `head`. As such, if you try to redefine a style that an already loaded stylesheet has set, you may need to add ` !important` to the definition due to CSS specificity rules.
+
 #### Msg schema
 
 ```jsonc
@@ -451,6 +467,16 @@ The load method allows you to dynamically load external web components, ECMA mod
         "components": [
             "url1", "url2" // as needed
         ],
+        // Styles are added to the end of the HEAD
+        "srcStyles": [
+            "https://example.com/libs/my-styles.css"
+        ],
+        "txtStyles": [
+            // Example of overwriting a brand stylesheet entry
+            ":root { --info-hue: 90 !important; }",
+            // We can try to change anything - but will need !important if the pre-loaded sheet already defines it
+            "code { font-size: 120% !important; font-family: fantasy; }"
+        ],
         // Note that scripts finish loading too slowly which means that you cannot use the load
         // method and then use the script in an add method. You have to load the script in your HTML.
         // Typically, you will need a second or two before the script will have fully loaded.
@@ -458,7 +484,10 @@ The load method allows you to dynamically load external web components, ECMA mod
             "https://example.com/some/script.js"
         ],
         "txtScripts": [
-            "function fred() { console.log('HEY! This script loaded dynamically.') }"
+            // Will be able to do `fred()` in the browser dev console.
+            "function fred() { console.log('HEY! This script loaded dynamically.') }",
+            // But of course, we can execute immediately as well.
+            "fred()"
         ]
     }
 }
@@ -707,6 +736,38 @@ TBC
 
 ?? standardise on data set/get and entry() fn
 
+See `totallyinformation/web-components` for example components that understand this syntax.
+
+### Method: reload - Reloads the current page
+
+No additional data is needed.
+
+Same as sending `msg._uib.reload`. But this method is preferred.
+
+### Method: notify
+
+Overlay a pop-over notification.
+
+Old-style `msg._uib.componentRef = 'globalNotification'` also works. But this method is preferred.
+
+### HTML Tags
+
+Will attach to any HTML tag/element with an ID of `toaster`. If one doesn't exist on the page, it will create a `<div id="toaster">` just after the opening `<body>` tag. The `toaster` tag will be given CSS classes of `toaster` and the `variant` if provided in `msg._ui.variant`.
+
+A new `<div id="toast">` element is added to `toaster`.
+
+#### Schema
+
+variant, title/topic, payload/content, autohide, noAutoHide/autohide, autoHideDelay/delay, appendToast, modal
+
+### Method: alert
+
+Overlay an alert notification
+
+Old-style `msg._uib.componentRef = 'globalAlert'` also works. But this method is preferred.
+
+Uses the same schema and styles as the `notify` method. Except that autohide is set to false, modal is set to true and the content is prefixed by an alert symbol.
+
 ---
 
 ## Troubleshooting
@@ -758,6 +819,9 @@ Because a lot of things happen asynchronously in JavaScript, it is possible that
 
 An alternative way to work would be to load the uibuilder library using a dynamic import as in `import('./uibuilder.module.js').then( ... )` and do all of your custom processing from within the `then` callback. If your browser supports top-level async/await, you could also do `const uibuilder = await import('./uibuilder.module.js')` which will pause until uibuilder is completely loaded and ready.
 
+---
+
+# Technical Reference
 
 ## Variables
 
@@ -795,6 +859,17 @@ Copy of last control msg object received from sever */
 
 
 ## Functions
+
+Functions accessible in user code.
+
+### `start(options)` - Starts Socket.IO communications with Node-RED
+
+Unlike the original uibuilder client, this version only allows passing of an object.
+
+While multiple properties can be given, only the following are currently used:
+
+* `ioNamespace` - This is normally calculated for you. However, if using an external server to serve the page or if using a page from a sub-folder, you may need to manually set this. Check the uibuilder node details page in the Node-RED Editor for what this should be set to.
+* `ioPath` - As above.
 
 ### Message Handling
 #### `send`

@@ -1,3 +1,10 @@
+/** This is the Front-End JavaScript for uibuilder  in HTML Module form
+ * It provides a number of global objects that can be used in your own javascript.
+ * @see the docs folder `./docs/uibuilder.module.md` for details of how to use this fully.
+ *
+ * Please use the default index.js file for your own code and leave this as-is.
+ *
+ */
 /*
   Copyright (c) 2017-2022 Julian Knight (Totally Information)
 
@@ -13,13 +20,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-/**
- * This is the Front-End JavaScript for uibuilder  in HTML Module form
- * It provides a number of global objects that can be used in your own javascript.
- * @see the docs folder `./docs/uibuilderfe-js.md` for details of how to use this fully.
- *
- * Please use the default index.js file for your own code and leave this as-is.
- */
 
 //#region --- Type Defs --- //
 /**
@@ -240,6 +240,7 @@ function urlJoin() {
 //#endregion --- Module-level utility functions --- //
 
 //#region --- We need the Socket.IO client - check in decreasing order of likelihood --- //
+// TODO - Maybe - check if already loaded as window['io']?
 const ioLocns = [ // Likely locations of the Socket.IO client library
     // Where it should normally be
     '../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
@@ -378,6 +379,7 @@ export const Uib = class Uib {
     set logLevel(level) { logLevel = level; console.log('%c❗ info%c [logLevel]', `${LOG_STYLES.level} ${LOG_STYLES.info.css}`, `${LOG_STYLES.head} ${LOG_STYLES.info.txtCss}`, `Set to ${level} (${LOG_STYLES.names[level]})`) /* changeLogLevel(level)*/ }
     get logLevel() { return logLevel }
 
+    // TODO Block setting of read-only vars
     /** Function to set uibuilder properties to a new value - works on any property except _* or #*
      * Also triggers any event listeners.
      * Example: this.set('msg', {topic:'uibuilder', payload:42});
@@ -677,6 +679,20 @@ export const Uib = class Uib {
         document.head.appendChild(newScript)
     }
 
+    /** Attach a new remote stylesheet link to the end of HEAD synchronously
+     * NOTE: It takes too long for most scripts to finish loading
+     *       so this is pretty useless to work with the dynamic UI features directly.
+     * @param {string} url The url to be used in the style link href attribute
+     */
+    loadStyleSrc(url) {
+        const newStyle = document.createElement('link')
+        newStyle.href = url
+        newStyle.rel = 'stylesheet'
+        newStyle.type = 'text/css'
+
+        document.head.appendChild(newStyle)
+    }
+
     /** Attach a new text script to the end of HEAD synchronously
      * NOTE: It takes too long for most scripts to finish loading
      *       so this is pretty useless to work with the dynamic UI features directly.
@@ -687,6 +703,108 @@ export const Uib = class Uib {
         newScript.async = false
         newScript.textContent = textFn
         document.head.appendChild(newScript)
+    }
+
+    /** Attach a new text stylesheet to the end of HEAD synchronously
+     * NOTE: It takes too long for most scripts to finish loading
+     *       so this is pretty useless to work with the dynamic UI features directly.
+     * @param {string} textFn The text to be loaded as a stylesheet
+     */
+    loadStyleTxt(textFn) {
+        const newStyle = document.createElement('style')
+        newStyle.textContent = textFn
+        document.head.appendChild(newStyle)
+    }
+
+    /** Show a pop-over "toast" dialog or a modal alert
+     * Refs: https://www.w3.org/WAI/ARIA/apg/example-index/dialog-modal/alertdialog.html,
+     *       https://www.w3.org/WAI/ARIA/apg/example-index/dialog-modal/dialog.html,
+     *       https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/
+     * @param {"notify"|"alert"} type Dialog type
+     * @param {object} ui standardised ui data
+     * @param {object} [msg] msg.payload/msg.topic - only used if a string. Optional.
+     * @returns {void}
+     */
+    showDialog(type, ui, msg) {
+        console.log('UI', ui)
+
+        //#region -- Check properties --
+
+        let content = ''
+        // Main body content
+        if ( msg.payload && typeof msg.payload === 'string' ) content += msg.payload
+        if ( ui.content ) content += ui.content
+        // Toast wont show anyway if content is empty, may as well warn user
+        if ( content === '' ) {
+            log(1, 'Uib:showDialog', 'Toast content is blank. Not shown.')()
+            return
+        }
+
+        // Use msg.topic as title if no title provided
+        if ( !ui.title && msg.topic ) ui.title = msg.topic
+        if ( ui.title ) content = `<p class="toast-head">${ui.title}</p><p>${content}</p>`
+
+        // Allow for variants
+        if ( !ui.variant || !['', 'primary', 'secondary', 'success', 'info', 'warn', 'warning', 'failure', 'error', 'danger'].includes(ui.variant)) ui.variant = ''
+
+        // Toasts auto-hide by default after 10s but alerts do not auto-hide
+        if ( ui.noAutohide ) ui.noAutoHide = ui.noAutohide
+        if ( ui.noAutoHide ) ui.autohide = !ui.noAutoHide
+        // If set, number of ms until toast is auto-hidden
+        if ( ui.autoHideDelay ) {
+            if ( !ui.autohide ) ui.autohide = true
+            ui.delay = ui.autoHideDelay
+        } else ui.autoHideDelay = 10000 // default = 10s
+        if ( !Object.prototype.hasOwnProperty.call(ui, 'autohide') ) ui.autohide = true
+
+        if ( type === 'alert' ) {
+            ui.modal = true
+            ui.autohide = false
+            content = `<svg viewBox="0 0 192.146 192.146" style="width:30;background-color:transparent;"><path d="M108.186 144.372c0 7.054-4.729 12.32-12.037 12.32h-.254c-7.054 0-11.92-5.266-11.92-12.32 0-7.298 5.012-12.31 12.174-12.31s11.91 4.992 12.037 12.31zM88.44 125.301h15.447l2.951-61.298H85.46l2.98 61.298zm101.932 51.733c-2.237 3.664-6.214 5.921-10.493 5.921H12.282c-4.426 0-8.51-2.384-10.698-6.233a12.34 12.34 0 0 1 .147-12.349l84.111-149.22c2.208-3.722 6.204-5.96 10.522-5.96h.332c4.445.107 8.441 2.618 10.513 6.546l83.515 149.229c1.993 3.8 1.905 8.363-.352 12.066zm-10.493-6.4L96.354 21.454l-84.062 149.18h167.587z" /></svg> ${content}`
+        }
+
+        //#endregion -- -- --
+
+        // Create a toaster container element if not already created - or get a ref to it
+        let toaster = document.getElementById('toaster')
+        if ( toaster === null ) {
+            toaster = document.createElement('div')
+            toaster.id = 'toaster'
+            toaster.title = 'Click to clear all notifcations'
+            toaster.setAttribute('class', 'toaster')
+            toaster.onclick = function() {
+                toaster.remove()
+            }
+            document.body.insertAdjacentElement('afterbegin', toaster)
+        }
+
+        // Create a toast element. Would be nice to use <dialog> but that isn't well supported yet - come on Apple!
+        const toast = document.createElement('div')
+        toast.title = 'Click to clear this notifcation'
+        toast.setAttribute('class', `toast ${ui.variant ? ui.variant : ''} ${type}`)
+        toast.innerHTML = content
+        toast.setAttribute('role', 'alertdialog')
+        if ( ui.modal ) toast.setAttribute('aria-modal', ui.modal)
+        toast.onclick = function(evt) {
+            evt.stopPropagation()
+            toast.remove()
+            if ( toaster.childElementCount < 1 ) toaster.remove()
+        }
+
+        if (type === 'alert') {
+            // newD.setAttribute('aria-labelledby', '')
+            // newD.setAttribute('aria-describedby', '')
+        }
+
+        toaster.insertAdjacentElement(ui.appendToast === true ? 'beforeend' : 'afterbegin', toast)
+
+        // Auto-hide
+        if ( ui.autohide === true ) {
+            setInterval( () => {
+                toast.remove()
+                if ( toaster.childElementCount < 1 ) toaster.remove()
+            }, ui.autoHideDelay)
+        }
     }
 
     /** Load a dynamic UI from a JSON web reponse */
@@ -849,7 +967,7 @@ export const Uib = class Uib {
         })
     } // --- end of _uiRemove ---
 
-    // TODO - does nothing right now
+    // TODO - does nothing right now - need to understand interactions between this and custom web components
     /** Handle incoming _ui update requests
      * @param {*} ui Standardised msg._ui property object
      */
@@ -857,6 +975,7 @@ export const Uib = class Uib {
 
     } // --- end of _uiUpdate ---
 
+    // TODO Add more error handling and parameter validation
     /** Handle incoming _ui load requests
      * @param {*} ui Standardised msg._ui property object
      */
@@ -882,12 +1001,29 @@ export const Uib = class Uib {
         if (ui.txtScripts) {
             if (!Array.isArray(ui.txtScripts)) ui.txtScripts = [ui.txtScripts]
 
-            ui.txtScripts.forEach(script => {
-                this.loadScriptTxt(script)
+            this.loadScriptTxt(ui.txtScripts.join('\n'))
+        }
+        // Remote Stylesheets
+        if (ui.srcStyles) {
+            if (!Array.isArray(ui.srcStyles)) ui.srcStyles = [ui.srcStyles]
+
+            ui.srcStyles.forEach(sheet => {
+                this.loadStyleSrc(sheet)
             })
+        }
+        // Styles passed as text
+        if (ui.txtStyles) {
+            if (!Array.isArray(ui.txtStyles)) ui.txtStyles = [ui.txtStyles]
+
+            this.loadStyleTxt(ui.txtStyles.join('\n'))
         }
 
     } // --- end of _uiLoad ---
+
+    /** Handle a reload request */
+    _uiReload(ui) {
+
+    }
 
     /** Handle incoming _ui messages and loaded UI JSON files
      * Called from start()
@@ -923,6 +1059,22 @@ export const Uib = class Uib {
 
                 case 'load': {
                     this._uiLoad(ui)
+                    break
+                }
+
+                case 'reload': {
+                    log('trace', 'Uib:uiManager:reload', 'reloading')()
+                    location.reload()
+                    break
+                }
+
+                case 'notify': {
+                    this.showDialog('notify', ui, msg)
+                    break
+                }
+
+                case 'alert': {
+                    this.showDialog('alert', ui, msg)
                     break
                 }
 
@@ -1436,7 +1588,8 @@ export const Uib = class Uib {
         log('trace', 'Uib:start', 'Starting')()
 
         if (this.started === true) {
-            log('warn', 'Uib:start', '❌ Start function already called. You should normally only call this once. Resetting Socket.IO')()
+            log('error', 'Uib:start', '❌ Start function already called. Can only be called once. Reload page to reset.')()
+            return
         }
 
         log('log', 'Uib:start', 'Cookies: ', this.cookies, `\nClient ID: ${this.clientId}`)()
@@ -1448,21 +1601,27 @@ export const Uib = class Uib {
             if (options.ioPath !== undefined && options.ioPath !== null && options.ioPath !== '') this.ioPath = options.ioPath
         }
 
-        // this.clearListener('msg')  // Hmm, not ideal as this clears ALL 'msg' listeners
-
         // Handle specialist messages like reload and _ui
         this.onChange('msg', (msg) => {
-            // Process a client reload request from Node-RED - as the page is reloaded, everything else is ignored
-            if (msg._uib && msg._uib.reload === true) {
-                log('trace', 'Uib:start:onChange:reload', 'reloading')()
-                location.reload()
-                return
+            if (msg._uib) {
+                /** Process a client reload request from Node-RED - as the page is reloaded, everything else is ignored
+                 * Note that msg._ui.reload is also actioned via the _ui processing below */
+                if (msg._uib.reload === true) {
+                    log('trace', 'Uib:start:onChange:reload', 'reloading')()
+                    location.reload()
+                    return
+                }
+
+                // Process toast and alert requests - can also be requested via msg._ui
+                if ( msg._uib.componentRef === 'globalNotification' ) {}
+                if ( msg._uib.componentRef === 'globalAlert' ) {}
             }
 
             // Process msg._ui messages
             if (msg._ui) {
                 log('trace', 'Uib:start:onChange:_ui', 'Calling _uiManager')()
                 this._uiManager(msg)
+                return // eslint-disable-line no-useless-return
             }
         })
 
