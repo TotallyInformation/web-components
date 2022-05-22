@@ -17,7 +17,7 @@
  * This is the Front-End JavaScript for uibuilder  in HTML Module form
  * It provides a number of global objects that can be used in your own javascript.
  * @see the docs folder `./docs/uibuilderfe-js.md` for details of how to use this fully.
- * 
+ *
  * Please use the default index.js file for your own code and leave this as-is.
  */
 
@@ -31,6 +31,7 @@
 //#region --- Module-level utility functions --- //
 
 //#region --- print/console - debugging output functions --- //
+/** Default log level - Error & Warn */
 let logLevel = 1
 // function changeLogLevel(level) {
 //     logLevel = level
@@ -91,10 +92,10 @@ const LOG_STYLES = {
     head: 'font-weight:bold; font-style:italic;',
     level: 'font-weight:bold; border-radius: 3px; padding: 2px 5px; display:inline-block;',
 }
-
-const log = function () {
+/** Custom logging. e.g. log(2, 'here:there', 'jiminy', {fred:'jim'})() */
+function log() {
     // Get the args
-    let args = Array.prototype.slice.call(arguments)
+    const args = Array.prototype.slice.call(arguments)
 
     // 1st arg is the log level/type
     let level = args.shift()
@@ -161,7 +162,7 @@ const log = function () {
     if (strLevel === undefined) return function () { }
 
     // 2nd arg is a heading that will be colour highlighted
-    let head = args.shift()
+    const head = args.shift()
 
     // Bind back to console.log (could use console[strLevel] but some levels ignore some formatting, use console.xxx directly or dedicated fn)
     return Function.prototype.bind.call(
@@ -171,11 +172,13 @@ const log = function () {
         ...args
     )
 }
-// log(2, 'here:there', 'jiminy', {fred:'jim'})()
-
 //#endregion
 
-function loadModule(url) {
+/** A hack to dynamically load a remote module and wait until it is loaded
+ * @param {string} url The URL of the module to load
+ * @returns {object|null} Either the result object or null (if the load fails)
+ */
+function loadModule(url) { // eslint-disable-line no-unused-vars
     let done
 
     import(url)
@@ -185,9 +188,11 @@ function loadModule(url) {
         })
         .catch(err => {
             console.error(`[uibuilder:loadModule] Could not load module ${url}`, err)
+            done = null
         })
 
-    while (!done) { }
+    //  eslint-disable-next-line no-empty
+    while (!done) { } // eslint-disable-line no-unmodified-loop-condition
 
     return done
 }
@@ -205,7 +210,7 @@ function makeMeAnObject(thing, property) {
         log('warn', 'uibuilderfe:makeMeAnObject', `WARNING: property parameter must be a string and not: ${typeof property}`)()
         property = 'payload'
     }
-    var out = {}
+    let out = {}
     if (typeof thing === 'object') {
         out = thing
     } else if (thing !== null) {
@@ -221,8 +226,8 @@ function makeMeAnObject(thing, property) {
  * @returns {string} _
  */
 function urlJoin() {
-    var paths = Array.prototype.slice.call(arguments)
-    var url = '/' + paths.map(function (e) {
+    const paths = Array.prototype.slice.call(arguments)
+    const url = '/' + paths.map(function (e) {
         return e.replace(/^\/|\/$/g, '')
     })
         .filter(function (e) {
@@ -280,6 +285,9 @@ export const Uib = class Uib {
     #msgRecvdByTopicCallbacks = {}
     /** setInterval id holder for Socket.IO checkConnect */
     #timerid = null
+    // @ts-ignore Detect whether the loaded library is minified or not
+    #isMinified = !(/param/).test(function (param) { }) // eslint-disable-line no-unused-vars
+
     // Placeholder for io.socket - can't make a # var until # fns allowed in all browsers
     _socket
 
@@ -289,18 +297,31 @@ export const Uib = class Uib {
 
     //#region ---- Externally read-only (via .get method) ---- //
     // TODO Move to proper getters
+    // version - moved to _meta
+    /** Client ID set by uibuilder on connect */
     clientId = ''
+    /** The collection of cookies provided by uibuilder */
     cookies = {}
-    ctrlMsg = {}  // copy of last control msg object received from sever
+    /** Copy of last control msg object received from sever */
+    ctrlMsg = {}
+    /** Is Socket.IO client connected to the server? */
     ioConnected = false
-    msg = {}  // Latest msg from Node-RED
-    msgsSent = 0   // track number of messages sent to server since page load
-    msgsReceived = 0   // track number of messages received from server since page load
-    msgsSentCtrl = 0   // track number of control messages sent to server since page load
-    msgsCtrlReceived = 0   // track number of control messages received from server since page load
-    sentCtrlMsg = {}  // copy of last control msg object sent via uibuilder.send() @since v2.0.0-dev3
-    sentMsg = {}  // copy of last msg object sent via uibuilder.send()
-    serverTimeOffset = null // placeholder to track time offset from server, see fn socket.on(ioChannels.server ...)
+    /** Last std msg received from Node-RED */
+    msg = {}
+    /** number of messages sent to server since page load */
+    msgsSent = 0
+    /** number of messages received from server since page load */
+    msgsReceived = 0
+    /** number of control messages sent to server since page load */
+    msgsSentCtrl = 0
+    /** number of control messages received from server since page load */
+    msgsCtrlReceived = 0
+    /** last control msg object sent via uibuilder.send() @since v2.0.0-dev3 */
+    sentCtrlMsg = {}
+    /** last std msg object sent via uibuilder.send() */
+    sentMsg = {}
+    /** placeholder to track time offset from server, see fn socket.on(ioChannels.server ...) */
+    serverTimeOffset = null
     //#endregion ---- ---- ---- ---- //
 
     //#region ---- Externally Writable (via .set method, read via .get method) ---- //
@@ -317,11 +338,10 @@ export const Uib = class Uib {
     httpNodeRoot = '' // Node-RED setting (via cookie)
     ioNamespace = ''
     ioPath = ''
-    // @ts-ignore
-    isMinified = !(/param/).test(function (param) { }) // eslint-disable-line no-unused-vars
-    retryFactor = 1.5                             // starting delay factor for subsequent reconnect attempts
-    retryMs = 2000                            // starting retry ms period for manual socket reconnections workaround
-    storePrefix = 'uib_'                          // Prefix for all uib-related localStorage
+    retryFactor = 1.5       // starting delay factor for subsequent reconnect attempts
+    retryMs = 2000          // starting retry ms period for manual socket reconnections workaround
+    storePrefix = 'uib_'    // Prefix for all uib-related localStorage
+    started = false
     socketOptions = {
         path: this.ioPath,
         transports: ['polling', 'websocket'],
@@ -333,29 +353,29 @@ export const Uib = class Uib {
             polling: {
                 extraHeaders: {
                     'x-clientid': `uibuilderfe; ${this.clientId}`,
-                    //Authorization: 'test', //TODO: Replace with self.jwt variable? // Authorization: `Bearer ${your_jwt}`
+                    // Authorization: 'test', //TODO: Replace with self.jwt variable? // Authorization: `Bearer ${your_jwt}`
                 }
             },
         },
     }
-    started = false
     //#endregion -- not external --
 
     //#endregion --- End of variables ---
 
     //#region ------- Static metadata ------- //
     static _meta = {
-        version: '5.0.2',
+        version: '5.0.2-mod',
         type: 'module',
         displayName: 'uibuilder',
     }
+
     get meta() { return Uib._meta }
     //#endregion ---- ---- ---- ---- //
 
     //#region ------- Getters and Setters ------- //
 
     // Change logging level dynamically (affects both console. and print.)
-    set logLevel(level) { logLevel = level; console.log('%c❗ info%c [logLevel]', `${LOG_STYLES.level} ${LOG_STYLES.info.css}`, `${LOG_STYLES.head} ${LOG_STYLES.info.txtCss}`, `Set to ${level} (${LOG_STYLES.names[level]})`); /*changeLogLevel(level)*/ }
+    set logLevel(level) { logLevel = level; console.log('%c❗ info%c [logLevel]', `${LOG_STYLES.level} ${LOG_STYLES.info.css}`, `${LOG_STYLES.head} ${LOG_STYLES.info.txtCss}`, `Set to ${level} (${LOG_STYLES.names[level]})`) /* changeLogLevel(level)*/ }
     get logLevel() { return logLevel }
 
     /** Function to set uibuilder properties to a new value - works on any property except _* or #*
@@ -380,11 +400,11 @@ export const Uib = class Uib {
         // this.emit(prop, val)
 
         // trigger an event on the prop name, pass both the name and value to the event details
-        const event = new CustomEvent('uibuilder:propertyChanged', { detail: { 'prop': prop, 'value': val } })
-        document.dispatchEvent(event)
+        this._dispatchCustomEvent('uibuilder:propertyChanged', { 'prop': prop, 'value': val })
 
         return val
     }
+
     /** Function to get the value of a uibuilder property
      * Example: uibuilder.get('msg')
      * @param {string} prop The name of the property to get as long as it does not start with a _ or #
@@ -404,7 +424,14 @@ export const Uib = class Uib {
     //#endregion ------- -------- ------- //
 
     //#region ------- Our own event handling system ---------- //
-    // See the this.#events private var
+
+    /** Standard fn to create a custom event with details & dispatch it */
+    _dispatchCustomEvent(title, details) {
+        const event = new CustomEvent(title, { detail: details })
+        document.dispatchEvent(event)
+    }
+
+    // See the this.#propChangeCallbacks & msgRecvdByTopicCallbacks private vars
 
     /** Register on-change event listeners for uibuilder tracked properties
      * Make it possible to register a function that will be run when the property changes.
@@ -430,10 +457,10 @@ export const Uib = class Uib {
         if (!this.#propChangeCallbacks[prop]) this.#propChangeCallbacks[prop] = { _nextRef: 1 }
         else this.#propChangeCallbacks[prop]._nextRef++
 
-        let nextCbRef = this.#propChangeCallbacks[prop]._nextRef
+        const nextCbRef = this.#propChangeCallbacks[prop]._nextRef
 
         // Register the callback function. It is saved so that we can remove the event listener if we need to
-        let propChangeCallback = this.#propChangeCallbacks[prop][nextCbRef] = function propChangeCallback(e) {
+        const propChangeCallback = this.#propChangeCallbacks[prop][nextCbRef] = function propChangeCallback(e) {
             // If the prop name matches the 1st arg in the onChange fn:
             if (prop === e.detail.prop) {
                 const value = e.detail.value
@@ -447,10 +474,11 @@ export const Uib = class Uib {
 
         return nextCbRef
     } // ---- End of onChange() ---- //
+
     cancelChange(prop, cbRef) {
         document.removeEventListener('uibuilder:propertyChanged', this.#propChangeCallbacks[prop][cbRef])
         delete this.#propChangeCallbacks[prop][cbRef]
-        //this.#propChangeCallbacks[topic]._nextRef-- // Don't bother, let the ref# increase
+        // this.#propChangeCallbacks[topic]._nextRef-- // Don't bother, let the ref# increase
     }
 
     /** Register a change callback for a specific msg.topic
@@ -467,10 +495,10 @@ export const Uib = class Uib {
         if (!this.#msgRecvdByTopicCallbacks[topic]) this.#msgRecvdByTopicCallbacks[topic] = { _nextRef: 1 }
         else this.#msgRecvdByTopicCallbacks[topic]._nextRef++
 
-        let nextCbRef = this.#msgRecvdByTopicCallbacks[topic]._nextRef
+        const nextCbRef = this.#msgRecvdByTopicCallbacks[topic]._nextRef
 
         // Register the callback function. It is saved so that we can remove the event listener if we need to
-        let msgRecvdEvtCallback = this.#msgRecvdByTopicCallbacks[topic][nextCbRef] = function msgRecvdEvtCallback(e) {
+        const msgRecvdEvtCallback = this.#msgRecvdByTopicCallbacks[topic][nextCbRef] = function msgRecvdEvtCallback(e) {
             const msg = e.detail
             // console.log('[Uib:onTopic:evt] uibuilder:stdMsgReceived where topic matches. ', e.detail)
             if (msg.topic === topic) {
@@ -483,10 +511,11 @@ export const Uib = class Uib {
 
         return nextCbRef
     }
+
     cancelTopic(topic, cbRef) {
         document.removeEventListener('uibuilder:stdMsgReceived', this.#msgRecvdByTopicCallbacks[topic][cbRef])
         delete this.#msgRecvdByTopicCallbacks[topic][cbRef]
-        //this.#msgRecvdCallbacks[topic]._nextRef-- // Don't bother, let the ref# increase
+        // this.#msgRecvdCallbacks[topic]._nextRef-- // Don't bother, let the ref# increase
     }
 
     /** Trigger event listener for a given property
@@ -525,8 +554,25 @@ export const Uib = class Uib {
 
     //#region ------- General Utility Functions -------- //
 
+    /** Check supplied msg from server for a timestamp - if received, work out & store difference to browser time
+     * @param {object} receivedMsg A message object recieved from Node-RED
+     * @returns {void} Updates self.serverTimeOffset if different to previous value
+     */
+    _checkTimestamp(receivedMsg) {
+        if (Object.prototype.hasOwnProperty.call(receivedMsg, 'serverTimestamp')) {
+            const serverTimestamp = new Date(receivedMsg.serverTimestamp)
+            // @ts-ignore
+            const offset = Math.round(((new Date()) - serverTimestamp) / 3600000) // in ms / 3.6m to get hours
+            if (offset !== this.serverTimeOffset) {
+                log('trace', `Uib:checkTimestamp:${this.#ioChannels.server} (server)`, `Offset changed to: ${offset} from: ${this.serverTimeOffset}`)()
+                this.set('serverTimeOffset', offset)
+            }
+        }
+    }
+
+    /** Simplistic jQuery-like document CSS query selector, returns an HTML Element */
     $ = document.querySelector.bind(document)
-    
+
     /** Set the default originator. Set to '' to ignore. Used with uib-sender.
      * @param {string} [originator] A Node-RED node ID to return the message to
      */
@@ -534,20 +580,85 @@ export const Uib = class Uib {
         this.originator = originator
     } // ---- End of setOriginator ---- //
 
-    /** Check supplied msg from server for a timestamp - if received, work out & store difference to browser time
-     * @param {object} receivedMsg A message object recieved from Node-RED
-     * @returns {void} Updates self.serverTimeOffset if different to previous value
+    /** Write to localStorage if possible. console error output if can't write
+     * Also uses this.storePrefix
+     * @example
+     *   uibuilder.setStore('fred', 42)
+     *   console.log(uibuilder.getStore('fred'))
+     * @param {string} id localStorage var name to be used (prefixed with 'uib_')
+     * @param {*} value value to write to localstore
+     * @returns {boolean} True if succeeded else false
      */
-    checkTimestamp(receivedMsg) {
-        if (Object.prototype.hasOwnProperty.call(receivedMsg, 'serverTimestamp')) {
-            var serverTimestamp = new Date(receivedMsg.serverTimestamp)
-            // @ts-ignore
-            var offset = Math.round(((new Date()) - serverTimestamp) / 3600000) // in ms / 3.6m to get hours
-            if (offset !== this.serverTimeOffset) {
-                log('trace', `Uib:checkTimestamp:${this.#ioChannels.server} (server)`, `Offset changed to: ${offset} from: ${this.serverTimeOffset}`)()
-                this.set('serverTimeOffset', offset)
+    setStore(id, value) {
+        if (typeof value === 'object') {
+            try {
+                value = JSON.stringify(value)
+            } catch (e) {
+                log('error', 'Uib:setStore', 'Cannot stringify object, not storing. ', e)()
+                return false
             }
         }
+        try {
+            localStorage.setItem(this.storePrefix + id, value)
+            return true
+        } catch (e) {
+            log('error', 'Uib:setStore', 'Cannot write to localStorage. ', e)()
+            return false
+        }
+    } // --- end of setStore --- //
+
+    getStore(id) {
+        try {
+            return JSON.parse(localStorage.getItem(this.storePrefix + id))
+        } catch (e) {
+            return localStorage.getItem(this.storePrefix + id)
+        }
+    }
+
+    removeStore(id) {
+        try {
+            localStorage.removeItem(this.storePrefix + id)
+        } catch (e) { }
+    }
+
+    /** HTTP Ping/Keep-alive - makes a call back to uibuilder's ExpressJS server and receives a 204 response
+     * Can be used to keep sessions alive.
+     * @example
+     *   uibuilder.setPing(2000) // repeat every 2 sec. Re-issue with ping(0) to turn off repeat.
+     *   uibuilder.onChange('ping', function(data) {
+     *      console.log('pinger', data)
+     *   })
+     * @param {number} ms Repeat interval in ms
+     */
+    setPing(ms = 0) {
+        const oReq = new XMLHttpRequest()
+        oReq.addEventListener('load', () => {
+            const headers = (oReq.getAllResponseHeaders()).split('\r\n')
+            this.set('ping', {
+                success: !!((oReq.status === 201) || (oReq.status === 204)), // true if one of the listed codes else false
+                status: oReq.status,
+                headers: headers,
+            })
+        })
+
+        if (this.#pingInterval) {
+            clearInterval(this.#pingInterval)
+            this.#pingInterval = undefined
+        }
+
+        if (ms < 1) {
+            oReq.open('GET', '../uibuilder/ping')
+            oReq.send()
+        } else {
+            this.#pingInterval = setInterval(() => {
+                oReq.open('GET', '../uibuilder/ping')
+                oReq.send()
+            }, ms)
+        }
+    } // ---- End of ping ---- //
+
+    log() {
+        log(...arguments)()
     }
 
     //#endregion -------- -------- -------- //
@@ -560,7 +671,7 @@ export const Uib = class Uib {
      * @param {string} url The url to be used in the script src attribute
      */
     loadScriptSrc(url) {
-        const newScript = document.createElement("script")
+        const newScript = document.createElement('script')
         newScript.src = url
         newScript.async = false
         document.head.appendChild(newScript)
@@ -572,7 +683,7 @@ export const Uib = class Uib {
      * @param {string} textFn The text to be loaded as a script
      */
     loadScriptTxt(textFn) {
-        const newScript = document.createElement("script")
+        const newScript = document.createElement('script')
         newScript.async = false
         newScript.textContent = textFn
         document.head.appendChild(newScript)
@@ -590,7 +701,7 @@ export const Uib = class Uib {
 
                 log('trace', 'Uib:loadui:then1', `Loaded '${url}'. Status ${response.status}, ${response.statusText}`)()
                 // Did we get json?
-                const contentType = response.headers.get('content-type');
+                const contentType = response.headers.get('content-type')
                 if (!contentType || !contentType.includes('application/json')) {
                     throw new TypeError(`Fetch '${url}' did not return JSON, ignoring`)
                 }
@@ -610,6 +721,7 @@ export const Uib = class Uib {
 
     } // --- end of loadui
 
+    // TODO Add check if ID already exists
     /** Handle incoming msg._ui add requests
      * @param {*} ui Standardised msg._ui property object
      * @param {*} [payload] Optional. msg.payload
@@ -619,32 +731,36 @@ export const Uib = class Uib {
 
         ui.components.forEach((compToAdd) => {
             // Create the new component
-            let newEl = document.createElement(compToAdd.type)
+            const newEl = document.createElement(compToAdd.type)
 
             // Add attributes
-            if (compToAdd.attributes) Object.keys(compToAdd.attributes).forEach((attrib) => {
-                newEl.setAttribute(attrib, compToAdd.attributes[attrib])
-            })
+            if (compToAdd.attributes) {
+                Object.keys(compToAdd.attributes).forEach((attrib) => {
+                    newEl.setAttribute(attrib, compToAdd.attributes[attrib])
+                })
+            }
 
             // Add event handlers
-            if (compToAdd.events) Object.keys(compToAdd.events).forEach((type) => {
-                // @ts-ignore  I'm forever getting this wrong!
-                if (type.toLowerCase === 'onclick') type = 'click'
-                // Add the event listener - hate eval but it is the only way I can get it to work
-                try {
-                    newEl.addEventListener(type, (evt) => {
-                        eval(`${compToAdd.events[type]}(evt)`)
-                    })
-                    // newEl.setAttribute( 'onClick', `${compToAdd.events[type]}()` )
-                } catch (err) {
-                    log('error', 'Uib:_uiAdd', `Add event '${type}' for element '${compToAdd.type}': Cannot add event handler. ${err.message}`)()
-                }
-            })
+            if (compToAdd.events) {
+                Object.keys(compToAdd.events).forEach((type) => {
+                    // @ts-ignore  I'm forever getting this wrong!
+                    if (type.toLowerCase === 'onclick') type = 'click'
+                    // Add the event listener - hate eval but it is the only way I can get it to work
+                    try {
+                        newEl.addEventListener(type, (evt) => {
+                            eval(`${compToAdd.events[type]}(evt)`) // eslint-disable-line no-eval
+                        })
+                        // newEl.setAttribute( 'onClick', `${compToAdd.events[type]}()` )
+                    } catch (err) {
+                        log('error', 'Uib:_uiAdd', `Add event '${type}' for element '${compToAdd.type}': Cannot add event handler. ${err.message}`)()
+                    }
+                })
+            }
 
             // Add custom properties to the dataset
             if (compToAdd.properties) {
                 Object.keys(compToAdd.properties).forEach((prop) => {
-                    //TODO break a.b into sub properties
+                    // TODO break a.b into sub properties
                     newEl[prop] = compToAdd.properties[prop]
                 })
             }
@@ -655,21 +771,25 @@ export const Uib = class Uib {
                 // If DOMPurify is loaded, apply it now
                 if (window['DOMPurify']) compToAdd.slot = window['DOMPurify'].sanitize(compToAdd.slot)
                 // Set the component content to the msg.payload or the slot property
-                if (compToAdd.slot !== undefined && compToAdd.slot !== null && compToAdd.slot !== '')
+                if (compToAdd.slot !== undefined && compToAdd.slot !== null && compToAdd.slot !== '') {
                     newEl.innerHTML = compToAdd.slot ? compToAdd.slot : payload
+                }
             }
             //#endregion
 
             //#region Add Slot Markdown content to innerHTML IF marked library is available
             if (window['markdownit'] && compToAdd.slotMarkdown) {
-                const opts = {
-                    html: true, linkify: true, _highlight: true, langPrefix: 'language-',
+                const opts = { // eslint-disable-line object-shorthand
+                    html: true,
+                    linkify: true,
+                    _highlight: true,
+                    langPrefix: 'language-',
                     highlight(str, lang) {
                         if (lang && window['hljs'] && window['hljs'].getLanguage(lang)) {
                             try {
                                 return `<pre class="highlight" data-language="${lang.toUpperCase()}">
                                         <code class="language-${lang}">${window['hljs'].highlightAuto(str).value}</code></pre>`
-                            } finally { }
+                            } finally { } // eslint-disable-line no-empty
                         }
                         return `<pre class="highlight"><code>${md.utils.escapeHtml(str)}</code></pre>`
                     },
@@ -679,8 +799,9 @@ export const Uib = class Uib {
                 // If DOMPurify is loaded, apply it now
                 if (window['DOMPurify']) compToAdd.slotMarkdown = window['DOMPurify'].sanitize(compToAdd.slotMarkdown)
                 // Set the component content to the msg.payload or the slot property
-                if (compToAdd.slotMarkdown !== undefined && compToAdd.slotMarkdown !== null && compToAdd.slotMarkdown !== '')
+                if (compToAdd.slotMarkdown !== undefined && compToAdd.slotMarkdown !== null && compToAdd.slotMarkdown !== '') {
                     newEl.innerHTML += compToAdd.slotMarkdown ? compToAdd.slotMarkdown : payload
+                }
             }
             //#endregion
 
@@ -691,7 +812,7 @@ export const Uib = class Uib {
             } else if (ui.parentEl) {
                 elParent = ui.parentEl
             } else if (compToAdd.parent || ui.parent) {
-                let parent = compToAdd.parent ? compToAdd.parent : ui.parent
+                const parent = compToAdd.parent ? compToAdd.parent : ui.parent
                 elParent = document.querySelector(parent)
                 if (!elParent) {
                     log('info', 'Uib:_uiAdd', `Parent element '${parent}' not found, adding to body`)()
@@ -706,11 +827,13 @@ export const Uib = class Uib {
             elParent.appendChild(newEl)
 
             // If nested components, go again - but don't pass payload to sub-components
-            if (compToAdd.components) this._uiAdd({
-                method: ui.method,
-                parentEl: newEl,
-                components: compToAdd.components,
-            }, null)
+            if (compToAdd.components) {
+                this._uiAdd({
+                    method: ui.method,
+                    parentEl: newEl,
+                    components: compToAdd.components,
+                }, null)
+            }
         })
 
     } // --- end of _uiAdd ---
@@ -726,6 +849,7 @@ export const Uib = class Uib {
         })
     } // --- end of _uiRemove ---
 
+    // TODO - does nothing right now
     /** Handle incoming _ui update requests
      * @param {*} ui Standardised msg._ui property object
      */
@@ -883,11 +1007,11 @@ export const Uib = class Uib {
      * @example
      * In VueJS: `<b-button id="myButton1" @click="doEvent" data-something="hello"></b-button>`
      * In VueJS methods: `doEvent: uibuilder.eventSend,`
-     * 
-     * All `data-` attributes will be passed back to Node-RED, 
+     *
+     * All `data-` attributes will be passed back to Node-RED,
      *    use them instead of arguments in the click function.
      *    All target._ui custom properties are also passed back to Node-RED.
-     * 
+     *
      * @param {MouseEvent|any} domevent DOM Event object
      * @param {string} [originator] A Node-RED node ID to return the message to
      */
@@ -927,11 +1051,6 @@ export const Uib = class Uib {
         if (target.dataset.length === 0) log('warn', 'Uib:eventSend', 'No payload in msg. data-* attributes should be used.')()
 
         this._send(msg, this.#ioChannels.client, originator)
-    }
-
-    _dispatchCustomEvent(title, details) {
-        const event = new CustomEvent(title, { detail: details })
-        document.dispatchEvent(event)
     }
 
     // Handle msg._ui - emit specific events on document that make it easy for coders to use
@@ -974,7 +1093,7 @@ export const Uib = class Uib {
         receivedMsg = makeMeAnObject(receivedMsg, 'payload')
 
         // @since 2018-10-07 v1.0.9: Work out local time offset from server
-        this.checkTimestamp(receivedMsg)
+        this._checkTimestamp(receivedMsg)
 
         // TODO RE-ENABLE script/style handling
         // If the msg contains a code property (js), insert to DOM, remove from msg if required
@@ -1009,18 +1128,18 @@ export const Uib = class Uib {
         if (receivedCtrlMsg === null) {
             receivedCtrlMsg = {}
         } else if (typeof receivedCtrlMsg !== 'object') {
-            var msg = {}
+            const msg = {}
             msg['uibuilderCtrl:' + this.#ioChannels.control] = receivedCtrlMsg
             receivedCtrlMsg = msg
         }
 
         // @since 2018-10-07 v1.0.9: Work out local time offset from server
-        this.checkTimestamp(receivedCtrlMsg)
+        this._checkTimestamp(receivedCtrlMsg)
 
         this.set('ctrlMsg', receivedCtrlMsg)
         this.set('msgsCtrl', ++this.msgsCtrlReceived)
 
-        log('trace', `Uib:ioSetup:_ctrlMsgFromServer`, `Channel '${this.#ioChannels.control}'. Received control msg #${this.msgsCtrlReceived}`, receivedCtrlMsg)()
+        log('trace', 'Uib:ioSetup:_ctrlMsgFromServer', `Channel '${this.#ioChannels.control}'. Received control msg #${this.msgsCtrlReceived}`, receivedCtrlMsg)()
 
         /** Process control msg types */
         switch (receivedCtrlMsg.uibuilderCtrl) {
@@ -1035,8 +1154,9 @@ export const Uib = class Uib {
             case 'client connect': {
                 log('trace', `Uib:ioSetup:${this.#ioChannels.control}`, 'Received "client connect" from server')()
                 log('info', `Uib:ioSetup:${this.#ioChannels.control}`, `✅ Server connected. Version: ${receivedCtrlMsg.version}\nServer time: ${receivedCtrlMsg.serverTimestamp}, Sever time offset: ${this.serverTimeOffset} hours`)()
-                if (Uib._meta.version !== receivedCtrlMsg.version)
+                if ( !Uib._meta.version.startsWith(receivedCtrlMsg.version) ) {
                     log('warn', `Uib:ioSetup:${this.#ioChannels.control}`, `Server version (${receivedCtrlMsg.version}) not the same as the client version (${Uib._meta.version})`)()
+                }
 
                 if (this.autoSendReady === true) { // eslint-disable-line no-lonely-if
                     log('trace', `Uib:ioSetup:${this.#ioChannels.control}/client connect`, 'Auto-sending ready-for-content/replay msg to server')
@@ -1071,7 +1191,7 @@ export const Uib = class Uib {
      * since 2020-01-25 Removed httpRoot from namespace to prevent proxy induced errors
      * @returns {string} Socket.IO namespace
      */
-    setIOnamespace() {
+    _getIOnamespace() {
 
         let ioNamespace
 
@@ -1081,7 +1201,7 @@ export const Uib = class Uib {
         // if it wasn't available, try using the current url path
         if (ioNamespace === undefined || ioNamespace === '') {
             // split url path & eliminate any blank elements, and trailing or double slashes
-            let u = window.location.pathname.split('/')
+            const u = window.location.pathname.split('/')
                 .filter(function (t) { return t.trim() !== '' })
 
             /** since v2.0.5 Extra check for 0 length, Issue #73. since 2017-11-06 If the last element of the path is an .html file name, remove it */
@@ -1090,15 +1210,15 @@ export const Uib = class Uib {
             // Get the last part of the url path, this MUST match the namespace in uibuilder
             ioNamespace = u.pop()
 
-            log('trace', 'uibuilder.module.js:setIOnamespace', `Socket.IO namespace found via url path: ${ioNamespace}`)()
+            log('trace', 'uibuilder.module.js:getIOnamespace', `Socket.IO namespace found via url path: ${ioNamespace}`)()
         } else {
-            log('trace', 'uibuilder.module.js:setIOnamespace', `Socket.IO namespace found via cookie: ${ioNamespace}`)()
+            log('trace', 'uibuilder.module.js:getIOnamespace', `Socket.IO namespace found via cookie: ${ioNamespace}`)()
         }
 
         // Namespace HAS to start with a /
         ioNamespace = '/' + ioNamespace
 
-        log('trace', 'uibuilder.module.js:setIOnamespace', `Final Socket.IO namespace: ${ioNamespace}`)()
+        log('trace', 'uibuilder.module.js:getIOnamespace', `Final Socket.IO namespace: ${ioNamespace}`)()
 
         return ioNamespace
     } // --- End of set IO namespace --- //
@@ -1108,7 +1228,7 @@ export const Uib = class Uib {
      * @param {number} [factor] Multiplication factor for subsequent checks (delay*factor). Default=1.5
      * @param {number} [depth] Recursion depth
      */
-    checkConnect(delay, factor, depth = 1) {
+    _checkConnect(delay, factor, depth = 1) {
         if (!delay) delay = this.retryMs
         if (!factor) factor = this.retryFactor
 
@@ -1143,7 +1263,7 @@ export const Uib = class Uib {
             this.#timerid = null
 
             // Create new timer for next time round with extended delay
-            this.checkConnect(delay * factor, factor, depth++)
+            this._checkConnect(delay * factor, factor, depth++)
         }, delay)
     } // --- End of checkConnect Fn--- //
 
@@ -1153,7 +1273,7 @@ export const Uib = class Uib {
      * since v2.0.0-beta2 Moved to a function and called by the user (uibuilder.start()) so that namespace & path can be passed manually if needed
      * @returns {void} Attaches socket.io manager to self._socket and updates self.ioNamespace & self.ioPath as needed
      */
-    ioSetup() {
+    _ioSetup() {
 
         // Just a notification, actual load is done outside the class (see start of file)
         if (io === undefined) log('error', 'Uib:ioSetup', 'Socket.IO client not loaded, Node-RED comms will not work')()
@@ -1184,7 +1304,7 @@ export const Uib = class Uib {
             log('info', 'Uib:ioSetup', `✅ SOCKET CONNECTED. Connection count: ${this.#connectedNum}\nNamespace: ${this.ioNamespace}`)()
 
             this.set('ioConnected', true)
-            this.checkConnect() // resets any reconnection timers
+            this._checkConnect() // resets any reconnection timers
 
         }) // --- End of socket connection processing ---
 
@@ -1203,7 +1323,7 @@ export const Uib = class Uib {
             log('info', 'Uib:ioSetup:socket-disconnect', `⛔ Socket Disconnected. Reason: ${reason}`)()
 
             /** A workaround for SIO's failure to reconnect after a disconnection */
-            this.checkConnect()
+            this._checkConnect()
         }) // --- End of socket disconnect processing ---
 
         // Socket.io connection error - probably the wrong ioPath
@@ -1221,7 +1341,7 @@ export const Uib = class Uib {
         }) // --- End of socket error processing ---
 
         // Ensure we are connected, retry if not
-        this.checkConnect()
+        this._checkConnect()
 
         /* We really don't need these, just for interest
             self._socket.io.on('packet', function onPacket(data){
@@ -1266,93 +1386,13 @@ export const Uib = class Uib {
 
     //#endregion -------- ------------ -------- //
 
-    //#region ------- External facing utility methods -------- //
-
-    /** Write to localStorage if possible. console error output if can't write
-     * Also uses this.storePrefix
-     * @example
-     *   uibuilder.setStore('fred', 42)
-     *   console.log(uibuilder.getStore('fred'))
-     * @param {string} id localStorage var name to be used (prefixed with 'uib_')
-     * @param {*} value value to write to localstore
-     * @returns {boolean} True if succeeded else false
-     */
-    setStore(id, value) {
-        if (typeof value === 'object') {
-            try {
-                value = JSON.stringify(value)
-            } catch (e) {
-                log('error', 'uibuilder:setStore', 'Cannot stringify object, not storing. ', e)()
-                return false
-            }
-        }
-        try {
-            localStorage.setItem(this.storePrefix + id, value)
-            return true
-        } catch (e) {
-            log('error', 'uibuilder:setStore', 'Cannot write to localStorage. ', e)()
-            return false
-        }
-    } // --- end of setStore --- //
-    getStore(id) {
-        try {
-            return JSON.parse(localStorage.getItem(this.storePrefix + id))
-        } catch (e) {
-            return localStorage.getItem(this.storePrefix + id)
-        }
-    }
-    removeStore(id) {
-        try {
-            localStorage.removeItem(this.storePrefix + id)
-        } catch (e) { }
-    }
-
-    /** HTTP Ping/Keep-alive - makes a call back to uibuilder's ExpressJS server and receives a 204 response
-     * Can be used to keep sessions alive.
-     * @example
-     *   uibuilder.setPing(2000) // repeat every 2 sec. Re-issue with ping(0) to turn off repeat.
-     *   uibuilder.onChange('ping', function(data) {
-     *      console.log('pinger', data)
-     *   })
-     * @param {number} ms Repeat interval in ms
-     */
-    setPing(ms = 0) {
-        const oReq = new XMLHttpRequest()
-        oReq.addEventListener('load', () => {
-            const headers = (oReq.getAllResponseHeaders()).split('\r\n')
-            //console.log('PING', oReq.status, oReq.getAllResponseHeaders())
-            this.set('ping', {
-                success: (oReq.status === 201) || (oReq.status === 204) ? true : false,
-                status: oReq.status,
-                headers: headers,
-            })
-        })
-
-        if (this.#pingInterval) {
-            clearInterval(this.#pingInterval)
-            this.#pingInterval = undefined
-        }
-
-        if (ms < 1) {
-            oReq.open('GET', '../uibuilder/ping')
-            oReq.send()
-        } else {
-            this.#pingInterval = setInterval(() => {
-                oReq.open('GET', '../uibuilder/ping')
-                oReq.send()
-            }, ms)
-        }
-    } // ---- End of ping ---- //
-
-    //#endregion -------- ------------ -------- //
-
     //#region ------- Class construction & startup method -------- //
 
     constructor() {
         log('trace', 'Uib:constructor', 'Starting')()
 
         document.cookie.split(';').forEach((c) => {
-            let splitC = c.split('=')
+            const splitC = c.split('=')
             this.cookies[splitC[0].trim()] = splitC[1]
         })
 
@@ -1360,7 +1400,7 @@ export const Uib = class Uib {
         this.clientId = this.cookies['uibuilder-client-id']
         log('trace', 'Uib:constructor', 'Client ID: ', this.clientId)()
 
-        this.ioNamespace = this.setIOnamespace()
+        this.ioNamespace = this._getIOnamespace()
 
         //#region - Try to make sure client uses Socket.IO client version from the uibuilder module (using cookie or path) @since v2.0.0 2019-02-24 allows for httpNodeRoot
 
@@ -1370,7 +1410,7 @@ export const Uib = class Uib {
             log('trace', 'Uib:constructor', `httpNodeRoot set by cookie to "${this.httpNodeRoot}"`)()
         } else {
             // split current url path, eliminate any blank elements and trailing or double slashes
-            let fullPath = window.location.pathname.split('/').filter(function (t) { return t.trim() !== '' })
+            const fullPath = window.location.pathname.split('/').filter(function (t) { return t.trim() !== '' })
             /** handle url includes file name - @since v2.0.5 Extra check for 0 length, Issue #73. */
             if (fullPath.length > 0 && fullPath[fullPath.length - 1].endsWith('.html')) fullPath.pop()
             fullPath.pop() // gives the last path section of the url
@@ -1387,7 +1427,7 @@ export const Uib = class Uib {
 
     /** Start up Socket.IO comms and listeners
      * This has to be done separately because if running from a web page in a sub-folder of src/dist, uibuilder cannot
-     * necessarily work out the correct ioPath to use. 
+     * necessarily work out the correct ioPath to use.
      * Also, if cookies aren't permitted in the browser, both ioPath and ioNamespace may need to be specified.
      * @param {object} [options] The start options object.
      * @returns {void}
@@ -1399,9 +1439,8 @@ export const Uib = class Uib {
             log('warn', 'Uib:start', '❌ Start function already called. You should normally only call this once. Resetting Socket.IO')()
         }
 
-        log('log', 'Uib:start', `Cookies: `, this.cookies, `\nClient ID: ${this.clientId}`)()
-        log('trace', 'Uib:start', `ioNamespace: `, this.ioNamespace, `\nioPath: ${this.ioPath}`)()
-
+        log('log', 'Uib:start', 'Cookies: ', this.cookies, `\nClient ID: ${this.clientId}`)()
+        log('trace', 'Uib:start', 'ioNamespace: ', this.ioNamespace, `\nioPath: ${this.ioPath}`)()
 
         // Handle options
         if (options) {
@@ -1424,12 +1463,11 @@ export const Uib = class Uib {
             if (msg._ui) {
                 log('trace', 'Uib:start:onChange:_ui', 'Calling _uiManager')()
                 this._uiManager(msg)
-                return
             }
         })
 
         // Start up Socket.IO connections and listeners
-        this.ioSetup()
+        this._ioSetup()
 
         this.started = true
         log('trace', 'Uib:start', 'Start completed')()
