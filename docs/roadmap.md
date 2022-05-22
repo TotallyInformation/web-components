@@ -24,17 +24,20 @@ Please see the main README file.
 
 | Name            | Description                                                  |
 | --------------- | ------------------------------------------------------------ |
-| `simple-input`  | An input tag with a label. With option to be part of a form (button submission) or to give output on lost focus. |
-| `simple-button` | A button that triggers a custom document event and sends to uibuilder (if available). Automatically includes attrib and prop data, id, name, etc. Includes basic formatting and a slot for text (which allows some HMTL formatting). |
-| `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
-| `simple-table`  | Takes a JSON or JavaScript object or array and displays the contents in a simple table format. |
-| `data-table`    | Similar to `simple-table` but with more options such as nested tables and multiple headers/bodies. Probably also with CRUD controls. |
-| `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. |
-| `grid-view`     | A controllable grid layout.                                  |
 | `chart-*`       | Various different chart outputs using different libraries. Chart.js, Uplot, EChart |
+| `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. |
+| `data-table`    | Similar to `simple-table` but with more options such as nested tables and multiple headers/bodies. Probably also with CRUD controls. |
+| `grid-view`     | A controllable grid layout.                                  |
+| `nav-bar`       | |
 | `on-off`        | A dedicated on/off button.    |
+| `simple-button` | A button that triggers a custom document event and sends to uibuilder (if available). Automatically includes attrib and prop data, id, name, etc. Includes basic formatting and a slot for text (which allows some HMTL formatting). |
 | `simple-dialog` | Simple wrapper for a [dialog box](https://www.tutorialrepublic.com/codelab.php?topic=html5&file=dialog-tag) with options for modal, button list |
-| `simple-pie` | https://dev.to/dannyengelman/web-components-using-unknownhtmlelements-for-better-semantic-html-5d8c |
-| `nav-bar` | |
-| `toast-msg` | |
+| `simple-gauge`  | Maybe using gauge.js? |
+| `simple-input`  | An input tag with a label. With option to be part of a form (button submission) or to give output on lost focus. |
+| `simple-map`    | See Dave's WorldMap Dashboard node for inspiration! |
+| `simple-pie`    | https://dev.to/dannyengelman/web-components-using-unknownhtmlelements-for-better-semantic-html-5d8c |
+| `simple-slider` | |
+| `simple-table`  | Takes a JSON or JavaScript object or array and displays the contents in a simple table format. |
+| `toast-msg`     | |
+| `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
 
