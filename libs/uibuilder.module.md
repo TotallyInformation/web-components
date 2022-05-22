@@ -757,3 +757,107 @@ Other similar issues may occur when using a slow network or one with excessive l
 Because a lot of things happen asynchronously in JavaScript, it is possible that occasionally an event handler isn't fully registed by the time that an event fires (for example on an incoming msg or a `uibuilder.set`). In these cases, you may need to put your change code into `window.onload = (evt) => { ... }`. That ensures that everything is fully loaded before your code will run.
 
 An alternative way to work would be to load the uibuilder library using a dynamic import as in `import('./uibuilder.module.js').then( ... )` and do all of your custom processing from within the `then` callback. If your browser supports top-level async/await, you could also do `const uibuilder = await import('./uibuilder.module.js')` which will pause until uibuilder is completely loaded and ready.
+
+
+## Variables
+
+### Read/write
+
+#### `logLevel`
+
+### Read only
+
+#### `meta` - module metadata (version, type, displayName)
+#### `clientId`
+Client ID set by uibuilder on connect
+#### `cookies`
+The collection of cookies provided by uibuilder
+#### `ctrlMsg`
+Copy of last control msg object received from sever */
+#### `ioConnected`
+    /** Is Socket.IO client connected to the server? */
+#### `msg`
+    /** Last std msg received from Node-RED */
+#### `msgsSent`
+    /** number of messages sent to server since page load */
+#### `msgsReceived`
+    /** number of messages received from server since page load */
+#### `msgsSentCtrl`
+    /** number of control messages sent to server since page load */
+#### `msgsCtrlReceived`
+    /** number of control messages received from server since page load */
+#### `sentCtrlMsg`
+    /** last control msg object sent via uibuilder.send() @since v2.0.0-dev3 */
+#### `sentMsg`
+    /** last std msg object sent via uibuilder.send() */
+#### `serverTimeOffset`
+    /** placeholder to track time offset from server, see fn socket.on(ioChannels.server ...) */
+
+
+## Functions
+
+### Message Handling
+#### `send`
+#### `sendCtrl`
+#### `eventSend`
+
+### Variable Handling
+#### `get`
+#### `set`
+#### `getStore`
+#### `setStore`
+#### `removeStore`
+#### `setPing`
+
+### UI Handling
+
+These are the new dynamic, configuration-driven UI features. They let you create your UI dynamically from simple data sent to the client.
+
+In addition, internal message handling will recognise standard messages from node-red and process them. So these functions won't always be needed.
+
+#### `loadScriptSrc` - Attach a new remote script to the end of HEAD synchronously
+#### `loadScriptTxt` - Attach a new text script to the end of HEAD synchronously
+#### `loadui` - Load a dynamic UI from a JSON web reponse
+
+### Event Handling
+
+#### `onChange` - Register on-change event listeners for uibuilder tracked properties
+
+Returns a reference to the callback so that it can be cancelled if needed.
+
+Uses the `uibuilder:propertyChanged` event internally.
+
+#### `cancelChange` - remove all the onchange listeners for a given property
+#### `onTopic` - like onChange but directly listens for a specific topic
+#### `cancelTopic` - like cancelChange for for onTopic
+
+### Other
+
+#### `$` - Simplistic jQuery-like document CSS query selector, returns an HTML Element
+
+#### `setOriginator`
+Set the default originator. Set to '' to ignore. Used with uib-sender.
+
+### `log` - output log messages like the library does
+
+Use as `uibuilder.log(1, 'my:prefix', 'Some text', {some:'optional data'})` which produces:
+![Example log output](example-log-output.png)
+
+First argument is the log level (0=Error, 1=Warn, 2=Info, 3=log, 4=debug, 5=trace). If the uibuilder logLevel variable is set to less than the requested level, the output will not be shown. The names can be used instead of the numbers.
+
+
+
+## Custom Events
+
+### `uibuilder:propertyChanged` - when uibuilder.set is called (externally or internally)
+
+Used internally be the `onChange` function but can also be used directly if preferred.
+
+### `uibuilder:stdMsgReceived` - when a non-control msg is received from Node-RED
+
+### `uibuilder:msg:topic:${msg.topic}` - when a std msg with a msg.topic prop is received
+
+### `uibuilder:msg:_ui` - when a std msg with a msg._ui property is received
+
+### `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}`
+
