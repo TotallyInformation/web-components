@@ -2,6 +2,7 @@
  * Assumes you are using Node-RED/uibuilder
  */
 
+// TODO - Change when this is moved to uibuilder proper
 import './uibuilder.module.js'  // Adds `uibuilder` and `$` to globals
 
 import '../components/button-send.js'
