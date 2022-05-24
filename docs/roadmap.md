@@ -25,7 +25,7 @@ Please see the main README file.
 | Name            | Description                                                  |
 | --------------- | ------------------------------------------------------------ |
 | `chart-*`       | Various different chart outputs using different libraries. Chart.js, Uplot, EChart |
-| `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. |
+| `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. A more complex version of `simple-card` |
 | `data-table`    | Similar to `simple-table` but with more options such as nested tables and multiple headers/bodies. Probably also with CRUD controls. |
 | `grid-view`     | A controllable grid layout.                                  |
 | `nav-bar`       | |
