@@ -3,7 +3,7 @@
  * @see the docs folder `./docs/uibuilder.module.md` for details of how to use this fully.
  *
  * Please use the default index.js file for your own code and leave this as-is.
- *
+ * See Uib._meta for client version string
  */
 /*
   Copyright (c) 2017-2022 Julian Knight (Totally Information)
@@ -28,6 +28,7 @@
  */
 //#endregion --- Type Defs --- //
 
+// TODO Add option to allow log events to be sent back to Node-RED as uib ctrl msgs
 //#region --- Module-level utility functions --- //
 
 //#region --- print/console - debugging output functions --- //
@@ -241,6 +242,8 @@ function urlJoin() {
 
 //#region --- We need the Socket.IO client - check in decreasing order of likelihood --- //
 // TODO - Maybe - check if already loaded as window['io']?
+// TODO - Maybe - Should this be moved to inside the class - would know the httpRoot then so less need to guess?
+// TODO           Or, could pull the cookie processing out of the class
 const ioLocns = [ // Likely locations of the Socket.IO client library
     // Where it should normally be
     '../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
@@ -288,6 +291,8 @@ export const Uib = class Uib {
     #timerid = null
     // @ts-ignore Detect whether the loaded library is minified or not
     #isMinified = !(/param/).test(function (param) { }) // eslint-disable-line no-unused-vars
+    // Holds the reference ID for the internal msg change event handler so that it can be cancelled
+    #MsgHandler
 
     // Placeholder for io.socket - can't make a # var until # fns allowed in all browsers
     _socket
@@ -323,6 +328,8 @@ export const Uib = class Uib {
     sentMsg = {}
     /** placeholder to track time offset from server, see fn socket.on(ioChannels.server ...) */
     serverTimeOffset = null
+    /** placeholder for a socket error message */
+    socketError = null
     //#endregion ---- ---- ---- ---- //
 
     //#region ---- Externally Writable (via .set method, read via .get method) ---- //
@@ -427,6 +434,7 @@ export const Uib = class Uib {
 
     //#region ------- Our own event handling system ---------- //
 
+    // TODO Add option to send event details back to Node-RED as uib ctrl msg
     /** Standard fn to create a custom event with details & dispatch it */
     _dispatchCustomEvent(title, details) {
         const event = new CustomEvent(title, { detail: details })
@@ -442,6 +450,7 @@ export const Uib = class Uib {
      *
      * @param {string} prop The property of uibuilder that we want to monitor
      * @param {Function} callback The function that will run when the property changes, parameter is the new value of the property after change
+     * @returns {number} A reference to the callback to cancel, save and pass to uibuilder.cancelChange if you need to remove a listener
      */
     onChange(prop, callback) {
         // Note: Property does not have to exist yet
@@ -636,10 +645,13 @@ export const Uib = class Uib {
         const oReq = new XMLHttpRequest()
         oReq.addEventListener('load', () => {
             const headers = (oReq.getAllResponseHeaders()).split('\r\n')
+            const elapsedTime = Number(new Date()) - Number((oReq.responseURL.split('='))[1])
             this.set('ping', {
                 success: !!((oReq.status === 201) || (oReq.status === 204)), // true if one of the listed codes else false
                 status: oReq.status,
                 headers: headers,
+                url: oReq.responseURL,
+                elapsedTime: elapsedTime,
             })
         })
 
@@ -648,12 +660,12 @@ export const Uib = class Uib {
             this.#pingInterval = undefined
         }
 
-        if (ms < 1) {
-            oReq.open('GET', '../uibuilder/ping')
-            oReq.send()
-        } else {
+        oReq.open('GET', `${this.httpNodeRoot}/uibuilder/ping?t=${Number(new Date())}`)
+        oReq.send()
+
+        if (ms > 0) {
             this.#pingInterval = setInterval(() => {
-                oReq.open('GET', '../uibuilder/ping')
+                oReq.open('GET', `${this.httpNodeRoot}/uibuilder/ping?t=${Number(new Date())}`)
                 oReq.send()
             }, ms)
         }
@@ -716,6 +728,7 @@ export const Uib = class Uib {
         document.head.appendChild(newStyle)
     }
 
+    // TODO - Allow notify to sit in corners rather than take over the screen
     /** Show a pop-over "toast" dialog or a modal alert
      * Refs: https://www.w3.org/WAI/ARIA/apg/example-index/dialog-modal/alertdialog.html,
      *       https://www.w3.org/WAI/ARIA/apg/example-index/dialog-modal/dialog.html,
@@ -726,7 +739,6 @@ export const Uib = class Uib {
      * @returns {void}
      */
     showDialog(type, ui, msg) {
-        console.log('UI', ui)
 
         //#region -- Check properties --
 
@@ -791,6 +803,7 @@ export const Uib = class Uib {
             if ( toaster.childElementCount < 1 ) toaster.remove()
         }
 
+        // TODO
         if (type === 'alert') {
             // newD.setAttribute('aria-labelledby', '')
             // newD.setAttribute('aria-describedby', '')
@@ -805,7 +818,8 @@ export const Uib = class Uib {
                 if ( toaster.childElementCount < 1 ) toaster.remove()
             }, ui.autoHideDelay)
         }
-    }
+
+    } // --- End of showDialog ---
 
     /** Load a dynamic UI from a JSON web reponse */
     loadui(url) {
@@ -1021,8 +1035,9 @@ export const Uib = class Uib {
     } // --- end of _uiLoad ---
 
     /** Handle a reload request */
-    _uiReload(ui) {
-
+    _uiReload() {
+        log('trace', 'Uib:uiManager:reload', 'reloading')()
+        location.reload()
     }
 
     /** Handle incoming _ui messages and loaded UI JSON files
@@ -1040,6 +1055,13 @@ export const Uib = class Uib {
                 log('warn', 'Uib:_uiManager', `No method defined for msg._ui[${i}]. Ignoring`)()
                 return
             }
+
+            ui.payload = msg.payload
+            ui.topic = msg.topic
+            this._dispatchCustomEvent(
+                `uibuilder:msg:_ui:${ui.method}${ui.id ? `:${ui.id}` : ''}`,
+                ui
+            )
 
             switch (ui.method) {
                 case 'add': {
@@ -1063,8 +1085,7 @@ export const Uib = class Uib {
                 }
 
                 case 'reload': {
-                    log('trace', 'Uib:uiManager:reload', 'reloading')()
-                    location.reload()
+                    this._uiReload()
                     break
                 }
 
@@ -1205,7 +1226,7 @@ export const Uib = class Uib {
         this._send(msg, this.#ioChannels.client, originator)
     }
 
-    // Handle msg._ui - emit specific events on document that make it easy for coders to use
+    // Handle received messages - Process some msgs internally, emit specific events on document that make it easy for coders to use
     _msgRcvdEvents(msg) {
 
         // Message received
@@ -1214,20 +1235,26 @@ export const Uib = class Uib {
         // Topic
         if ( msg.topic ) this._dispatchCustomEvent(`uibuilder:msg:topic:${msg.topic}`, msg)
 
-        // msg._ui events
-        if ( msg._ui ) {
-            this._dispatchCustomEvent('uibuilder:msg:_ui', msg)
+        // Handle msg._uib special requests
+        if (msg._uib) {
+            /** Process a client reload request from Node-RED - as the page is reloaded, everything else is ignored
+             * Note that msg._ui.reload is also actioned via the _ui processing below */
+            if (msg._uib.reload === true) {
+                log('trace', 'Uib:_msgRcvdEvents:_uib:reload', 'reloading')()
+                location.reload()
+                return
+            }
 
-            msg._ui.forEach( action => {
-                if ( action.method ) {
-                    action.payload = msg.payload
-                    action.topic = msg.topic
-                    this._dispatchCustomEvent(
-                        `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}`,
-                        action
-                    )
-                }
-            })
+            // TODO Process toast and alert requests - can also be requested via msg._ui
+            if ( msg._uib.componentRef === 'globalNotification' ) { }
+            if ( msg._uib.componentRef === 'globalAlert' ) { }
+        }
+
+        // Handle msg._ui requests
+        if ( msg._ui ) {
+            log('trace', 'Uib:_msgRcvdEvents:_ui', 'Calling _uiManager')()
+            this._dispatchCustomEvent('uibuilder:msg:_ui', msg)
+            this._uiManager(msg)
         }
 
     } // --- end of _msgRcvdEvents ---
@@ -1247,18 +1274,6 @@ export const Uib = class Uib {
         // @since 2018-10-07 v1.0.9: Work out local time offset from server
         this._checkTimestamp(receivedMsg)
 
-        // TODO RE-ENABLE script/style handling
-        // If the msg contains a code property (js), insert to DOM, remove from msg if required
-        // if ( self.allowScript && Object.prototype.hasOwnProperty.call(receivedMsg, 'script') ) {
-        //     self.newScript(receivedMsg.script)
-        //     if ( self.removeScript ) delete receivedMsg.script
-        // }
-        // If the msg contains a style property (css), insert to DOM, remove from msg if required
-        // if ( self.allowStyle && Object.prototype.hasOwnProperty.call(receivedMsg, 'style') ) {
-        //     self.newStyle(receivedMsg.style)
-        //     if ( self.removeStyle ) delete receivedMsg.style
-        // }
-
         // Save the msg for further processing
         this.set('msg', receivedMsg)
 
@@ -1270,7 +1285,7 @@ export const Uib = class Uib {
 
         log('info', 'Uib:ioSetup:stdMsgFromServer', `Channel '${this.#ioChannels.server}'. Received msg #${this.msgsReceived}.`, receivedMsg)()
 
-        // ! NOTE: Don't try to handle specialist messages here. Add onChange('msg', ...) callbacks in start()
+        // ! NOTE: Don't try to handle specialist messages here. See _msgRcvdEvents.
 
     } // -- End of websocket receive DATA msg from Node-RED -- //
 
@@ -1379,6 +1394,7 @@ export const Uib = class Uib {
      * @param {number} [delay] Initial delay before checking (ms). Default=2000ms
      * @param {number} [factor] Multiplication factor for subsequent checks (delay*factor). Default=1.5
      * @param {number} [depth] Recursion depth
+     * @returns {boolean} Whether or not Socket.IO is connected to uibuilder in Node-RED
      */
     _checkConnect(delay, factor, depth = 1) {
         if (!delay) delay = this.retryMs
@@ -1393,10 +1409,13 @@ export const Uib = class Uib {
                 window.clearTimeout(this.#timerid)
                 this.#timerid = null
             }
-            return
+            this.set('ioConnected', true)
+            this.set('socketError', null)
+            return true
         }
 
         // ... we aren't connected so:
+        this.set('ioConnected', false)
 
         // we only want one running at a time
         if (this.#timerid) window.clearTimeout(this.#timerid)
@@ -1417,18 +1436,23 @@ export const Uib = class Uib {
             // Create new timer for next time round with extended delay
             this._checkConnect(delay * factor, factor, depth++)
         }, delay)
+
+        return false
     } // --- End of checkConnect Fn--- //
 
     // See message handling section for msg receipt handlers
 
     /** Setup Socket.io
      * since v2.0.0-beta2 Moved to a function and called by the user (uibuilder.start()) so that namespace & path can be passed manually if needed
-     * @returns {void} Attaches socket.io manager to self._socket and updates self.ioNamespace & self.ioPath as needed
+     * @returns {boolean} Attaches socket.io manager to self._socket and updates self.ioNamespace & self.ioPath as needed
      */
     _ioSetup() {
 
         // Just a notification, actual load is done outside the class (see start of file)
-        if (io === undefined) log('error', 'Uib:ioSetup', 'Socket.IO client not loaded, Node-RED comms will not work')()
+        if (io === undefined) {
+            log('error', 'Uib:ioSetup', 'Socket.IO client not loaded, Node-RED comms will not work')()
+            return false
+        }
 
         // If socket is already set up, close it and remove all of the listeners
         if (this._socket) {
@@ -1440,6 +1464,7 @@ export const Uib = class Uib {
             this._socket.close()
             this._socket.offAny()
             this._socket = undefined
+            this.set('ioConnected', false)
         }
 
         // Update the URL path to make sure we have the right one
@@ -1454,9 +1479,9 @@ export const Uib = class Uib {
 
             this.#connectedNum++
             log('info', 'Uib:ioSetup', `✅ SOCKET CONNECTED. Connection count: ${this.#connectedNum}\nNamespace: ${this.ioNamespace}`)()
+            this._dispatchCustomEvent('uibuilder:socket:connected', this.#connectedNum)
 
-            this.set('ioConnected', true)
-            this._checkConnect() // resets any reconnection timers
+            this._checkConnect() // resets any reconnection timers & sets connected flag
 
         }) // --- End of socket connection processing ---
 
@@ -1471,8 +1496,9 @@ export const Uib = class Uib {
             // reason === 'io server disconnect' - redeploy of Node instance
             // reason === 'transport close' - Node-RED terminating
             // reason === 'ping timeout' - didn't receive a pong response?
-            this.set('ioConnected', false)
             log('info', 'Uib:ioSetup:socket-disconnect', `⛔ Socket Disconnected. Reason: ${reason}`)()
+
+            this._dispatchCustomEvent('uibuilder:socket:disconnected', reason)
 
             /** A workaround for SIO's failure to reconnect after a disconnection */
             this._checkConnect()
@@ -1483,6 +1509,7 @@ export const Uib = class Uib {
             log('error', 'Uib:ioSetup:connect_error', `❌ Socket.IO Connect Error. Reason: ${err.message}`, err)()
             this.set('ioConnected', false)
             this.set('socketError', err)
+            this._dispatchCustomEvent('uibuilder:socket:disconnected', err)
         }) // --- End of socket connect error processing ---
 
         // Socket.io error - from the server (socket.use middleware triggered an error response)
@@ -1490,10 +1517,13 @@ export const Uib = class Uib {
             log('error', 'Uib:ioSetup:error', `❌ Socket.IO Error. Reason: ${err.message}`, err)()
             this.set('ioConnected', false)
             this.set('socketError', err)
+            this._dispatchCustomEvent('uibuilder:socket:disconnected', err)
         }) // --- End of socket error processing ---
 
         // Ensure we are connected, retry if not
         this._checkConnect()
+
+        return true
 
         /* We really don't need these, just for interest
             self._socket.io.on('packet', function onPacket(data){
@@ -1577,6 +1607,7 @@ export const Uib = class Uib {
         log('trace', 'Uib:constructor', 'Ending')()
     }
 
+    // TODO Add option to override auto-loading of stylesheet
     /** Start up Socket.IO comms and listeners
      * This has to be done separately because if running from a web page in a sub-folder of src/dist, uibuilder cannot
      * necessarily work out the correct ioPath to use.
@@ -1587,9 +1618,11 @@ export const Uib = class Uib {
     start(options) {
         log('trace', 'Uib:start', 'Starting')()
 
+        // Cancel the msg event handler if already present
+        if ( this.#MsgHandler ) this.cancelChange('msg', this.#MsgHandler)
+
         if (this.started === true) {
-            log('error', 'Uib:start', '❌ Start function already called. Can only be called once. Reload page to reset.')()
-            return
+            log('info', 'Uib:start', 'Start function already called. Resetting Socket.IO and msg handler.')()
         }
 
         log('log', 'Uib:start', 'Cookies: ', this.cookies, `\nClient ID: ${this.clientId}`)()
@@ -1601,42 +1634,32 @@ export const Uib = class Uib {
             if (options.ioPath !== undefined && options.ioPath !== null && options.ioPath !== '') this.ioPath = options.ioPath
         }
 
-        // Handle specialist messages like reload and _ui
-        this.onChange('msg', (msg) => {
-            if (msg._uib) {
-                /** Process a client reload request from Node-RED - as the page is reloaded, everything else is ignored
-                 * Note that msg._ui.reload is also actioned via the _ui processing below */
-                if (msg._uib.reload === true) {
-                    log('trace', 'Uib:start:onChange:reload', 'reloading')()
-                    location.reload()
-                    return
-                }
+        // Do we need to load styles?
+        if ( document.styleSheets.length > 1 || (document.styleSheets.length === 0 && document.styleSheets[0].cssRules.length === 0) ) {
+            log('info', 'Uib:start', 'Styles already loaded so not loading uibuilder default styles.')()
+        } else {
+            log('info', 'Uib:start', 'No styles loaded, loading uibuilder default styles.')()
+            this.loadStyleSrc(`${this.httpNodeRoot}/uibuilder/uib-brand.css`)
+        }
 
-                // Process toast and alert requests - can also be requested via msg._ui
-                if ( msg._uib.componentRef === 'globalNotification' ) {}
-                if ( msg._uib.componentRef === 'globalAlert' ) {}
-            }
+        // Handle specialist messages like reload and _ui -> Moved to _msgRcvdEvents
 
-            // Process msg._ui messages
-            if (msg._ui) {
-                log('trace', 'Uib:start:onChange:_ui', 'Calling _uiManager')()
-                this._uiManager(msg)
-                return // eslint-disable-line no-useless-return
-            }
-        })
+        // Start up (or restart) Socket.IO connections and listeners. Returns false if io not found
+        this.started = this._ioSetup()
 
-        // Start up Socket.IO connections and listeners
-        this._ioSetup()
-
-        this.started = true
-        log('trace', 'Uib:start', 'Start completed')()
+        if ( this.started === true ) {
+            log('trace', 'Uib:start', 'Start completed. Socket.IO client library loaded.')()
+        } else {
+            log('error', 'Uib:start', 'Start completed. ERROR: Socket.IO client library NOT LOADED.')()
+        }
     }
 
     //#endregion -------- ------------ -------- //
 
 } // ==== End of Class Uib
 
-//#region --- Wrap up ---
+//#region --- Wrap up - get things started ---
+
 // Create an instance (we will only ever want one)
 const uibuilder = new Uib()
 
@@ -1657,6 +1680,10 @@ if (!window['$']) {
 // Can import as `import uibuilder from ...` OR `import {uibuilder} from ...`
 export { uibuilder }
 export default uibuilder
+
+// Attempt to run start fn
+uibuilder.start()
+
 //#endregion --- Wrap up ---
 
 // EOF

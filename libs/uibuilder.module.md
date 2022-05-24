@@ -1,5 +1,96 @@
 # Documentation for uibuilder.module.js
 
+This is the next-generation front-end client for uibuilder. It has some nice new features but at the expense of only working with browsers that support ES2019 (anything from around the beginning of 2019 or later should work).
+
+- [Documentation for uibuilder.module.js](#documentation-for-uibuildermodulejs)
+  - [How to use](#how-to-use)
+    - [The quick guide](#the-quick-guide)
+    - [Where is it?](#where-is-it)
+    - [More information](#more-information)
+  - [What is not yet working, to-do](#what-is-not-yet-working-to-do)
+  - [What has been removed?](#what-has-been-removed)
+  - [Features](#features)
+    - [Exposes global uibuilder and $](#exposes-global-uibuilder-and-)
+    - [start function](#start-function)
+    - [$ function](#-function)
+    - [onChange/cancelChange functions](#onchangecancelchange-functions)
+    - [onTopic/cancelTopic functions](#ontopiccanceltopic-functions)
+    - [Conditional logging](#conditional-logging)
+    - [document-level events](#document-level-events)
+    - [setPing function](#setping-function)
+    - [set function](#set-function)
+    - [Page auto-reload](#page-auto-reload)
+    - [setStore, getStore, removeStore functions](#setstore-getstore-removestore-functions)
+    - [send function](#send-function)
+    - [eventSend function](#eventsend-function)
+      - [Plain html/javascript example.](#plain-htmljavascript-example)
+      - [VueJS/bootstrap-vue example](#vuejsbootstrap-vue-example)
+    - [Auto-loading of the Socket.IO client](#auto-loading-of-the-socketio-client)
+    - [Auto-loading of the uibuilder default stylesheet](#auto-loading-of-the-uibuilder-default-stylesheet)
+  - [Dynamic, data-driven HTML content](#dynamic-data-driven-html-content)
+    - [Dynamic content details](#dynamic-content-details)
+      - [Initial load from JSON URL](#initial-load-from-json-url)
+    - [Dynamic changes via messages from Node-RED (or local set)](#dynamic-changes-via-messages-from-node-red-or-local-set)
+    - [Available methods](#available-methods)
+    - [Method: load](#method-load)
+      - [Caveats and limitations](#caveats-and-limitations)
+      - [Msg schema](#msg-schema)
+      - [Example showing load in your own index.js](#example-showing-load-in-your-own-indexjs)
+    - [Method: add](#method-add)
+      - [Msg schema](#msg-schema-1)
+      - [Example msgs for nested components](#example-msgs-for-nested-components)
+    - [Method: remove](#method-remove)
+    - [Method: update](#method-update)
+    - [Method: reload - Reloads the current page](#method-reload---reloads-the-current-page)
+    - [Method: notify](#method-notify)
+      - [HTML Tags](#html-tags)
+        - [Schema](#schema)
+    - [Method: alert](#method-alert)
+  - [Troubleshooting](#troubleshooting)
+    - [Vendor files are not loading](#vendor-files-are-not-loading)
+    - [Socket.IO refuses to connect](#socketio-refuses-to-connect)
+    - [Socket.IO repeatedly disconnects](#socketio-repeatedly-disconnects)
+    - [Event/onChange/onTopic callbacks don't fire](#eventonchangeontopic-callbacks-dont-fire)
+    - [The `uibuilder` JavaScript object does not seem to be loaded](#the-uibuilder-javascript-object-does-not-seem-to-be-loaded)
+- [Technical Reference](#technical-reference)
+  - [Variables](#variables)
+    - [Read/write](#readwrite)
+    - [Read only](#read-only)
+  - [Functions](#functions)
+    - [`start(options)` - Starts Socket.IO communications with Node-RED](#startoptions---starts-socketio-communications-with-node-red)
+    - [Message Handling](#message-handling)
+      - [`send`](#send)
+      - [`sendCtrl`](#sendctrl)
+      - [`eventSend`](#eventsend)
+    - [Variable Handling](#variable-handling)
+      - [`get`](#get)
+      - [`set`](#set)
+      - [`getStore`](#getstore)
+      - [`setStore`](#setstore)
+      - [`removeStore`](#removestore)
+      - [`setPing`](#setping)
+    - [UI Handling](#ui-handling)
+      - [`loadScriptSrc` - Attach a new remote script to the end of HEAD synchronously](#loadscriptsrc---attach-a-new-remote-script-to-the-end-of-head-synchronously)
+      - [`loadScriptTxt` - Attach a new text script to the end of HEAD synchronously](#loadscripttxt---attach-a-new-text-script-to-the-end-of-head-synchronously)
+      - [`loadui` - Load a dynamic UI from a JSON web reponse](#loadui---load-a-dynamic-ui-from-a-json-web-reponse)
+    - [Event Handling](#event-handling)
+      - [`onChange` - Register on-change event listeners for uibuilder tracked properties](#onchange---register-on-change-event-listeners-for-uibuilder-tracked-properties)
+      - [`cancelChange` - remove all the onchange listeners for a given property](#cancelchange---remove-all-the-onchange-listeners-for-a-given-property)
+      - [`onTopic` - like onChange but directly listens for a specific topic](#ontopic---like-onchange-but-directly-listens-for-a-specific-topic)
+      - [`cancelTopic` - like cancelChange for for onTopic](#canceltopic---like-cancelchange-for-for-ontopic)
+    - [Other](#other)
+      - [`$` - Simplistic jQuery-like document CSS query selector, returns an HTML Element](#---simplistic-jquery-like-document-css-query-selector-returns-an-html-element)
+      - [`setOriginator`](#setoriginator)
+    - [`log` - output log messages like the library does](#log---output-log-messages-like-the-library-does)
+  - [Custom Events](#custom-events)
+    - [`uibuilder:propertyChanged` - when uibuilder.set is called (externally or internally)](#uibuilderpropertychanged---when-uibuilderset-is-called-externally-or-internally)
+    - [`uibuilder:stdMsgReceived` - when a non-control msg is received from Node-RED](#uibuilderstdmsgreceived---when-a-non-control-msg-is-received-from-node-red)
+    - [`uibuilder:msg:topic:${msg.topic}` - when a std msg with a msg.topic prop is received](#uibuildermsgtopicmsgtopic---when-a-std-msg-with-a-msgtopic-prop-is-received)
+    - [`uibuilder:msg:_ui` - when a std msg with a msg._ui property is received](#uibuildermsg_ui---when-a-std-msg-with-a-msg_ui-property-is-received)
+    - [`uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}` - output for each action on receipt of a std msg with a msg._ui property](#uibuildermsg_uiactionmethodactionid--actionid-----output-for-each-action-on-receipt-of-a-std-msg-with-a-msg_ui-property)
+    - [`uibuilder:socket:connected` - when Socket.IO successfully connects to the matching uibuilder node in Node-RED](#uibuildersocketconnected---when-socketio-successfully-connects-to-the-matching-uibuilder-node-in-node-red)
+    - [`uibuilder:socket:disconnected` - when Socket.IO disconnects from the matching uibuilder node in Node-RED](#uibuildersocketdisconnected---when-socketio-disconnects-from-the-matching-uibuilder-node-in-node-red)
+
 ## How to use
 
 This version of the library _has_ to be used as a module.
@@ -19,7 +110,7 @@ In `index.html`:
     <meta name="description" content="Node-RED uibuilder - TotallyInformation">
     <link rel="icon" href="./images/node-blue.ico"> 
 
-    <link type="text/css" rel="stylesheet" href="./index.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./uib-brand.css" media="all">
 
     <script type="module" async src="./index.js"></script> 
 
@@ -33,17 +124,44 @@ In `index.html`:
 In `index.js`
 
 ```javascript
-import {uibuilder} from './uibuilder.module.js'
-uibuilder.start()
+import './uibuilder.module.js'
 
-// ... your custom code ...
+// ... your custom code, the uibuilder global object is available ...
+// note that we almost certainly don't need the uibuilder.start() line any more
 
-window.onload = (ev) => {
+window.onload = (evt) => {
     // Put code in here if you need to delay it until everything is really loaded and ready.
     // You probably won't need this most of the time.
 }
 
 ```
+
+In some cases, your JavaScript code may be nothing more than the import statement. If that is the case, you don't need an `index.js` file at all, just use the following in your HTML.
+
+```html
+<script type="module" async src="./uibuilder.module.js"></script>
+```
+
+However, note that the uibuilder object is not then available to another script. This is because code inside ECMA modules is isolated and they can't directly talk to each other.
+
+Or, if you only need a few lines of JavaScript.
+
+```html
+<script type="module" async>
+    import './uibuilder.module.js'
+    // -- more code, the uibuilder object is available here --
+</script>
+```
+
+### Where is it?
+
+You can access the client module from two different URL's. Which one you use depends on your coding needs.
+
+The main location is given as `./uibuilder.module.js` which will be on the same URL path as your UI code. 
+
+Alternatively, you can use `/uibuilder/uibuilder.module.js` although if you are using Node-RED's ExpressJS web server (normally on port 1880) you will need to take note whether Node-RED's `httpNode` setting has been changed. If it has, you will need to add that to the beggining of the URL. For example, if `httpNod` = `nr`, you would need to use `/nr/uibuilder/uibuilder.module.js`. So the first form is generally easier to use.
+
+In addition to the main, uncompressed, file, a more compact minified version is available called `uibuilder.module.min.js`. This also has a `.map` file which can be useful for debugging, you don't need to load that manually.
 
 ### More information
 
@@ -59,9 +177,9 @@ Because you should ideally be loading uibuilder in your own module code. For exa
 
 In addition, you could do just `import {Uib} from './uibuilder.module.js'` and then do `const uibuilder = new Uib()`. Not sure why you might want to do that but it is possible anyway.
 
-## What is not yet working
+## What is not yet working, to-do
 
-There are some features from the old `uibuilderfe.js` library that haven't (yet) made it into this new library. It should be noted that some may never come back as they may have been superceded.
+This is the list of things expected to be enhanced, there may be some more embeded as TODO comments in the code.
 
 * Minimised, non-ES2019 and non-ECMA-module versions
   
@@ -69,11 +187,8 @@ There are some features from the old `uibuilderfe.js` library that haven't (yet)
 
   Other versions may be made available if I can work out how to deliver them.
 
-
-* `Toast` - the ability to show a pop-over `toast` message.
-  
-  This will almost certainly return but possibly in a very different format. This was only ever a convenience anyway and future developments should see better ways of achieving the same ends.
-
+* Option to allow log msgs to be returned to Node-RED as uibuilder control messages
+* Option to allow custom events to be returned to Node-RED as uibuilder control messages
 
 ## What has been removed?
 
@@ -107,9 +222,16 @@ For ease of use, both `uibuilder` and `$` objects are added to the global `windo
 
 ### start function
 
+!> You should hardly ever need to manually run this now. Try without first. See the details below.
+
 The start function is what kick-starts the uibuilder front-end library into action. It attempts to make a connection to Node-RED and exchanges the initial control messages.
 
-It attempts to use some cookie values passed from Node-RED by uibuilder in order to work out how to connect the websocket (actually uses Socket.IO).
+It:
+
+* Attempts to use some cookie values passed from Node-RED by uibuilder in order to work out how to connect the websocket (actually uses Socket.IO).
+* Starts the communications with Node-RED/uibuilder node using Socket.IO. This also issues 1 or more document custom events (see [Event Handling](#event-handling) below).
+* An event handler is created for incoming messages from Node-RED. It checks for reload and UI requests and deals with them automatically.
+* Automatically loads the default stylesheet if you haven't loaded your own.
 
 Normally, you will not have to pass any options to this function (unlike the equivalent function in the older `uibuilderfe.js` library before uibuilder v5). However, see the troubleshooting section if you are having problems connecting correctly.
 
@@ -195,7 +317,7 @@ let otRef = uibuilder.onTopic('mytopic', (msg) => {
 
 Because `this` now points to the parent and not to the callback function. You could use a bound function if you really wanted the correct `this` when using an arrow function but at present, there is no real value in doing that as the content of `this` is identical to the `msg` argument. That may change in future releases.
 
-### Internal logging
+### Conditional logging
 
 Internal logging is much improved over previous versions of this library. There is now a dedicated internal `log` function which adds colour highlighting to browsers that support it in the dev tools console. That includes all Chromium-based browsers and Firefox.
 
@@ -205,7 +327,7 @@ The default level is set to 2 (info). The levels are: 0 'error', 1 'warn', 2 'in
 
 Changing the log level outputs an info note to the console telling you what the level is.
 
-At present, this log function is not available to your own code.
+The log function is also available to your own code as `uibuilder.log(level, prefix, ...outputs)`.
 
 ### document-level events
 
@@ -237,7 +359,7 @@ Of particular note are the `_ui` events. These are used by uibuilder-aware web c
 
 ### setPing function
 
-`setPing` accesses a special endpoint (URL) provided by uibuilder. That endpoint returns a single value which really isn't of any use to your code. However, it _does_ do two useful things:
+`setPing` accesses a special endpoint (URL) provided by uibuilder. That endpoint returns a single value which really isn't of any use to your code. However, it _does_ do several useful things:
 
 1. It tells the server that your browser tab is alive. 
    
@@ -245,7 +367,11 @@ Of particular note are the `_ui` events. These are used by uibuilder-aware web c
 
    Because most communication with uibuilder happens over websockets, telling the server whether a client is still active or whether the client's session has expired is challenging. A ping such as this may be sufficient for the proxy or your custom middleware code to continue to refresh any required security tokens, etc.
 
-2. It returns the uibuilder/Node-RED HTTP headers.
+2. It returns the timespan (in milliseconds) of the round-trip time.
+
+   This can help with understanding networking and client device or Node-RED issues.
+
+3. It returns the uibuilder/Node-RED HTTP headers.
 
    Normally, the web server headers cannot be accessed by your custom JavaScript code. However, the ping function uses the `Fetch` feature available to modern browsers which does return the headers.
 
@@ -264,6 +390,10 @@ Of particular note are the `_ui` events. These are used by uibuilder-aware web c
    ```
 
    The headers are included in the data object.
+
+4. It returns the full originating URL.
+
+   While not normally needed, it can be useful in order to work out whether Node-RED's httpNode URL path has been changed.
 
 ### set function
 
@@ -377,6 +507,16 @@ In index.js VueJS app `methods` section
 
 In previous versions of the front-end library, you had to load the correct Socket.IO library yourself in your index.html. This is no longer the case as the correct client is now loaded for you. This is one of the benefits of working as an ECMA module.
 
+### Auto-loading of the uibuilder default stylesheet
+
+In previous versions of the front-end library, you had to provide your own CSS code and had to make sure that you imported (or loaded) the uibuilder default stylesheet (`uib-styles.css`).
+
+In this version, if you haven't loaded any other stylesheets, the library will automatically load the new default stylesheet (`uib-brand.css`).
+
+!> Note that using this auto-load feature will result in a flash of an unformated page before the styles are loaded and applied. So it is still recommended to load the stylesheet manually in the head section of your HTML. That will avoid the unstyled flash.
+
+If you are trying to load the default CSS and can't find the correct URL, try removing the style link from your HTML and check what the client loads in the browsers dev tools network tab.
+
 ---
 
 ## Dynamic, data-driven HTML content
@@ -418,13 +558,16 @@ All methods and components are processed in the order they appear in the message
 ### Available methods
 
 ```js
-msg._ui.method = 'load' || 'add' || 'remove' || 'update'
+msg._ui.method = 'load' || 'add' || 'remove' || 'update' || 'reload' || 'notify' || 'alert'
 ```
 
 * `load`: Load a new UI component using `import()` so that it can be used.
 * `add`: Add a UI component instance to the web page dynamically.
 * `remove`: Remove a UI component instance from the web page dynamically.
 * `update`: Update the settings/data of a UI component instance on the web page.
+* `reload`: Triggers the page to automatically reload
+* `notify`: Shows an overlayed notification message (toast)
+* `alert`: Shows an overlayed alert notification
 
 Other future possibilities: `reset`
 
@@ -750,13 +893,15 @@ Overlay a pop-over notification.
 
 Old-style `msg._uib.componentRef = 'globalNotification'` also works. But this method is preferred.
 
-### HTML Tags
+Defaults to auto-timeout.
+
+#### HTML Tags
 
 Will attach to any HTML tag/element with an ID of `toaster`. If one doesn't exist on the page, it will create a `<div id="toaster">` just after the opening `<body>` tag. The `toaster` tag will be given CSS classes of `toaster` and the `variant` if provided in `msg._ui.variant`.
 
 A new `<div id="toast">` element is added to `toaster`.
 
-#### Schema
+##### Schema
 
 variant, title/topic, payload/content, autohide, noAutoHide/autohide, autoHideDelay/delay, appendToast, modal
 
@@ -819,6 +964,23 @@ Because a lot of things happen asynchronously in JavaScript, it is possible that
 
 An alternative way to work would be to load the uibuilder library using a dynamic import as in `import('./uibuilder.module.js').then( ... )` and do all of your custom processing from within the `then` callback. If your browser supports top-level async/await, you could also do `const uibuilder = await import('./uibuilder.module.js')` which will pause until uibuilder is completely loaded and ready.
 
+### The `uibuilder` JavaScript object does not seem to be loaded
+
+Firstly check in your browser's dev tools, network tab, whether the library is actually loaded. See [Where is it?](#where-is-it) for more information.
+
+If it is loaded, you have probably forgotten that, when using ECMA JavaScript Modules, each module script is _isolated_. That means that you need to `include` the uibuilder client in the module script you want to work in.
+
+Alternatively, you may no longer need to work directly with uibuilder client object at all! That is because the client now issues custom messages on the DOM `document` object for all important actions. So if you don't need to send anything back to Node-RED, you can just use those. They will work in other modules and scripts. as in:
+
+```javascript
+document.addEventListener('uibuilder:stdMsgReceived', evt => {
+    // evt.detail contains the msg received
+    console.log('>> (document) EVENT uibuilder:stdMsgReceived >>', evt.detail)
+})
+```
+
+See [Custom Events](#custom-events) for details.
+
 ---
 
 # Technical Reference
@@ -827,36 +989,23 @@ An alternative way to work would be to load the uibuilder library using a dynami
 
 ### Read/write
 
-#### `logLevel`
+* `logLevel` - Sets the current logging level. The default is `2` ('error' and 'warn'). Increase to see more detailed logging.
 
 ### Read only
 
-#### `meta` - module metadata (version, type, displayName)
-#### `clientId`
-Client ID set by uibuilder on connect
-#### `cookies`
-The collection of cookies provided by uibuilder
-#### `ctrlMsg`
-Copy of last control msg object received from sever */
-#### `ioConnected`
-    /** Is Socket.IO client connected to the server? */
-#### `msg`
-    /** Last std msg received from Node-RED */
-#### `msgsSent`
-    /** number of messages sent to server since page load */
-#### `msgsReceived`
-    /** number of messages received from server since page load */
-#### `msgsSentCtrl`
-    /** number of control messages sent to server since page load */
-#### `msgsCtrlReceived`
-    /** number of control messages received from server since page load */
-#### `sentCtrlMsg`
-    /** last control msg object sent via uibuilder.send() @since v2.0.0-dev3 */
-#### `sentMsg`
-    /** last std msg object sent via uibuilder.send() */
-#### `serverTimeOffset`
-    /** placeholder to track time offset from server, see fn socket.on(ioChannels.server ...) */
-
+* `meta` - module metadata (version, type, displayName)
+* `clientId` - Client ID set by uibuilder on connect
+* `cookies` - The collection of cookies provided by uibuilder
+* `ctrlMsg` - Copy of last control msg object received from sever
+* `ioConnected` - Is Socket.IO client connected to the server?
+* `msg` - Last std msg received from Node-RED
+* `msgsSent` - The number of messages sent to server since page load
+* `msgsReceived` - The number of messages received from server since page load
+* `msgsSentCtrl` - The number of control messages sent to server since page load
+* `msgsCtrlReceived` - The number of control messages received from server since page load
+* `sentCtrlMsg` - The last control msg object sent via uibuilder.send()
+* `sentMsg` - The last std msg object sent via uibuilder.send()
+* `serverTimeOffset` - Time offset between browser clock and server clock
 
 ## Functions
 
@@ -864,12 +1013,19 @@ Functions accessible in user code.
 
 ### `start(options)` - Starts Socket.IO communications with Node-RED
 
-Unlike the original uibuilder client, this version only allows passing of an object.
+!> In most cases, you no longer need to call this yourself. The client startup is now more robust and should rarely need any help. The exception will be if you are loading a page from an external server instead of from Node-RED.
 
-While multiple properties can be given, only the following are currently used:
+Unlike the original uibuilder client, this version:
 
-* `ioNamespace` - This is normally calculated for you. However, if using an external server to serve the page or if using a page from a sub-folder, you may need to manually set this. Check the uibuilder node details page in the Node-RED Editor for what this should be set to.
+* Rarely needs to be manually called. It should work for all page locations including in sub-folders as long as the client allows cookies.
+* Only allows passing of a single options object.
+* Allows being called again which will reset the Socket.IO connection and internal msg event handlers.
+
+While multiple properties can be given in the options object, only the following are currently used:
+
+* `ioNamespace` - This is normally calculated for you. However, if using an external server to serve the page, you may need to manually set this. Check the uibuilder node details page in the Node-RED Editor for what this should be set to.
 * `ioPath` - As above.
+* `loadStylesheet` - (default=true). Set to false if you don't want the uibuilder default stylesheet (`uib-brand.css`) to be loaded if you haven't loaded your own. Checks to see if any stylesheet has already been loaded and if it has, does not load.
 
 ### Message Handling
 #### `send`
@@ -924,15 +1080,34 @@ First argument is the log level (0=Error, 1=Warn, 2=Info, 3=log, 4=debug, 5=trac
 
 ## Custom Events
 
+Custom events are all attached to the DOM `document` object. Additional custom data may be added to the `detail` object of the event object.
+
 ### `uibuilder:propertyChanged` - when uibuilder.set is called (externally or internally)
 
 Used internally be the `onChange` function but can also be used directly if preferred.
 
+The new value of the property is provided on the events `detail` object.
+
 ### `uibuilder:stdMsgReceived` - when a non-control msg is received from Node-RED
+
+The message content is provided on the events `detail` object.
 
 ### `uibuilder:msg:topic:${msg.topic}` - when a std msg with a msg.topic prop is received
 
+The message content is provided on the events `detail` object.
+
 ### `uibuilder:msg:_ui` - when a std msg with a msg._ui property is received
 
-### `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}`
+The message content is provided on the events `detail` object.
 
+### `uibuilder:msg:_ui:${action.method}${action.id ? `:${action.id}` : ''}` - output for each action on receipt of a std msg with a msg._ui property
+
+The action details are provided on the events `detail` object.
+
+### `uibuilder:socket:connected` - when Socket.IO successfully connects to the matching uibuilder node in Node-RED
+
+The connection count is provided on the events `detail` object.
+
+### `uibuilder:socket:disconnected` - when Socket.IO disconnects from the matching uibuilder node in Node-RED
+
+The disconnect reason is provided on the events `detail` object if available. May be a string or an error object.
