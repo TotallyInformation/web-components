@@ -2,7 +2,7 @@
   "name": "@totallyinformation/web-components",
   "version": "0.2.3",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
-  "main": "index.js",
+  "main": "libs/load-all.js",
   "scripts": {
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
@@ -39,7 +39,7 @@
   "bugs": {
     "url": "https://github.com/TotallyInformation/web-components/issues"
   },
-  "homepage": "https://github.com/TotallyInformation/web-components#readme",
+  "homepage": "https://totallyinformation.github.io/web-components/#/",
   "devDependencies": {
     "eslint": "^8.15.0",
     "eslint-config-standard": "^17.0.0",
