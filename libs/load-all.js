@@ -2,9 +2,6 @@
  * Assumes you are using Node-RED/uibuilder
  */
 
-// TODO - Change when this is moved to uibuilder proper
-import './uibuilder.module.js'  // Adds `uibuilder` and `$` to globals
-
 import '../components/button-send.js'
 import '../components/container-br.js'
 import '../components/data-list.js'
@@ -15,5 +12,8 @@ import '../components/simple-card.js'
 import '../components/simple-container.js'
 import '../components/syntax-highlight.js'
 import '../components/uib-theme-changer.js'
+import '../components/nav-bar.js'
+import '../components/chart-frappe.js'
+import '../components/gauge-steel.js'
 
 export default {}

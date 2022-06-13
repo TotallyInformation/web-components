@@ -55,7 +55,8 @@ template.innerHTML = html`
         :host {
             --size: 2rem;
             --w: 4rem;
-            display: flex;
+            /* display: flex; */
+            display: inline-block;
             position: sticky;
             top: 0;
             background-color: var(--surface1);
@@ -67,16 +68,28 @@ template.innerHTML = html`
             background-clip: border-box;
             box-sizing: border-box;
             box-shadow: var(--shadow2);
+            width: 100%;
+        }
+        * {
+            vertical-align: top;
+        }
+        div {
+            display: inline-block;
         }
         form {
             margin: .2rem 1rem;
+            /* flex: 1 0 auto; */
+            display: inline-block;
         }
-        button {
+        form > div {
+            display: block;
+        }
+        .s-and-m {
+            aspect-ratio: 1;
             background: none;
             color: var(--text3);
             border: none;
             padding: 0;
-            aspect-ratio: 1;
             inline-size: var(--size);
             block-size: var(--size);
             
@@ -86,11 +99,6 @@ template.innerHTML = html`
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             outline-offset: 5px;
-        }
-        @media (hover: none) {
-            :host {
-                --size: 48px;
-            }
         }
         input[type=submit] {
             inline-size: var(--w);
@@ -109,12 +117,16 @@ template.innerHTML = html`
             fill: var(--text1);
         }
 
+        /* @media (hover: none) {
+            :host {
+                --size: 48px;
+                --w: 48px;
+            }
+        } */
     </style>
-    <div id="s-and-m">
-    <button name="color-scheme-toggle" title="Toggles between light & dark color schemes" 
-        aria-label="auto" aria-live="polite"
-        onclick="this.getRootNode().host.evtClickToggle(event)"
-    >
+    <div id="s-and-m" name="color-scheme-toggle" onclick="this.getRootNode().host.evtClickToggle(event)" 
+            title="Toggles between light & dark color schemes" 
+            aria-label="auto" aria-live="polite">
         <svg class="sun-and-moon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
             <svg name="sun" class="sun" viewbox="0 0 20 20">
                 <path
@@ -130,37 +142,36 @@ template.innerHTML = html`
             </svg>
             <svg class="divider" width='100%' height='100%' viewBox='0 0 20 20' preserveAspectRatio='none'>
                 <line x1="5" y1="5" x2="15" y2="15" vector-effect="non-scaling-stroke" 
-                      stroke-width="10%" stroke="currentColor" />
+                    stroke-width="10%" stroke="currentColor" />
             </svg>
         </svg>
-    </button>
     </div>
     <input type="submit" value="Reset" onclick="this.getRootNode().host.evtClickReset(event)">
     <form>
         <div name="color-scheme-choose" onclick="this.getRootNode().host.evtClickChooser(event)">
             <b>Color scheme:</b>
-            <label><input type="radio" name="input-color-scheme-choose" value="auto">auto</label>
-            <label><input type="radio" name="input-color-scheme-choose" value="light">light</label>
-            <label><input type="radio" name="input-color-scheme-choose" value="dark">dark</label>
+            <label><input type="radio" name="input-color-scheme-choose" value="auto">&nbsp;auto</label>
+            <label><input type="radio" name="input-color-scheme-choose" value="light">&nbsp;light</label>
+            <label><input type="radio" name="input-color-scheme-choose" value="dark">&nbsp;dark</label>
         </div>
         
         <div onclick="this.getRootNode().host.evtClickContrast(event)">
             <b>Contrast:</b>
-            <label><input type="radio" name="contrast" value="standard">standard</label>
-            <label><input type="radio" name="contrast" value="more">more</label>
-            <label><input type="radio" name="contrast" value="less">less</label>
+            <label><input type="radio" name="contrast" value="standard">&nbsp;standard</label>
+            <label><input type="radio" name="contrast" value="more">&nbsp;more</label>
+            <label><input type="radio" name="contrast" value="less">&nbsp;less</label>
         </div>
     
         <div>
-            <b>Brand Hue angle:</b>
+            <label><b>Brand Hue angle:</b>
             <input name="brand-hue" type="range" min="0" max="360" step="1" value="200">
-            <output>200</output>
+            <output>200</output></label>
         </div>
 
         <div title="30=Split Complementary, 60=Triadic, 150=Complementary">
-            <b>Accent offset angle</b>
+            <label><b>Accent offset angle</b>
             <input name="accent-offset" type="range" min="0" max="360" step="1" value="30">
-            <output>30</output>
+            <output>30</output></label>
         </div>
     </form>
     

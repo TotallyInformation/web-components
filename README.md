@@ -1,5 +1,7 @@
 # web-components
 
+[![](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge)](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
+
 A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.
 
 > **NOTE**: Currently, all of the components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change. Also note that the documentation is incomplete and may be wrong in places.

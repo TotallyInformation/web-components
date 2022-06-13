@@ -3,6 +3,7 @@
  * TODO: color const not really needed, convert to make direct changes to style (see theme changer for code)
  *       Use uib-brand.css rather than trying to do local css processing for light/dark
  *       Improve slot change handlers and remove on disconnect
+ *       Allow varient for slots not just the card
  *
  * @version 0.2 2022-05-10 Early-release
  *
@@ -107,21 +108,29 @@ template.innerHTML = html`
  * @fires simple-card:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
- * @attr {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
+ * @attr {string} variant - Optional. Sets the cards colour variant
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
- * @prop {string} name - Sync'd from name attribute
+ * @prop {string} variant - Sync'd from name attribute
+ * @prop {string|html} slot - Populates the cards default slot content
+ * @prop {string|html} header - Populates the cards header slot content
+ * @prop {string|html} footer - Populates the cards footer slot content
  *
  * @slot Container contents
- * @slot header - Content to go in the header section
- * @slot footer - Content to go in the footer section
+ * @slot header - Content to go in the header section of the card
+ * @slot footer - Content to go in the footer section of the card
  *
- * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
+ * csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
  */
 export default class SimpleCard extends HTMLElement {
     // #region ---- Class Variables ----
 
     name = undefined
+
+    // List of useful properties/attributes
+    static props = [
+        'variant',
+    ]
 
     /** Standard _ui object to include in msgs */
     _ui = {
@@ -192,7 +201,7 @@ export default class SimpleCard extends HTMLElement {
     /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
      * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
      */
-    _uibMsgHandler(evt) {
+    DEPRECATED_uibMsgHandler(evt) {
 
         // If there is a payload, we want to replace the slot - easiest done from the light DOM
         if ( evt['detail'].slot ) {
@@ -253,10 +262,16 @@ export default class SimpleCard extends HTMLElement {
 
     } // ---- end of constructor ---- //
 
+    get variant() {
+        return this.getAttribute('variant')
+    }
+
+    set variant(value) {
+        this.setAttribute('variant', value)
+    }
+
     // List all attribs we want to observe
-    static get observedAttributes() { return [
-        'name', 'variant'
-    ] }
+    static get observedAttributes() { return SimpleCard.props }
 
     // Runs when an observed attribute changes - Note: values are always strings
     attributeChangedCallback(name, oldVal, newVal) {
@@ -304,7 +319,7 @@ export default class SimpleCard extends HTMLElement {
         }
 
         // Listen for a uibuilder msg that is targetted at this instance of the component
-        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+        // document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
 
         // Check if header/footer slots get content and turn on border if so
         const slots = this.shadowRoot.querySelectorAll('slot')
@@ -355,7 +370,7 @@ export default class SimpleCard extends HTMLElement {
     disconnectedCallback() {
         // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
 
-        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
+        // document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
             bubbles: true,

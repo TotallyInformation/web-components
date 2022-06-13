@@ -6,7 +6,7 @@
  *
  * TODO: - Add variants (see simple-card)
  *
- * @version: 1.0.1 2022-04-07
+ * @version: 1.0.2 2022-06-12
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  *
@@ -134,7 +134,7 @@ export default class ButtonSend extends HTMLElement {
         event: undefined,
         id: undefined,
         name: undefined,
-        data: undefined, // All of the data-* attributes as an object
+        // data: undefined, // All of the data-* attributes as an object
     }
 
     /** The output msg @type {object} */
@@ -153,7 +153,7 @@ export default class ButtonSend extends HTMLElement {
         if ( this.id !== '') this._msg._ui.id = this.id
         const n = this.getAttribute('name')
         if ( n !== null ) this._msg._ui.name = n
-        this._msg._ui.data = mydata // All of the data-* attributes as an object
+        // this._msg._ui.data = mydata // All of the data-* attributes as an object
     }
 
     /** Make sure that the component instance has an ID */
@@ -172,20 +172,55 @@ export default class ButtonSend extends HTMLElement {
         // If there is a payload, we want to replace the slot - easiest done from the light DOM
         if ( evt['detail'].payload ) {
             const el = document.getElementById(this.id)
+            // @ts-ignore
             el.innerHTML = evt['detail'].payload
         }
     }
 
     /** fn to run when the button is clicked
-     * @param {MouseEvent} evt The event object
+     * @param {PointerEvent} evt The event object
      */
     handleClick(evt) {
+
         evt.preventDefault()
         this._setMsg('click')
-        this._msg._ui.altKey = evt.altKey
-        this._msg._ui.ctrlKey = evt.ctrlKey
-        this._msg._ui.shiftKey = evt.shiftKey
-        this._msg._ui.metaKey = evt.metaKey
+
+        const _ui = this._msg._ui
+        const target = /** @type {Element} */ (evt.currentTarget)
+
+        // Get target properties - only shows custom props not element default ones
+        const props = {}
+        const ignoreProps = ['name', 'sendEvents', 'payload', '$', '_ui', '_msg']
+        Object.keys(target).forEach( key => {
+            if ( !ignoreProps.includes(key) ) props[key] = target[key]
+        })
+
+        const ignoreAttribs = ['class', 'id', 'name']
+        const attribs = Object.assign({},
+            ...Array.from(target.attributes,
+                ( { name, value } ) => {
+                    if ( !ignoreAttribs.includes(name) ) {
+                        return ({ [name]: value })
+                    }
+                    return undefined
+                }
+            )
+        )
+
+        _ui.slotText = target.textContent !== '' ? target.textContent.substring(0, 255) : undefined
+
+        _ui.props = props
+        _ui.attribs = attribs
+        _ui.classes = Array.from(target.classList)
+
+        _ui.altKey = evt.altKey
+        _ui.ctrlKey = evt.ctrlKey
+        _ui.shiftKey = evt.shiftKey
+        _ui.metaKey = evt.metaKey
+
+        _ui.pointerType = evt.pointerType
+        _ui.nodeName = target.nodeName
+        if ( window['uibuilder'] ) _ui.clientId = window['uibuilder'].clientId
 
         /** Output a custom document event `button-send:click`, data is in evt.details */
         document.dispatchEvent( new CustomEvent(`${componentName}:click`, {
@@ -207,6 +242,7 @@ export default class ButtonSend extends HTMLElement {
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
+        // @ts-ignore
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
         // const mydata = { ...this.dataset }

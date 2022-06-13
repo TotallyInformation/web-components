@@ -3,7 +3,7 @@ title: button-send
 description: >
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-lastUpdated: 2022-04-07 21:16:54
+lastUpdated: 2022-06-12 15:04:46
 ---
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
@@ -108,15 +108,7 @@ document.addEventListener('button-send:click', function (e) {
 
     <link type="text/css" rel="stylesheet" href="./index.css" media="all">
 
-    <script defer src="../uibuilder/vendor/socket.io/socket.io.js"></script>
-    <script defer src="./uibuilderfe.js"></script>
-
-    <!-- Can load the web components here as type=module but you have to load them in the right order.
-         Alternatively, use a dynamic import in index.js 
-         Loading after installation to uibuilder Library manager -->
-    <script type="module" async src="../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js"></script>
-
-    <script defer src="./index.js"></script> 
+    <script type="module" src="./index.js"></script> 
 
 </head><body class="uib">
     
@@ -160,19 +152,15 @@ document.addEventListener('button-send:click', function (e) {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports
  */
 
-// Adjust to the correct URL - this shows how to load with uibuilder v5+
-// Alternatively, load these as scripts in html with type=module
-//import('../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js')
-
-// Start up uibuilder
-uibuilder.start() 
+import './uibuilder.esm.min.js'  // Adds `uibuilder` and `$` to globals
+import '../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js'
 
 // No code is needed for the buttons to send messages back to Node-RED via uibuilder
 // this happens behind the scenes in the component.
 
 // If we want to pass a complex payload, we have to use this method
 // because element attributes can only be a string.
-const btn = document.getElementById('btnSend2')
+const btn = $('.btnSend2') // Using uibuilders $() shortcut to document.querySelector
 btn.payload = {
     "a":"one",
     "b":"two"

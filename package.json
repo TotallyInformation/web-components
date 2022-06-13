@@ -3,6 +3,7 @@
   "version": "0.2.3",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "main": "libs/load-all.js",
+  "module": "libs/load-all.js",
   "scripts": {
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",

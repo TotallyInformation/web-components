@@ -37,6 +37,7 @@ const template = document.createElement('template')
 template.innerHTML = html`
     <style>
         :host {
+            position: relative;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
