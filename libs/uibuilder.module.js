@@ -28,6 +28,9 @@
  */
 //#endregion --- Type Defs --- //
 
+//#region --- We need the Socket.IO client - check in decreasing order of likelihood --- //
+// import io from 'socket.io-client' // Note: Only works when using esbuild to bundle
+
 // TODO Add option to allow log events to be sent back to Node-RED as uib ctrl msgs
 //#region --- Module-level utility functions --- //
 
@@ -93,7 +96,9 @@ const LOG_STYLES = {
     head: 'font-weight:bold; font-style:italic;',
     level: 'font-weight:bold; border-radius: 3px; padding: 2px 5px; display:inline-block;',
 }
-/** Custom logging. e.g. log(2, 'here:there', 'jiminy', {fred:'jim'})() */
+/** Custom logging. e.g. log(2, 'here:there', 'jiminy', {fred:'jim'})()
+ * @returns {Function} Log function @example log(2, 'here:there', 'jiminy', {fred:'jim'})()
+ */
 function log() {
     // Get the args
     const args = Array.prototype.slice.call(arguments)
@@ -175,28 +180,58 @@ function log() {
 }
 //#endregion
 
+// TODO - Maybe - check if already loaded as window['io']?
+// TODO - Maybe - Should this be moved to inside the class - would know the httpRoot then so less need to guess?
+// TODO           Or, could pull the cookie processing out of the class
+const ioLocns = [ // Likely locations of the Socket.IO client library
+    // Where it should normally be
+    '../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    // Where it might be if using a custom uib Express server and haven't changed httpNodeRoot
+    '/uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    // Where it might be if using a custom uib Express server and have changed httpNodeRoot
+    '../../../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    '../../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    '../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    '../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
+    // Direct from the Internet - last ditch attempt
+    'https://cdn.jsdelivr.net/npm/socket.io-client/+esm',
+]
+
+let io
+for (const locn of ioLocns) {
+    try {
+        ({ io } = await import(locn))
+        log('trace', 'uibuilder.module.js:io', `Socket.IO client library found at '${locn}'`)()
+    } catch (e) {
+        log('trace', 'uibuilder.module.js:io', `Socket.IO client library not found at '${locn}'`)()
+    }
+    if (io) break
+}
+if (!io) log('error', 'uibuilder.module.js', 'Socket.IO client failed to load')()
+//#endregion -------- -------- -------- //
+
 /** A hack to dynamically load a remote module and wait until it is loaded
  * @param {string} url The URL of the module to load
  * @returns {object|null} Either the result object or null (if the load fails)
  */
-function loadModule(url) { // eslint-disable-line no-unused-vars
-    let done
+// function loadModule(url) { // eslint-disable-line no-unused-vars
+//     let done
 
-    import(url)
-        .then(res => {
-            log('debug', '>> then >>', res)()
-            done = res
-        })
-        .catch(err => {
-            console.error(`[uibuilder:loadModule] Could not load module ${url}`, err)
-            done = null
-        })
+//     import(url)
+//         .then(res => {
+//             log('debug', '>> then >>', res)()
+//             done = res
+//         })
+//         .catch(err => {
+//             console.error(`[uibuilder:loadModule] Could not load module ${url}`, err)
+//             done = null
+//         })
 
-    //  eslint-disable-next-line no-empty
-    while (!done) { } // eslint-disable-line no-unmodified-loop-condition
+//     //  eslint-disable-next-line no-empty
+//     while (!done) { } // eslint-disable-line no-unmodified-loop-condition
 
-    return done
-}
+//     return done
+// }
 
 /** Makes a null or non-object into an object
  * If not null, moves "thing" to {payload:thing}
@@ -240,36 +275,6 @@ function urlJoin() {
 
 //#endregion --- Module-level utility functions --- //
 
-//#region --- We need the Socket.IO client - check in decreasing order of likelihood --- //
-// TODO - Maybe - check if already loaded as window['io']?
-// TODO - Maybe - Should this be moved to inside the class - would know the httpRoot then so less need to guess?
-// TODO           Or, could pull the cookie processing out of the class
-const ioLocns = [ // Likely locations of the Socket.IO client library
-    // Where it should normally be
-    '../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    // Where it might be if using a custom uib Express server and haven't changed httpNodeRoot
-    '/uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    // Where it might be if using a custom uib Express server and have changed httpNodeRoot
-    '../../../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    '../../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    '../../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    '../../uibuilder/vendor/socket.io-client/socket.io.esm.min.js',
-    // Direct from the Internet - last ditch attempt
-    'https://cdn.jsdelivr.net/npm/socket.io-client/+esm',
-]
-let io
-for (const locn of ioLocns) {
-    try {
-        ({ io } = await import(locn))
-        log('trace', 'uibuilder.module.js:io', `Socket.IO client library found at '${locn}'`)()
-    } catch (e) {
-        log('trace', 'uibuilder.module.js:io', `Socket.IO client library not found at '${locn}'`)()
-    }
-    if (io) break
-}
-if (!io) log('error', 'uibuilder.module.js', 'Socket.IO client failed to load')()
-//#endregion -------- -------- -------- //
-
 // Define and export the Uib class - note that an instance of the class is also exported in the wrap-up
 export const Uib = class Uib {
 
@@ -287,7 +292,9 @@ export const Uib = class Uib {
     #propChangeCallbacks = {}
     // onTopic event callbacks
     #msgRecvdByTopicCallbacks = {}
-    /** setInterval id holder for Socket.IO checkConnect */
+    /** setInterval id holder for Socket.IO checkConnect
+     * @type {number|null}
+     */
     #timerid = null
     // @ts-ignore Detect whether the loaded library is minified or not
     #isMinified = !(/param/).test(function (param) { }) // eslint-disable-line no-unused-vars
@@ -301,8 +308,8 @@ export const Uib = class Uib {
 
     //#region public class vars
 
-    //#region ---- Externally read-only (via .get method) ---- //
     // TODO Move to proper getters
+    //#region ---- Externally read-only (via .get method) ---- //
     // version - moved to _meta
     /** Client ID set by uibuilder on connect */
     clientId = ''
@@ -332,8 +339,8 @@ export const Uib = class Uib {
     socketError = null
     //#endregion ---- ---- ---- ---- //
 
-    //#region ---- Externally Writable (via .set method, read via .get method) ---- //
     // TODO Move to proper getters/setters
+    //#region ---- Externally Writable (via .set method, read via .get method) ---- //
     allowScript = true   // Allow incoming msg to contain msg.script with JavaScript that will be automatically executed
     allowStyle = true   // Allow incoming msg to contain msg.style with CSS that will be automatically executed
     removeScript = true   // Delete msg.code after inserting to DOM if it exists on incoming msg
@@ -372,7 +379,7 @@ export const Uib = class Uib {
 
     //#region ------- Static metadata ------- //
     static _meta = {
-        version: '5.0.2-mod',
+        version: '5.0.3-mod',
         type: 'module',
         displayName: 'uibuilder',
     }
@@ -392,6 +399,7 @@ export const Uib = class Uib {
      * Example: this.set('msg', {topic:'uibuilder', payload:42});
      * @param {string} prop Any uibuilder property who's name does not start with a _ or #
      * @param {*} val _
+     * @returns {*} Input value
      */
     set(prop, val) {
         // Check for excluded properties - we don't want people to set these
@@ -435,7 +443,10 @@ export const Uib = class Uib {
     //#region ------- Our own event handling system ---------- //
 
     // TODO Add option to send event details back to Node-RED as uib ctrl msg
-    /** Standard fn to create a custom event with details & dispatch it */
+    /** Standard fn to create a custom event with details & dispatch it
+     * @param {string} title The event name
+     * @param {*} details Any details to pass to event output
+     */
     _dispatchCustomEvent(title, details) {
         const event = new CustomEvent(title, { detail: details })
         document.dispatchEvent(event)
@@ -620,6 +631,7 @@ export const Uib = class Uib {
 
     getStore(id) {
         try {
+            // @ts-ignore
             return JSON.parse(localStorage.getItem(this.storePrefix + id))
         } catch (e) {
             return localStorage.getItem(this.storePrefix + id)
@@ -785,6 +797,7 @@ export const Uib = class Uib {
             toaster.title = 'Click to clear all notifcations'
             toaster.setAttribute('class', 'toaster')
             toaster.onclick = function() {
+                // @ts-ignore
                 toaster.remove()
             }
             document.body.insertAdjacentElement('afterbegin', toaster)
@@ -800,6 +813,7 @@ export const Uib = class Uib {
         toast.onclick = function(evt) {
             evt.stopPropagation()
             toast.remove()
+            // @ts-ignore
             if ( toaster.childElementCount < 1 ) toaster.remove()
         }
 
@@ -815,13 +829,16 @@ export const Uib = class Uib {
         if ( ui.autohide === true ) {
             setInterval( () => {
                 toast.remove()
+                // @ts-ignore
                 if ( toaster.childElementCount < 1 ) toaster.remove()
             }, ui.autoHideDelay)
         }
 
     } // --- End of showDialog ---
 
-    /** Load a dynamic UI from a JSON web reponse */
+    /** Load a dynamic UI from a JSON web reponse
+     * @param {string} url URL that will return the ui JSON
+     */
     loadui(url) {
 
         fetch(url)
@@ -845,7 +862,9 @@ export const Uib = class Uib {
                     log('trace', 'Uib:loadui:then2', 'Parsed JSON successfully obtained')()
                     // Call the _uiManager
                     this._uiManager({ _ui: data })
+                    return true
                 }
+                return false
             })
             .catch(err => {
                 log('warn', 'Uib:loadui:catch', 'Error. ', err)()
@@ -854,11 +873,11 @@ export const Uib = class Uib {
     } // --- end of loadui
 
     // TODO Add check if ID already exists
+    // TODO Allow single add without using components array
     /** Handle incoming msg._ui add requests
-     * @param {*} ui Standardised msg._ui property object
-     * @param {*} [payload] Optional. msg.payload
+     * @param {*} ui Standardised msg._ui property object. Note that payload and topic are appended to this object
      */
-    _uiAdd(ui, payload) {
+    _uiAdd(ui) {
         log('trace', 'Uib:_uiManager:add', 'Starting _uiAdd')()
 
         ui.components.forEach((compToAdd) => {
@@ -880,7 +899,8 @@ export const Uib = class Uib {
                     // Add the event listener - hate eval but it is the only way I can get it to work
                     try {
                         newEl.addEventListener(type, (evt) => {
-                            eval(`${compToAdd.events[type]}(evt)`) // eslint-disable-line no-eval
+                            // Use new Function to ensure that esbuild works: https://esbuild.github.io/content-types/#direct-eval
+                            (new Function('evt', `${compToAdd.events[type]}(evt)`))(evt) // eslint-disable-line no-new-func
                         })
                         // newEl.setAttribute( 'onClick', `${compToAdd.events[type]}()` )
                     } catch (err) {
@@ -898,16 +918,18 @@ export const Uib = class Uib {
             }
 
             //#region Add Slot content to innerHTML
-            if (!compToAdd.slot) compToAdd.slot = payload
+            if (!compToAdd.slot) compToAdd.slot = ui.payload
             if (compToAdd.slot) {
                 // If DOMPurify is loaded, apply it now
                 if (window['DOMPurify']) compToAdd.slot = window['DOMPurify'].sanitize(compToAdd.slot)
                 // Set the component content to the msg.payload or the slot property
                 if (compToAdd.slot !== undefined && compToAdd.slot !== null && compToAdd.slot !== '') {
-                    newEl.innerHTML = compToAdd.slot ? compToAdd.slot : payload
+                    newEl.innerHTML = compToAdd.slot ? compToAdd.slot : ui.payload
                 }
             }
             //#endregion
+
+            // TODO Add multi-slot capability
 
             //#region Add Slot Markdown content to innerHTML IF marked library is available
             if (window['markdownit'] && compToAdd.slotMarkdown) {
@@ -932,7 +954,7 @@ export const Uib = class Uib {
                 if (window['DOMPurify']) compToAdd.slotMarkdown = window['DOMPurify'].sanitize(compToAdd.slotMarkdown)
                 // Set the component content to the msg.payload or the slot property
                 if (compToAdd.slotMarkdown !== undefined && compToAdd.slotMarkdown !== null && compToAdd.slotMarkdown !== '') {
-                    newEl.innerHTML += compToAdd.slotMarkdown ? compToAdd.slotMarkdown : payload
+                    newEl.innerHTML += compToAdd.slotMarkdown ? compToAdd.slotMarkdown : ui.payload
                 }
             }
             //#endregion
@@ -964,14 +986,14 @@ export const Uib = class Uib {
                     method: ui.method,
                     parentEl: newEl,
                     components: compToAdd.components,
-                }, null)
+                })
             }
         })
 
     } // --- end of _uiAdd ---
 
     /** Handle incoming _ui remove requests
-     * @param {*} ui Standardised msg._ui property object
+     * @param {*} ui Standardised msg._ui property object. Note that payload and topic are appended to this object
      */
     _uiRemove(ui) {
         ui.components.forEach((compToRemove) => {
@@ -981,17 +1003,89 @@ export const Uib = class Uib {
         })
     } // --- end of _uiRemove ---
 
-    // TODO - does nothing right now - need to understand interactions between this and custom web components
+    // TODO Allow single add without using components array
     /** Handle incoming _ui update requests
-     * @param {*} ui Standardised msg._ui property object
+     * @param {*} ui Standardised msg._ui property object. Note that payload and topic are appended to this object
      */
     _uiUpdate(ui) {
+        log('trace', 'Uib:_uiManager:update', 'Starting _uiUpdate')()
+
+        if ( !ui.components ) ui.components = [ui]
+
+        ui.components.forEach((compToUpd) => {
+
+            /** @type {NodeListOf<Element>} */
+            let elToUpd
+
+            // Either the id, name or type (element type) must be given in order to identify the element to change. ALL elements matching are updated.
+            if ( compToUpd.id ) {
+                elToUpd = document.querySelectorAll(`#${compToUpd.id}`)
+            } else if ( compToUpd.name ) {
+                elToUpd = document.querySelectorAll(`[name="${compToUpd.name}"]`)
+            } else if ( compToUpd.type ) {
+                elToUpd = document.querySelectorAll(compToUpd.type)
+            }
+
+            // @ts-ignore Nothing was found so give up
+            if ( elToUpd === undefined || elToUpd.length < 1 ) {
+                log('error', 'Uib:_uiManager:update', 'Cannot find the DOM element', compToUpd)()
+                return
+            }
+
+            console.log('trace', 'Uib:_uiManager:update', ': ', elToUpd, compToUpd)
+
+            // Add event handlers
+            if (compToUpd.events) {
+                Object.keys(compToUpd.events).forEach((type) => {
+                    // @ts-ignore  I'm forever getting this wrong!
+                    if (type.toLowerCase === 'onclick') type = 'click'
+                    elToUpd.forEach( el => {
+                        // Add the event listener - hate eval but it is the only way I can get it to work
+                        try {
+                            el.addEventListener(type, (evt) => {
+                                // Use new Function to ensure that esbuild works: https://esbuild.github.io/content-types/#direct-eval
+                                (new Function('evt', `${compToUpd.events[type]}(evt)`))(evt) // eslint-disable-line no-new-func
+                            })
+                        } catch (err) {
+                            log('error', 'Uib:_uiAdd', `Add event '${type}' for element '${compToUpd.type}': Cannot add event handler. ${err.message}`)()
+                        }
+                    })
+                })
+            }
+
+            if (compToUpd.attributes) {
+                Object.keys(compToUpd.attributes).forEach((attrib) => {
+                    elToUpd.forEach( el => {
+                        el.setAttribute(attrib, compToUpd.attributes[attrib])
+                    })
+                })
+            }
+
+            if (compToUpd.properties) {
+                Object.keys(compToUpd.properties).forEach((prop) => {
+                    elToUpd.forEach( el => {
+                        el[prop] = compToUpd.properties[prop]
+                    })
+                })
+            }
+
+            if (!compToUpd.slot && compToUpd.payload) compToUpd.slot = compToUpd.payload
+            if (compToUpd.slot) {
+                elToUpd.forEach( el => {
+                    el.innerHTML = compToUpd.slot
+                })
+            }
+
+            // TODO Add multi-slot capability (default slot must always be processed first as innerHTML is replaced)
+            // ? Do we want to allow nested component lists?
+
+        })
 
     } // --- end of _uiUpdate ---
 
     // TODO Add more error handling and parameter validation
     /** Handle incoming _ui load requests
-     * @param {*} ui Standardised msg._ui property object
+     * @param {*} ui Standardised msg._ui property object. Note that payload and topic are appended to this object
      */
     _uiLoad(ui) {
 
@@ -1065,7 +1159,7 @@ export const Uib = class Uib {
 
             switch (ui.method) {
                 case 'add': {
-                    this._uiAdd(ui, msg.payload)
+                    this._uiAdd(ui)
                     break
                 }
 
@@ -1198,26 +1292,51 @@ export const Uib = class Uib {
         }
         const target = domevent.currentTarget
 
-        // Try to get a meaningful ID. id attrib is highest priority, text content is lowest
-        let id = ''
-        try { if (target.textContent !== '') id = target.textContent.substring(0, 25) } catch (e) { /** */ }
-        try { if (target.name !== '') id = target.name } catch (e) { /** */ }
-        try { if (target.id !== '') id = target.id } catch (e) { /** */ }
+        // Get target properties - only shows custom props not element default ones
+        const props = {}
+        Object.keys(target).forEach( key => {
+            props[key] = target[key]
+        })
+
+        const ignoreAttribs = ['class', 'id', 'name']
+        const attribs = Object.assign({},
+            ...Array.from(target.attributes,
+                ( { name, value } ) => {
+                    if ( !ignoreAttribs.includes(name) ) {
+                        return ({ [name]: value })
+                    }
+                    return undefined
+                }
+            )
+        )
 
         const msg = {
             topic: this.msg.topic,  // repeats the topic from the last inbound msg if it exists
-
-            uibDomEvent: {
-                sourceId: id,
-                event: domevent.type,
-            },
 
             // Each `data-xxxx` attribute is added as a property
             // - this may be an empty Object if no data attributes defined
             payload: target.dataset,
 
-            // Add the custom properties to the msg
-            uiprops: target._ui,
+            _ui: {
+                id: target.id !== '' ? target.id : undefined,
+                name: target.name !== '' ? target.name : undefined,
+                slotText: target.textContent !== '' ? target.textContent.substring(0, 255) : undefined,
+
+                props: props,
+                attribs: attribs,
+                classes: Array.from(target.classList),
+
+                event: domevent.type,
+                altKey: domevent.altKey,
+                ctrlKey: domevent.ctrlKey,
+                shiftKey: domevent.shiftKey,
+                metaKey: domevent.metaKey,
+
+                pointerType: domevent.pointerType,
+                nodeName: target.nodeName,
+
+                clientId: this.clientId,
+            }
         }
 
         log('trace', 'Uib:eventSend', 'Sending msg to Node-RED', msg)()
@@ -1263,7 +1382,7 @@ export const Uib = class Uib {
      * NOTE: `this` is the class here rather the `socket` as would be normal since we bind the correct `this` in the call.
      *       Use this._socket if needing reference to the socket.
      * @callback ioSetupFromServer Called from ioSetup/this._socket.on(this.#ioChannels.server, this.stdMsgFromServer.bind(this))
-     * @param {object} receivedMsg
+     * @param {object} receivedMsg The msg object from Node-RED
      * @this Uib
      */
     _stdMsgFromServer(receivedMsg) {
@@ -1321,7 +1440,8 @@ export const Uib = class Uib {
             case 'client connect': {
                 log('trace', `Uib:ioSetup:${this.#ioChannels.control}`, 'Received "client connect" from server')()
                 log('info', `Uib:ioSetup:${this.#ioChannels.control}`, `✅ Server connected. Version: ${receivedCtrlMsg.version}\nServer time: ${receivedCtrlMsg.serverTimestamp}, Sever time offset: ${this.serverTimeOffset} hours`)()
-                if ( !Uib._meta.version.startsWith(receivedCtrlMsg.version) ) {
+
+                if ( !Uib._meta.version.startsWith(receivedCtrlMsg.version.split('-')[0]) ) {
                     log('warn', `Uib:ioSetup:${this.#ioChannels.control}`, `Server version (${receivedCtrlMsg.version}) not the same as the client version (${Uib._meta.version})`)()
                 }
 
@@ -1433,7 +1553,7 @@ export const Uib = class Uib {
             // don't need to check whether we have connected as the timer will have been cleared if we have
             this.#timerid = null
 
-            // Create new timer for next time round with extended delay
+            // @ts-ignore Create new timer for next time round with extended delay
             this._checkConnect(delay * factor, factor, depth++)
         }, delay)
 
@@ -1470,6 +1590,9 @@ export const Uib = class Uib {
         // Update the URL path to make sure we have the right one
         this.socketOptions.path = this.ioPath
 
+        this.socketOptions.auth.clientId = this.clientId
+        this.socketOptions.auth.connectedNum = this.#connectedNum
+
         // Create the socket - make sure client uses Socket.IO version from the uibuilder module (using path)
         log('trace', 'Uib:ioSetup', `About to create IO object. Transports: [${this.socketOptions.transports.join(', ')}]`)()
         this._socket = io(this.ioNamespace, this.socketOptions)
@@ -1478,6 +1601,7 @@ export const Uib = class Uib {
         this._socket.on('connect', () => {
 
             this.#connectedNum++
+            this.socketOptions.auth.connectedNum = this.#connectedNum
             log('info', 'Uib:ioSetup', `✅ SOCKET CONNECTED. Connection count: ${this.#connectedNum}\nNamespace: ${this.ioNamespace}`)()
             this._dispatchCustomEvent('uibuilder:socket:connected', this.#connectedNum)
 
