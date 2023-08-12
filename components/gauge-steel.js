@@ -36,7 +36,7 @@ import 'https://cdn.jsdelivr.net/npm/steelseries@2.0.7/dist/steelseries.bundled.
 const componentName = 'gauge-steel'
 const className = 'GaugeSteel'
 
-// just for syntax highlighting in VSCode
+// just for syntax highlighting in VSCode (requires the lit-html extension)
 function html(strings, ...keys) {
     return strings.map( (s, i) => {
         return s + (keys[i] || '')
