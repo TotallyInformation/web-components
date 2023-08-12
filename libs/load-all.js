@@ -1,5 +1,5 @@
 /** Simple ECMA module to load uibuilder module and all of the web component modules
- * Assumes you are using Node-RED/uibuilder
+ * Assumes you are using Node-RED/uibuilder & only works with the ESM build of the uibuilder client
  */
 
 import '../components/button-send.js'
@@ -15,5 +15,7 @@ import '../components/uib-theme-changer.js'
 import '../components/nav-bar.js'
 import '../components/chart-frappe.js'
 import '../components/gauge-steel.js'
+import '../components/simple-switch.js'
+import '../components/ghost-thermometer.js'
 
 export default {}
