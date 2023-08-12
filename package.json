@@ -1,6 +1,6 @@
 {
   "name": "@totallyinformation/web-components",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "main": "libs/load-all.js",
   "module": "libs/load-all.js",
@@ -45,7 +45,8 @@
     "eslint": "^8.15.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-jsdoc": "^46.4.6",
+    "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.0.0"
   }
 }

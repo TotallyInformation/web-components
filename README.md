@@ -47,7 +47,7 @@ Note that all of these components make use of the new `uib-brand.css` stylesheet
 
   May not always be in step with the code until everything is finalised.
 
-* `libs/uibuilder.module.js` - an alternative, uibuilder v5 compatible client library specifically designed for use as an ECMA module. Not quite feature comparible with the standard `uibuilderfe.js` library but is the future direction of the client. Written as a class, self-loads the correct socket.io client library, has brand new logging features. Provides a simple, jQuery like `$` selector function.
+* `libs/uibuilder.module.js` - an alternative, uibuilder v5+ compatible client library specifically designed for use as an ECMA module. Not quite feature comparible with the standard `uibuilderfe.js` library but is the future direction of the client. Written as a class, self-loads the correct socket.io client library, has brand new logging features. Provides a simple, jQuery like `$` selector function.
 
   Most importantly, it contains a new, data-driven UI creator that lets you send configuration messages to build a UI dynamically.
 
@@ -89,8 +89,6 @@ If installing locally, you will need to make the installed `web-components/compo
 ### Using with Node-RED and uibuilder
 
 If using with Node-RED, you can install the components with the help of node-red-contrib-uibuilder. The uibuilder node has a library manager feature and you should use that to install the repository direct from GitHub (requires uibuilder v5+). In that case, uibuilder adds the repository to its web server and you can access them as: `../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js`. See below for details.
-
-Also for Node-RED, you may wish to try out the experimental `libs/uibuilder.module.js` front-end library. See the documentation in the same folder. And you will probably want to use the css file from that same folder.
 
 ### Loading components into your web page
 
