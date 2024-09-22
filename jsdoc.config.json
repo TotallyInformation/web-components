@@ -1,0 +1,18 @@
+{
+    "source": {
+        "include": ["src", "alpha"],
+        "xx_includePattern": "component-template.js",
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "destination": "./docs/jsdoc",
+        "recurse": true,
+        "readme": "./README.md"
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true
+    }
+}

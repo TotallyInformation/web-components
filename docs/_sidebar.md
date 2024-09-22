@@ -1,5 +1,8 @@
 * [Home](/)
+* Ready for use
 * [`button-send`](./button-send)
+* [`visible-console`](./visible-console)
+* Alpha-quality
 * [`html-include`](./html-include)
 * [`syntax-highlight`](./syntax-highlight)
 

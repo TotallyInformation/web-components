@@ -1,13 +1,18 @@
 ---
 title: button-send
-description: >
+description: |
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-lastUpdated: 2022-06-12 15:04:46
+updated: 2024-09-22 18:11:30
 ---
+
+> [!NOTE]
+> STATUS: Needs Updating for v2024-09-22+
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name
+
+If using UIBUILDER for Node-RED, the button sends a message back to Node-RED with content very similar to using the `uibuilder.eventSend(event)` function.
 
 ## Usage
 
@@ -26,10 +31,7 @@ When used without uibuilder, you need to detect the custom event that is fired o
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Can load the web components here as type=module but you have to load everything in the right order.
-         Alternatively, use a dynamic import in index.js -->
-    <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script>
-
+    <script defer src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/dist/button-send.iife.min.js"></script>
     <script defer src="./index.js"></script> 
 
 </head><body>
@@ -66,29 +68,29 @@ When used without uibuilder, you need to detect the custom event that is fired o
 #### index.js
 
 ```js
-/** Main app script
- * NOTES: 
- * - Dynamic imports return a PROMISE. That is fine for importing components but NOT for uibuilderfe. 
- * - Any imports are relative to THIS script.
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports
+//#region ---- <button-send> ----
+
+// Get a DYNAMIC reference to all the buttons
+const buttons = document.getElementsByTagName('button-send')
+
+/** Add an object payload to the 2nd button
+ * If we want to pass a complex payload, we have to use this method
+ * because element attributes can only be a string.
  */
-
-// Adjust to the correct URL - this shows how to load direct from jsdelivr using a dynamic import.
-// Alternatively, load these as scripts in html with type=module, see the index.html file.
-//import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
-
-// If we want to pass a complex payload, we have to use this method
-// because element attributes can only be a string.
-const btn = document.getElementById('btnSend2')
-btn.payload = {
+buttons[1].payload = {
     "a":"one",
     "b":"two"
 }
 
-// Listen for the custom click event. e.detail contains the same data as the msg to uibuilder
-document.addEventListener('button-send:click', function (e) {
-    console.log('>> EVENT button-send:click >>', e.detail)
+/** Listen for the custom click event from either button.
+ * Not needed when using UIBUILDER unless you want to process the click in front-end code
+ * e.detail contains the same data as the msg to uibuilder
+ */
+document.addEventListener('button-send:click', function (event) {
+    console.log('>> EVENT button-send:click >>', event.detail)
 })
+
+//#endregion ---- <button-send> ----
 ```
 
 ### With uibuilder
@@ -101,70 +103,83 @@ document.addEventListener('button-send:click', function (e) {
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../uibuilder/images/node-blue.ico">
 
-    <title>Web Components - Node-RED uibuilder</title>
-    <meta name="description" content="Node-RED uibuilder - Web Components">
-    <link rel="icon" href="./images/node-blue.ico"> 
+    <title>Testing web-components - Node-RED uibuilder</title>
+    <meta name="description" content="Node-RED uibuilder - Testing web-components">
 
+    <!-- Your own CSS -->
     <link type="text/css" rel="stylesheet" href="./index.css" media="all">
 
-    <script type="module" src="./index.js"></script> 
-
+    <!-- NOTE: Load component libraries AFTER uibuilder. Load your custom JS at the end -->
+    <script defer src="../uibuilder/uibuilder.iife.min.js"></script>
+    <script defer src="../uibuilder/vendor/@totallyinformation/web-components/dist/button-send.iife.min.js"></script>
+    <script type="module" async src="./index.js"></script>
+    
 </head><body class="uib">
     
-    <h1>uibuilder Web Components Example: button-send</h1>
+    <h1 class="with-subtitle">Testing Totally Information's web-components package</h1>
+    <div role="doc-subtitle">Using the uibuilder ESM library.</div>
 
-    <div>
-        <button-send id="btnSend" topic="my-topic" payload="my payload" 
-                     data-something="Something from the client">
-            <!-- In ordinary button tags, you cannot include block elements in the slot. 
-                 But with this custom button, you can. -->
-            Send a msg back to Node-RED.
-            <p>
-                Use <code>topic</code>, <code>payload</code> and <code>data-*</code> 
-                attributes to pass data back to Node-RED.
-            </p>
-            <p>
-                Note that you can't normally include block tags 
-                (e.g. &lt;br>, &lt;p>, etc) in a &lt;button> but you can now!
-            </p>
-        </button-send>
-    </div>
+    <div id="more"><!-- '#more' is used as a parent for dynamic HTML content in examples --></div>
 
-    <div>
-        <!-- To send complex payload, you can't add it here because attributes can only be strings.
-             Instead, you have to use JavaScript as shown in index.js -->
-        <button-send id="btnSend2" topic="my-topic2" name="btn-2" data-something="Something 2 from the client">
-            Send
-        </button-send>
-    </div>
-    
+    <article>
+        <h2><code>button-send</code></h2>
+        <div>
+            <button-send inherit-style topic="my-topic" payload="my payload" data-something="Something from the button">
+                <!-- In ordinary button tags, you cannot include block elements in the slot. 
+                    But with this custom button, you can. -->
+                Send a msg back to Node-RED.
+                <p>
+                    Use <code>topic</code>, <code>payload</code> and <code>data-*</code> 
+                    attributes to pass to the custom event.
+                </p>
+                <p>
+                    Note that you can't normally include block tags 
+                    (e.g. &lt;br>, &lt;p>, etc) in a &lt;button> but you can now!
+                </p>
+            </button-send>
+        </div>
+        <div>
+            <!-- To have a complex payload, you can't add it here because attributes can only be strings.
+                 Instead, you have to use JavaScript as shown in index.js -->
+            <button-send topic="my-topic2" name="btn-2" data-something="Something 2 from the button">
+                Send
+            </button-send>
+        </div>    
+    </article>    
+
 </body></html>
 ```
 
 #### index.js
 
 ```js
-/** Main app script
- * NOTES: 
- * - Dynamic imports return a PROMISE. That is fine for importing components but NOT for uibuilderfe. 
- * - Any imports are relative to THIS script.
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports
+//#region ---- <button-send> ----
+
+// Grab a static reference to all the buttons
+const buttons = $$('button-send')
+// Or get a DYNAMIC reference to all the buttons
+// const buttons = document.getElementsByTagName('button-send')
+
+/** Add an object payload to the 2nd button
+ * If we want to pass a complex payload, we have to use this method
+ * because element attributes can only be a string.
  */
-
-import './uibuilder.esm.min.js'  // Adds `uibuilder` and `$` to globals
-import '../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js'
-
-// No code is needed for the buttons to send messages back to Node-RED via uibuilder
-// this happens behind the scenes in the component.
-
-// If we want to pass a complex payload, we have to use this method
-// because element attributes can only be a string.
-const btn = $('.btnSend2') // Using uibuilders $() shortcut to document.querySelector
-btn.payload = {
+buttons[1].payload = {
     "a":"one",
     "b":"two"
 }
+
+/** Listen for the custom click event from either button.
+ * Not needed when using UIBUILDER unless you want to process the click in front-end code
+ * e.detail contains the same data as the msg to uibuilder
+ */
+document.addEventListener('button-send:click', function (event) {
+    console.log('>> EVENT button-send:click >>', event.detail)
+})
+
+//#endregion ---- <button-send> ----
 ```
 
 ----
@@ -178,6 +193,7 @@ The remainder of this documentation is produced using [web-component-analyzer](h
 | `data-*`  | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
 | `id`      | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
 | `name`    | `string` | Optional. HTML name attribute. Included in output _meta prop. |
+| `inherit-style` | `string` | Optional. Load an external style sheet into the Shadow DOM. |
 
 ## Properties
 

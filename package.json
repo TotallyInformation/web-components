@@ -1,14 +1,32 @@
 {
   "name": "@totallyinformation/web-components",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
-  "main": "libs/load-all.js",
-  "module": "libs/load-all.js",
   "scripts": {
+    "build": "node esbuild.config.js",
+    "watch": "esbuild --watch esbuild.config.js",
+    "lint": "eslint .",
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
-    "analyse": "npx web-component-analyzer ./components --format markdown",
-    "vscode-custom": "npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json"
+    "analyse": "npm run analyse1 && npm run analyse2",
+    "analyse1": "npx web-component-analyzer ./src/*.js --format markdown --outDir docs/readme",
+    "analyse2": "npx web-component-analyzer ./alpha/*.js --format markdown --outDir docs/readme/alpha",
+    "vscode-custom": "npx web-component-analyzer ./{src,alpha,libs}/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json",
+    "jsdoc": "npx jsdoc ./src ./alpha -c jsdoc.config.json -r --destination ./docs/jsdoc"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "esbuild": "^0.23.1",
+    "esdoc": "^1.1.0",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^8.15.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsdoc": "^48.0.2",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "jsdoc": "^4.0.3"
   },
   "directories": {
     "example": "./examples",
@@ -40,13 +58,5 @@
   "bugs": {
     "url": "https://github.com/TotallyInformation/web-components/issues"
   },
-  "homepage": "https://totallyinformation.github.io/web-components/#/",
-  "devDependencies": {
-    "eslint": "^8.15.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^46.4.6",
-    "eslint-plugin-n": "^16.0.1",
-    "eslint-plugin-promise": "^6.0.0"
-  }
+  "homepage": "https://totallyinformation.github.io/web-components/#/"
 }

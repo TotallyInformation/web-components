@@ -1,0 +1,480 @@
+// ts-nocheck
+/** A zero dependency web component that will display JavaScript console output on-page.
+ *
+ * @version - see class var
+ *
+ * @example
+ *  <div id="more">
+ *    <visible-console></visible-console>
+ *  </div>
+ */
+/*
+  Copyright (c) 2024-2024 Julian Knight (Totally Information)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+// ! STATUS: Alpha
+
+/** TODO
+ * ! Probably need to make the timeline a FIXED timespan (can be a moving fixed span) so widths can be pre-calculated and not change.
+ * - std parts
+ *   - topic, var - should default to the instance id - std schema: msg. payload=slot, .value, .config, .attributes
+ *   - [x] inherit-style - Optional attrib text is the link to import - else import ./index.css
+ *   - All should allow default (no value) and string inputs
+ *   [x] config fn
+ *   [x] get version
+ * - Start/end state times
+ * - multi-entries (e.g. send cache)
+ * - multi-timelines - data-set attrib
+ * - State labels
+ * - axis labels
+ * - limits: # & time
+ * - Add attibs: data-start, data-end
+ * - Track previous entry and auto-add data-end if needed
+ * - Add chart start/end ts
+ * - Add null state when offline
+ * - undefined for start and coming back online, null only for offline
+ *
+ * Refs:
+ * https://flows.nodered.org/flow/3827f07ed08826b01bd71b2c874f7fdc
+ * https://github.com/hotNipi/node-red-contrib-ui-state-trail/blob/master/ui-state-trail.js#L27
+ */
+
+const template = document.createElement('template')
+template.innerHTML = /*html*/`
+    <style>
+        :host {
+            margin: 2em;
+        }
+        :root {
+            --base-font-size: 1em;
+        }
+
+        .timeline {
+            display: flex;
+            width: 100%;
+            height: 5em;
+            padding: 1em;
+
+            justify-content: flex-start; /* Ensures items are aligned from the left */
+            /* align-items: center; */
+        }
+    
+        .state {
+            height: 100%;
+            transition: width 0.5s;
+        }
+    </style>
+
+    <div class="timeline"></div>
+`
+
+/**
+ * @namespace Alpha
+ */
+
+/**
+ * @class
+ * @extends HTMLElement
+ * @description A zero dependency web component that will display JavaScript console output on-page.
+ *
+ * @element state-timeline
+ * @memberOf Alpha
+ *
+ * @method config Update runtime configuration, return complete config
+ * @method doInheritStyles If requested, add link to an external style sheet
+ * @method deepAssign Object deep merger
+ * method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
+ *
+ * @fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires state-timeline:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires state-timeline:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ *
+ * Standard watched attributes (common across all my components):
+ * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * Other watched attributes:
+ * None
+ *
+ * Standard props (common across all my components):
+ * @prop {string} version Static. The component version string (date updated). Also has a getter.
+ * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
+ * @prop {function(string): Element} $ jQuery-like shadow dom selector
+ * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+ * @prop {number} _iCount The component version string (date updated)
+ * @prop {object} opts This components controllable options - get/set using the `config()` method
+ * Other props:
+ * By default, all attributes are also created as properties
+ *
+ * @slot Container contents
+ *
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
+ */
+class StateTimeline extends HTMLElement {
+    /** Component version */
+    static version = '2024-09-18'
+
+    //#region --- Class Properties ---
+
+    /** Are we online? */
+    online = navigator.onLine
+    /** Is UIBUILDER loaded? */
+    uib = !!window['uibuilder']
+    /** Mini jQuery-like shadow dom selector (see constructor)
+     * @type {function(string): Element}
+     * @param {string} selector - A CSS selector to match the element within the shadow DOM.
+     * @returns {Element} The first element that matches the specified selector.
+     */
+    $
+    /** Mini jQuery-like shadow dom multi-selector (see constructor)
+     * @type {function(string): NodeList}
+     * @param {string} selector - A CSS selector to match the element within the shadow DOM.
+     * @returns {NodeList} A STATIC list of all shadow dom elements that match the selector.
+     */
+    $$
+    /** Holds a count of how many instances of this component are on the page
+     * Used to ensure a unique id if needing to add one dynamically
+     */
+    static _iCount = 0
+
+    colors = {
+        'log': 'green',
+        'error': 'red',
+        'warn': 'orange',
+    }
+
+    bgColors = {
+        'info': 'hsl(92, 100, 50, 0.3)',
+        'warn': 'hsl(39, 100, 50, 0.3)',
+        'error': 'hsl(0, 100, 50, 0.3)',
+    }
+
+    icons = {
+        'log': '> ',
+        'info': 'ℹ️ ',
+        'debug': '🪲 ',
+        'trace': '👓 ',
+        'warn': '⚠️ ',
+        'error': '⛔ ',
+    }
+
+    static defaultStates = {
+        'undefined': { name: 'undefined', label: 'Undefined', color: 'darkslategray' },
+        'offline': { name: 'offline', label: 'Offline', color: 'grey' },
+    }
+
+    /** Runtime configuration settings */
+    opts = {
+        /** State schema
+         * @property {object} states Each state ID'd by name
+         * @property {string} states.name Unique name of the state
+         * @property {string} states.label Long label for the state
+         * @property {string} states.color CSS Color specification of timeline state
+         */
+        states: StateTimeline.defaultStates,
+        /** Max # seconds in the timeline display, old entries will be dropped
+         * Set to 0 for unlimited but beware of excessive memory use
+         */
+        timespan: 43200, // 12 hours
+        /** Max # entries allowed in the display, extra's will be dropped */
+        maxEntries: 10000,
+    }
+
+    /** Makes HTML attribute change watched
+     * @returns {Array<string>} List of all of the html attribs (props) listened to
+     */
+    static get observedAttributes() {
+        return ['inherit-style']
+    }
+
+    /** Report the current component version string */
+    get version() {
+        return StateTimeline.version
+    }
+
+    //#endregion --- Class Properties ---
+
+    /** NB: Attributes not available here - use connectedCallback to reference */
+    constructor() {
+        super()
+
+        this.attachShadow({ mode: 'open', delegatesFocus: true })
+            // Only append the template if code and style isolation is needed
+            .append(template.content.cloneNode(true))
+
+        // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
+        this.$ = this.shadowRoot?.querySelector.bind(this.shadowRoot)
+        this.$$ = this.shadowRoot?.querySelectorAll.bind(this.shadowRoot)
+    }
+
+    /** Runs when an instance is added to the DOM */
+    connectedCallback() {
+        // Make sure instance has an ID. Create an id from name or calculation if needed
+        if (!this.id) {
+            if (!this.name) this.name = this.getAttribute('name')
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `uib-meta-${++StateTimeline._iCount}`
+        }
+
+        // Check again if UIBUILDER for Node-RED is loaded
+        this.uib = !!window['uibuilder']
+
+        // Apply parent styles from a stylesheet if required
+        if (this.hasAttribute('inherit-style')) {
+            const styleUrl = this.getAttribute('inherit-style')
+            this.doInheritStyles(styleUrl)
+        }
+
+        this.timeline = this.shadowRoot?.querySelector('.timeline')
+        /** LIVE ref to all state divs - updates automatically as new states are added
+         * @type {HTMLCollectionOf<Element>}
+         */
+        this.states = this.timeline?.getElementsByClassName('state')
+
+        // When was this instance connected?
+        this.prevTs = this.firstTs = new Date()
+        // Set initial state to built-in 'undefined'
+        this.updateState('undefined')
+
+        // Listen for on-/off-line and mark state as null
+        window.addEventListener('offline', (e) => {
+            console.warn('OFFLINE')
+            this.online = false
+            // Set state to built-in 'null'
+            this.updateState('offline')
+        })
+        window.addEventListener('online', (e) => {
+            console.warn('ONLINE')
+            this.online = true
+            // Set initial state to built-in 'undefined'
+            this.updateState('undefined')
+        })
+
+        // Keep at end. Let everyone know that a new instance of the component has been connected
+        this.dispatchEvent(new CustomEvent('state-timeline:connected', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        } ) )
+    }
+
+    /** Runs when an instance is added to the DOM */
+    disconnectedCallback() {
+        // Keep at end. Let everyone know that an instance of the component has been disconnected
+        this.dispatchEvent(new CustomEvent('state-timeline:disconnected', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        } ) )
+    }
+
+    /** Handle watched attributes
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
+     * Attribute values can only ever be strings
+     * @param {string} attrib The name of the attribute that is changing
+     * @param {string} newVal The new value of the attribute
+     * @param {string} oldVal The old value of the attribute
+     */
+    attributeChangedCallback(attrib, oldVal, newVal) {
+        // Don't bother if the new value same as old
+        if ( oldVal === newVal ) return
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[attrib] = newVal
+
+        // Add other dynamic attribute processing here.
+        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
+
+        // Keep at end. Let everyone know that an attribute has changed for this instance of the component
+        this.dispatchEvent(new CustomEvent('state-timeline:attribChanged', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name,
+                attribute: attrib,
+                newVal: newVal,
+                oldVal: oldVal,
+            }
+        } ) )
+    }
+
+    /** OPTIONAL. Update runtime configuration, return complete config
+     * @param {object|undefined} config If present, partial or full set of options. If undefined, fn returns the current full option settings
+     */
+    config(config) {
+        // Merge config but ensure that default states always present
+        // if (config) this.opts = { ...this.opts, ...config }
+        if (config) this.opts = StateTimeline.deepAssign(this.opts, config)
+        return this.opts
+    }
+
+    /** Optionally apply an external linked style sheet (called from connectedCallback)
+     * @param {*} url The URL for the linked style sheet
+     */
+    async doInheritStyles(url) {
+        if (!url) url = './index.css'
+
+        const linkEl = document.createElement('link')
+        linkEl.setAttribute('type', 'text/css')
+        linkEl.setAttribute('rel', 'stylesheet')
+        linkEl.setAttribute('href', url)
+        // @ts-ignore
+        this.shadowRoot.appendChild(linkEl)
+
+        console.info(`[state-timeline] Inherit style requested. Loading: "${url}"`)
+    }
+
+    /** Updates the timeline with a new state
+     * @param {string} stateName Name of the state
+     */
+    updateState(stateName) {
+        const config = this.opts
+
+        // date/time of new entry
+        const ts = new Date()
+        const stateDuration = ts - this.prevTs
+
+        // Get a reference to the PREVIOUS entry
+        let prev
+        // No previous? We must be at the start
+        if (this.states.length === 0) {
+            console.log('at the start')
+            // Create a dummy entry
+            prev = {
+                dataset: {
+                    state: 'undefined',
+                    start: this.firstTs.toISOString(),
+                },
+            }
+        } else {
+            prev = this.states.item(this.states.length - 1)
+        }
+        // end of the previous entry is the start of the current
+        prev.dataset.end = ts.toISOString()
+
+        // Find the PREVIOUS state details - that's what we need to show this time
+        const stateInfo = config.states[this.prevState]
+        if (!stateInfo) throw new Error(`[state-timeline] State ${this.prevState} not found`)
+
+        const stateDiv = document.createElement('div')
+        stateDiv.dataset.state = prev.dataset.state
+        stateDiv.dataset.start = ts.toISOString()
+        stateDiv.dataset.end = ''
+        stateDiv.classList.add('state')
+        stateDiv.style.backgroundColor = stateInfo.color
+        // stateDiv.style.flexBasis = '1px' // Initially 0 width
+
+        // @ts-ignore
+        // const elapsed = ts - this.firstTs
+        // const elapsed = ts - this.prevTs
+
+        // @ts-ignore
+        console.info(`${stateName}: elapsed={from-start: ${ts - this.firstTs}, from-prev: ${ts - this.prevTs}}, #=${this.states.length}`)
+
+        // Set the label for each state
+        // const labelDiv = document.createElement('div')
+        // labelDiv.classList.add('label')
+        // labelDiv.textContent = stateInfo.label
+        // stateDiv.appendChild(labelDiv)
+
+        // @ts-ignore Calculate the width of the state based on its duration (fixed 3s in this case)
+        const stateWidth = (stateDuration / config.timespan)
+
+        // @ts-ignore Append the new state to the timeline
+        this.timeline.appendChild(stateDiv)
+
+        // Add a slight delay to allow smooth width transition
+        setTimeout(() => {
+            stateDiv.style.flexBasis = `${stateWidth}%`
+        }, 50)
+
+        // Update the last timestamp & state
+        this.prevTs = ts
+        this.prevState = stateName
+    }
+
+    /** Utility object deep merge fn
+     * @param {object} target Target object to merge into
+     * @param  {...object} sources Source objects to merge
+     * @returns {object} Deep merged object
+     */
+    static deepAssign(target, ...sources) {
+        for (let source of sources) { // eslint-disable-line prefer-const
+            for (let k in source) { // eslint-disable-line prefer-const
+                const vs = source[k]
+                const vt = target[k]
+                if (Object(vs) == vs && Object(vt) === vt) { // eslint-disable-line eqeqeq
+                    target[k] = StateTimeline.deepAssign(vt, vs)
+                    continue
+                }
+                target[k] = source[k]
+            }
+        }
+        return target
+    }
+}
+
+// Make the class the default export so it can be used elsewhere
+export default StateTimeline
+
+/** Self register the class to global
+ * Enables new data to be dynamically added via JS
+ * and lets any static methods be called
+ */
+window['StateTimeline'] = StateTimeline
+
+// Self-register the HTML tag
+customElements.define('state-timeline', StateTimeline)
+
+//#region TEST
+
+// Demo of how to use the component
+const timeline = document.querySelector('state-timeline')
+if (timeline) {
+    window.tiTest = true
+    setInterval(() => {
+        window.tiTest = false
+    }, 9000)
+
+    // Define possible states
+    const statesConfig = {
+        'true': { name: 'true', label: 'ON', color: 'green' },
+        'false': { name: 'false', label: 'OFF', color: 'red' }
+    }
+
+    // Set config for the component (e.g., 30 seconds span)
+    // ts-ignore
+    timeline.config({ states: statesConfig, timespan: 30 })
+
+    // Randomly add "true" and "false" states every 3 seconds
+    setInterval(() => {
+        if (window.tiTest && navigator.onLine) { // Easily turn on/off the test
+            const randomState = Math.random() > 0.5 ? 'true' : 'false'
+            // const randomState = Math.random() > 0.5 ? 'true' : 'random'
+            // const randomState = Math.random() > 0.5 ? 'true' : 'null'
+            // @ts-ignore
+            timeline.updateState(randomState)
+        }
+    }, 3000)
+} else {
+    console.error('No state-timeline found')
+}
+
+//#endregion

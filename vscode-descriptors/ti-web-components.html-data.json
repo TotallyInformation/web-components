@@ -2,41 +2,125 @@
   "version": 1,
   "tags": [
     {
-      "name": "button-send",
-      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: string | { [x: string]: string | undefined; }; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - The topic to include in the output @type {string}\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - The topic to include in the output @type {string}\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_msg` - The output msg @type {object}\n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: string | {}; _meta: { id: string; name: string | null; data: {}; }; }>`} - Create a new custom event for later use - will output the msg data - for use without uibuilder @type {CustomEvent}",
+      "name": "chart-frappe",
+      "description": "Events:\n\n  * `chart-frappe:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-frappe:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
-          "name": "topic",
-          "description": "`topic` {string} - The topic to include in the output @type {string}\n\nProperty: topic\n\nDefault: "
-        },
-        {
-          "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "id",
-          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
-        },
-        {
           "name": "name",
-          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
         },
         {
           "name": "data-*",
-          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
         },
         {
-          "name": "onbutton-send:click",
-          "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: string | { [x: string]: string | undefined; }; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
+          "name": "onchart-frappe:construction",
+          "description": "`chart-frappe:construction` {} - Document object event. evt.details contains the data"
         },
         {
-          "name": "onuibuilder.send",
-          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set."
+          "name": "onchart-frappe:connected",
+          "description": "`chart-frappe:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-frappe:disconnected",
+          "description": "`chart-frappe:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-frappe:attribChanged",
+          "description": "`chart-frappe:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "chart-high",
+      "description": "Events:\n\n  * `chart-high:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-high:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onchart-high:construction",
+          "description": "`chart-high:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onchart-high:connected",
+          "description": "`chart-high:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-high:disconnected",
+          "description": "`chart-high:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-high:attribChanged",
+          "description": "`chart-high:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "component-template",
+      "description": "Events:\n\n  * `component-template:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "values": []
+        },
+        {
+          "name": "oncomponent-template:connected",
+          "description": "`component-template:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncomponent-template:disconnected",
+          "description": "`component-template:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncomponent-template:attribChanged",
+          "description": "`component-template:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
+      "name": "container-br",
+      "description": "Events:\n\n  * `container-br:construction` {} - Document object event. evt.details contains the data\n\n  * `container-br:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `container-br:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `container-br:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `name` {string} - Sync'd from name attribute",
+      "attributes": [
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "oncontainer-br:construction",
+          "description": "`container-br:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "oncontainer-br:connected",
+          "description": "`container-br:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncontainer-br:disconnected",
+          "description": "`container-br:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncontainer-br:attribChanged",
+          "description": "`container-br:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "data-list",
+      "description": "Attributes:\n\n  * `listvar` {} - \n\n  * `type` {} - \n\nProperties:\n\n  * `data` - \n\n  * `_list` - \n\n  * `_entries` - ",
+      "attributes": [
+        {
+          "name": "listvar",
+          "description": "`listvar` {} - \n\n"
+        },
+        {
+          "name": "type",
+          "description": "`type` {} - \n\n"
         }
       ]
     },
@@ -119,13 +203,110 @@
       ]
     },
     {
-      "name": "hello-world",
-      "description": "Attributes:\n\n  * `name` {`string | null`} - \n\nProperties:\n\n  * `name` {`string | null`} - ",
+      "name": "gauge-steel",
+      "description": "Events:\n\n  * `gauge-steel:construction` {} - Document object event. evt.details contains the data\n\n  * `gauge-steel:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
-          "description": "`name` {`string | null`} - \n\nProperty: name",
-          "values": []
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "ongauge-steel:construction",
+          "description": "`gauge-steel:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "ongauge-steel:connected",
+          "description": "`gauge-steel:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "ongauge-steel:disconnected",
+          "description": "`gauge-steel:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "ongauge-steel:attribChanged",
+          "description": "`gauge-steel:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "button-send",
+      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "attributes": [
+        {
+          "name": "topic",
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic\n\nDefault: "
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
+          "values": [
+            {
+              "name": "any"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onbutton-send:click",
+          "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuibuilder.send",
+          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set."
+        }
+      ]
+    },
+    {
+      "name": "ghost-thermometer",
+      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "attributes": [
+        {
+          "name": "topic",
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic\n\nDefault: "
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
+          "values": [
+            {
+              "name": "any"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onbutton-send:click",
+          "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuibuilder.send",
+          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set."
         }
       ]
     },
@@ -141,12 +322,360 @@
       ]
     },
     {
+      "name": "labelled-value",
+      "description": "Events:\n\n  * `labelled-value:construction` {} - Document object event. evt.details contains the data\n\n  * `labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `label` {`undefined`} - \n\n  * `value` {`undefined`} - \n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `label` {`undefined`} - \n\n  * `value` {`undefined`} - \n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "label",
+          "description": "`label` {`undefined`} - \n\nProperty: label\n\nDefault: undefined"
+        },
+        {
+          "name": "value",
+          "description": "`value` {`undefined`} - \n\nProperty: value\n\nDefault: undefined"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onlabelled-value:construction",
+          "description": "`labelled-value:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onlabelled-value:connected",
+          "description": "`labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onlabelled-value:disconnected",
+          "description": "`labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onlabelled-value:attribChanged",
+          "description": "`labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "multi-way-switch",
+      "description": "Events:\n\n  * `multi-way-switch:construction-complete` {`Event`} - \n\nAttributes:\n\n  * `mode` {} - \n\n  * `positions` {} - \n\n  * `values` {} - \n\nProperties:\n\n  * `uib` {`boolean`} - Is UIBUILDER loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `value` - \n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `_value` {`number`} - \n\n  * `knobRotation` {`number`} - \n\n  * `_customValues` {`never[]`} - ",
+      "attributes": [
+        {
+          "name": "mode",
+          "description": "`mode` {} - \n\n"
+        },
+        {
+          "name": "positions",
+          "description": "`positions` {} - \n\n"
+        },
+        {
+          "name": "values",
+          "description": "`values` {} - \n\n"
+        },
+        {
+          "name": "onmulti-way-switch:construction-complete",
+          "description": "`multi-way-switch:construction-complete` {`Event`} - "
+        }
+      ]
+    },
+    {
+      "name": "nav-bar",
+      "description": "Events:\n\n  * `nav-bar:construction` {} - Document object event. evt.details contains the data\n\n  * `nav-bar:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onnav-bar:construction",
+          "description": "`nav-bar:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onnav-bar:connected",
+          "description": "`nav-bar:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onnav-bar:disconnected",
+          "description": "`nav-bar:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onnav-bar:attribChanged",
+          "description": "`nav-bar:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "simple-card",
+      "description": "A simple card component\n\nEvents:\n\n  * `simple-card:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-card:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-card:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-card:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\n  * `header` {} - Content to go in the header section of the card\n\n  * `footer` {} - Content to go in the footer section of the card\n\ncsspart ??? - Uses the uib-styles.css uibuilder master for variables where available.\n\nAttributes:\n\n  * `data-*` {string} variant - Optional. Sets the cards colour variant\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `slot` {string|html} - Populates the cards default slot content\n\n  * `header` {string|html} - Populates the cards header slot content\n\n  * `footer` {string|html} - Populates the cards footer slot content\n\n  * `name` {`undefined`} - \n\n  * `props` {`string[]`} - \n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - \n\n  * `variant` {string} - Sync'd from name attribute",
+      "attributes": [
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} variant - Optional. Sets the cards colour variant\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onsimple-card:construction",
+          "description": "`simple-card:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onsimple-card:connected",
+          "description": "`simple-card:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-card:disconnected",
+          "description": "`simple-card:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-card:attribChanged",
+          "description": "`simple-card:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "simple-container",
+      "description": "A simple container component\n\nSlots:\n\n  * ` ` {} - Container contents\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs",
+      "attributes": []
+    },
+    {
+      "name": "simple-switch",
+      "description": "Events:\n\n  * `simple-switch:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-switch:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "onsimple-switch:construction",
+          "description": "`simple-switch:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onsimple-switch:connected",
+          "description": "`simple-switch:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-switch:disconnected",
+          "description": "`simple-switch:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-switch:attribChanged",
+          "description": "`simple-switch:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "state-timeline",
+      "description": "Events:\n\n  * `state-timeline:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `online` {`boolean`} - Are we online?\n\n  * `uib` {`boolean`} - Is UIBUILDER loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `colors` {`{ log: string; error: string; warn: string; }`} - \n\n  * `bgColors` {`{ info: string; warn: string; error: string; }`} - \n\n  * `icons` {`{ log: string; info: string; debug: string; trace: string; warn: string; error: string; }`} - \n\n  * `defaultStates` {`{ undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }`} - \n\n  * `opts` {`{ states: { undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }; timespan: number; maxEntries: number; }`} - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "values": []
+        },
+        {
+          "name": "onstate-timeline:connected",
+          "description": "`state-timeline:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onstate-timeline:disconnected",
+          "description": "`state-timeline:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onstate-timeline:attribChanged",
+          "description": "`state-timeline:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
       "name": "syntax-highlight",
       "description": "Attributes:\n\n  * `auto` {} - \n\nProperties:\n\n  * `json` - ",
       "attributes": [
         {
           "name": "auto",
           "description": "`auto` {} - \n\n"
+        }
+      ]
+    },
+    {
+      "name": "component-template",
+      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "attributes": [
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {} - \n\n"
+        },
+        {
+          "name": "onuib-theme-changer:construction",
+          "description": "`uib-theme-changer:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuib-theme-changer:connected",
+          "description": "`uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onuib-theme-changer:disconnected",
+          "description": "`uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onuib-theme-changer:attribChanged",
+          "description": "`uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "uib-theme-changer",
+      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "attributes": [
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {} - \n\n"
+        },
+        {
+          "name": "onuib-theme-changer:construction",
+          "description": "`uib-theme-changer:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuib-theme-changer:connected",
+          "description": "`uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onuib-theme-changer:disconnected",
+          "description": "`uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onuib-theme-changer:attribChanged",
+          "description": "`uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "ti-base-component",
+      "description": "Attributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Report the current component version string",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "values": []
+        }
+      ]
+    },
+    {
+      "name": "button-send",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `button-send:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `button-send:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\n\n  * `button-send:click` {} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string|undefined} - The topic to include in the output\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nStandard props (common across all my components):\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\n\nProperties:\n\n  * `sendEvents` {`boolean`} - \n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_msg` {object} - The output msg\n\n  * `topic` {string|undefined} - The topic to include in the output\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version",
+      "attributes": [
+        {
+          "name": "topic",
+          "description": "`topic` {string|undefined} - The topic to include in the output\n\nProperty: topic",
+          "values": []
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\nProperty: payload",
+          "values": [
+            {
+              "name": "any"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
+        },
+        {
+          "name": "data-*",
+          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nStandard props (common across all my components):\n\n"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\n\n",
+          "values": []
+        },
+        {
+          "name": "onbutton-send:connected",
+          "description": "`button-send:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onbutton-send:disconnected",
+          "description": "`button-send:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onbutton-send:attribChanged",
+          "description": "`button-send:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change."
+        },
+        {
+          "name": "onbutton-send:click",
+          "description": "`button-send:click` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onuibuilder.send",
+          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
+      "name": "component-template",
+      "description": "Events:\n\n  * `visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `colors` {object} - \n\n  * `bgColors` {object} - \n\n  * `icons` {object} - \n\n  * `wrapper` - \n\n  * `originalConsole` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Is UIBUILDER for Node-RED loaded?\n\n  * `version` {`string`} - Component version",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "values": []
+        },
+        {
+          "name": "onvisible-console:connected",
+          "description": "`visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onvisible-console:disconnected",
+          "description": "`visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onvisible-console:attribChanged",
+          "description": "`visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
+      "name": "visible-console",
+      "description": "Events:\n\n  * `visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `colors` {object} - \n\n  * `bgColors` {object} - \n\n  * `icons` {object} - \n\n  * `wrapper` - \n\n  * `originalConsole` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Is UIBUILDER for Node-RED loaded?\n\n  * `version` {`string`} - Component version",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "values": []
+        },
+        {
+          "name": "onvisible-console:connected",
+          "description": "`visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onvisible-console:disconnected",
+          "description": "`visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onvisible-console:attribChanged",
+          "description": "`visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
         }
       ]
     }

@@ -2,30 +2,93 @@
 
 [![](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge)](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
 
-A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.
-
-> **NOTE**: Currently, all of the components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change. Also note that the documentation is incomplete and may be wrong in places.
+A repository of simple W3C Web Components. These may have extra capabilities for use with node-red-contrib-uibuilder but all work independently as well.
 
 Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.
 
+## Useage
+
+Install locally using npm or access via [jsdelivr](https://www.jsdelivr.com/package/gh/totallyinformation/web-components).
+
+Files for live use are in the `dist` folder. The alpha quality components are in the `dist/alpha` folder.
+
+Each component has 4 files but you only need 1 of them.
+
+If using traditional JavaScript or just HTML, use the `*.iife.min.js` files in deferred links in your `<head>`.
+
+```html
+<script defer src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components/dist/visible-console.iife.min.js"></script>
+```
+
+If using ES Modules, import the `*.esm.min.js` files in your module code.
+
+```javascript
+import 'https://cdn.jsdelivr.net/gh/totallyinformation/web-components/dist/visible-console.esm.min.js'
+```
+
+> [!TIP]
+> If using with UIBUILDER for Node-RED, load _after_ the uibuilder client library so that the component registers that uibuilder is in use and becomes responsive to it.
+
+
+Each component self-registers its custom HTML tag. They also globally self-register their class name so that you can access static variables and functions if needed. The tag name and global name are both listed in the tables below.
+
+When using your browser's developer tools, the matching `.map` file will be loaded. This ensures that reported line numbers and full variable/function names are reported.
+
+The source for the components is in the `src` folder for the main components and in the `alpha` folder for the alpha quality components.
+
 ## Components
 
-Please note the warning about these being experimental right now. But please do give them a go and let me have some feedback.
+These components can be considered `beta` quality or better. They may not be complete but they should have basic usefulness.
 
-Note that all of these components make use of the new `uib-brand.css` stylesheet which is light/dark switchable and all based off CSS variables and calculations so is very flexible.
+| Name                                  | Description                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `visible-console` (VisibleConsole)    | Copies `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
 
-| Name                | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| `button-send`       | A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data. |
-| `container-br`      | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
-| `data-list`         | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
-| `definition-list`   | Similar to `data-list` but outputs a DL instead.             |
-| `html-include`      | Dynamically load external HTML content very easily without needing an iFrame. |
-| `labelled-value`    | Text output with a label.                                    |
-| `simple-card`       | A card container with optional header and footer. |
-| `simple-container`  | A UI container for easy, automated layout of contained elements (specifically cards). |
-| `syntax-highlight`  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
-| `uib-theme-changer` | This only works with the `uib-brand` stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours. |
+
+## Alpha Components
+
+> [!NOTE]
+> Currently, all of the alpha components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.
+>
+> Also note that the documentation is incomplete and may be wrong in places.
+>
+> However, please do give them a go and let me have some feedback.
+
+| Name (tag/global)                     | Description                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `button-send` (ButtonSend)            | A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data. |
+| `chart-frappe` (ChartFrappe)          | A chart component using the Frappe chart library |
+| `chart-high` (ChartHigh)              | A chart component using the HighCharts library |
+| `container-br` (ContainerBr)          | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
+| `data-list` (DataList)                | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
+| `definition-list` (DefinitionList)    | Similar to `data-list` but outputs a DL instead.             |
+| `gauge-steel` (GaugeSteel)            | A gauge component using the Steel Series library |
+| `ghost-thermometer` (GhostThermometer)| A thermometer style gauge |
+| `html-include` (HtmlInclude)          | Dynamically load external HTML content very easily without needing an iFrame. |
+| `labelled-value` (LabelledValue)      | Text output with a label.                                    |
+| `multi-way-switch` (MultiWaySwitch)   | A flexible multi-switch that can display in several styles (buttons, rotary, etc) |
+| `nav-bar` (NavBar)                    | A standardised navigation menu bar |
+| `simple-card` (SimpleCard)            | A card container with optional header and footer. |
+| `simple-container` (SimpleContainer)  | A UI container for easy, automated layout of contained elements (specifically cards). |
+| `simple-gauge` (SimpleGauge)          | A simple gauge style display component. |
+| `simple-switch` (SimpleSwitch)        | A simple 2-way latching switch. |
+| `state-timeline` (StateTimeline)      | A horizontal timeline display designed to show status/state. |
+| `syntax-highlight` (SyntaxHighlight)  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
+| `uib-theme-changer` (UibThemeChanger) | This only works with the `uib-brand` stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours. |
+
+There is also a `alpha/no-complete` folder. This contains some components not yet even considered alpha quality.
+
+| Name (tag/global)                     | Description                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `chart-apex` (ChartApex)              | Charts using the Apex.js chart library. |
+| `chart-js` (ChartJs)                  | Charts using the Chart.js chart library. |
+| `chart-plotly` (ChartPlotly)          | Charts using the Plotly.js chart library. |
+| `component-template` (ComponentTemplate) | A template for new components. Containing core standard features and JSDoc documentation. |
+| `floor-plan` (FloorPlan)              | Display a floor-plan image and add dynamic icons. For example, showing lighting status. |
+| `hello-world` (HelloWorld)            | A simplistic example web component. |
+| `simple-tree` (SimpleTree)            | Output's a collapsible tree-style list display. |
+| `super-star` (SuperStar)              | A simple animated star emoji that twinkles when clicked or hovered over. |
+| `uib-wrap` (UibWrap)                  | Makes 3rd-party web components responsive to UIBUILDER for Node-RED. |
 
 ## Other supporting files and folders
 
@@ -66,10 +129,14 @@ These are the requirements for any web component to be included in this reposito
 * MUST be linted using ESLINT. SHOULD use JavaScript Standard format (with some variations documented in the `.eslintrc.js` file).
 * MUST self-register the custom tag using `customElements.define`.
 * MUST use a Class name using a _CamelCase_ version of the component name with an initial upper-case letter (e.g. `syntax-highlight` will be `export default class SyntaxHighlight extends HTMLElement { ... }` ).
+* MUST be documented in the `docs` folder.{}
   
 * SHOULD have a `<slot>` to allow nested rich content (where it makes sense).
 * SHOULD export a _camelCase_ version of the component-name which contains any useful methods and data. (e.g. `syntax-highlight` should export `syntaxHighlight`).
 * SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
+* SHOULD define any shadow template content and required component name as static variables in the class.
+
+* [Best practices](https://web.dev/articles/custom-elements-best-practices)
 
 ### HTML Standards limitations
 

@@ -1,12 +1,25 @@
 This is the documentation for TotallyInformation's pure Web Components.
 
 These components do not require any external modules or frameworks. However, they do contain (optional) features to use with node-red-contrib-uibuilder.
+
 They require a reasonably modern, standards compliant browser. No Internet Explorer support (though you may be able to get them to work with a suitable polyfill).
 
 See the examples folder which contains an html and a javascript file for each component that demonstrates their use with and without uibuilder.
 
 See the main README for how to install and use.
 
+## Styling
+
+Most of the components use a shadow-dom to isolate the HTML and CSS. The impact of this is that any CSS style sheets applied to the outer DOM (the page), will NOT be reflected into the shadow dom. However, _any CSS variables WILL be reflected_.
+
+This is a limitation of the W3C Web Component specification, not of these specific components.
+
+Should you need to get around this limitation of the shadow dom, all components in this package support the `inherit-style` attribute. Adding this attribute will make the component load an external style sheet link into the component so that all styles become available.
+
+Note that slot content is not subject to this restriction since it exists in the DOM, not the shadow dom.
+
+> [!NOTE]
+> Loading external style sheets into the components causes an additional web resource load and in extreme cases can cause a flash of style change.
 
 ## Components
 
@@ -14,7 +27,9 @@ See the main README for how to install and use.
 
 While these are certainly fully usable in their current form, they may still continue to evolve, possibly fairly dramatically.
 
-* [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data.
+* [`visible-console`](visible-console) - Clones `console.xxxx()` outputs to the web-page.
+* [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data and enables block content.
+
 * [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
 * [`syntax-highlight`](./syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
 
@@ -38,47 +53,6 @@ These will do a job in a basic fashion but still need some work to make them mor
 
 
 
-## Standards & Requirements
+## Standards, Requirements & Development
 
-* Self registering custom tag. All tag namess are lower-case with at least one dash.
-
-* Class is the default export and is attached to the window global
-
-* Include `$` internal shortcut to shadow DOM
-
-  ```javascript
-  /** Mini jQuery-like shadow dom selector
-   * @param {keyof HTMLElementTagNameMap} selection HTML element selector
-   */
-  $(selection) {
-      return this.shadowRoot && this.shadowRoot.querySelector(selection)
-  }
-  ```
-
-* Standard attributes should include
-
-  'topic', 'payload', 'events' (boolean)
-
-* uibuilder aware
-  
-  * Content (data) changes and events optionally trigger send back to Node-RED. Uses the `msg._ui` property
-  * Consumes data from node-red where sensible. Uses the `msg._ui` property.
-  * When sending to node-red, msg should include `msg._ui` which should include id, name, data (object containing any `data-*` attribs)
-
-* Triggers custom events on the `document` global object
-
-  * Constructor (load)
-  * ConnectedCallback (instance load)
-  * DisconnectedCallback (instance unload)
-  * Data changes
-
-* MUST be standalone with no external requirements. Common include library modules may be permitted however.
-* MUST be useable in the majority of modern browsers. IE will not be supported.
-* MUST use ES6+. Maxumum JavaScript version should be 2 years behind the leading edge and only features supported by the majority of mainstream browsers are allowed. Other features MAY be permitted as long as they are optional and do not produce errors.
-* MUST be linted using ESLINT. SHOULD use JavaScript Standard format.
-* MUST self-register the custom tag using `customElements.define`.
-* MUST use a Class name using a _CamelCase_ version of the component name with an initial upper-case letter (e.g. `syntax-highlight` will be `export default class SyntaxHighlight extends HTMLElement { ... }` ).
-  
-* SHOULD have a `<slot>` to allow nested rich content (where it makes sense).
-* SHOULD export a _camelCase_ version of the component-name which contains any useful methods and data. (e.g. `syntax-highlight` should export `syntaxHighlight`).
-* SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
+See the [Developer Docs](dev.md)
