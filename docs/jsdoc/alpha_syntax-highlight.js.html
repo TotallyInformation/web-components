@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alpha/syntax-highlight.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: alpha/syntax-highlight.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Zero dependency web component to show a JavaScript object as a highlighted box in the UI
+ * Use with uibuilder as:
+ *   @example html
+ *     &lt;!-- Shows the last incoming msg from Node-RED -->
+ *     &lt;syntax-highlight auto="msg">⇇ Latest msg from Node-RED:&lt;/syntax-highlight>
+ *     &lt;!-- Shows the last outgoing msg to Node-RED -->
+ *     &lt;!-- &lt;syntax-highlight auto="sentMsg">⇉ Latest msg to Node-RED:&lt;/syntax-highlight> -->
+ *     &lt;!-- Shows the last incoming control msg from Node-RED -->
+ *     &lt;!-- &lt;syntax-highlight auto="ctrl">⇐ Latest control msg from Node-RED:&lt;/syntax-highlight> -->
+ *     &lt;!-- Shows the last outgoing control msg to Node-RED -->
+ *     &lt;!-- &lt;syntax-highlight auto="sentCtrlMsg">⇒ Latest control msg to Node-RED:&lt;/syntax-highlight> -->
+ *   @example JavaScript
+ *     import('./syntax-highlight')
+ * Or use as
+ * @example HTML:
+ *   &lt;syntax-highlight>Latest msg from Node-RED:&lt;/syntax-highlight>
+ * @example JavaScript:
+ *   const {dumpObject} = await import('./components/syntax-highlight.js')
+ *   dumpObject(msg)
+ * @example Alternative JavaScript:
+ *   await import('./components/syntax-highlight.js')
+ *   document.getElementsByTagName('syntax-highlight')[0].json = msg
+ * @example Other update methods
+ *   const showMsg = document.getElementsByTagName('syntax-highlight')[0]
+ *   showMsg.dispatchEvent(new CustomEvent('new-msg', { bubbles: false, detail: msg }))
+ *   showMsg.evt('new-msg', msg)
+ * 
+ */
+/*
+  Copyright (c) 2022 Julian Knight (Totally Information)
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+const template = document.createElement('template')
+template.innerHTML = `
+    &lt;style>
+        :host {
+            display: block;
+            color:white;
+            background-color:black;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+        }
+        pre {
+            font-family: Consolas, "ui-monospace", "Lucida Console", monospace;
+            white-space: pre;
+            margin: 0;
+        }
+        .key {color:#ffbf35}
+        .string {color:#5dff39;}
+        .number {color:#70aeff;}
+        .boolean {color:#b993ff;}
+        .null {color:#93ffe4;}
+        .undefined {color:#ff93c9;}
+    &lt;/style>
+    &lt;slot>&lt;/slot>
+    &lt;pre>&lt;i>No data&lt;/i>&lt;/pre>
+`
+
+// return formatted HTML version of JSON object
+const returnHighlight = function (json) {
+    json = JSON.stringify(json, undefined, 4)
+    json = json.replace(/&amp;/g, '&amp;amp;').replace(/&lt;/g, '&amp;lt;').replace(/>/g, '&amp;gt;')
+    json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number'
+        if ((/^"/).test(match)) {
+            if ((/:$/).test(match)) {
+                cls = 'key'
+            } else {
+                cls = 'string'
+            }
+        } else if ((/true|false/).test(match)) {
+            cls = 'boolean'
+        } else if ((/null/).test(match)) {
+            cls = 'null'
+        }
+        return '&lt;span class="' + cls + '">' + match + '&lt;/span>'
+    })
+    const myHtml = document.createElement('pre')
+    myHtml.innerHTML = json
+    return myHtml
+} // --- End of syntaxHighlight --- //
+
+export default class SyntaxHighlight extends HTMLElement {
+
+    constructor() {
+        super()
+        this.attachShadow({ mode: 'open', delegatesFocus: true })
+            .append(template.content.cloneNode(true))
+
+        this.addEventListener('new-msg', evt => {
+            this.json = evt.detail
+        })
+
+        // Get a reference to the uibuilder FE client library if possible
+        try {
+            this.uibuilder = window.uibuilder
+        } catch (e) {
+            this.uibuilder = undefined
+        }
+    }
+
+    set json(value) {
+        //console.log(value, syntaxHighlight(value))
+        this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+        this.shadowRoot.appendChild(returnHighlight(value))
+    }
+
+    evt(evtName, evtData) {
+        this.dispatchEvent(new CustomEvent(evtName, { bubbles: false, detail: evtData }))
+    }
+
+    static get observedAttributes() { return [
+        'auto', 
+    ]}
+
+    attributeChangedCallback(name, oldVal, newVal) {
+        if ( oldVal === newVal ) return
+
+        // auto attrib allows msgs to/from Node-RED to be shown as long as window.uibuilder is available
+        if ( name === 'auto' &amp;&amp; this.uibuilder ) {
+            switch (newVal) {
+                case 'message':
+                case 'msg': {
+                    this.uibuilder.onChange('msg', (msg)=> {
+                        this.json = msg
+                    })
+                    break
+                }
+
+                case 'ctrl':
+                case 'control':
+                case 'ctrlMsg': {
+                    this.uibuilder.onChange('ctrlMsg', (msg)=> {
+                        this.json = msg
+                    })
+                    break
+                }
+
+                case 'sent':
+                case 'sentmsg':
+                case 'sentMsg': {
+                    this.uibuilder.onChange('sentMsg', (msg)=> {
+                        this.json = msg
+                    })
+                    break
+                }
+
+                case 'sentctrlmsg':
+                case 'sentCtrlMsg': {
+                    this.uibuilder.onChange('sentCtrlMsg', (msg)=> {
+                        this.json = msg
+                    })
+                    break
+                }
+
+                default: {
+                    break
+                }
+            } // -- end of switch --
+        } // -- end of if name=auto --
+        
+    } // --- end of attributeChangedCallback --- //
+
+} // ---- End of SyntaxHighlight class definition ---- //
+
+// Add the class as a new Custom Element to the window object
+customElements.define('syntax-highlight', SyntaxHighlight)
+
+// document.addEventListener('new-msg', evt => {
+//     console.log('GOT A MSG', evt)
+// })
+
+/** Quick and dirty method to dump a JavaScript object to the ui
+ * Will put the output to the first &lt;syntax-highlight> tag on the page
+ * @param {*} obj Object to dump
+ * @param {number} [ref] Optional, default=0. Which tag to use? If >1 &lt;syntax-highlight> tag is on the page.
+ */
+export const dumpObject = function showJson(obj, ref = 0) {
+    try {
+        const showMsg = document.getElementsByTagName('syntax-highlight')[ref]
+        showMsg.json = obj
+    } catch (e) {
+        console.error('[syntax-highlight:dumpObject] Cannot show object - is there a &lt;syntax-highlight> tag?')
+    }
+}
+
+// Consider using a std to expose default functionality for a component
+export const syntaxHighlight = dumpObject</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#dumpObject">dumpObject</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Sep 24 2024 19:36:38 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

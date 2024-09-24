@@ -31,6 +31,25 @@ updated: 2024-09-22 14:34:05
 * SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
 * SHOULD have a `<slot>` to allow nested rich content (where it makes sense).
 
+* Where _static_ properties or methods are referred to, `this.constructor` should be used rather than the class name. This avoids errors should the class ever be renamed or the code copied to a different class. Similarly, `this.localName` can be used to get the class name as text which should be used in debugging and error logging.
+
+## Styling
+
+Where shadow dom is used (most of these components), note that style isolation between parent and component instance applies.
+
+* Classes defined in the parent are not available within the shadow dom.
+
+* CSS Variables defined in the parent **ARE** available within the shadow dom.
+
+* `:host{ ... }` is used to apply styles to the custom tag.
+
+* Shadow dom elements can be selectively styled based on parent elements surrounding the custom tag through the use of the `:host-context()` pseudo selector.
+Shadow dom elements can be selectively styled based on a class or other identifier on the custom tag itself in the parent though the use of the `:host()` pseudo selector.
+
+* Elements from the parent that go into the components `<slot>`s may be given additional styling by use of the `::slotted()` pseudo selector. Note that slot contents remain in the parent dom. **NOTE**: Only top-level slot elements can be styled this way.
+
+* If you want to let the parent page style your component. Either use *CSS Variables* or add a `part` attribute to shadow dom elements. Then the parent styles can use `::part(partName){ ... }`.
+
 ## Features provided by the TiBaseComponent class
 
 ### Standard Attributes

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alpha/not-complete/chart-js.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: alpha/not-complete/chart-js.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+ *
+ * @version 0.1 2022-05-17 Pre-release
+ *
+ * See: https://web.dev/custom-elements-v1/, https://web.dev/shadowdom-v1/
+ *
+ * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
+ * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
+ *     or paste into https://runem.github.io/web-component-analyzer/
+ * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
+ *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
+ *
+ **/
+/**
+ * Copyright (c) 2022 Julian Knight (Totally Information)
+ * https://it.knightnet.org.uk, https://github.com/TotallyInformation
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
+
+// import Chart from 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js'
+
+import { Chart, registerables } from 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.esm.js'
+Chart.register(...registerables)
+
+const componentName = 'chart-js'
+const className = 'ChartJs'
+
+// just for syntax highlighting in VSCode
+function html(strings, ...keys) {
+    return strings.map( (s, i) => {
+        return s + (keys[i] || '')
+    }).join('')
+}
+
+const template = document.createElement('template')
+template.innerHTML = html`
+    &lt;style>
+        :host {
+            display: block;   /* default is inline */
+            contain: content; /* performance boost */
+            background-color: var(--surface3);
+        }
+    &lt;/style>
+    &lt;canvas id="chart" width="400" height="400">&lt;/canvas>
+    &lt;slot>&lt;/slot>
+`
+
+// Define the class and make it the default export
+/**
+ * @element chart-js
+ *
+ * @fires chart-js:construction - Document object event. evt.details contains the data
+ * @fires chart-js:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires chart-js:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires chart-js:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ *
+ * @attr {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
+ * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
+ *
+ * @prop {string} name - Sync'd from name attribute
+ *
+ * @slot Container contents
+ *
+ * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
+ */
+export default class ChartJs extends HTMLElement {
+    //#region ---- Class Variables ----
+
+    /** Standard _ui object to include in msgs */
+    _ui = {
+        type: componentName,
+        event: undefined,
+        id: undefined,
+        name: undefined,
+        data: undefined, // All of the data-* attributes as an object
+    }
+
+    /** Mini jQuery-like shadow dom selector (see constructor) */
+    $
+
+    /** Holds the name for this instance of the component */
+    name = undefined
+
+    /** Holds a count of how many instances of this component are on the page */
+    static _iCount = 0
+
+    //#endregion ---- ---- ---- ----
+
+    //#region ---- Utility Functions ----
+
+    //#endregion ---- ---- ---- ----
+
+    //#region ---- Event Handlers ----
+
+    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
+     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
+     */
+    _uibMsgHandler(evt) {
+        // If there is a payload, we want to replace the slot - easiest done from the light DOM
+        // if ( evt['detail'].payload ) {
+        //     const el = document.getElementById(this.id)
+        //     el.innerHTML = evt['detail'].payload
+        // }
+        // If there is a payload, we want to replace the VALUE
+        // if ( evt['detail'].payload ) {
+        //     const el = this.shadowRoot.getElementById('value')
+        //     el.innerHTML = evt['detail'].payload
+        // }
+    }
+
+    //#endregion ---- ---- ---- ----
+
+    constructor() {
+
+        super()
+        this.attachShadow({ mode: 'open', delegatesFocus: true })
+            .append(template.content.cloneNode(true))
+
+        this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
+
+        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+
+    } // ---- end of constructor ----
+
+    // List all attribs we want to observe
+    static get observedAttributes() { return [
+        'name'
+    ] }
+
+    // Runs when an observed attribute changes - Note: values are always strings
+    attributeChangedCallback(name, oldVal, newVal) {
+
+        // Don't bother if the new value same as old
+        if ( oldVal === newVal ) return
+
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[name] = newVal
+
+        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name,
+                attribute: name,
+                newVal: newVal,
+                oldVal: oldVal,
+            }
+        } ) )
+
+    } // --- end of attributeChangedCallback --- //
+
+    // Runs when an instance is added to the DOM
+    connectedCallback() {
+        ++ChartJs._iCount // increment total instance count
+
+        // Create an id from name or calculation if needed
+        this.name = this.getAttribute('name')
+        if (!this.id) {
+            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
+            else this.id = `sc-${ChartJs._iCount}`
+        }
+
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+
+        const ctx = this.shadowRoot.getElementById('chart')
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        })
+
+        this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        } ) )
+
+    } // ---- end of connectedCallback ---- //
+
+    // Runs when an instance is removed from the DOM
+    disconnectedCallback() {
+        // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
+
+        // @ts-ignore
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
+
+        this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name
+            },
+        } ) )
+
+    } // ---- end of disconnectedCallback ---- //
+
+} // ---- end of Class ---- //
+
+/** Self register the class to global
+ * Enables new data lists to be dynamically added via JS
+ * and lets the static methods be called
+ */
+window[className] = ChartJs
+
+// Self-register the HTML tag
+customElements.define(componentName, ChartJs)
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#dumpObject">dumpObject</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Sep 24 2024 19:36:38 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

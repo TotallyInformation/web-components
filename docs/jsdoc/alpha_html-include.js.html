@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alpha/html-include.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: alpha/html-include.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Zero dependency web component to load HTML/JSON dynamically
+ * See https://github.com/justinfagnani/html-include-element for inspiration
+ */
+
+const template = document.createElement('template')
+template.innerHTML = `
+    &lt;slot>&lt;/slot>
+    &lt;inner-load>&lt;/inner-load>
+`
+
+export class HtmlInclude extends HTMLElement {
+
+    constructor() {
+        super()
+        this.type = 'text'
+        this.text = ''
+        this.json = {}
+        this.attachShadow({ mode: 'open', delegatesFocus: true })
+            .appendChild(template.content.cloneNode(true))
+    }
+
+    // component attributes
+    static get observedAttributes() {
+        return ['src']
+    }
+
+    /** The URL to fetch an HTML document from.
+     *  Setting this property causes a fetch the HTML from the URL.
+     *  We are reflecting the src attrib and the src prop.
+     */
+    get src() {
+        return this.getAttribute('src')
+    }
+
+    set src(value) {
+        this.setAttribute('src', value)
+    }
+
+    // attribute change
+    async attributeChangedCallback(property, oldValue, newValue) {
+
+        if (oldValue === newValue) return
+
+        if (property === 'src') {
+            const response = await fetch(newValue)
+
+            if (!response.ok) {
+                throw new Error(`html-include fetch failed: ${response.statusText}`)
+            }
+
+            const contentType = response.headers.get('content-type')
+            if (contentType) {
+                if (contentType.includes('text/html')) {
+                    this.type = 'html'
+                } else if (contentType.includes('application/json')) {
+                    this.type = 'json'
+                } else if (contentType.includes('multipart/form-data')) {
+                    this.type = 'form'
+                }
+            }
+
+            // Could add other binary types here. https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#body
+            switch (this.type) {
+                case 'html': {
+                    this.text = await response.text()
+                    const parser = new DOMParser()
+                    const newDoc = parser.parseFromString( this.text, 'text/html' )
+                    this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                    this.shadowRoot.appendChild(newDoc.body)
+                    break
+                }
+
+                case 'json': {
+                    this.json = await response.json()
+                    this.text = JSON.stringify(this.json, null, 4)
+                    this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                    const myHtml = document.createElement('pre')
+                    myHtml.textContent = this.text
+                    this.shadowRoot.appendChild( myHtml )
+                    break
+                }
+
+                case 'form': {
+                    this.json = await response.formData()
+                    this.text = JSON.stringify(this.json)
+                    this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                    this.shadowRoot.append(this.text)
+                    break
+                }
+
+                default: {
+                    this.text = await response.text()
+                    this.shadowRoot.append(this.text)
+                    break
+                }
+            }
+
+        }
+
+    }
+
+    // connect component
+    // connectedCallback() {
+    //     console.log('>> HelloWorld >> connectedCallback >>')
+    // }
+
+}
+
+customElements.define('html-include', HtmlInclude)
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#dumpObject">dumpObject</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Sep 24 2024 19:36:38 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
