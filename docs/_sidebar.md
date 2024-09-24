@@ -1,6 +1,7 @@
 * [Home](/)
 * Ready for use
 * [`button-send`](./button-send)
+* [`collapsible-headings`](./collapsible-headings)
 * [`visible-console`](./visible-console)
 * Alpha-quality
 * [`html-include`](./html-include)

@@ -634,6 +634,33 @@
       ]
     },
     {
+      "name": "collapsible-headings",
+      "description": "Events:\n\n  * `collapsible-headings:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `collapsible-headings:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `collapsible-headings:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\n\nProperties:\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version",
+      "attributes": [
+        {
+          "name": "levels",
+          "description": "`levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\nProperty: levels\n\nDefault: h2, h3, h4, h5"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nOther watched attributes:\n\n",
+          "values": []
+        },
+        {
+          "name": "oncollapsible-headings:connected",
+          "description": "`collapsible-headings:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncollapsible-headings:disconnected",
+          "description": "`collapsible-headings:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncollapsible-headings:attribChanged",
+          "description": "`collapsible-headings:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
       "name": "component-template",
       "description": "Events:\n\n  * `visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `colors` {object} - \n\n  * `bgColors` {object} - \n\n  * `icons` {object} - \n\n  * `wrapper` - \n\n  * `originalConsole` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Is UIBUILDER for Node-RED loaded?\n\n  * `version` {`string`} - Component version",
       "attributes": [

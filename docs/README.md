@@ -27,16 +27,17 @@ Note that slot content is not subject to this restriction since it exists in the
 
 While these are certainly fully usable in their current form, they may still continue to evolve, possibly fairly dramatically.
 
-* [`visible-console`](visible-console) - Clones `console.xxxx()` outputs to the web-page.
 * [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data and enables block content.
+* [`collapsible-headings`](collapsible-headings) - Turns a section of Hn headings and block contents into collapsible content around the heading levels.
+* [`visible-console`](visible-console) - Clones `console.xxxx()` outputs to the web-page.
 
-* [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
-* [`syntax-highlight`](./syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
 
 ### Usable with limitations
 
 These will do a job in a basic fashion but still need some work to make them more complete and standardised.
 
+* [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
+* [`syntax-highlight`](./syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
 * `data-list`
 
 ### Not yet ready for use and/or experimental

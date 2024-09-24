@@ -42,6 +42,8 @@ These components can be considered `beta` quality or better. They may not be com
 
 | Name                                  | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
+| `button-send` (ButtonSend)    | A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button. |
+| `collapsible-headings` (CollapsibleHeadings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. |
 | `visible-console` (VisibleConsole)    | Copies `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
 
 
@@ -56,7 +58,6 @@ These components can be considered `beta` quality or better. They may not be com
 
 | Name (tag/global)                     | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
-| `button-send` (ButtonSend)            | A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data. |
 | `chart-frappe` (ChartFrappe)          | A chart component using the Frappe chart library |
 | `chart-high` (ChartHigh)              | A chart component using the HighCharts library |
 | `container-br` (ContainerBr)          | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
