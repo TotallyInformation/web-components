@@ -3,11 +3,11 @@ title: button-send
 description: |
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-updated: 2024-09-22 18:11:30
+updated: 2024-09-24 19:39:33
 ---
 
 > [!NOTE]
-> STATUS: Needs Updating for v2024-09-22+
+> STATUS: Beta - ready for basic use
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name

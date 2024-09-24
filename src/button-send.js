@@ -20,6 +20,9 @@
  * - Create a unique identifier to use when id/name not specified.
  * - Allow std pre-formatted msg from uibuilder to change the attribs/props
  * - Allow std pre-formatted msg from uibuilder to add a new button
+ * - Consider moving from `click` to `pointerdown`/`up`. taking note of `setPointerCapture` to detect when up is outside of the down
+ *    target so it can be ignored if desired.
+ * - Also add processing for multi-click (detail property of click), contextMenu, auxclick, dblclick
  */
 /*
   Copyright (c) 2022-2024 Julian Knight (Totally Information)
