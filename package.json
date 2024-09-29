@@ -5,6 +5,7 @@
   "scripts": {
     "build": "node esbuild.config.js",
     "watch": "esbuild --watch esbuild.config.js",
+    "test": "node ./test-server.js",
     "lint": "eslint .",
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
