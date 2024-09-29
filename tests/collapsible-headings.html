@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing web-components - collapsible-headings</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+    <script defer src="/dist/call-out.iife.min.js"></script>
+    <script defer src="/dist/collapsible-headings.iife.min.js"></script>
+
+</head><body>
+    
+    <h1>Testing Totally Information's web-components package - collapsible-headings</h1>
+
+    <call-out type="" title="Status" icon="❔">
+        <b>Beta</b>: Ready for basic use
+    </call-out>
+
+    <p>
+        Slot content is dynamically amended to make headings clickable. Clicking hides/shows lower-level content.
+    </p><p>
+        There is a script on the page that dynamically adds an extra section to ensure that dynamic content is also handled.
+    </p>
+
+    <article>
+        <h2><code>collapsible-headings</code></h2>
+        <collapsible-headings>
+            <h2>My first heading (h2)</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <h3>My first sub-heading (h3)</h3>
+            <p>
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Lacus aliquet id nostra senectus primis molestie convallis. Metus hendrerit rutrum fusce risus nascetur fringilla. Risus eros blandit placerat convallis conubia eros. Lobortis quis placerat convallis sodales metus iaculis sollicitudin eget. Laoreet sociosqu tristique fames elementum taciti. Non vel massa iaculis, hac metus fermentum curabitur. Ac venenatis finibus primis ante; maximus nunc. Pharetra nascetur sagittis vehicula dignissim parturient potenti purus imperdiet.
+            </p><p>
+                Potenti leo diam ligula nascetur sociosqu habitasse; enim parturient. Nullam scelerisque vestibulum platea ultricies conubia sollicitudin sagittis porta. Vulputate viverra nulla vehicula odio placerat ipsum. Tempor sit et a lorem mus neque. Enim sollicitudin eros morbi mauris; integer nunc justo fermentum. Per porta dignissim ac ipsum platea ligula. Odio luctus penatibus; feugiat metus justo leo consectetur dolor at.
+            </p><p>
+                Hendrerit nascetur volutpat libero nec bibendum rutrum bibendum sollicitudin. Porttitor massa vivamus nam est amet volutpat neque. Sit lectus tincidunt malesuada vel dolor proin. Phasellus erat ridiculus lobortis dolor curabitur fames suspendisse nec. Interdum id ut tortor aliquam ligula tristique magna. Lacus felis in; augue lobortis venenatis ultricies laoreet porttitor. Interdum lacinia class id est pharetra aenean pellentesque. Ex adipiscing nulla cursus accumsan montes euismod facilisi.
+            </p><p>
+                Morbi integer consequat vestibulum diam leo purus rutrum erat. Venenatis egestas tristique dignissim torquent varius. Adipiscing torquent blandit elit sed scelerisque; in ex potenti at. Potenti libero odio commodo nullam metus pretium. Bibendum facilisi quisque fames mollis, enim sem facilisis cubilia. Ridiculus consequat orci fermentum varius curabitur dui vehicula ut. Ornare feugiat nulla ante nam velit nascetur ligula.
+            </p>
+            <h4>My h4 bit</h4>
+            <div>
+                Erat consectetur tempus lobortis eros vel vitae dolor. Sit commodo iaculis ridiculus faucibus conubia. Facilisi neque faucibus torquent eu suscipit habitasse sodales dis? Rhoncus montes nullam aliquam tristique ridiculus. Sit magna finibus facilisis sit; lacinia ultrices. Bibendum dolor a sollicitudin platea iaculis pharetra himenaeos.
+            </div>
+            <img src="https://picsum.photos/400/200">
+            <h2>My 2nd heading (h2)</h2>
+            <p>
+                Lorem ipsum odor amet, consectetuer adipiscing elit. Porta condimentum eleifend nullam convallis varius torquent viverra dictumst. Efficitur eget iaculis consequat habitant elit turpis. Aptent magna primis taciti potenti est ac metus. Sem eleifend fermentum consectetur leo quam nam arcu interdum penatibus. Quisque cras natoque justo netus facilisi nullam faucibus. Ornare vulputate nulla vehicula aliquet accumsan nibh molestie euismod aenean. Est netus curabitur justo feugiat vulputate integer.
+                Erat velit porttitor phasellus eu tellus efficitur hac ut. Elit enim rutrum ultricies justo; bibendum risus sit blandit eu. Porttitor cras sit quam cras felis natoque maecenas dolor. Eleifend viverra eu sollicitudin dolor eleifend euismod ultrices rhoncus. At parturient condimentum volutpat tempor placerat ligula tristique. Nascetur varius interdum molestie mus posuere tristique lorem. Pretium at felis amet maecenas commodo. Penatibus habitasse fusce et eros natoque nunc dui laoreet. Eleifend efficitur sollicitudin venenatis metus risus ornare egestas adipiscing.
+            </p>
+        </collapsible-headings>
+    </article>
+
+    <script defer>
+        console.info('Adding dynamic content ...')
+        const ch = document.getElementsByTagName('collapsible-headings')[0]
+        if (ch) {
+            const newH = document.createElement('h2')
+            const newP = document.createElement('p')
+            newH.innerText = 'Dynamically added section'
+            newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+            setTimeout(() => {
+                // ch.appendChild(
+                ch.appendChild(newH)
+                ch.append(newP)
+                console.info('... complete')
+            }, 5000)
+        } else {
+            console.error('collapsible-headings tag not found')
+        }
+    </script>
+
+</body></html>

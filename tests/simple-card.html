@@ -1,33 +1,25 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en" class="dark"><head>
     <meta charset="utf-8">
     <title>Web Component Test: simple-container and simple-card</title>
 
+    <!-- <link type="text/css" rel="stylesheet" href="./libs/uib-brand.css" media="all"> -->
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
     <style>
-        @import url("../libs/uib-brand.css");
-        /* Can override the base hue and the accent colours and other things too */
         /* :root {
             --brand-hue: 200;
             --accent-offset: 30;
         } */
     </style>
 
-    <script type="module" async >
-        // These assume you are using Node-RED/uibuilder
-        import '../libs/uibuilder.module.js'  // Adds `uibuilder` and `$` to globals
-        import '../components/simple-container.js'
-        import '../components/simple-card.js'
-        import '../components/uib-theme-changer.js'
-
-        // An EventListener added here cannot pick up the initial setup but will pick up later events
-        // However, uibuilder and $ are available.
-        uibuilder.start()
-
-    </script>
+    <!-- <script defer src="/dist/alpha/simple-container.iife.min.js" type="text/javascript"></script> -->
+    <!-- <script defer src="/dist/alpha/simple-card.iife.min.js" type="text/javascript"></script> -->
+    <script defer src="/dist/alpha/simple-container.iife.min.js"></script>
+    <script defer src="/dist/alpha/simple-card.iife.min.js"></script>
 
 </head><body>
-    <uib-theme-changer></uib-theme-changer>
-    <h1>Demonstrating Web Components</h1>
+    <h1>Testing Totally Information's web-components package - simple-card</h1>
+
     <p>This example uses <code>&lt;simple-container</code> and <code>&lt;simple-card></code>.</p>
     <p>
         The container component uses a flex row layout. The card component has header and footer slots.

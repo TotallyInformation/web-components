@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing web-components - visible-console</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <script defer src="/dist/visible-console.iife.min.js"></script>
+
+</head><body>
+    
+    <h1>Testing Totally Information's web-components package - visible-console</h1>
+
+    <p>
+        Intercepts JavaScript calls to <code>console</code> methods and copies the data to an on-page panel.
+    </p><p>
+        There is a script on the page that outputs some example console logging.
+    </p>
+
+    <article>
+        <h2><code>visible-console</code></h2>
+        <visible-console></visible-console>
+    </article>
+
+    <script defer>
+        const data = {
+            name: 'Alice',
+            age: 30,
+            isAdmin: true,
+            hobbies: ['Reading', 'Gaming', 'Cycling'],
+            preferences: {
+                theme: 'dark',
+                notifications: true
+            },
+            score: null,
+            actions: function() { console.log('hello') }
+        }
+        const step = 1000
+        let time = step
+        setTimeout(() => {
+            console.log('hello', 42, data)
+        }, time)
+        setTimeout(() => {
+            console.info('hello', Math.random()*100, data)
+        }, time+step)
+        setTimeout(() => {
+            console.debug('hello', Math.random()*100, data)
+        }, time+step+step)
+        setTimeout(() => {
+            console.trace('hello', Math.random()*100, data)
+        }, time+step+step+step)
+        setTimeout(() => {
+            console.warn('hello', Math.random()*100, data)
+        }, time+step+step+step+step)
+        setTimeout(() => {
+            console.error('hello', Math.random()*100, data)
+        }, time+step+step+step+step+step)
+    </script>
+
+</body></html>

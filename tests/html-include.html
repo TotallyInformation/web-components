@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing web-components - html-include</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <script defer src="/dist/html-include.iife.min.js"></script>
+
+</head><body>
+    
+    <h1>Testing Totally Information's web-components package - html-include</h1>
+
+    <p>
+        The <code>src</code> attribute defines the URL resource to include.
+    </p>
+    <p>
+        To-do: Test dynamic change of src
+    </p>
+
+    <article>
+        <h2>include-1 - Full HTML page</h2>
+        <html-include id="hi1" src="/tests/resources/include-1.html"></html-include>
+    </article>
+    <article>
+        <h2>include-2 - HTML Fragment</h2>
+        <html-include id="hi2" src="/tests/resources/include-2.html"></html-include>
+    </article>
+    <article>
+        <h2>include-3 - JSON</h2>
+        <html-include id="hi3" src="/tests/resources/include-3.json"></html-include>
+    </article>
+
+    <script defer>
+        console.info('Dynamic content test ...')
+        // const hi1 = document.getElementsByTagName('html-include')[0]
+        const hi1 = document.getElementById('hi1')
+        if (hi1) {
+
+            setTimeout(() => {
+                console.info('... complete')
+            }, 5000)
+        } else {
+            console.error('html-include hi1 tag not found')
+        }
+    </script>
+
+</body></html>
