@@ -3,21 +3,22 @@
  * @version See Class version property
  *
  */
-/*
-  Copyright (c) 2024-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ * https://it.knightnet.org.uk, https://github.com/TotallyInformation
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
 
 /** TODO
  * - Add part transparent color backgrounds for at least warn and err
@@ -26,6 +27,9 @@
  * - Max entry limit
  */
 
+import TiBaseComponent from '../libs/ti-base-component'
+
+/** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
 template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
     <style>
@@ -93,8 +97,6 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
     <div class="wrapper"></div>
 `
 
-import TiBaseComponent from '../libs/ti-base-component'
-
 /**
  * @namespace Beta
  */
@@ -109,64 +111,57 @@ import TiBaseComponent from '../libs/ti-base-component'
  *
  * @example
  *    <visible-console></visible-console>
- * 
+
+ * METHODS FROM BASE:
  * @method config Update runtime configuration, return complete config
- * @method doInheritStyles If requested, add link to an external style sheet
+ * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
  * @method deepAssign Object deep merger
+ * @method doInheritStyles If requested, add link to an external style sheet
+ * @method ensureId Adds a unique ID to the tag if no ID defined.
+ * @method _uibMsgHandler Not yet in use
+ * @method _event(name,data) Standardised custom event dispatcher
+
+ * OTHER METHODS:
  * @method redirectConsole Capture console.xxxx and write to the div
  * @method newLog Creates a new HTML log entry
  * @method checkType Find out the input JavaScript var type
  * @method createHTMLVisualizer Creates an HTML visualisation of the input
- *
+
  * @fires visible-console:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
  * @fires visible-console:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
  * @fires visible-console:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
- *
+
  * Standard watched attributes (common across all my components):
  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * 
  * Other watched attributes:
  * None
- *
+
  * Standard props (common across all my components):
- * @prop {string} version Static. The component version string (date updated). Also has a getter.
+ * @prop {number} _iCount Static. The component version string (date updated)
  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
  * @prop {function(string): Element} $ jQuery-like shadow dom selector
  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {number} _iCount The component version string (date updated)
+ * @prop {string} name Placeholder for the optional name attribute
  * @prop {object} opts This components controllable options - get/set using the `config()` method
+ *
+ * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * 
  * Other props:
  * @prop {object} colors
  * @prop {object} bgColors
  * @prop {object} icons
+
+ * @slot No slot
+
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class VisibleConsole extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-21'
-
-    //#region --- Class Properties ---
-
-    /** Is UIBUILDER for Node-RED loaded? */
-    // uib   // in base class
-    /** Mini jQuery-like shadow dom selector (see constructor)
-     * @type {function(string): Element}
-     * @param {string} selector - A CSS selector to match the element within the shadow DOM.
-     * @returns {Element} The first element that matches the specified selector.
-     */
-    // $  // in base class
-    /** Mini jQuery-like shadow dom multi-selector (see constructor)
-     * @type {function(string): NodeList}
-     * @param {string} selector - A CSS selector to match the element within the shadow DOM.
-     * @returns {NodeList} A STATIC list of all shadow dom elements that match the selector.
-     */
-    // $$  // in base class
-    /** Holds a count of how many instances of this component are on the page that don't have their own id
-     * Used to ensure a unique id if needing to add one dynamically
-     */
-    // static _iCount = 0  // in base class
-    
-    /** Runtime configuration settings */
-    opts = {}
+    static version = '2024-09-29'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -174,10 +169,13 @@ class VisibleConsole extends TiBaseComponent {
     static get observedAttributes() {
         return [
             // Standard watched attributes:
-            'inherit-style',
+            'inherit-style', 'name'
             // Other watched attributes:
         ]
     }
+
+    /** Runtime configuration settings */
+    opts = {}
 
     colors = {
         'log': 'green',
@@ -231,27 +229,14 @@ class VisibleConsole extends TiBaseComponent {
         this.redirectConsole()
 
         // Keep at end. Let everyone know that a new instance of the component has been connected
-        this.dispatchEvent(new CustomEvent(`${this.localName}:connected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        } ) )
+        this._event('connected')
+        this._event('ready')
     }
 
     /** Runs when an instance is removed from the DOM */
     disconnectedCallback() {
         // Keep at end. Let everyone know that an instance of the component has been disconnected
-        this.dispatchEvent(new CustomEvent(`${this.localName}:disconnected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        } ) )
+        this._event('disconnected')
     }
 
     /** Handle watched attributes
@@ -271,17 +256,7 @@ class VisibleConsole extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this.dispatchEvent(new CustomEvent(`${this.localName}:attribChanged`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name,
-                attribute: attrib,
-                newVal: newVal,
-                oldVal: oldVal,
-            }
-        } ) )
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
 
     /** Capture console.xxxx and write to the div  */
@@ -504,25 +479,3 @@ window['VisibleConsole'] = VisibleConsole
 
 // Add the class as a new Custom Element to the window object
 customElements.define('visible-console', VisibleConsole)
-
-//#region TEST
-// console.dir(Object.keys(console))
-// const data = {
-//     name: 'Alice',
-//     age: 30,
-//     isAdmin: true,
-//     hobbies: ['Reading', 'Gaming', 'Cycling'],
-//     preferences: {
-//         theme: 'dark',
-//         notifications: true
-//     },
-//     score: null,
-//     actions: function() { console.log('hello') }
-// }
-// console.log('hello', 42, data)
-// console.info('hello', 42, data)
-// console.debug('hello', 42, data)
-// console.trace('hello', 42, data)
-// console.warn('hello', 42, data)
-// console.error('hello', 42, data)
-//#endregion

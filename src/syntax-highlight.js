@@ -1,9 +1,8 @@
-/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+/** Zero dependency web component to show a JavaScript object as a highlighted box in the UI
  *
  * Version: See the class code
- *
- **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -19,12 +18,8 @@
  * limitations under the License.
  **/
 
-/** TODO
- * - Add a host attrib or class to allow sections to be pre-hidden (add to the hx tag?)
- *   - sub-option to store collapsed sections in browser storage (probably needs ID's to be added to all heads and wrappers)
- * - Maybe add another option to make headings auto-numbered?
- * - Add option for an icon
- * - How to ignore outer div (as delivered by uib-element) - maybe something with observer?
+/** To Do
+ * - Use highlighter from visible-console
  */
 
 import TiBaseComponent from '../libs/ti-base-component'
@@ -36,9 +31,26 @@ template.innerHTML = /*html*/`
         :host {
             display: block;   /* default is inline */
             contain: content; /* performance boost */
+            color:white;
+            background-color:black;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
         }
+        pre {
+            font-family: Consolas, "ui-monospace", "Lucida Console", monospace;
+            white-space: pre;
+            margin: 0;
+        }
+        .key {color:#ffbf35}
+        .string {color:#5dff39;}
+        .number {color:#70aeff;}
+        .boolean {color:#b993ff;}
+        .null {color:#93ffe4;}
+        .undefined {color:#ff93c9;}
     </style>
     <slot></slot>
+    <pre><i>Waiting for data</i></pre>
 `
 
 /** Namespace
@@ -48,10 +60,14 @@ template.innerHTML = /*html*/`
 /**
  * @class
  * @extends TiBaseComponent
- * @description Wraps around HTML text with headings h1-h4 making the headings a collapsible hierarchy.
+ * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @element collapsible-headings
+ * @element syntax-highlight
  * @memberOf Beta
+
+ * @example Set the json property on the element
+ *   const showMsg = document.getElementsByTagName('syntax-highlight')[0]
+ *   showMsg.json({....})
 
  * METHODS FROM BASE:
  * @method config Update runtime configuration, return complete config
@@ -63,12 +79,12 @@ template.innerHTML = /*html*/`
  * @method _event(name,data) Standardised custom event dispatcher
 
  * OTHER METHODS:
- * None
+ * @method highlight Convert object to HTML
 
- * @fires collapsible-headings:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires syntax-highlight:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
  * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires collapsible-headings:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires collapsible-headings:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * @fires syntax-highlight:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires syntax-highlight:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -76,7 +92,7 @@ template.innerHTML = /*html*/`
  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} levels - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.
+ * None
 
  * Standard props (common across all my components):
  * @prop {number} _iCount Static. The component version string (date updated)
@@ -89,18 +105,18 @@ template.innerHTML = /*html*/`
  * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {string} level Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.
+ * @prop {object|JSON|string} json JSON to convert
  * By default, all attributes are also created as properties
 
  * @slot Container contents
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class CollapsibleHeadings extends TiBaseComponent {
+class SyntaxHighlight extends TiBaseComponent {
     /** Component version */
     static version = '2024-09-29'
 
-    levels = 'h2, h3, h4, h5'
+    jsonData = {}
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -110,14 +126,36 @@ class CollapsibleHeadings extends TiBaseComponent {
             // Standard watched attributes:
             'inherit-style', 'name',
             // Other watched attributes:
-            'levels',
+            'auto',
         ]
+    }
+
+    /** Element.json = {...} to show the json object
+     * @param {Object|JSON|string} value JS Object or JSON string to show
+     */
+    set json(value) {
+        if (typeof value === 'string') {
+            try {
+                value = JSON.parse(value)
+            } catch (e) {
+                console.warn(`[syntax-highlight] Could not parse string "${value}"`)
+            }
+        }
+        this.jsonData = value
+
+        // console.log(value, syntaxHighlight(value))
+        this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+        // @ts-ignore
+        this.shadowRoot.appendChild(this.constructor.highlight(value))
+    }
+
+    get json() {
+        return this.jsonData
     }
 
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
@@ -133,18 +171,12 @@ class CollapsibleHeadings extends TiBaseComponent {
         // Apply parent styles from a stylesheet if required - only required if using an applied template
         this.doInheritStyles()  // in base class
 
+        // this.addEventListener('new-msg', evt => {
+        //     this.json = evt.detail
+        // })
+
         // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
         if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
-
-        // Get a reference to the slot tag
-        this.shadowSlot = this.shadowRoot.querySelector('slot')
-
-        // Create a mutation observer that processes changes to the content of the slot
-        this.observer = new MutationObserver(this.processSlotContent.bind(this))
-        this.observer.observe(this, { childList: true, subtree: true })
-
-        // Do a first pass to process the initial load
-        this.processSlotContent()
 
         // Keep at end. Let everyone know that a new instance of the component has been connected
         this._event('connected')
@@ -155,9 +187,6 @@ class CollapsibleHeadings extends TiBaseComponent {
     disconnectedCallback() {
         // @ts-ignore Remove optional uibuilder event listener
         document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
-
-        // Remove the observer
-        this.observer.disconnect()
 
         // Keep at end. Let everyone know that an instance of the component has been disconnected
         this._event('disconnected')
@@ -179,91 +208,44 @@ class CollapsibleHeadings extends TiBaseComponent {
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
-    }
+    } // --- end of attributeChangedCallback --- //
 
-    /** Walk through slot content.
-     * Called once when connected and then every time slot content changes
-     * param {*} records Mutated records
-     * param {*} observer Reference to the observer object
+    /** Return a formatted HTML version of JSON object
+     * @param {object|JSON} json JSON object to convert
+     * @returns {HTMLElement} Highlighted JSON wrapped in a `<pre>` tag
      */
-    processSlotContent() {
-        // Get the contents of the slot
-        const assignedNodes = this.shadowSlot.assignedNodes({ flatten: true })
-        // NB: assignedElements would be better but not supported in Safari 12.1/12.2
-
-        assignedNodes.forEach(node => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                this.processElement(/** @type {HTMLElement} */ (node))
+    static highlight(json) {
+        json = JSON.stringify(json, undefined, 4)
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number'
+            if ((/^"/).test(match)) {
+                if ((/:$/).test(match)) {
+                    cls = 'key'
+                } else {
+                    cls = 'string'
+                }
+            } else if ((/true|false/).test(match)) {
+                cls = 'boolean'
+            } else if ((/null/).test(match)) {
+                cls = 'null'
             }
+            return '<span class="' + cls + '">' + match + '</span>'
         })
+        const myHtml = document.createElement('pre')
+        myHtml.innerHTML = json
+        return myHtml
     }
-
-    /** Process each found element node. Adds pointer cursor to the heading and wraps content in a div that can be collapsed.
-     * @param {HTMLElement} element The HTML element to process
-     */
-    processElement(element) {
-        if (!element.matches(this.levels) || element.dataset.collapsibleProcessed) return
-
-        const level = parseInt(element.tagName[1])
-        const nextElements = []
-
-        let sibling = element.nextElementSibling
-        while (sibling) {
-            if (sibling.matches(this.levels) && parseInt(sibling.tagName[1]) <= level) {
-                break
-            }
-            nextElements.push(sibling)
-            sibling = sibling.nextElementSibling
-        }
-
-        // Create a collapsible section for content under the heading
-        const collapsibleSection = document.createElement('div')
-        collapsibleSection.classList.add('collapsible-content')
-        // @ts-ignore
-        collapsibleSection.dataset.level = level
-
-        nextElements.forEach(el => collapsibleSection.appendChild(el))
-
-        element.insertAdjacentElement('afterend', collapsibleSection)
-        element.style.cursor = 'pointer'
-
-        // Add click event to toggle collapsible section
-        element.addEventListener('click', function () {
-            const isCollapsed = collapsibleSection.style.display === 'none'
-            collapsibleSection.style.display = isCollapsed ? 'block' : 'none'
-        })
-
-        // Mark this heading as processed
-        element.dataset.collapsibleProcessed = 'true'
-    }
-} // ---- end of Class ---- //
+} // ---- End of SyntaxHighlight class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default CollapsibleHeadings
+export default SyntaxHighlight
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['CollapsibleHeadings'] = CollapsibleHeadings
+window['SyntaxHighlight'] = SyntaxHighlight
 
 // Self-register the HTML tag
-customElements.define('collapsible-headings', CollapsibleHeadings)
-
-//#region TEST
-// const ch = document.getElementsByTagName('collapsible-headings')[0]
-// if (ch) {
-//     const newH = document.createElement('h2')
-//     const newP = document.createElement('p')
-//     newH.innerText = 'Dynamically added section'
-//     newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
-//     setTimeout(() => {
-//         // ch.appendChild(
-//         ch.appendChild(newH)
-//         ch.append(newP)
-//     }, 5000)
-// } else {
-//     console.debug('collapsible-headings tag not found')
-// }
-//#endregion
+customElements.define('syntax-highlight', SyntaxHighlight)

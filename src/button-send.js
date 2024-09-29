@@ -4,18 +4,27 @@
  *
  * See ./docs/button-send.md for detailed documentation on installation and use.
  *
- * TODO: - Add variants (see simple-card)
+ * Version: See the class code
  *
- * @version: 1.0.2 2022-06-12
+ **/
+/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+ * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
- * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
- *     or paste into https://runem.github.io/web-component-analyzer/
- * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
- *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * To Do:
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ **/
+
+/** ToDo:
+ * - Add variants (see simple-card)
  * - Allow colour and background colour to be controlled with standard names (e.g. info, warning, error, etc)
  * - Create a unique identifier to use when id/name not specified.
  * - Allow std pre-formatted msg from uibuilder to change the attribs/props
@@ -24,24 +33,10 @@
  *    target so it can be ignored if desired.
  * - Also add processing for multi-click (detail property of click), contextMenu, auxclick, dblclick
  */
-/*
-  Copyright (c) 2022-2024 Julian Knight (Totally Information)
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
 
 import TiBaseComponent from '../libs/ti-base-component'
 
+/** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
 template.innerHTML = /*html*/`
     <style>
@@ -108,12 +103,14 @@ template.innerHTML = /*html*/`
  * @method deepAssign Object deep merger
  * @method doInheritStyles If requested, add link to an external style sheet
  * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
+ * @method _uibMsgHandler Not yet in use
+ * @method _event(name,data) Standardised custom event dispatcher
 
  * OTHER METHODS:
  * None
 
  * @fires button-send:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires button-send:ready - Alias for connected. The instance can handle property & attribute changes
  * @fires button-send:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
  * @fires button-send:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * @fires button-send:click - Document object event. evt.details contains the data
@@ -122,13 +119,11 @@ template.innerHTML = /*html*/`
 
  * Standard watched attributes (common across all my components):
  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
  * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
  * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
- * @attr {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
- * @attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
 
  * Standard props (common across all my components):
  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded. In base class
@@ -137,7 +132,7 @@ template.innerHTML = /*html*/`
  * @prop {number} _iCount The component version string (date updated). In base class
  * @prop {object} opts This components controllable options - get/set using the `config()` method. In base class
  *
- * @prop {string} version Static. The component version string (date updated). Also has a getter.
+ * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
  * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
@@ -146,12 +141,12 @@ template.innerHTML = /*html*/`
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
 
  * @csspart button - Uses the uib-styles.css uibuilder master for variables where available.
+
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class ButtonSend extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-22'
-
-    //#region ---- Class Variables ----
+    static version = '2024-09-29'
 
     sendEvents = true
     /** The topic to include in the output
@@ -178,13 +173,11 @@ class ButtonSend extends TiBaseComponent {
     static get observedAttributes() {
         return [
             // Standard watched attributes:
-            'inherit-style',
+            'inherit-style', 'name',
             // Other watched attributes:            
             'topic', 'payload',
         ]
     }
-
-    //#endregion ---- ---- ---- ----
 
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
@@ -224,14 +217,8 @@ class ButtonSend extends TiBaseComponent {
         if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
 
         // Keep at end. Let everyone know that a new instance of the component has been connected
-        document.dispatchEvent(new CustomEvent(`${this.localName}:connected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        }))
+        this._event('connected')
+        this._event('ready')
     }
 
     /** Runs when an instance is removed from the DOM */
@@ -241,14 +228,7 @@ class ButtonSend extends TiBaseComponent {
         document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
         // Keep at end. Let everyone know that an instance of the component has been disconnected
-        document.dispatchEvent(new CustomEvent(`${this.localName}:disconnected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        }))
+        this._event('disconnected')
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
@@ -272,17 +252,8 @@ class ButtonSend extends TiBaseComponent {
             _ui: { ...this._ui }
         } ) }
 
-        document.dispatchEvent(new CustomEvent(`${this.localName}:attribChanged`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name,
-                attribute: attrib,
-                newVal: newVal,
-                oldVal: oldVal,
-            }
-        }))
+        // Keep at end. Let everyone know that an attribute has changed for this instance of the component
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
 
     _setMsg(evtName) {

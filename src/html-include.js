@@ -1,9 +1,8 @@
-/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
- *
+/** Zero dependency web component to load HTML/JSON dynamically
  * Version: See the class code
- *
- **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ * See https://github.com/justinfagnani/html-include-element for inspiration
+ */
+/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -20,11 +19,11 @@
  **/
 
 /** TODO
- * - Add a host attrib or class to allow sections to be pre-hidden (add to the hx tag?)
- *   - sub-option to store collapsed sections in browser storage (probably needs ID's to be added to all heads and wrappers)
- * - Maybe add another option to make headings auto-numbered?
- * - Add option for an icon
- * - How to ignore outer div (as delivered by uib-element) - maybe something with observer?
+ * - Allow scripts to work on imports
+ * - Check if styles work on html import
+ * - JSON load to global var?
+ * - optional load to template?
+ * - Maybe: add syntax highlights for json
  */
 
 import TiBaseComponent from '../libs/ti-base-component'
@@ -39,6 +38,7 @@ template.innerHTML = /*html*/`
         }
     </style>
     <slot></slot>
+    <inner-load></inner-load>
 `
 
 /** Namespace
@@ -48,9 +48,11 @@ template.innerHTML = /*html*/`
 /**
  * @class
  * @extends TiBaseComponent
- * @description Wraps around HTML text with headings h1-h4 making the headings a collapsible hierarchy.
+ * @description A zero dependency custom web component ECMA module that imports HTML from an external resource.
+ *   The src attribute defines the resource to load. The resource can be dynamically changed either by changing
+ *   the src attribute OR by getting a reference to the instance and changing the src property.
  *
- * @element collapsible-headings
+ * @element html-include
  * @memberOf Beta
 
  * METHODS FROM BASE:
@@ -63,12 +65,12 @@ template.innerHTML = /*html*/`
  * @method _event(name,data) Standardised custom event dispatcher
 
  * OTHER METHODS:
- * None
+ * @method doInclude(url) Replaces the shadow dom content with the imported HTML.
 
- * @fires collapsible-headings:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires html-include:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
  * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires collapsible-headings:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires collapsible-headings:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * @fires html-include:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires html-include:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -76,7 +78,7 @@ template.innerHTML = /*html*/`
  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} levels - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.
+ * @attr {string} src - URL of the source to include
 
  * Standard props (common across all my components):
  * @prop {number} _iCount Static. The component version string (date updated)
@@ -89,18 +91,16 @@ template.innerHTML = /*html*/`
  * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {string} level Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.
+ * @prop {string} url The URL to load. Reflected to/from the src attribute.
  * By default, all attributes are also created as properties
 
  * @slot Container contents
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class CollapsibleHeadings extends TiBaseComponent {
+class HtmlInclude extends TiBaseComponent {
     /** Component version */
     static version = '2024-09-29'
-
-    levels = 'h2, h3, h4, h5'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -110,11 +110,33 @@ class CollapsibleHeadings extends TiBaseComponent {
             // Standard watched attributes:
             'inherit-style', 'name',
             // Other watched attributes:
-            'levels',
+            'src',
         ]
     }
 
-    /** NB: Attributes not available here - use connectedCallback to reference */
+    /** Content type of the imported resource
+     * @type {"text"|"html"|"json"|"form"}
+     */
+    contentType = 'text'
+    text = ''
+    json = {}
+
+    /** The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.
+     *  Setting this property causes a fetch the HTML from the URL.
+     *  We are reflecting the src attrib and the src prop.
+     * @returns {URL|string} The content of the src attribute
+     */
+    get src() {
+        return this.getAttribute('src')
+    }
+
+    /** Reflect src property to the src attribute
+     * @param {string} value The URL to set
+     */
+    set src(value) {
+        this.setAttribute('src', value)
+    }
+
     constructor() {
         super()
 
@@ -136,16 +158,6 @@ class CollapsibleHeadings extends TiBaseComponent {
         // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
         if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
 
-        // Get a reference to the slot tag
-        this.shadowSlot = this.shadowRoot.querySelector('slot')
-
-        // Create a mutation observer that processes changes to the content of the slot
-        this.observer = new MutationObserver(this.processSlotContent.bind(this))
-        this.observer.observe(this, { childList: true, subtree: true })
-
-        // Do a first pass to process the initial load
-        this.processSlotContent()
-
         // Keep at end. Let everyone know that a new instance of the component has been connected
         this._event('connected')
         this._event('ready')
@@ -155,9 +167,6 @@ class CollapsibleHeadings extends TiBaseComponent {
     disconnectedCallback() {
         // @ts-ignore Remove optional uibuilder event listener
         document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
-
-        // Remove the observer
-        this.observer.disconnect()
 
         // Keep at end. Let everyone know that an instance of the component has been disconnected
         this._event('disconnected')
@@ -171,99 +180,97 @@ class CollapsibleHeadings extends TiBaseComponent {
     attributeChangedCallback(attrib, oldVal, newVal) {
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
-        // Create a property from the value - WARN: Be careful with name clashes
-        this[attrib] = newVal
 
-        // Add other dynamic attribute processing here.
-        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
+        // We are allowing src to be change dynamically both by attrib change AND by instance property change.
+        if (attrib === 'src') {
+            if (newVal) {
+                this.doInclude(newVal)
+            } else {
+                console.error('[html-include] src attribute cannot be empty.')
+            }
+        }
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
 
-    /** Walk through slot content.
-     * Called once when connected and then every time slot content changes
-     * param {*} records Mutated records
-     * param {*} observer Reference to the observer object
+    /** Replaces the shadow dom content with the imported HTML.
+     * @param {URL|string} url URL of the resource to import
      */
-    processSlotContent() {
-        // Get the contents of the slot
-        const assignedNodes = this.shadowSlot.assignedNodes({ flatten: true })
-        // NB: assignedElements would be better but not supported in Safari 12.1/12.2
-
-        assignedNodes.forEach(node => {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                this.processElement(/** @type {HTMLElement} */ (node))
-            }
-        })
-    }
-
-    /** Process each found element node. Adds pointer cursor to the heading and wraps content in a div that can be collapsed.
-     * @param {HTMLElement} element The HTML element to process
-     */
-    processElement(element) {
-        if (!element.matches(this.levels) || element.dataset.collapsibleProcessed) return
-
-        const level = parseInt(element.tagName[1])
-        const nextElements = []
-
-        let sibling = element.nextElementSibling
-        while (sibling) {
-            if (sibling.matches(this.levels) && parseInt(sibling.tagName[1]) <= level) {
-                break
-            }
-            nextElements.push(sibling)
-            sibling = sibling.nextElementSibling
+    async doInclude(url) {
+        if (!url) {
+            console.error('[html-include] Cannot fetch empty string.')
+            return
         }
 
-        // Create a collapsible section for content under the heading
-        const collapsibleSection = document.createElement('div')
-        collapsibleSection.classList.add('collapsible-content')
-        // @ts-ignore
-        collapsibleSection.dataset.level = level
+        const response = await fetch(url)
 
-        nextElements.forEach(el => collapsibleSection.appendChild(el))
+        if (!response.ok) {
+            throw new Error(`[html-include] Fetch of url "${url}" failed: ${response.statusText}`)
+        }
 
-        element.insertAdjacentElement('afterend', collapsibleSection)
-        element.style.cursor = 'pointer'
+        const contentType = response.headers.get('content-type')
+        if (contentType) {
+            if (contentType.includes('text/html')) {
+                this.contentType = 'html'
+            } else if (contentType.includes('application/json')) {
+                this.contentType = 'json'
+            } else if (contentType.includes('multipart/form-data')) {
+                this.contentType = 'form'
+            } else {
+                this.contentType = 'text'
+            }
+        }
 
-        // Add click event to toggle collapsible section
-        element.addEventListener('click', function () {
-            const isCollapsed = collapsibleSection.style.display === 'none'
-            collapsibleSection.style.display = isCollapsed ? 'block' : 'none'
-        })
+        // Could add other binary types here. https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#body
+        switch (this.contentType) {
+            case 'html': {
+                this.json = {}
+                this.text = await response.text()
+                const parser = new DOMParser()
+                const newDoc = parser.parseFromString( this.text, 'text/html' )
+                this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                this.shadowRoot.appendChild(newDoc.body)
+                break
+            }
 
-        // Mark this heading as processed
-        element.dataset.collapsibleProcessed = 'true'
+            case 'json': {
+                this.json = await response.json()
+                this.text = JSON.stringify(this.json, null, 4)
+                this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                const myHtml = document.createElement('pre')
+                myHtml.textContent = this.text
+                this.shadowRoot.appendChild( myHtml )
+                break
+            }
+
+            case 'form': {
+                this.json = await response.formData()
+                this.text = JSON.stringify(this.json)
+                this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
+                this.shadowRoot.append(this.text)
+                break
+            }
+
+            case 'text':
+            default: {
+                this.json = {}
+                this.text = await response.text()
+                this.shadowRoot.append(this.text)
+                break
+            }
+        }
     }
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default CollapsibleHeadings
+export default HtmlInclude
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['CollapsibleHeadings'] = CollapsibleHeadings
+window['HtmlInclude'] = HtmlInclude
 
 // Self-register the HTML tag
-customElements.define('collapsible-headings', CollapsibleHeadings)
-
-//#region TEST
-// const ch = document.getElementsByTagName('collapsible-headings')[0]
-// if (ch) {
-//     const newH = document.createElement('h2')
-//     const newP = document.createElement('p')
-//     newH.innerText = 'Dynamically added section'
-//     newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
-//     setTimeout(() => {
-//         // ch.appendChild(
-//         ch.appendChild(newH)
-//         ch.append(newP)
-//     }, 5000)
-// } else {
-//     console.debug('collapsible-headings tag not found')
-// }
-//#endregion
+customElements.define('html-include', HtmlInclude)

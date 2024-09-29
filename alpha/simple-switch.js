@@ -30,6 +30,11 @@
  * limitations under the License.
  **/
 
+/**
+ * Refs:
+ * - https://discourse.nodered.org/t/size-of-custom-mdi-switch-icon/91280/9
+ */
+
 const componentName = 'simple-switch'
 const className = 'SimpleSwitch'
 
