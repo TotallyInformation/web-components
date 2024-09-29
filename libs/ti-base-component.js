@@ -37,28 +37,39 @@
  * @method deepAssign Object deep merger
  * @method doInheritStyles If requested, add link to an external style sheet
  * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
- *
+ * @method _uibMsgHandler Not yet in use
+ * @method _event(name,data) Standardised custom event dispatcher
+ * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+
  * Standard watched attributes (common across all my components):
  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
  * Other watched attributes:
  * None
- *
+
  * Standard props (common across all my components):
  * @prop {string} baseVersion Static. The component version string (date updated). Also has a getter.
+ * @prop {number} _iCount Static. The component version string (date updated)
  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
  * @prop {function(string): Element} $ jQuery-like shadow dom selector
  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {number} _iCount The component version string (date updated)
+ * @prop {boolean} connected False until connectedCallback finishes
+ * @prop {string} name Placeholder for the optional name attribute
  * @prop {object} opts This components controllable options - get/set using the `config()` method
+ * 
+ * @prop {string} version Getter that returns the class version & baseVersion static strings.
  * Other props:
  * By default, all attributes are also created as properties
- *
+
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2024-09-22'
+    static baseVersion = '2024-09-29'
+
+    /** Holds a count of how many instances of this component are on the page that don't have their own id
+     * Used to ensure a unique id if needing to add one dynamically
+     */
+    static _iCount = 0
 
     /** Is UIBUILDER for Node-RED loaded? */
     uib = !!window['uibuilder']
@@ -74,16 +85,21 @@ class TiBaseComponent extends HTMLElement {
      * @returns {NodeList} A STATIC list of all shadow dom elements that match the selector.
      */
     $$
-    /** Holds a count of how many instances of this component are on the page that don't have their own id
-     * Used to ensure a unique id if needing to add one dynamically
-     */
-    static _iCount = 0
 
-    /** Runtime configuration settings */
+    /** True when instance finishes connecting.
+     * Allows initial calls of attributeChangedCallback to be
+     * ignored if needed. */
+    connected = false
+
+    /** Placeholder for the optional name attribute @type {string} */
+    name
+
+    /** Runtime configuration settings @type {object} */
     opts = {}
 
     /** Report the current component version string */
     get version() {
+        // @ts-ignore
         return `${this.constructor.version} (Base: ${this.constructor.baseVersion})`
     }
 
@@ -150,15 +166,18 @@ class TiBaseComponent extends HTMLElement {
             // if (!this.name) this.name = this.getAttribute('name')
             // if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
             // else this.id = `${this.localName}-${++this.constructor._iCount}`
+            // @ts-ignore
             this.id = `${this.localName}-${++this.constructor._iCount}`
         }
     }
 
+    /** Creates the $ and $$ fns that do css selections against the shadow dom */
     createShadowSelectors() {
         this.$ = this.shadowRoot?.querySelector.bind(this.shadowRoot)
         this.$$ = this.shadowRoot?.querySelectorAll.bind(this.shadowRoot)
     }
 
+    // TODO Needs enhancing - does nothing at the moment
     /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
      * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
      */
@@ -173,6 +192,34 @@ class TiBaseComponent extends HTMLElement {
         //     const el = this.shadowRoot.getElementById('value')
         //     el.innerHTML = evt['detail'].payload
         // }
+    }
+
+    /** Custom event dispacher `component-name:name` with detail data
+     * @example
+     *   this._event('ready')
+     * @example
+     *   this._event('ready', {age: 42, type: 'android'})
+     *
+     * @param {string} name A name to give the event, added to the component-name separated with a :
+     * @param {*=} data Optional data object to pass to event listeners via the evt.detail property
+     */
+    _event(name, data) {
+        this.dispatchEvent(new CustomEvent(`${this.localName}:${name}`, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                id: this.id,
+                name: this.name,
+                data: data,
+            },
+        } ) )
+    }
+
+    /** Call from end of connectedCallback */
+    _ready() {
+        this.connected = true
+        this._event('connected')
+        this._event('ready')
     }
 } // ---- end of Class ---- //
 
