@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: alpha/simple-container.js</title>
+    <title>JSDoc: Source: alpha/not-complete/container-br.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: alpha/simple-container.js</h1>
+    <h1 class="page-title">Source: alpha/not-complete/container-br.js</h1>
 
     
 
@@ -28,7 +28,11 @@
         <article>
             <pre class="prettyprint source linenums"><code>/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @version 0.2 2022-05-10 Early-release
+ * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'ContainerBr' and 'container-br' &amp; change version below
+ *
+ * @version 0.2 2022-05-11 Early-release
+ *
+ * See: https://web.dev/custom-elements-v1/, https://web.dev/shadowdom-v1/
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
@@ -54,116 +58,66 @@
  * limitations under the License.
  **/
 
-// tagged template - just for syntax highlighting in VSCode
+// just for syntax highlighting in VSCode
 function html(strings, ...keys) {
     return strings.map( (s, i) => {
         return s + (keys[i] || '')
     }).join('')
 }
 
+const componentName = 'container-br'
+const className = 'ContainerBr'
+
 const template = document.createElement('template')
 template.innerHTML = html`
     &lt;style>
         :host {
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            box-sizing: border-box;
-            width: 100%;
-            max-width: 720px;
-            padding-right: 1rem;
-            padding-left: 1rem;
-            margin-right: auto;
-            margin-left: auto;
+            display: block;   /* default is inline */
+            contain: content; /* performance boost */
+            flex-basis: 100%;
+            height: 0;
         }
     &lt;/style>
-    &lt;slot role="region" aria-label="Content Grid">&lt;/slot>
 `
 
 // Define the class and make it the default export
-/** A simple container component
+/**
+ * @element container-br
  *
- * @element simple-container
+ * @fires container-br:construction - Document object event. evt.details contains the data
+ * @fires container-br:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires container-br:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires container-br:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
- * fires simple-container:click - Document object event. evt.details contains the data
- *
+ * @attr {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
- * prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
+ * @prop {string} name - Sync'd from name attribute
  *
  * @slot Container contents
  *
  * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
  */
-export default class SimpleContainer extends HTMLElement {
-    //#region ---- Class Variables ----
-
-    /** Standard _ui object to include in msgs */
-    _ui = {
-        type: 'button-send',
-        event: undefined,
-        id: undefined,
-        name: undefined,
-        data: undefined, // All of the data-* attributes as an object
-    }
-
-    //#endregion ---- ---- ---- ----
-
-    //#region ---- Utility Functions ----
-
-    /** Mini jQuery-like shadow dom selector
-     * @param {keyof HTMLElementTagNameMap} selection HTML element selector
-     */
-    $(selection) {
-        return this.shadowRoot &amp;&amp; this.shadowRoot.querySelector(selection)
-    }
-
-    //#endregion ---- ---- ---- ----
-
+export default class ContainerBr extends HTMLElement {
     constructor() {
+
         super()
         this.attachShadow({ mode: 'open', delegatesFocus: true })
             .append(template.content.cloneNode(true))
 
-        // this._list = this.shadowRoot.querySelector('ul')
-
-    }
-
-    // List all attribs we want to observe
-    static get observedAttributes() { return [
-
-    ] }
-
-    // Runs when an observed attribute changes - Note: values are always strings
-    attributeChangedCallback(name, oldVal, newVal) {
-
-        // Don't bother if the new value same as old
-        if ( oldVal === newVal ) return
-
-        // Create a property from the value - WARN: Be careful with name clashes
-        this[name] = newVal
-
-    } // --- end of attributeChangedCallback --- //
-
-    // Runs when an instance is added to the DOM
-    connectedCallback() {
-    }
-
-    // Runs when an instance is removed from the DOM
-    disconnectedCallback() {
-    }
-
+        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+    } // ---- end of constructor ----
 } // ---- end of Class ---- //
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['SimpleContainer'] = SimpleContainer
+window[className] = ContainerBr
 
 // Self-register the HTML tag
-customElements.define('simple-container', SimpleContainer)
+customElements.define(componentName, ContainerBr)
 </code></pre>
         </article>
     </section>

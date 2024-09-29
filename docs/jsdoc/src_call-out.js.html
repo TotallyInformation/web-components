@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: alpha/component-template.js</title>
+    <title>JSDoc: Source: src/call-out.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: alpha/component-template.js</h1>
+    <h1 class="page-title">Source: src/call-out.js</h1>
 
     
 
@@ -26,15 +26,10 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
- *
- * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'ComponentTemplate' and 'component-template'
- * For better formatting of HTML in template strings, use VSCode's "ES6 String HTML" extension
- *
+            <pre class="prettyprint source linenums"><code>/** Define a new zero dependency custom web component ECMA module that can be used to show a GitHub Markdown-style callout box
  * Version: See the class code
- *
  **/
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -50,19 +45,29 @@
  * limitations under the License.
  **/
 
+/** TODO
+ * - Use a css var for background transparency
+ * - Allow for a different background in the head
+ * - Use html in head, not just text.
+ * - Allow for image icons
+ * - use uib-brand css variables with fallbacks
+ * - Consider backgrounds matching the color but with transparency
+ * + Move initial processing to connected callback, add setters for type/icon/title and may changes dynamically, change attrib chg to dynamic upds
+ */
+
 import TiBaseComponent from '../libs/ti-base-component'
 
 /** Only use a template if you want to isolate the code and CSS */
-const template = document.createElement('template')
-template.innerHTML = /*html*/`
-    &lt;style>
-        :host {
-            display: block;   /* default is inline */
-            contain: content; /* performance boost */
-        }
-    &lt;/style>
-    &lt;slot>&lt;/slot>
-`
+// const template = document.createElement('template')
+// template.innerHTML = /*html*/`
+//     &lt;style>
+//         :host {
+//             display: block;   /* default is inline */
+//             contain: content; /* performance boost */
+//         }
+//     &lt;/style>
+//     &lt;slot>&lt;/slot>
+// `
 
 /** Namespace
  * @namespace Alpha
@@ -71,9 +76,9 @@ template.innerHTML = /*html*/`
 /**
  * @class
  * @extends TiBaseComponent
- * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+ * @description Define a new zero dependency custom web component that outputs a standardised callout box
  *
- * @element component-template
+ * @element call-out
  * @memberOf Alpha
 
  * METHODS FROM BASE:
@@ -89,10 +94,10 @@ template.innerHTML = /*html*/`
  * OTHER METHODS:
  * None
 
- * @fires component-template:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires component-template:ready - Alias for connected. The instance can handle property &amp; attribute changes
- * @fires component-template:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires component-template:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * @fires call-out:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * @fires call-out:ready - Alias for connected. The instance can handle property &amp; attribute changes
+ * @fires call-out:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * @fires call-out:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -100,7 +105,11 @@ template.innerHTML = /*html*/`
  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * None
+ * @attr {string} type - Optional. If present, a title will be added above other child content
+ * @attr {string} icon - Optional. If present, will override the callout title icon
+
+ * Non-watched but still used attributes:
+ * @attr {string} title - Optional. If present, will override the callout title text
 
  * Standard props (common across all my components):
  * @prop {number} _iCount Static. The component version string (date updated)
@@ -120,7 +129,7 @@ template.innerHTML = /*html*/`
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class ComponentTemplate extends TiBaseComponent {
+class CallOut extends TiBaseComponent {
     /** Component version */
     static version = '2024-09-29'
 
@@ -132,19 +141,48 @@ class ComponentTemplate extends TiBaseComponent {
             // Standard watched attributes:
             'inherit-style', 'name',
             // Other watched attributes:
+            'type', 'icon', 'title',
         ]
     }
+
+    type = ''
+    icon = ''
+
+    connected = false
 
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
 
         // Only attach the shadow dom if code and style isolation is needed
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
-            .append(template.content.cloneNode(true))
+        // this.attachShadow({ mode: 'open', delegatesFocus: true })
+            // .append(template.content.cloneNode(true))
 
         // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
         this.createShadowSelectors()  // in base class
+
+        // Apply styles using a &lt;style> tag in the light DOM
+        const style = document.createElement('style')
+        style.textContent = `
+        ${this.localName} {
+            --callout-color: inherit;
+            --callout-bgcolor: hsl(207.1deg 63.27% 40% /0.15);
+            --parent-color: inherit;
+            display: block;
+            border: 1px solid silver;
+            border-left: .25rem solid var(--callout-color, silver);
+            margin-bottom: 1rem;
+            padding: .75rem 1.25rem;
+            border-radius: 0.25rem;
+            background-color: var(--callout-bgcolor, inherit);
+        }
+        ${this.localName} > .co-head {
+            color: var(--callout-color, inherit);
+            font-weight: bolder;
+        }
+        `
+        // this.appendChild(style)
+        document.head.appendChild(style)
     }
 
     /** Runs when an instance is added to the DOM */
@@ -155,12 +193,16 @@ class ComponentTemplate extends TiBaseComponent {
         this.doInheritStyles()  // in base class
 
         // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
-        if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+        // if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+
+        this.type = this.getAttribute('type')
+        this.icon = this.getAttribute('icon')
+        console.log(this.id, 'connected', this.type, this.icon)
+
+        this.doType(this.type)
 
         // Keep at end. Let everyone know that a new instance of the component has been connected &amp; is ready
-        this.connected = true
-        this._event('connected')
-        this._event('ready')
+        this._ready()
     }
 
     /** Runs when an instance is removed from the DOM */
@@ -181,32 +223,110 @@ class ComponentTemplate extends TiBaseComponent {
         /** Optionally ignore attrib changes until instance is fully connected
          * Otherwise this can fire BEFORE everthing is fully connected.
          */
-        // if (!this.connected) return
+        if (!this.connected) return
 
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
         // Create a property from the value - WARN: Be careful with name clashes
         this[attrib] = newVal
 
+        console.log(this.id, 'attrib', attrib, oldVal, newVal)
+
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
+        
+        if (attrib === 'type') this.doType(this.type)
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
+
+    doType(type) {
+        if (!type) type = null
+        else type = type.toLowerCase()
+
+        console.log(this.id, 'doType')
+
+        // new element to add
+        const headEl = document.createElement('div')
+        headEl.className = 'co-head'
+
+        let headText = ''
+        let headIcon = ''
+        let headStyle = 'inherit'
+
+        switch (type) {
+            // These supported by GitHub, Typora, Docsify, Obsidian
+            case 'note': {
+                headIcon = 'ℹ️ '
+                headText = 'Note'
+                headStyle = '--callout-color: hsl(188.2deg 77.78% 40.59%);'
+                break
+            }
+        
+            case 'hint':
+            case 'tip': {
+                headIcon = '💡 '
+                headText = 'Tip'
+                headStyle = '--callout-color: hsl(133.7deg 61.35% 40.59%);'
+                break
+            }
+        
+            case 'warn':
+            case 'warning': {
+                headIcon = '⚠️ '
+                headText = 'Warning'
+                headStyle = '--callout-color: var(--warning-intense, hsl(35.19deg 84.38% 62.35%));'
+                break
+            }
+        
+            // These supported by GitHub, Typora, Obsidian
+            case 'important': {
+                headIcon = '🔖 '
+                headText = 'Important'
+                headStyle = '--callout-color: hsl(262.44deg 89.78% 73.14%);'
+                break
+            }
+        
+            case 'caution': {
+                headIcon = '❗ '
+                headText = 'Caution'
+                headStyle = '--callout-color: hsl(2.74deg 92.59% 62.94%);'
+                break
+            }
+        
+            default: {
+                break
+            }
+        }
+
+        if (this.title) {
+            headText = this.title
+        }
+
+        if (this.icon) {
+            headIcon = `${this.icon} `
+        }
+
+        if (headText) {
+            headEl.textContent = `${headIcon}${headText}`
+            this.style = headStyle
+            this.prepend(headEl)
+        }
+    }
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default ComponentTemplate
+export default CallOut
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['ComponentTemplate'] = ComponentTemplate
+window['CallOut'] = CallOut
 
 // Self-register the HTML tag
-customElements.define('component-template', ComponentTemplate)
+customElements.define('call-out', CallOut)
 </code></pre>
         </article>
     </section>

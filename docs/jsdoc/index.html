@@ -49,6 +49,10 @@
 <p>Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.</p>
 <h2>Useage</h2>
 <p>Install locally using npm or access via <a href="https://www.jsdelivr.com/package/gh/totallyinformation/web-components">jsdelivr</a>.</p>
+<p>See the <a href="docs">component documentation</a> for specific usage information for each component.</p>
+<details>
+<summary><b>Useage details</b></summary>
+<h3>File locations</h3>
 <p>Files for live use are in the <code>dist</code> folder. The alpha quality components are in the <code>dist/alpha</code> folder.</p>
 <p>Each component has 4 files but you only need 1 of them.</p>
 <p>If using traditional JavaScript or just HTML, use the <code>*.iife.min.js</code> files in deferred links in your <code>&lt;head&gt;</code>.</p>
@@ -57,13 +61,48 @@
 <p>If using ES Modules, import the <code>*.esm.min.js</code> files in your module code.</p>
 <pre class="prettyprint source lang-javascript"><code>import 'https://cdn.jsdelivr.net/gh/totallyinformation/web-components/dist/visible-console.esm.min.js'
 </code></pre>
-<blockquote>
-<p>[!TIP]
-If using with UIBUILDER for Node-RED, load <em>after</em> the uibuilder client library so that the component registers that uibuilder is in use and becomes responsive to it.</p>
-</blockquote>
 <p>Each component self-registers its custom HTML tag. They also globally self-register their class name so that you can access static variables and functions if needed. The tag name and global name are both listed in the tables below.</p>
 <p>When using your browser's developer tools, the matching <code>.map</code> file will be loaded. This ensures that reported line numbers and full variable/function names are reported.</p>
 <p>The source for the components is in the <code>src</code> folder for the main components and in the <code>alpha</code> folder for the alpha quality components.</p>
+<h3>Useage with UIBUILDER for Node-RED</h3>
+<ul>
+<li>You can install the components library using UIBUILDER's library manager.</li>
+<li>In your front-end HTML, load the components <em>after</em> the uibuilder client library so that the components register that uibuilder is in use and becomes responsive to it.</li>
+</ul>
+<p>If using with Node-RED, you can install the components with the help of node-red-contrib-uibuilder. The uibuilder node has a library manager feature and you should use that to install the repository direct from GitHub (requires uibuilder v5+). In that case, uibuilder adds the repository to its web server and you can access them as: <code>../uibuilder/vendor/@totallyinformation/web-components/dist/button-send.js</code>. See below for details.</p>
+<h3>Local installation</h3>
+<p>If you wish to install locally, you can npm install from the GitHub repository with <code>npm install totallyinformation/web-components</code>. If these ever get published to npm, you would install with <code>npm install @totallyinformation/web-components</code>. However, note that, at this point, I am not intending to publish them quickly as they are still evolving quite rapidly.</p>
+<p>If installing locally, you will need to make the installed <code>web-components/components/</code> folder available to your web server as a static resource folder.</p>
+<h3>Loading components into your web page</h3>
+<p>The individual component documentation contains details on how to load the component files. In general, however, there are two choices on how to load them.</p>
+<h4>Load as an ECMA module</h4>
+<p>This is the preferred method. However, it is generally best to load via a script module. While you can load them via your HTML as a script link, you loose some capability this way.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async>
+   import '../uibuilder/vendor/@totallyinformation/web-components/components/simple-container.js'
+&lt;/script>
+</code></pre>
+<h4>Load from HTML with a script tag</h4>
+<p>They <strong>must</strong> be loaded as a type &quot;module&quot;.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js&quot;>&lt;/script>
+</code></pre>
+<p>Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.</p>
+<h4>Load from a standard script</h4>
+<p>Alternatively, you can load them in your main JavaScript script using dynamic imports as:</p>
+<pre class="prettyprint source lang-html"><code>&lt;script defer async>
+   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
+&lt;/script>
+</code></pre>
+<p>The disadvantage of this method is that the import function is asynchronous and so your own code may try to execute before the module has loaded. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level async or the promise-style then/catch.</p>
+<p>The potential advantage of this approach is that you can access exported variables and methods from the component if any are available (see the syntax-highlight component for an example).</p>
+<h3>Visual Studio Code (VSCode) Intelligence</h3>
+<p>VSCode supposts the use of HTML and CSS Custom Data JSON files that describe custom web components and CSS in a way that gives some intelligence to the editor when writing HTML and CSS code.</p>
+<p>This collection of web components uses <a href="https://github.com/runem/web-component-analyzer">Web Component Analyzer</a> to help document the components. It is also used to create an html custom data file that can be added to VSCode or to a specific workspace or folder settings to provide additional Intellisense help for the components.</p>
+<p>To do so, find the html custom data setting in VSCode settings and add:</p>
+<pre class="prettyprint source"><code>/path/to/totallyinformation/web-components/vscode-descriptors/ti-web-components.html-data.json
+</code></pre>
+</details>
+<h3>Demos</h3>
+<p>All of the components have demo web pages in <code>tests</code>. There is a built-in Node.js mini web server. Running the npm script <code>tests</code> will start the server on port 8080. Opening <code>http://127.0.0.1:8080</code> or <code>http://127.0.0.1:8080/list.html</code> will give a list of all available demos.</p>
 <h2>Components</h2>
 <p>These components can be considered <code>beta</code> quality or better. They may not be complete but they should have basic usefulness.</p>
 <table>
@@ -74,6 +113,14 @@ If using with UIBUILDER for Node-RED, load <em>after</em> the uibuilder client l
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>button-send</code> (ButtonSend)</td>
+<td>A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button.</td>
+</tr>
+<tr>
+<td><code>collapsible-headings</code> (CollapsibleHeadings)</td>
+<td>Turns a section of Hn headings and block contents into collapsible content around the heading levels.</td>
+</tr>
 <tr>
 <td><code>visible-console</code> (VisibleConsole)</td>
 <td>Copies <code>console</code> log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console.</td>
@@ -95,10 +142,6 @@ Currently, all of the alpha components should be considered <em>experimental</em
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><code>button-send</code> (ButtonSend)</td>
-<td>A pre-defined button that fires an event and sends a uibuilder msg when clicked. Includes attribs in the sent data.</td>
-</tr>
 <tr>
 <td><code>chart-frappe</code> (ChartFrappe)</td>
 <td>A chart component using the Frappe chart library</td>
@@ -246,106 +289,6 @@ Currently, all of the alpha components should be considered <em>experimental</em
 <p><code>libs/uib-brand.css</code> - a copy of the alternate (new) stylesheet from uibuilder that these components can use.</p>
 </li>
 </ul>
-<h2>Requirements</h2>
-<p>These are the requirements for any web component to be included in this repository.</p>
-<ul>
-<li>
-<p>MUST be standalone with no external requirements. Common internal library modules may be permitted however.</p>
-</li>
-<li>
-<p>MUST be useable in the majority of modern browsers, anything supporting ES2019+ should be usable. IE will not be supported.</p>
-</li>
-<li>
-<p>MUST use ES6+. Maxumum JavaScript version should be 2 years behind the leading edge and only features supported by the majority of mainstream browsers are allowed. Other features MAY be permitted as long as they are optional and do not produce errors.</p>
-</li>
-<li>
-<p>MUST be linted using ESLINT. SHOULD use JavaScript Standard format (with some variations documented in the <code>.eslintrc.js</code> file).</p>
-</li>
-<li>
-<p>MUST self-register the custom tag using <code>customElements.define</code>.</p>
-</li>
-<li>
-<p>MUST use a Class name using a <em>CamelCase</em> version of the component name with an initial upper-case letter (e.g. <code>syntax-highlight</code> will be <code>export default class SyntaxHighlight extends HTMLElement { ... }</code> ).</p>
-</li>
-<li>
-<p>MUST be documented in the <code>docs</code> folder.{}</p>
-</li>
-<li>
-<p>SHOULD have a <code>&lt;slot&gt;</code> to allow nested rich content (where it makes sense).</p>
-</li>
-<li>
-<p>SHOULD export a <em>camelCase</em> version of the component-name which contains any useful methods and data. (e.g. <code>syntax-highlight</code> should export <code>syntaxHighlight</code>).</p>
-</li>
-<li>
-<p>SHOULD meet the <a href="https://github.com/webcomponents/gold-standard/wiki">Web Components Gold Standard</a>.</p>
-</li>
-<li>
-<p>SHOULD define any shadow template content and required component name as static variables in the class.</p>
-</li>
-<li>
-<p><a href="https://web.dev/articles/custom-elements-best-practices">Best practices</a></p>
-</li>
-</ul>
-<h3>HTML Standards limitations</h3>
-<ul>
-<li>Custom HTML tags MUST use pascal-case with at least 1 <code>-</code>.</li>
-<li>Custom HTML tags MUST use lower-case attribute names.</li>
-</ul>
-<h2>Installation and loading</h2>
-<p>You can use these components directly from the jsdelivr CDN by referencing like: <code>https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js</code>. So no install is required if you are happy to load from the Internet.</p>
-<h3>Local installation</h3>
-<p>If you wish to install locally, you can npm install from the GitHub repository with <code>npm install totallyinformation/web-components</code>. If these ever get published to npm, you would install with <code>npm install @totallyinformation/web-components</code>. However, note that, at this point, I am not intending to publish them quickly as they are still evolving quite rapidly.</p>
-<p>If installing locally, you will need to make the installed <code>web-components/components/</code> folder available to your web server as a static resource folder.</p>
-<h3>Using with Node-RED and uibuilder</h3>
-<p>If using with Node-RED, you can install the components with the help of node-red-contrib-uibuilder. The uibuilder node has a library manager feature and you should use that to install the repository direct from GitHub (requires uibuilder v5+). In that case, uibuilder adds the repository to its web server and you can access them as: <code>../uibuilder/vendor/@totallyinformation/web-components/components/button-send.js</code>. See below for details.</p>
-<h3>Loading components into your web page</h3>
-<p>The individual component documentation contains details on how to load the component files. In general, however, there are two choices on how to load them.</p>
-<h4>Load as an ECMA module</h4>
-<p>This is the preferred method. However, it is generally best to load via a script module. While you can load them via your HTML as a script link, you loose some capability this way.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async>
-   import '../uibuilder/vendor/@totallyinformation/web-components/components/simple-container.js'
-&lt;/script>
-</code></pre>
-<h4>Load from HTML with a script tag</h4>
-<p>They <strong>must</strong> be loaded as a type &quot;module&quot;.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js&quot;>&lt;/script>
-</code></pre>
-<p>Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.</p>
-<h4>Load from a standard script</h4>
-<p>Alternatively, you can load them in your main JavaScript script using dynamic imports as:</p>
-<pre class="prettyprint source lang-html"><code>&lt;script defer async>
-   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
-&lt;/script>
-</code></pre>
-<p>The disadvantage of this method is that the import function is asynchronous and so your own code may try to execute before the module has loaded. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level async or the promise-style then/catch.</p>
-<p>The potential advantage of this approach is that you can access exported variables and methods from the component if any are available (see the syntax-highlight component for an example).</p>
-<h2>Stand-alone use</h2>
-<h3>Installation and loading</h3>
-<p>See the general information above.</p>
-<h3>Using the components</h3>
-<p>See the <a href="docs">component documentation</a> for specific usage information for each component.</p>
-<h2>Use with <a href="https://nodered.org/">Node-RED</a> and <a href="https://github.com/TotallyInformation/node-red-contrib-uibuilder">node-red-contrib-uibuilder</a></h2>
-<h3>Installation and loading</h3>
-<p>You can, of course, use the components direct from a CDN as shown above.</p>
-<p>Otherwise, install this repository using the library manager in a uibuilder node in Node-RED.</p>
-<img src="docs/images/2022-04-05-14-03-33.png" alt="uibuilder library manager" width="350"/>
-<p>Which results in something like:</p>
-<img src="docs/images/2022-04-05-14-09-34.png" alt="uibuilder installed library" width="350"/>
-<p>Noting that this library does not actually have a default script so the listed on is spurious.</p>
-<p>You can then access the components by loading them into your html or JavaScript as shown above.</p>
-<h3>Using the components</h3>
-<p>The components can, of course, be used in the same way as if not using uibuilder. However, there are additional capabilities aimed at making their use in conjunction with Node-RED and uibuilder even easier. Specifically reducing the amount of code required to use them.</p>
-<p>Components will automatically recognise when uibuilder is being used. They will each:</p>
-<ul>
-<li>Have a specific msg schema - when a msg with the matching schema is sent from Node-RED via uibuilder, a singular instance of the component on a page will be automatically updated. Where multiple instances are present, the msg must include an html id so that the msg will target that instance.</li>
-</ul>
-<p>See the <a href="docs">component documentation</a> for specific usage information for each component.</p>
-<h2>Visual Studio Code (VSCode) Intelligence</h2>
-<p>VSCode supposts the use of HTML and CSS Custom Data JSON files that describe custom web components and CSS in a way that gives some intelligence to the editor when writing HTML and CSS code.</p>
-<p>This collection of web components uses <a href="https://github.com/runem/web-component-analyzer">Web Component Analyzer</a> to help document the components. It is also used to create an html custom data file that can be added to VSCode or to a specific workspace or folder settings to provide additional Intellisense help for the components.</p>
-<p>To do so, find the html custom data setting in VSCode settings and add:</p>
-<pre class="prettyprint source"><code>/path/to/totallyinformation/web-components/vscode-descriptors/ti-web-components.html-data.json
-</code></pre>
 <h2>Discussions and suggestions</h2>
 <p>The best place to ask questions, or suggest improvements about these components is the <a href="https://github.com/TotallyInformation/web-components/discussions">GitHub discussion board for this repository</a>.</p>
 <h2>Contributing</h2>
@@ -369,13 +312,13 @@ Currently, all of the alpha components should be considered <em>experimental</em
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#dumpObject">dumpObject</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Sep 24 2024 19:36:38 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 29 2024 17:56:15 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

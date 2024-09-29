@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: alpha/dynamic-list.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: alpha/dynamic-list.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+let template = document.createElement('template');
+template.innerHTML = /*html*/ `
+    &lt;div>List items:&lt;/div>
+    &lt;ul>&lt;/ul>
+`
+
+let instanceCount = 0
+const instance = {}
+
+// Create a GLOBAL var for this component
+// window.dataList = {
+//     count: 0,
+//     instances: {},
+
+    
+
+//     setData: (elementId, elementData) => {
+//         console.log('>> setData this >>', window.dataList.instances[elementId])
+//         // Get ref to element
+//         let el = document.getElementById(elementId)
+
+//         // Set the data
+
+//     },
+// }
+
+export default class DataList extends HTMLElement {
+    constructor() {
+        super()
+        this.attachShadow({ mode: 'open', delegatesFocus: true })
+            .append(template.content.cloneNode(true))
+
+        
+
+        this._list = this.shadowRoot.querySelector('ul')
+
+        this._entries = {}
+    }
+
+    // Getter/setter for the `data` public property - maps to this._entries
+    set data(val) {
+        this._entries = val
+
+        this._list.innerHTML = ''
+        // Dynamically build the content of the ul/ol
+        Object.keys(this._entries).forEach( (key, i) => {
+            this._list.insertAdjacentHTML('beforeend', `&lt;li id="${key}">${key} :: ${this._entries[key]}&lt;/li>`)
+        })
+    }
+    get data() {
+        return this._entries
+    }
+    entry(key, val) {
+        // this._list.innerHTML = ''
+        this._entries[key] = val
+        this.data = this._entries
+
+        let sr = this.shadowRoot.getElementById(key)
+        console.log('>> li key >>', sr)
+
+        
+        // Dynamically build the content of the ul/ol
+        // Object.keys(this._entries).forEach( (key, i) => {
+        //     this._list.insertAdjacentHTML('beforeend', `&lt;li id="${key}">${key} :: ${this._entries[key]}&lt;/li>`)
+        // })
+    }
+
+    static get instances() {
+        return instanceCount
+    }
+
+    getInstance(instanceId) {
+        return instance[instanceId]
+    }
+
+    static get observedAttributes() { return [
+        'listvar', 'type',
+    ]}
+
+    attributeChangedCallback(name, oldVal, newVal) {
+
+        if ( oldVal === newVal ) return
+
+        if ( name === 'listvar' &amp;&amp; window[newVal] ) {
+            if ( window[newVal] ) {
+
+                this.data = window[newVal]
+                // window.dataList.instances[this.id] = window[newVal]
+                // console.log('>> listvar change >>', this.id, this._entries, window.dataList.instances[this.id])
+                //window[newVal] = new Proxy()
+
+            } else {
+                console.error(`[DataList] window.${newVal} does not exist, ignoring.`)
+            }
+
+            return
+        }
+
+        this[name] = newVal
+
+    } // --- end of attributeChangedCallback --- //
+
+    connectedCallback() {
+        // Keep count of the number of instances
+        instanceCount++
+
+        // If no element id, create an ID that should be unique across all instances
+        if (!this.id) {
+            let myname = this.getAttribute('name')
+            if (myname) this.id = myname.replaceAll(' ', '_')
+            else this.id = `dataList${instanceCount}`
+        }
+
+        // Keep track of each instance
+        instance[this.id] = this
+
+        // Notify Event
+        
+    }
+
+    disconnectedCallback() {
+        // Keep count of the number of instances
+        instanceCount--
+
+        // Keep track of each instance
+        delete instance[this.id]
+    }
+}
+
+/** Self register the class to global
+ * Enables new data lists to be dynamically added via JS
+ * and lets the static methods be called
+ */
+window.DataList = DataList
+
+// Export the class as default
+// export default DataList
+
+// Self-register the HTML tag
+customElements.define('data-list', DataList)
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 29 2024 17:56:15 GMT+0100 (British Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

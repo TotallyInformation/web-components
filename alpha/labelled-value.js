@@ -172,7 +172,7 @@ export default class LabelledValue extends HTMLElement {
             }
         }
 
-        document.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
+        document.dispatchEvent(new CustomEvent(`${this.localName}:attribChanged`, {
             bubbles: true,
             composed: true,
             detail: {

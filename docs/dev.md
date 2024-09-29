@@ -8,11 +8,14 @@ updated: 2024-09-22 14:34:05
 
 ## Standards
 
+These are the requirements and standards for any web component to be included in this repository.
+
+* MUST be standalone with no external requirements. Common include library modules (e.g. charts) MAY be imported however. The resulting file MUST be useable stand-alone.
+* MUST be useable in the majority of modern browsers, anything supporting ES2019+ should be usable. IE will not be supported.
+
 * All components MUST self register the custom tag AND their Class Name. All tag namess are lower-case with at least one dash (_kebab-case_) . All Class names start with an upper-case letter and the name is the tag name in _PascalCase_. MUST self-register the custom tag using `customElements.define`.
 * The Class is the default export and is also self-registered to the window global.
 * MUST provide source-code in either `./src` (for production ready components) or `./alpha`. Any component in `./src` MUST be usable even if it is not feature complete.
-* MUST be useable in the majority of modern browsers. IE will not be supported.
-* MUST be standalone with no external requirements. Common include library modules (e.g. charts) MAY be imported however. The resulting file MUST be useable stand-alone.
 * MUST have both IIFE and ESM minimised versions built using ESBUILD. The built versions should target common browser features no newer than 2-years old. Built versions will be in the `./dist` folder with alpha quality components built to the `./dist/alpha` folder. All built versions will include `.map` files for debugging.
 * MUST use JSDoc to self-document. MUST use ESLint and follow the modified _JavaScript Standard_ formatting.
 * MUST provide a document file in `./docs` describing use, settings, etc.
@@ -29,9 +32,15 @@ updated: 2024-09-22 14:34:05
 * MUST NOT be dependent on UIBUILDER for Node-RED. SHOULD be enhanced if the UIBUILDER client library is loaded.
 * SHOULD be derived from the `./libs/ti-base-component.js` class to inherit standard properties and methods.
 * SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
+* SHOULD follow [Best practices](https://web.dev/articles/custom-elements-best-practices).
 * SHOULD have a `<slot>` to allow nested rich content (where it makes sense).
 
 * Where _static_ properties or methods are referred to, `this.constructor` should be used rather than the class name. This avoids errors should the class ever be renamed or the code copied to a different class. Similarly, `this.localName` can be used to get the class name as text which should be used in debugging and error logging.
+
+### HTML Standards limitations
+
+* Custom HTML tags MUST use pascal-case with at least 1 `-`.
+* Custom HTML tags MUST use lower-case attribute names.
 
 ## Styling
 
