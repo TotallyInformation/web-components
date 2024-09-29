@@ -1,0 +1,1098 @@
+/** Default Styles for uibuilder - Light & Dark options ...
+ *
+ * TODO: Add darker/lighter shades for variant colours for headers, etc.
+ *
+ * Recommended @media breakpoints:
+ * Tablet:        48em @ 16pt   = 768px
+ * Tablet Wide:   62em @ 16pt   = 992px
+ *
+ * Mobile Small:  30em @ 16pt   = 480px
+ * Mobile Medium: 37.5em @ 16pt = 600px
+ * Mobile Large:  48em @ 16pt   = 768px
+ *
+ * 
+ * https://css-tricks.com/a-complete-guide-to-custom-properties/ for details on using custom css properties
+ * https://una.im/css-color-theming/ for more on color theory calculations
+ * https://web.dev/building-a-color-scheme/ is the basis for this style
+ * https://unifyned.com/colors.html extends the above
+ * https://chromatichq.com/insights/understanding-and-using-hsl-your-css gives calculations for the color wheel
+ *
+ * @version: 1.33 2024-03-28
+ * @author: Julian Knight (TotallyInformation)
+ * @license: Apache 2.0
+ * @created: 2022-05-02
+ *
+ * USAGE:
+ * - https://totallyinformation.github.io/node-red-contrib-uibuilder/#/client-docs/uib-brand-css
+ * - Reference directly or via import in own CSS
+ * - Will auto pick up browser preference for light/dark if set
+ * - Or manually set with `class="light"` or `class="dark"` on the html tag
+ * - Or create a manual switcher feature - see css-test.html or brand-test.html for examples
+ * - A simple CSS reset is provided to get reasonably looking HTML in any browser
+ * - Some special classes are provided - see the "Recommended surfaces" section
+ * - Lots of css variables provided for use in your own CSS or in web components
+ * NOTES:
+ * - Watch out for the order of loading of style sheets!
+ * - uibuilder attempts to auto-load this sheet BUT you may need to do it manually to get the right order.
+ * - Include in your index.css file as `@import url("./uib-brand.min.css");`
+ */
+
+/* :root applies to everything, :root.light is for manually selected light mode */
+:root, :root.light {
+    color-scheme: light dark;
+    --mode: light;
+
+    /* Create a checkable var - helps web components know if this stylesheet is loaded
+     * Use this from general code: 
+     *    window.getComputedStyle(document.documentElement, null).getPropertyValue('--uib-css') === 'uib-brand'
+     * Or this from within the component code:
+     *    window.getComputedStyle(this, null).getPropertyValue('--uib-css') === 'uib-brand'
+     * NOTE: no space between : and text!
+     */
+    --uib-css:uib-brand;
+    /* Sans-serif is much easier to read on-screen */
+    --font-family: sans-serif;
+
+    --brand-hue: 200;
+    --text-hue: var(--brand-hue);
+    --surface-hue: var(--brand-hue);
+    --complementary-offset: 180;
+    --accent-offset: 30; /* 30=Split complementary, 60=Triadic */
+
+    --saturation-bias: 0;
+    --light-saturation: .66;
+    --dark-saturation: calc(var(--light-saturation) * .6);
+    --saturation-value: var(--light-saturation);
+    --saturation: calc(var(--saturation-value) + var(--saturation-bias));
+
+    --lightness-bias: 0;
+    --light-lightness: .57;
+    --dark-lightness: calc(var(--light-lightness) * .75);
+    --lightness-value: var(--light-lightness);
+    --lightness: calc(var(--lightness-value) + var(--lightness-bias));
+
+    --base-margin: 1rem;
+    --max-width: 64rem;
+
+    --border-radius: 0.5rem; /*8px;*/
+    --border-pad: 0.5rem;
+    --border-margin: 0;
+
+    /* For the .grid-fit class, the minimum child element size */
+    --grid-fit-min: 15rem;
+
+    /* For nicer emoji's use this as the font-family */
+    --emoji-fonts: "Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji",
+        sans-serif;
+
+    /*#region --- Brand --- */
+    --brand: hsl(
+        var(--brand-hue)
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    /*#endregion --- --- */
+
+    /*#region --- Shadows https://shadows.brumm.af/ --- */
+    --surface-shadow-light: var(--brand-hue) 10% 20%;
+    --shadow-strength-light: .02;
+
+    --surface-shadow-dark: var(--brand-hue) 30% 30%;
+    --shadow-strength-dark: .1;
+
+    --surface-shadow: var(--surface-shadow-light);
+    --shadow-strength: var(--shadow-strength-light);
+
+    --shadow1:
+        0 2.8px 2.2px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .03)),
+        0 6.7px 5.3px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .01)),
+        0 12.5px 10px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .02)),
+        0 22.3px 17.9px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .02)),
+        0 41.8px 33.4px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .03)),
+        0 100px 80px hsl(var(--surface-shadow) / var(--shadow-strength))
+    ;
+
+    --shadow2: 
+        0.2px 0.3px 0.3px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .031)),
+        0.5px 0.7px 0.7px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .053)),
+        1px 1.3px 1.3px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .07)),
+        1.8px 2.2px 2.2px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .087)),
+        3.3px 4.2px 4.2px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .109)),
+        8px 10px 10px hsl(var(--surface-shadow) / calc(var(--shadow-strength) + .16))
+    ;
+
+    --shadow: var(--shadow1);
+  
+    /*#endregion --- --- */
+
+    /*#region --- Text --- */
+    --text-saturation: .2;
+    --text-bias: 0;
+    --light-text-lightness: .1;
+    --light-text-factor: 1;
+    --dark-text-lightness: .9;
+    --dark-text-factor: -1;
+
+    --text-factor: var(--light-text-factor);
+    --text-lightness: var(--light-text-lightness);
+
+    --text1: hsl(
+        var(--text-hue)
+        calc(100% * var(--text-saturation))
+        calc(
+            100% * (var(--text-lightness)
+            + (0 * var(--text-factor) * .2)
+            - (var(--text-factor) * var(--text-bias)))
+        )
+    );
+    --text2: hsl(
+        var(--text-hue)
+        calc(100% * (var(--text-saturation) / 2))
+        calc(
+            100% * (var(--text-lightness)
+            + (1 * var(--text-factor) * .2)
+            - (var(--text-factor) * var(--text-bias)))
+        )
+    );
+    --text3: hsl(
+        var(--text-hue)
+        calc(100% * (var(--text-saturation) / 2))
+        calc(
+            100% * (var(--text-lightness)
+            + (1 * var(--text-factor) * .4)
+            - (var(--text-factor) * var(--text-bias)))
+        )
+    );
+    --text4: hsl(
+        var(--text-hue) 
+        10% 
+        calc(
+            50% 
+            - (100% * var(--text-factor) * var(--text-bias)))
+        / calc(25% + (100% * var(--text-bias)))
+    );
+    /*#endregion --- --- */
+
+    /*#region --- Surfaces --- */
+    --surfaces-saturation: .1;
+    --surfaces-bias: 0;
+    --light-surfaces-lightness: .95;
+    --light-surfaces-factor: 1;
+    --dark-surfaces-lightness: .1;
+    --dark-surfaces-factor: -1;
+
+    --surfaces-factor: var(--light-surfaces-factor);
+    --surfaces-lightness: var(--light-surfaces-lightness);
+    
+    --surface1: hsl(
+        var(--surface-hue)
+        calc(100% * var(--surfaces-saturation))
+        calc(
+            100% * (var(--surfaces-lightness)
+            - (var(--surfaces-factor) * .00)
+            + (var(--surfaces-factor) * var(--surfaces-bias)))
+        )
+    );
+    --surface2: hsl(
+        var(--surface-hue)
+        calc(100% * var(--surfaces-saturation))
+        calc(
+            100% * (var(--surfaces-lightness)
+            - (var(--surfaces-factor) * .05)
+            + (var(--surfaces-factor) * var(--surfaces-bias)))
+        )
+    );
+    --surface3: hsl(
+        var(--surface-hue)
+        calc(100% * var(--surfaces-saturation))
+        calc(
+            100% * (var(--surfaces-lightness)
+            - (var(--surfaces-factor) * .10)
+            + (var(--surfaces-factor) * var(--surfaces-bias)))
+        )
+    );
+    --surface4: hsl(
+        var(--surface-hue)
+        calc(100% * var(--surfaces-saturation))
+        calc(
+            100% * (var(--surfaces-lightness)
+            - (var(--surfaces-factor) * .15)
+            + (var(--surfaces-factor) * var(--surfaces-bias)))
+        )
+    );
+    --surface5: hsl(
+        var(--surface-hue)
+        calc(100% * var(--surfaces-saturation))
+        calc(
+            100% * (var(--surfaces-lightness)
+            - (var(--surfaces-factor) * .20)
+            + (var(--surfaces-factor) * var(--surfaces-bias)))
+        )
+    );
+    /*#endregion --- --- */
+
+    /*#region === INFO === */
+    --info-hue: 203;
+    --info-saturation-bias: 0;
+    --info-lightness-bias: 0;
+    
+    --info-hsl: var(--info-hue)
+                calc(100% * (var(--saturation) + var(--info-saturation-bias)))
+                calc(100% * (var(--lightness) + var(--info-lightness-bias)));
+
+    --info: hsl( var(--info-hsl) );
+    --info-intense: hsl(
+        var(--info-hue) 100% 50%
+    );
+    /*#endregion --- --- */
+    
+    /*#region === SUCCESS === */
+    --success-hue: 120;
+    --success-saturation-bias: 0;
+    --success-lightness-bias: 0;
+    
+    --success: hsl(
+        var(--success-hue)
+        calc(100% * (var(--saturation) + var(--success-saturation-bias)))
+        calc(100% * (var(--lightness) + var(--success-lightness-bias)))
+    );
+    --success-intense: hsl(
+        var(--success-hue) 100% 50%
+    );
+    /*#endregion --- --- */
+    
+    /*#region === WARNING === */
+    --warning-hue: 40;
+    --warning-saturation-bias: 0;
+    --warning-lightness-bias: 0;
+    
+    --warning: hsl(
+        var(--warning-hue)
+        calc(100% * (var(--saturation) + var(--warning-saturation-bias)))
+        calc(100% * (var(--lightness) + var(--warning-lightness-bias)))
+    );
+    --warning-intense: hsl(
+        var(--warning-hue) 100% 50%
+    );
+    --warn: var(--warning);
+    /*#endregion --- --- */
+    
+    /*#region === FAILURE === */
+    --failure-hue: 2;
+    --failure-saturation-bias: 0;
+    --failure-lightness-bias: 0;
+    
+    --failure: hsl(
+        var(--failure-hue)
+        calc(100% * (var(--saturation) + var(--failure-saturation-bias)))
+        calc(100% * (var(--lightness) + var(--failure-lightness-bias)))
+    );
+    --failure-intense: hsl(
+        var(--failure-hue) 100% 50%
+    );
+    --error: var(--failure);
+    --danger: var(--failure);
+    /*#endregion --- --- */
+    
+    /*#region === Complementary ACCENT === */
+    --complementary-hue: calc(var(--brand-hue) + var(--complementary-offset));
+
+    --complementary-fg: hsl(
+        var(--brand-hue)
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --complementary-bg: hsl(
+        var(--complementary-hue)
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --complementary: hsl(
+        calc(var(--complementary-hue))
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    /*#endregion --- --- */
+    
+    /*#region === PRIMARY ACCENT === */
+    --primary-hue: calc(var(--brand-hue) + var(--complementary-offset) + var(--accent-offset));
+
+    --primary-fg: hsl(
+        calc(var(--primary-hue) + var(--complementary-offset))
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --primary-bg: hsl(
+        var(--primary-hue)
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --primary: var(--primary-bg);
+    /*#endregion --- --- */
+    
+    /*#region === SECONDARY ACCENT === */
+    --secondary-hue: calc(var(--brand-hue) + var(--complementary-offset) - var(--accent-offset));
+    
+    --secondary-fg: hsl(
+        calc(var(--secondary-hue) + var(--complementary-offset))
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --secondary-bg: hsl(
+        var(--secondary-hue)
+        calc(100% * var(--saturation))
+        calc(100% * var(--lightness))
+    );
+    --secondary: var(--secondary-bg);
+    /*#endregion --- --- */
+}
+
+/* If the browser reports it, we can adjust for light/dark theme preferences
+ * See https://stackoverflow.com/a/57795495 for use with JavaScript
+ */
+@media (prefers-color-scheme: light) {
+    :root {
+        color-scheme: light dark;
+        --mode: light;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* ---- Active Theme (Dark) ---- */
+        color-scheme: dark light;
+        --mode: dark;
+
+        --saturation-value: var(--dark-saturation);
+        --lightness-value: var(--dark-lightness);
+        
+        --surface-shadow: var(--surface-shadow-dark);
+        --shadow-strength: var(--shadow-strength-dark);
+        
+        --text-factor: var(--dark-text-factor);
+        --text-lightness: var(--dark-text-lightness);
+
+        --surfaces-factor: var(--dark-surfaces-factor);
+        --surfaces-lightness: var(--dark-surfaces-lightness);
+    }
+}
+
+/* Or if the user manually requests a dark colour theme by setting class="dark" on html tag */
+:root.dark {
+    color-scheme: dark light;
+    --mode: dark;
+
+    --saturation-value: var(--dark-saturation);
+    --lightness-value: var(--dark-lightness);
+    
+    --surface-shadow: var(--surface-shadow-dark);
+    --shadow-strength: var(--shadow-strength-dark);
+
+    --text-factor: var(--dark-text-factor);
+    --text-lightness: var(--dark-text-lightness);
+
+    --surfaces-factor: var(--dark-surfaces-factor);
+    --surfaces-lightness: var(--dark-surfaces-lightness);
+}
+
+/*#region --- Surface & std colour classes --- */
+
+.brand {
+    color: var(--text1);
+    background-color: var(--brand);
+}
+.complementary {
+    color: var(--text1);
+    background-color: var(--complementary);
+}
+.surface1 {
+    background-color: var(--surface1);
+    color: var(--text2);
+}
+.surface2 {
+    background-color: var(--surface2);
+    color: var(--text2);
+}
+.surface3 {
+    background-color: var(--surface3);
+    color: var(--text1);
+}
+.surface4 {
+    background-color: var(--surface4);
+    color: var(--text1);
+}
+.surface5 {
+    background-color: var(--surface5);
+    color: var(--text1);
+}
+.rad-shadow {
+    box-shadow: var(--shadow);
+}
+.info {
+    color: var(--text1) !important;
+    background-color: var(--info) !important;
+}
+.info-intense {
+    color: var(--text1) !important;
+    background-color: var(--info-intense) !important;
+}
+.success {
+    color: var(--text1) !important;
+    background-color: var(--success) !important;
+}
+.success-intense {
+    color: var(--text1) !important;
+    background-color: var(--success-intense) !important;
+}
+.warning, .warn {
+    color: var(--text1) !important;
+    background-color: var(--warning) !important;
+}
+.warning-intense, .warn-intense {
+    color: var(--text1) !important;
+    background-color: var(--warning-intense) !important;
+}
+.failure, .error, .danger {
+    color: var(--text1) !important;
+    background-color: var(--failure) !important;
+}
+.failure-intense, .error-intense, .danger-intense {
+    color: var(--text1) !important;
+    background-color: var(--failure-intense) !important;
+}
+.primary {
+    color: var(--primary-fg);
+    background-color: var(--primary-bg);
+}
+.secondary {
+    color: var(--secondary-fg);
+    background-color: var(--secondary-bg);
+}
+
+/*#endregion --- --- --- --- */
+
+/*#region --- Basic reset --- */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    /* margin: 0; */
+}
+*:focus-visible {
+    outline: 2px solid var(--secondary-fg);
+    outline-offset: 2px;
+}
+@supports not selector(:focus-visible) {
+    *:focus {
+        outline: 1px solid var(--secondary-fg);
+        outline-offset: -4px;
+    }
+}
+html {
+    line-height: 1.5; /* Accessible line-height */
+    font-size: 100%;
+    background-color: var(--surface1);
+    color: var(--text2);
+    accent-color: var(--brand);
+}
+body {
+    margin-left: var(--base-margin);
+    margin-right: var(--base-margin);
+    /* padding: 0.3rem; */
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased; /* Improve text rendering */
+}
+h1, h2, h3, h4, h5, h6, heading {
+    line-height: calc(1em + 0.5rem); /* dynamic heights for headings */
+    text-wrap: balance;
+}
+p, li, figcaption {
+    text-wrap: pretty;
+}
+img, picture, video, canvas, svg {
+    /* display: block; */
+    object-fit: cover;
+    vertical-align: bottom;
+    max-width: 100%;
+    background-color: var(--surface2);
+    margin:var(--base-margin);
+}
+p, h1, h2, h3, h4, h5, h6, heading, li, dl, dt, blockquote {
+    overflow-wrap: break-word;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    word-break: break-word;
+}
+div > p, div > article {
+    margin-left: var(--base-margin);
+    margin-right: var(--base-margin);
+}
+button, input[type="button" i], input[type="reset" i], input[type="submit" i], ::file-selector-button {
+    /* display: inline-flex; */
+    align-items: center;
+    justify-content: center;
+    border: none;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    background-color: var(--info);
+    color: var(--text1);
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.1;
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: var(--border-radius);
+    /* box-shadow: 0 3px 5px rgb(var(--uib-color-fg), 0.5); */
+    box-shadow: inset 2px 2px 3px rgba(255,255,255, .3),
+                inset -2px -2px 3px rgba(0,0,0, .3);
+}
+button:hover, input[type="button" i]:hover, input[type="reset" i]:hover, input[type="submit" i]:hover {
+    background-color: hsl(var(--info-hsl) / .5);
+}
+button:active, input[type="button" i]:active, input[type="reset" i]:active, input[type="submit" i]:active {
+    transform: scale(0.97);
+}
+input, button, textarea, select {
+    font: inherit;
+    min-width: 2em;
+}
+blockquote {
+    border: 1px solid var(--text3);
+    padding: 0.3rem;
+    box-shadow: var(--shadow);
+}
+code {
+    font-size: 120%;
+}
+header, footer, main, section, article {
+    /* default prep for container queries */
+    container-type: inline-size;
+}
+/* This lets us use an article like a card display */
+article {
+    max-width: var(--max-width);
+    border: 1px solid var(--text3);
+    border-radius: var(--border-radius);
+    padding: var(--border-pad);
+    margin: 1rem var(--border-margin);
+    background-color: var(--surface3);
+}
+article > h1::before {
+    font-size: 50%;
+    color: hsl( var(--failure-hue) 100% 50% );
+    content: "⛔ Do not use H1 headings in articles. "
+}
+article > h2, article > h3, article > h4 {
+    margin-block-start: 0;
+    border-bottom: 1px solid var(--text3);
+    padding-block-end: var(--border-pad);
+}
+/* HTML5 section tags - only special format top-level to reduce odd fmts */
+body > main, body > header, body > footer, body > section {
+    padding-left: var(--base-margin);
+    padding-right: var(--base-margin);
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+body > main {
+    display: grid;
+    gap: 1rem;
+}
+footer {
+    margin-top: 1em;
+}
+/* Put asides inside a main to one side
+   Or, use a section or div to wrap multiple */
+main > article, main .left {
+    grid-column: 1;
+}
+main > aside, main .right {
+    grid-column: 2;
+}
+/* Inline blocks in a summary tag */
+summary > h2, summary > h3, summary > h4, summary > div, summary > p {
+    display: inline-block;
+}
+
+/*#endregion --- Basic reset --- */
+
+/*#region --- Tables --- */
+table {
+    border-collapse: collapse;
+    border: 1px solid var(--text3);
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+thead th, thead td {
+    color: var(--text2);
+    font-weight: bolder;
+    background: var(--surface4);
+}
+tfoot th, tfoot td {
+    color: var(--text2);
+    font-style: italic;
+    background: var(--surface4);
+}
+th[scope=row], tbody th {
+    font-style: italic;
+    color: var(--text2);
+    font-weight:lighter;
+    background: var(--surface4);
+    background-blend-mode: lighten;
+    text-align: left;
+}
+th, td {
+    padding: .5rem;
+    border: 1px solid var(--text4);
+}
+tbody tr:nth-child(even) {
+    color: var(--text2);
+    background-color: var(--surface3);
+    background-blend-mode: lighten;
+}
+/* In case you want to use an hr in a table, reduced top/bottom margins */
+td hr {
+    margin-top:0.5em;
+    margin-bottom:0.5em;
+}
+/* Extra line spacing for <br> in tables, mainly for use in markdown */
+td br, th br {
+    display:block;
+    content:"";
+    margin-top:0.8em;
+    line-height:190%;
+}
+/*#endregion --- Tables --- */
+
+/*#region --- Forms --- */
+form {
+    border: 1px solid var(--text3);
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 2.5rem;
+}
+input:invalid, textarea:invalid, select:invalid {
+    /* outline: 2px solid var(--failure); */
+    border: 2px solid var(--failure);
+}
+/* input:valid, textarea:valid, select:valid {
+    border: 3px solid var(--success);
+} */
+/* at any level of nesting */
+form input, form textarea, form select, form fieldset, form output {
+    /* width: 75%; */
+    flex: 2;
+    border-radius: var(--border-radius);
+    padding:0.2rem;
+    border: 1px solid var(--text3);
+}
+form select {
+    cursor: pointer;
+    transition: background 250ms ease-in-out, transform 150ms ease;
+    box-shadow: inset 1px 1px 2px rgba(255,255,255, .3),
+                inset -1px -1px 2px rgba(0,0,0, .3);
+    background-color: 
+        /* var(--brand); */
+        hsl(
+            var(--brand-hue)
+            calc(60% * var(--saturation))
+            calc(100% * var(--lightness))
+        );
+}
+form button, input[type="button" i], form input[type="reset" i], form input[type="submit" i] {
+    width:auto;
+    margin-left: .2em;
+    margin-right: .2em;
+}
+form input[type="checkbox" i], form input[type="radio" i] {
+    height:1.5em;
+    vertical-align: middle;
+}
+form:invalid button {
+    background-color: var(--warning);
+}
+form label {
+    flex: 1;
+    vertical-align: middle;
+    display: inline-block;
+}
+form label[required]::after {
+    content: " *"
+}
+/* first level only */
+form > div {
+    display: inherit;
+    vertical-align: middle;
+}
+form > div:focus-within {
+    font-weight: bold;
+}
+form > label {
+    align-self: center;
+    text-transform: capitalize;
+}
+form > label:focus-within {
+    font-weight: bold;
+}
+/* Small screen (37.5em @ 16pt is about 600px) */
+@media all and (max-width: 37.5em) {
+    form, form * {
+        display:block;
+        width:100%;
+    }
+    form > label, form > div.btn-row {
+        margin-top: .8rem;
+    }
+    form > :not(label) {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/*#endregion --- Forms --- */
+
+/*#region --- Menus --- */
+nav a {
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+}
+nav li:not([aria-current]):hover {
+    text-decoration: underline;
+    filter: brightness(120%);
+}
+nav [aria-current=page] {
+	font-weight: bolder;
+    filter: brightness(130%);
+}
+
+/*#region -- Horizontal menu -- */
+/* nav.horizontal {
+    display: inline-block;
+    padding: 0.5rem;
+} */
+nav.horizontal {
+    display: flex;
+    padding: 0 0.1rem;
+    align-items: center;
+    background-color: var(--surface3);
+}
+nav.horizontal > h2 { /* Menu heading */
+    font-size: inherit;
+    font-weight: inherit;
+    padding-left: 0.5rem;
+}
+nav.horizontal [role="menubar"], nav.horizontal ul { /* ul */
+    display: flex;
+    flex: 2;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    justify-content: flex-start;
+}
+nav.horizontal li { /* [role="menuitem"], [data-route], li */
+    padding: 0.2rem 0.4rem;
+}
+/* Search form */
+nav.horizontal form {
+    flex: 1;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    margin: inherit;
+    padding: inherit;
+    gap: .2rem;
+}
+nav.horizontal input[type="search"] {
+    flex: 3;
+    filter: brightness(120%);
+}
+nav.horizontal input[type="submit"] {
+    flex: 1;
+    font-size: large;
+    font-weight: bolder;
+    filter: brightness(120%);
+    padding: .5rem 0;
+}
+@media all and (max-width: 600px) {
+    nav.horizontal, nav.horizontal ul {
+        /* On small screens, we are no longer using row direction but column */
+        flex-direction: column;
+    }
+}
+/*#endregion -- ---- -- */
+/*#endregion --- Menus --- */
+
+/*#region --- Lists --- */
+.checklist {
+    margin-inline-start: var(--base-margin);
+    margin-inline-end: var(--base-margin);
+    padding-inline-start: .2rem;
+}
+li.check, li.completed {
+    list-style-type: "✅";
+    padding-left: 0.4rem;
+    font-family: var(--emoji-fonts);
+}
+li.uncheck, li.unstarted {
+    list-style-type: "❌";
+    padding-left: 0.4rem;
+    font-family: var(--emoji-fonts);
+}
+li.started {
+    list-style-type: "✔️";
+    padding-left: 0.4rem;
+    font-family: var(--emoji-fonts);
+}
+/*#endregion --- Lists --- */
+
+/*#region ---- Utility ---- */
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    50% {
+        opacity: .5;
+    }
+}
+
+.border {
+    border: 1px solid var(--text3);
+    border-radius: var(--border-radius);
+    padding: var(--border-pad);
+    margin: var(--border-margin);
+}
+
+.box {
+    border: 1px solid var(--text3);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+}
+.box h2, .box h3, .box h4, .box h5, .box h6 {
+    margin-top: 0.5rem;
+}
+
+.centre, .center {
+    margin-left:auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.compact {
+    margin: 0;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
+button.compact {
+    padding: 2px 5px;
+    border-radius: 0;
+    background: inherit;
+    margin: 2px;
+}
+
+.emoji { /* Nicer, cross-platform emoji's */
+    font-family: var(--emoji-fonts);
+}
+
+.noborder {
+    border: none;
+}
+
+.status-side-panel {
+    border-radius: 9999px;
+    width: .5rem;
+    height: 100%;
+    background-color: var(--surface1);
+}
+
+.text-larger {
+    font-size: larger;
+}
+.text-smaller {
+    font-size: smaller;
+}
+
+/** These are useful for things like buttons.
+ * Default to 5em in size but are easily customised
+ * using CSS variables.
+ * @example
+ *   <button class="square" style="--sq: 10em;">Square</button>
+ *   <button class="round" style="--dia: 10em;">Round</button>
+ *   <button class="square" style="--sq: 10em;--sqw: 20em;">Rectangle</button>
+ *   <button class="round" style="--dia: 10em;--roundw: 20em;">Oval</button>
+ */
+/* Make something square or rectangular. */
+.square {
+    --sq: 5em;
+    width: var(--sqw, var(--sq));
+    height: var(--sqh, var(--sq));
+    border-radius: calc(var(--sq) * 0.1);
+}
+/* Make something circular, oval or pill-shaped */
+.round {
+    --dia: 5em;
+    width: var(--roundw, var(--dia));
+    height: var(--roundh, var(--dia));
+    border-radius: var(--roundb, var(--dia));
+}
+
+/* Apply to headings where you want a sub-title */
+.with-subtitle {
+    margin-bottom: 0;
+}
+/* Add the subtitle as a div with the Aria role */
+[role="doc-subtitle"] {
+    font-size: smaller;
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+/*#endregion ---- Utility ---- */
+
+/*#region -- Toasts/Notifications/Alerts - Readable pop-over notifications -- */
+
+.toaster {
+    /* all: unset;  */
+    position:absolute; 
+    top:0; left:0; min-width:100vw; min-height:100vh; 
+    -webkit-backdrop-filter: grayscale(60%) blur(10px);
+    backdrop-filter: grayscale(60%) blur(10px);
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    z-index:998;
+}
+.toast {
+    /* all: unset;  */
+    border: 4px solid var(--text3);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow2);
+    background-clip: border-box;
+    box-sizing: border-box;
+    min-width:50vw; max-width:50vw; max-height:50vh; overflow-y:auto;
+    padding:1em; margin-bottom:.5em; margin-top:.5em;
+    z-index:999;
+}
+.toast.alert {
+    /* all: unset;  */
+    border: 4px solid var(--text3);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow2);
+    background-clip: border-box;
+    box-sizing: border-box;
+    min-width:50vw; max-width:50vw; max-height:50vh; overflow-y:auto; 
+    padding:1em; margin-bottom:.5em; margin-top:.5em;
+    z-index:999;
+}
+.toast-head {font-weight:bold}
+
+/*#endregion -- Toasts/Notifications/Alerts - Readable pop-over notifications -- */
+
+/*#region ---- Status Grid ---- */
+.status-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(14em, 1fr));
+    gap:0.5rem;
+    list-style-position: inside;
+}
+.status-heading {
+  grid-column: 1/-1;
+}
+.status-link {
+  display:contents;
+  color:inherit;
+  text-decoration:none;
+}
+/*#endregion ---- ---- ---- */
+
+/*#region ---- Flex/Grid Layouts ---- */
+
+.grid {
+    display:grid;
+    gap:0.5rem;
+}
+.grid-2 {
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:0.5rem;
+}
+.grid-3 {
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); */
+    gap:0.5rem;
+}
+.grid-4 {
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap:0.5rem;
+}
+.grid-fit {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-fit-min), 100%), 1fr));
+}
+
+.flex {
+    display: flex;
+    gap:0.5rem;
+}
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap:0.5rem;
+}
+
+/*#endregion ---- ---- ---- */
+
+/*#region for Syntax Highlighted pre's */
+#uib_last_msg_wrap {
+    position:relative;
+}
+#uib_last_msg_wrap > button {
+    display:none;
+    position:absolute;
+    color:hsl(0,0%,50%,.5);
+}
+#uib_last_msg_wrap:hover > button {
+    display:initial;
+}
+#uib_last_msg_wrap > button:hover {
+    color:hsl(0,0%,50%,1);
+}
+
+.syntax-highlight {
+    color:white;
+    display:block;
+    background-color:black;
+    padding:5px 10px;
+    font-family: Consolas, "ui-monospace", "Lucida Console", monospace;
+    font-size: smaller;
+    white-space: pre;
+    width: 99%;
+    height: 22em;
+    overflow: auto;
+    resize: both;
+}
+.syntax-highlight > .key {color:#ffbf35}
+.syntax-highlight > .string {color:#5dff39;}
+.syntax-highlight > .number {color:#70aeff;}
+.syntax-highlight > .boolean {color:#b993ff;}
+.syntax-highlight > .null {color:#93ffe4;}
+.syntax-highlight > .undefined {color:#ff93c9;}
+/*#endregion */
