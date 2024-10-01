@@ -1,4 +1,4 @@
-# web-components
+# web-components by TotallyInformation
 
 [![](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge)](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
 
@@ -102,13 +102,13 @@ To do so, find the html custom data setting in VSCode settings and add:
 /path/to/totallyinformation/web-components/vscode-descriptors/ti-web-components.html-data.json
 ```
 
-
 </details>
 
 ### Demos
 
-All of the components have demo web pages in `tests`. There is a built-in Node.js mini web server. Running the npm script `tests` will start the server on port 8080. Opening `http://127.0.0.1:8080` or `http://127.0.0.1:8080/list.html` will give a list of all available demos.
+To see the web components in action, go to [`https://wc.totallyinformation.net`](https://wc.totallyinformation.net).
 
+Alternatively, there is a built-in Node.js mini web server. Running the npm script `npm run tests` will start the server on port `8788`. Opening `http://127.0.0.1:8788` in your browser will give a list of all available demos and links to documentation and source code. Note that the mini-server has to download the Cloudflare `wrangler` server, you will be asked if you wish to continue.
 
 ## Components
 
@@ -117,13 +117,17 @@ These components can be considered `beta` quality or better. They may not be com
 | Name                                  | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
 | `button-send` (ButtonSend)    | A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button. |
+| `call-out` (CallOut)          | Displays nicely formatted callout boxes. |
 | `collapsible-headings` (CollapsibleHeadings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. |
-| `visible-console` (VisibleConsole)    | Copies `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
+| `html-include` (HtmlInclude)          | Dynamically load external HTML content very easily without needing an iFrame. |
+| `syntax-highlight` (SyntaxHighlight)  | A simple, easy to use JSON object highlight element. |
+| `visible-console` (VisibleConsole)    | Reflects `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
 
 
 ## Alpha Components
 
 > [!NOTE]
+> 
 > Currently, all of the alpha components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.
 >
 > Also note that the documentation is incomplete and may be wrong in places.
@@ -132,6 +136,8 @@ These components can be considered `beta` quality or better. They may not be com
 
 | Name (tag/global)                     | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
+| *`component-template`*                | *Unlike the other entries, this is complete. It can be used as a base for new components.* |
+| | |
 | `chart-frappe` (ChartFrappe)          | A chart component using the Frappe chart library |
 | `chart-high` (ChartHigh)              | A chart component using the HighCharts library |
 | `container-br` (ContainerBr)          | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
@@ -139,7 +145,6 @@ These components can be considered `beta` quality or better. They may not be com
 | `definition-list` (DefinitionList)    | Similar to `data-list` but outputs a DL instead.             |
 | `gauge-steel` (GaugeSteel)            | A gauge component using the Steel Series library |
 | `ghost-thermometer` (GhostThermometer)| A thermometer style gauge |
-| `html-include` (HtmlInclude)          | Dynamically load external HTML content very easily without needing an iFrame. |
 | `labelled-value` (LabelledValue)      | Text output with a label.                                    |
 | `multi-way-switch` (MultiWaySwitch)   | A flexible multi-switch that can display in several styles (buttons, rotary, etc) |
 | `nav-bar` (NavBar)                    | A standardised navigation menu bar |
@@ -148,10 +153,9 @@ These components can be considered `beta` quality or better. They may not be com
 | `simple-gauge` (SimpleGauge)          | A simple gauge style display component. |
 | `simple-switch` (SimpleSwitch)        | A simple 2-way latching switch. |
 | `state-timeline` (StateTimeline)      | A horizontal timeline display designed to show status/state. |
-| `syntax-highlight` (SyntaxHighlight)  | A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data. |
 | `uib-theme-changer` (UibThemeChanger) | This only works with the `uib-brand` stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours. |
 
-There is also a `alpha/no-complete` folder. This contains some components not yet even considered alpha quality.
+There is also an `alpha/not-complete` folder. This contains some components not yet even considered alpha quality.
 
 | Name (tag/global)                     | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing TotallyInformation's web-components - labelled-value</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <script defer src="/dist/call-out.iife.min.js"></script>
+    <script defer src="/dist/alpha/labelled-value.iife.min.js"></script>
+
+</head><body>
+    <main>
+        <h1>Testing Totally Information's web-components - labelled-value</h1>
+
+        <section>
+            <call-out type="" title="Status" icon="❔">
+                <b>Alpha</b>: Still in early development
+            </call-out>
+
+            <p>
+                A very simple label/value output.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>Simplest use. Manual label and value</h2>
+                <labelled-value label="My Label" value="My Value"></labelled-value>
+            </article>
+
+            <article>
+                <h2>No label</h2>
+                <labelled-value value="42"></labelled-value>
+            </article>
+
+            <article>
+                <h2>No value</h2>
+                <labelled-value label="No value label"></labelled-value>
+            </article>
+
+            <article>
+                <h2>Controlled by JavaScript managed variable</h2>
+                <labelled-value label="Managed global variable (myvar)" var="myvar"></labelled-value>
+                <p><i>Note that this feature is a little simplistic and will not always work perfectly.
+                    Also the specified variable has to be in the window context.
+                    See the source for this page for details.</i></p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        // For the var attribute to work, the variable HAS to be in the global context.
+        // JavaScript var here makes it global but locked, let or const would not make it global.
+        // So use window or globalThis
+        window.myvar = 123
+        setTimeout(() => {
+            myvar = 321
+            console.log('myvar changed to: ', myvar)
+        }, 1000)
+    </script>
+
+</body></html>

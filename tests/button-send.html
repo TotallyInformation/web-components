@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing TotallyInformation's web-components - button-send</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <script defer src="/dist/button-send.iife.min.js"></script>
+    <script defer src="/dist/visible-console.iife.min.js"></script>
+
+</head><body>
+    <main>
+        <h1>Testing TotallyInformation's web-components - button-send</h1>
+
+        <section>
+            <call-out type="" title="Status" icon="❔">
+                <b>Beta</b>: Ready for basic use
+            </call-out>
+
+            <p>
+                A dynamic button that triggers an event with standardised meta-data on-click.
+                It also allows more complex content than the standard HTML button tag.
+            </p>
+            <p>If UIBUILDER for Node-RED is in use, clicking will automatically send a message back
+                to the Node-RED server.
+            </p>
+            <p>The detail data sent on the click event mirrors that for UIBUILDER output.
+                Create an event listener in JavaScript to pick up the data.
+                See the source code of this page for examples.
+            </p>
+        </section>
+
+        <section>
+            <button-send>
+                This is a button
+            </button-send>
+
+            <button-send id="btnSend" topic="my-topic" payload="my payload" 
+                 data-something="Something from the button">
+                <!-- In ordinary button tags, you cannot include block elements in the slot. 
+                    But with this custom button, you can. -->
+                Send out a message.
+                <p>
+                    Use <code>topic</code>, <code>payload</code> and <code>data-*</code> 
+                    attributes to pass to the custom event.
+                </p>
+                <p>
+                    Note that you can't normally include block tags 
+                    (e.g. &lt;br>, &lt;p>, etc) in a &lt;button> but you can now!
+                </p>
+            </button-send>
+        </section>
+
+        <section>
+            <h2 title="Uses the visible-console component"><code>console.log</code> output</h2>
+            <visible-console></visible-console>
+        </section>
+    </main>
+
+    <script>
+        // Listen to clicks from all buttons on-page
+        document.addEventListener('button-send:click', (data) => {
+            console.log(`Click event data for button: '${data.detail._ui.id}'`)
+            console.log('  Detail: ', data.detail)
+        })
+        // console.info('Adding dynamic content ...')
+        // const ch = document.getElementsByTagName('collapsible-headings')[0]
+        // if (ch) {
+        //     const newH = document.createElement('h2')
+        //     const newP = document.createElement('p')
+        //     newH.innerText = 'Dynamically added section'
+        //     newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+        //     setTimeout(() => {
+        //         // ch.appendChild(
+        //         ch.appendChild(newH)
+        //         ch.append(newP)
+        //         console.info('... complete')
+        //     }, 5000)
+        // } else {
+        //     console.error('collapsible-headings tag not found')
+        // }
+    </script>
+
+</body></html>

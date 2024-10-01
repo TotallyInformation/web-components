@@ -604,6 +604,9 @@ body > main {
 footer {
     margin-top: 1em;
 }
+main > article {
+    margin: .1em 0;
+}
 /* Put asides inside a main to one side
    Or, use a section or div to wrap multiple */
 main > article, main .left {

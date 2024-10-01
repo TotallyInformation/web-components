@@ -169,7 +169,6 @@ class CallOut extends TiBaseComponent {
 
         this.type = this.getAttribute('type')
         this.icon = this.getAttribute('icon')
-        console.log(this.id, 'connected', this.type, this.icon)
 
         this.doType(this.type)
 
@@ -202,8 +201,6 @@ class CallOut extends TiBaseComponent {
         // Create a property from the value - WARN: Be careful with name clashes
         this[attrib] = newVal
 
-        console.log(this.id, 'attrib', attrib, oldVal, newVal)
-
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
         
@@ -216,8 +213,6 @@ class CallOut extends TiBaseComponent {
     doType(type) {
         if (!type) type = null
         else type = type.toLowerCase()
-
-        console.log(this.id, 'doType')
 
         // new element to add
         const headEl = document.createElement('div')

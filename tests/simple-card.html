@@ -1,43 +1,38 @@
 <!doctype html>
 <html lang="en" class="dark"><head>
     <meta charset="utf-8">
-    <title>Web Component Test: simple-container and simple-card</title>
+    <title>Testing TotallyInformation's web-components - simple-container and simple-card</title>
 
-    <!-- <link type="text/css" rel="stylesheet" href="./libs/uib-brand.css" media="all"> -->
     <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
-    <style>
-        /* :root {
-            --brand-hue: 200;
-            --accent-offset: 30;
-        } */
-    </style>
 
-    <!-- <script defer src="/dist/alpha/simple-container.iife.min.js" type="text/javascript"></script> -->
-    <!-- <script defer src="/dist/alpha/simple-card.iife.min.js" type="text/javascript"></script> -->
     <script defer src="/dist/alpha/simple-container.iife.min.js"></script>
     <script defer src="/dist/alpha/simple-card.iife.min.js"></script>
 
 </head><body>
-    <h1>Testing Totally Information's web-components package - simple-card</h1>
+    <main>
+        <h1>Testing TotallyInformation's web-components - simple-container and simple-card</h1>
 
-    <p>This example uses <code>&lt;simple-container</code> and <code>&lt;simple-card></code>.</p>
-    <p>
-        The container component uses a flex row layout. The card component has header and footer slots.
-    </p>
+        <section>
+            <p>This example uses <code>&lt;simple-container</code> and <code>&lt;simple-card></code>.</p>
+            <p>
+                The container component uses a flex row layout. The card component has header and footer slots.
+            </p>
+        </section>
 
-    <simple-container>
-        <simple-card>
-            Hello, in a card
-            <span slot="header">Some other header</span>
-            <span slot="footer">Some footer</span>
-        </simple-card>
-        <simple-card name="This Is a name">
-            Another card
-        </simple-card>
-        <simple-card id="card3" data-something="Hello">
-            Card #3
-        </simple-card>
-    </simple-container>
+        <simple-container>
+            <simple-card>
+                Hello, in a card
+                <span slot="header">Some other header</span>
+                <span slot="footer">Some footer</span>
+            </simple-card>
+            <simple-card name="This Is a name">
+                Another card
+            </simple-card>
+            <simple-card id="card3" data-something="Hello">
+                Card #3
+            </simple-card>
+        </simple-container>
+    </main>
 
     <script>
         // Event Listeners set in module scripts wont get set up early enough to pick up the initial component load events

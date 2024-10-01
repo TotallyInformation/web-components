@@ -37,6 +37,8 @@ These are the requirements and standards for any web component to be included in
 
 * Where _static_ properties or methods are referred to, `this.constructor` should be used rather than the class name. This avoids errors should the class ever be renamed or the code copied to a different class. Similarly, `this.localName` can be used to get the class name as text which should be used in debugging and error logging.
 
+* Components generally SHOULD NOT do processing directly in `attributeChangedCallback`. Better to create setters for any attribute names and do the processing called from the setter. This then also allows the attribute to be used as a property and still automatically get the benefit of the processing.
+
 ### HTML Standards limitations
 
 * Custom HTML tags MUST use pascal-case with at least 1 `-`.

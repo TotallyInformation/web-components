@@ -3,13 +3,13 @@
   "version": "0.3.0",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "scripts": {
-    "build": "node esbuild.config.js",
-    "watch": "esbuild --watch esbuild.config.js",
-    "test": "node ./test-server.js",
+    "build": "node ./libs/build-index.js && node esbuild.config.js",
+    "test": "npx wrangler pages dev ./",
+    "analyse": "npm run analyse1 && npm run analyse2 && npm run vscode-custom && npm run jsdoc",
+    "watch": "esbuild --watch ./esbuild.config.js",
     "lint": "eslint .",
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
-    "analyse": "npm run analyse1 && npm run analyse2",
     "analyse1": "npx web-component-analyzer ./src/*.js --format markdown --outDir docs/readme",
     "analyse2": "npx web-component-analyzer ./alpha/*.js --format markdown --outDir docs/readme/alpha",
     "vscode-custom": "npx web-component-analyzer ./{src,alpha,libs}/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json",
@@ -18,9 +18,6 @@
   "devDependencies": {
     "@types/node": "^22.5.5",
     "esbuild": "^0.23.1",
-    "esdoc": "^1.1.0",
-    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
-    "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^8.15.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
@@ -30,7 +27,7 @@
     "jsdoc": "^4.0.3"
   },
   "directories": {
-    "example": "./examples",
+    "example": "./tests",
     "doc": "./docs",
     "lib": "./libs"
   },

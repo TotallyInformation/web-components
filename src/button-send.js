@@ -146,7 +146,7 @@ template.innerHTML = /*html*/`
  */
 class ButtonSend extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-29'
+    static version = '2024-10-01'
 
     sendEvents = true
     /** The topic to include in the output
@@ -182,13 +182,8 @@ class ButtonSend extends TiBaseComponent {
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
-
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
-            // Only append the template if code and style isolation is needed
-            .append(template.content.cloneNode(true))
-
-        // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
-        this.createShadowSelectors()  // in base class
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        this._construct(template.content.cloneNode(true))
 
         // const mydata = { ...this.dataset }
 
@@ -200,10 +195,7 @@ class ButtonSend extends TiBaseComponent {
 
     /** Runs when an instance is added to the DOM */
     connectedCallback() {
-        // Make sure instance has an ID. Create an id from name or calculation if needed
-        this.ensureId()  // in base class
-        // Apply parent styles from a stylesheet if required - only required if using an applied template
-        this.doInheritStyles()  // in base class
+        this._connect() // Keep at start.
 
         /** Listen for the button click */
         this.addEventListener('click', this.handleClick)
@@ -213,22 +205,14 @@ class ButtonSend extends TiBaseComponent {
         // document.dispatchEvent( new CustomEvent('button-send:instanceAdded', {'detail': this._msg._ui}) )
         // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
 
-        // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
-        if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
-
-        // Keep at end. Let everyone know that a new instance of the component has been connected
-        this._event('connected')
-        this._event('ready')
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
     /** Runs when an instance is removed from the DOM */
     disconnectedCallback() {
         this.removeEventListener('click', this.handleClick)
-        // @ts-ignore Remove optional uibuilder event listener
-        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
 
-        // Keep at end. Let everyone know that an instance of the component has been disconnected
-        this._event('disconnected')
+        this._disconnect() // Keep at end.
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
@@ -237,6 +221,11 @@ class ButtonSend extends TiBaseComponent {
      * @param {string} newVal The new attribute value
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
+        /** Optionally ignore attrib changes until instance is fully connected
+         * Otherwise this can fire BEFORE everthing is fully connected.
+         */
+        // if (!this.connected) return
+
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
         // Create a property from the value - WARN: Be careful with name clashes

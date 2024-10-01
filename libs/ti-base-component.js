@@ -64,7 +64,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2024-09-29'
+    static baseVersion = '2024-09-30'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -213,6 +213,40 @@ class TiBaseComponent extends HTMLElement {
                 data: data,
             },
         } ) )
+    }
+
+    /** Standardised constructor. Keep after call to super()
+     * @param {Node|string} template Nodes/string content that will be cloned into the shadow dom
+     * @param {{mode:'open'|'closed',delegatesFocus:boolean}=} shadowOpts Options passed to attachShadow
+     */
+    _construct(template, shadowOpts) {
+        if (!shadowOpts) shadowOpts = { mode: 'open', delegatesFocus: true }
+        // Only attach the shadow dom if code and style isolation is needed
+        this.attachShadow(shadowOpts)
+            .append(template)
+
+        // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
+        this.createShadowSelectors()  // in base class
+    }
+
+    /** Standardised connection. Call from the start of connectedCallback fn */
+    _connect() {
+        // Make sure instance has an ID. Create an id from name or calculation if needed
+        this.ensureId()  // in base class
+        // Apply parent styles from a stylesheet if required - only required if using an applied template
+        this.doInheritStyles()  // in base class
+
+        // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
+        // if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+    }
+
+    /** Standardised disconnection. Call from the END of disconnectedCallback fn */
+    _disconnect() {
+        // @ts-ignore Remove optional uibuilder event listener
+        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
+
+        // Keep at end. Let everyone know that an instance of the component has been disconnected
+        this._event('disconnected')
     }
 
     /** Call from end of connectedCallback */

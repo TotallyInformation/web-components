@@ -3,12 +3,14 @@ title: Ideas for future components and enhancements
 description: |
   Where might we go?
 created: 2024-09-25 02:04:04
-updated: 2024-09-28 13:24:19
+updated: 2024-10-01 20:17:57
 ---
 
 ## Possible future components
 
-### Version of uib-var
+Note that some of these might not even be possible.
+
+### `show-var` Version of uib-var
 
 * Shows content from a JavaScript variable.
 * Possibly allows dynamic overrides of attributes.
@@ -48,6 +50,11 @@ updated: 2024-09-28 13:24:19
 
 Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
 
+### `standard-footer` or extend `page-meta` - (c), date (range), author, version and other metadata
+
+### `h1-title` - Use the page's title tag as the `<h1>`
+
+Maybe with optional sub-title. Also option to use different string instead.
 
 ## Thoughts
 
@@ -56,3 +63,8 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 * Article with heading should be collapsible
 
 * Each component could have a getter to output their own TODO lists!
+
+## To Do
+
+* Documentation
+  * call-out

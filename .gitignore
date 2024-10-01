@@ -105,3 +105,8 @@ typings/
 # TI
 web-components.code-workspace
 .vscode/
+.wrangler/tmp/bundle-7TmmIk/checked-fetch.js
+.wrangler/tmp/bundle-7TmmIk/middleware-insertion-facade.js
+.wrangler/tmp/bundle-7TmmIk/middleware-loader.entry.ts
+.wrangler/tmp/dev-EPeg11/pages-shim.js
+.wrangler/tmp/dev-EPeg11/pages-shim.js.map

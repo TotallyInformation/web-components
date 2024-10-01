@@ -3,30 +3,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Testing web-components - syntax-highlight</title>
+    <title>Testing TotallyInformation's web-components - syntax-highlight</title>
 
     <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
 
     <script defer src="/dist/syntax-highlight.iife.min.js"></script>
 
 </head><body>
-    
-    <h1>Testing Totally Information's web-components package - syntax-highlight</h1>
+    <main>
+        <h1>Testing Totally Information's web-components - syntax-highlight</h1>
 
-    <p>
-        Uses the <code>json</code> property of the element to dynamically convert the JSON input into
-        HTML formatted output.
-    </p>
+        <section>
+            <p>
+                Uses the <code>json</code> property of the element to dynamically convert the JSON input into
+                HTML formatted output.
+            </p>
+        </section>
 
-    <article>
-        <h2>syntax-highlight - Simple JSON string</h2>
-        <syntax-highlight id="sh2"></syntax-highlight>
-    </article>
+        <section>
+            <article>
+                <h2>syntax-highlight - Simple JSON string</h2>
+                <syntax-highlight id="sh2"></syntax-highlight>
+            </article>
 
-   <article>
-        <h2>syntax-highlight - fetched complex JSON file</h2>
-        <syntax-highlight></syntax-highlight>
-    </article>
+            <article>
+                <h2>syntax-highlight - fetched complex JSON file</h2>
+                <syntax-highlight></syntax-highlight>
+            </article>
+        </section>
+    </main>
 
     <script>
         /** NOTE: There is a 2ms delay in the browser to set up the component.
