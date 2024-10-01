@@ -294,31 +294,36 @@
     },
     {
       "name": "labelled-value",
-      "description": "Events:\n\n  * `labelled-value:construction` {} - Document object event. evt.details contains the data\n\n  * `labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `label` {`undefined`} - \n\n  * `value` {`undefined`} - \n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `label` {`undefined`} - \n\n  * `value` {`undefined`} - \n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "description": "Events:\n\n  * `labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `label` {`undefined`} - Set the label to show\n\n  * `value` {`undefined`} - Set the value to show\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `var` {} - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `label` {`undefined`} - Set the label to show\n\n  * `value` {`undefined`} - Set the value to show\n\n  * `#outputEl` - \n\n  * `#labelEl` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings\n\n  * `version` {`string`} - Component version",
       "attributes": [
         {
-          "name": "name",
-          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
-        },
-        {
           "name": "label",
-          "description": "`label` {`undefined`} - \n\nProperty: label\n\nDefault: undefined"
+          "description": "`label` {`undefined`} - Set the label to show\n\nProperty: label"
         },
         {
           "name": "value",
-          "description": "`value` {`undefined`} - \n\nProperty: value\n\nDefault: undefined"
+          "description": "`value` {`undefined`} - Set the value to show\n\nProperty: value"
         },
         {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+          "name": "name",
+          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
         },
         {
-          "name": "onlabelled-value:construction",
-          "description": "`labelled-value:construction` {} - Document object event. evt.details contains the data"
+          "name": "var",
+          "description": "`var` {} - \n\n"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "values": []
         },
         {
           "name": "onlabelled-value:connected",
           "description": "`labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncomponent-template:ready",
+          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
         },
         {
           "name": "onlabelled-value:disconnected",
@@ -326,7 +331,7 @@
         },
         {
           "name": "onlabelled-value:attribChanged",
-          "description": "`labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+          "description": "`labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
         }
       ]
     },

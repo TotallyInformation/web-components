@@ -23,7 +23,7 @@ includes a _meta object showing whether any modifier keys were used, the element
 | `sendEvents` |           | `boolean`                    | true         |                                                  |
 | `topic`      | `topic`   | `string\|undefined`          |              | The topic to include in the output               |
 | `uib`        |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`    |           | `string`                     | "2024-09-29" | Component version                                |
+| `version`    |           | `string`                     | "2024-10-01" | Component version                                |
 
 ## Methods
 

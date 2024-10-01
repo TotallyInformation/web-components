@@ -16,7 +16,7 @@
 | `name`      | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
 | `opts`      |           | `object`                     | {}           | Runtime configuration settings                   |
 | `uib`       |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`   |           | `string`                     | "2024-09-29" | Component version                                |
+| `version`   |           | `string`                     | "2024-09-30" | Component version                                |
 
 ## Methods
 

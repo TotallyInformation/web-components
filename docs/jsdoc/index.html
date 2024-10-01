@@ -43,7 +43,7 @@
 
 
     <section>
-        <article><h1>web-components</h1>
+        <article><h1>web-components by TotallyInformation</h1>
 <p><a href="https://www.jsdelivr.com/package/gh/TotallyInformation/web-components"><img src="https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge" alt=""></a></p>
 <p>A repository of simple W3C Web Components. These may have extra capabilities for use with node-red-contrib-uibuilder but all work independently as well.</p>
 <p>Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.</p>
@@ -102,7 +102,8 @@
 </code></pre>
 </details>
 <h3>Demos</h3>
-<p>All of the components have demo web pages in <code>tests</code>. There is a built-in Node.js mini web server. Running the npm script <code>tests</code> will start the server on port 8080. Opening <code>http://127.0.0.1:8080</code> or <code>http://127.0.0.1:8080/list.html</code> will give a list of all available demos.</p>
+<p>To see the web components in action, go to <a href="https://wc.totallyinformation.net"><code>https://wc.totallyinformation.net</code></a>.</p>
+<p>Alternatively, there is a built-in Node.js mini web server. Running the npm script <code>npm run tests</code> will start the server on port <code>8788</code>. Opening <code>http://127.0.0.1:8788</code> in your browser will give a list of all available demos and links to documentation and source code. Note that the mini-server has to download the Cloudflare <code>wrangler</code> server, you will be asked if you wish to continue.</p>
 <h2>Components</h2>
 <p>These components can be considered <code>beta</code> quality or better. They may not be complete but they should have basic usefulness.</p>
 <table>
@@ -118,19 +119,31 @@
 <td>A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button.</td>
 </tr>
 <tr>
+<td><code>call-out</code> (CallOut)</td>
+<td>Displays nicely formatted callout boxes.</td>
+</tr>
+<tr>
 <td><code>collapsible-headings</code> (CollapsibleHeadings)</td>
 <td>Turns a section of Hn headings and block contents into collapsible content around the heading levels.</td>
 </tr>
 <tr>
+<td><code>html-include</code> (HtmlInclude)</td>
+<td>Dynamically load external HTML content very easily without needing an iFrame.</td>
+</tr>
+<tr>
+<td><code>syntax-highlight</code> (SyntaxHighlight)</td>
+<td>A simple, easy to use JSON object highlight element.</td>
+</tr>
+<tr>
 <td><code>visible-console</code> (VisibleConsole)</td>
-<td>Copies <code>console</code> log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console.</td>
+<td>Reflects <code>console</code> log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console.</td>
 </tr>
 </tbody>
 </table>
 <h2>Alpha Components</h2>
 <blockquote>
-<p>[!NOTE]
-Currently, all of the alpha components should be considered <em>experimental</em>. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.</p>
+<p>[!NOTE]</p>
+<p>Currently, all of the alpha components should be considered <em>experimental</em>. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.</p>
 <p>Also note that the documentation is incomplete and may be wrong in places.</p>
 <p>However, please do give them a go and let me have some feedback.</p>
 </blockquote>
@@ -142,6 +155,14 @@ Currently, all of the alpha components should be considered <em>experimental</em
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><em><code>component-template</code></em></td>
+<td><em>Unlike the other entries, this is complete. It can be used as a base for new components.</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
 <tr>
 <td><code>chart-frappe</code> (ChartFrappe)</td>
 <td>A chart component using the Frappe chart library</td>
@@ -169,10 +190,6 @@ Currently, all of the alpha components should be considered <em>experimental</em
 <tr>
 <td><code>ghost-thermometer</code> (GhostThermometer)</td>
 <td>A thermometer style gauge</td>
-</tr>
-<tr>
-<td><code>html-include</code> (HtmlInclude)</td>
-<td>Dynamically load external HTML content very easily without needing an iFrame.</td>
 </tr>
 <tr>
 <td><code>labelled-value</code> (LabelledValue)</td>
@@ -207,16 +224,12 @@ Currently, all of the alpha components should be considered <em>experimental</em
 <td>A horizontal timeline display designed to show status/state.</td>
 </tr>
 <tr>
-<td><code>syntax-highlight</code> (SyntaxHighlight)</td>
-<td>A simple, easy to use JSON object highlight element. Auto settings for different types of uibuilder messages or manually pass the data.</td>
-</tr>
-<tr>
 <td><code>uib-theme-changer</code> (UibThemeChanger)</td>
 <td>This only works with the <code>uib-brand</code> stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours.</td>
 </tr>
 </tbody>
 </table>
-<p>There is also a <code>alpha/no-complete</code> folder. This contains some components not yet even considered alpha quality.</p>
+<p>There is also an <code>alpha/not-complete</code> folder. This contains some components not yet even considered alpha quality.</p>
 <table>
 <thead>
 <tr>
@@ -312,13 +325,13 @@ Currently, all of the alpha components should be considered <em>experimental</em
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_ensureId">_ensureId</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Sep 29 2024 17:56:15 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Oct 01 2024 21:17:17 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
