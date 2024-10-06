@@ -64,7 +64,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2024-09-30'
+    static baseVersion = '2024-10-06'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -98,9 +98,9 @@ class TiBaseComponent extends HTMLElement {
     opts = {}
 
     /** Report the current component version string */
-    get version() {
+    static get version() {
         // @ts-ignore
-        return `${this.constructor.version} (Base: ${this.constructor.baseVersion})`
+        return `${this.componentVersion} (Base: ${this.baseVersion})`
     }
 
     /** NB: Attributes not available here - use connectedCallback to reference */
