@@ -161,7 +161,7 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
  */
 class VisibleConsole extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-29'
+    static componentVersion = '2024-10-06'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to

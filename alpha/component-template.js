@@ -64,7 +64,7 @@ template.innerHTML = /*html*/`
  * @fires component-template:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
  * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
  * @fires component-template:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires component-template:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * @fires component-template:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -94,7 +94,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-30'
+    static componentVersion = '2024-10-06'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to

@@ -98,7 +98,7 @@ template.innerHTML = /*html*/`
  */
 class CollapsibleHeadings extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-29'
+    static componentVersion = '2024-10-06'
 
     levels = 'h2, h3, h4, h5'
 

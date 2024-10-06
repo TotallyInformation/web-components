@@ -146,7 +146,7 @@ template.innerHTML = /*html*/`
  */
 class ButtonSend extends TiBaseComponent {
     /** Component version */
-    static version = '2024-10-01'
+    static componentVersion = '2024-10-06'
 
     sendEvents = true
     /** The topic to include in the output

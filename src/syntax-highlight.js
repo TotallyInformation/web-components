@@ -114,7 +114,7 @@ template.innerHTML = /*html*/`
  */
 class SyntaxHighlight extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-29'
+    static componentVersion = '2024-10-06'
 
     jsonData = {}
 
