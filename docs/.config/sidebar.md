@@ -4,6 +4,7 @@
 * [`collapsible-headings`](./collapsible-headings)
 * [`visible-console`](./visible-console)
 * Alpha-quality
+* [`labelled-value`](./labelled-value)
 * [`html-include`](./html-include)
 * [`syntax-highlight`](./syntax-highlight)
 
