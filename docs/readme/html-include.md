@@ -8,19 +8,18 @@
 
 ## Properties
 
-| Property      | Attribute | Type                             | Default      | Description                                      |
-|---------------|-----------|----------------------------------|--------------|--------------------------------------------------|
-| `$`           |           | `function(string): Element`      |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`          |           | `function(string): NodeList`     |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected`   |           | `boolean`                        | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `contentType` |           | `"text"\|"html"\|"json"\|"form"` | "text"       | Content type of the imported resource            |
-| `json`        |           | `object`                         | {}           |                                                  |
-| `name`        | `name`    | `string`                         |              | Placeholder for the optional name attribute      |
-| `opts`        |           | `object`                         | {}           | Runtime configuration settings                   |
-| `src`         | `src`     | `string`                         |              | The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.<br />Setting this property causes a fetch the HTML from the URL.<br />We are reflecting the src attrib and the src prop. |
-| `text`        |           | `string`                         | ""           |                                                  |
-| `uib`         |           | `boolean`                        | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`     |           | `string`                         | "2024-09-29" | Component version                                |
+| Property      | Attribute | Type                             | Default | Description                                      |
+|---------------|-----------|----------------------------------|---------|--------------------------------------------------|
+| `$`           |           | `function(string): Element`      |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`          |           | `function(string): NodeList`     |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected`   |           | `boolean`                        | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `contentType` |           | `"text"\|"html"\|"json"\|"form"` | "text"  | Content type of the imported resource            |
+| `json`        |           | `object`                         | {}      |                                                  |
+| `name`        | `name`    | `string`                         |         | Placeholder for the optional name attribute      |
+| `opts`        |           | `object`                         | {}      | Runtime configuration settings                   |
+| `src`         | `src`     | `string`                         |         | The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.<br />Setting this property causes a fetch the HTML from the URL.<br />We are reflecting the src attrib and the src prop. |
+| `text`        |           | `string`                         | ""      |                                                  |
+| `uib`         |           | `boolean`                        | false   | Is UIBUILDER for Node-RED loaded?                |
 
 ## Methods
 

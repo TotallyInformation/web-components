@@ -3,7 +3,7 @@ title: Ideas for future components and enhancements
 description: |
   Where might we go?
 created: 2024-09-25 02:04:04
-updated: 2024-10-01 20:17:57
+updated: 2024-10-04 16:28:11
 ---
 
 ## Possible future components
@@ -31,6 +31,13 @@ Note that some of these might not even be possible.
 * Optional checkbox with data store
 * UIBUILDER data enabled. Controllable updates back to Node-RED (e.g. when no longer visible or immediate)
 
+### `smart-table` - Like smart-list
+
+* Build from data
+* Optional columns data - if not provided, auto-build from content
+* Save altered data
+* Custom event on changed data
+
 ### `smart-report` - Like collapsible-headings but also data controllable
 
 * Wraps around a collection of `<hx>` and `<p>`/`<div>`/`<img>` tags adding smarter formatting and control
@@ -55,6 +62,10 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 ### `h1-title` - Use the page's title tag as the `<h1>`
 
 Maybe with optional sub-title. Also option to use different string instead.
+
+### `image-meta` - access to image exif metadata
+
+* [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
 
 ## Thoughts
 

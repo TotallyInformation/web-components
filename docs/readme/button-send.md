@@ -12,18 +12,17 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 ## Properties
 
-| Property     | Attribute | Type                         | Default      | Description                                      |
-|--------------|-----------|------------------------------|--------------|--------------------------------------------------|
-| `$`          |           | `function(string): Element`  |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`         |           | `function(string): NodeList` |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected`  |           | `boolean`                    | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `name`       | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
-| `opts`       |           | `object`                     | {}           | Runtime configuration settings                   |
-| `payload`    | `payload` | `any\|string`                |              | Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.<br />By default, all attributes are also created as properties |
-| `sendEvents` |           | `boolean`                    | true         |                                                  |
-| `topic`      | `topic`   | `string\|undefined`          |              | The topic to include in the output               |
-| `uib`        |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`    |           | `string`                     | "2024-10-01" | Component version                                |
+| Property     | Attribute | Type                         | Default | Description                                      |
+|--------------|-----------|------------------------------|---------|--------------------------------------------------|
+| `$`          |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`         |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected`  |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `name`       | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
+| `opts`       |           | `object`                     | {}      | Runtime configuration settings                   |
+| `payload`    | `payload` | `any\|string`                |         | Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.<br />By default, all attributes are also created as properties |
+| `sendEvents` |           | `boolean`                    | true    |                                                  |
+| `topic`      | `topic`   | `string\|undefined`          |         | The topic to include in the output               |
+| `uib`        |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
 
 ## Methods
 

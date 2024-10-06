@@ -28,7 +28,6 @@ METHODS FROM BASE:
 | `opts`            |           | `object`                     | {}                                               | Runtime configuration settings                   |
 | `originalConsole` |           | `object`                     | {}                                               |                                                  |
 | `uib`             |           | `boolean`                    | false                                            | Is UIBUILDER for Node-RED loaded?                |
-| `version`         |           | `string`                     | "2024-09-29"                                     | Component version                                |
 | `wrapper`         |           | `any \| any`                 |                                                  |                                                  |
 
 ## Methods
@@ -90,7 +89,6 @@ METHODS FROM BASE:
 | `opts`            |           | `object`                     | {}                                               | Runtime configuration settings                   |
 | `originalConsole` |           | `object`                     | {}                                               |                                                  |
 | `uib`             |           | `boolean`                    | false                                            | Is UIBUILDER for Node-RED loaded?                |
-| `version`         |           | `string`                     | "2024-09-29"                                     | Component version                                |
 | `wrapper`         |           | `any \| any`                 |                                                  |                                                  |
 
 ## Methods

@@ -19,17 +19,16 @@ METHODS FROM BASE:
 
 ## Properties
 
-| Property    | Attribute | Type                         | Default      | Description                                      |
-|-------------|-----------|------------------------------|--------------|--------------------------------------------------|
-| `$`         |           | `function(string): Element`  |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`        |           | `function(string): NodeList` |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected` |           | `boolean`                    | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `json`      |           |                              |              | Element.json = {...} to show the json object     |
-| `jsonData`  |           | `object`                     | {}           |                                                  |
-| `name`      | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
-| `opts`      |           | `object`                     | {}           | Runtime configuration settings                   |
-| `uib`       |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`   |           | `string`                     | "2024-09-29" | Component version                                |
+| Property    | Attribute | Type                         | Default | Description                                      |
+|-------------|-----------|------------------------------|---------|--------------------------------------------------|
+| `$`         |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`        |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected` |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `json`      |           |                              |         | Element.json = {...} to show the json object     |
+| `jsonData`  |           | `object`                     | {}      |                                                  |
+| `name`      | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
+| `opts`      |           | `object`                     | {}      | Runtime configuration settings                   |
+| `uib`       |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
 
 ## Methods
 

@@ -8,15 +8,14 @@
 
 ## Properties
 
-| Property    | Attribute | Type                         | Default      | Description                                      |
-|-------------|-----------|------------------------------|--------------|--------------------------------------------------|
-| `$`         |           | `function(string): Element`  |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`        |           | `function(string): NodeList` |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected` |           | `boolean`                    | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `name`      | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
-| `opts`      |           | `object`                     | {}           | Runtime configuration settings                   |
-| `uib`       |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`   |           | `string`                     | "2024-09-30" | Component version                                |
+| Property    | Attribute | Type                         | Default | Description                                      |
+|-------------|-----------|------------------------------|---------|--------------------------------------------------|
+| `$`         |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`        |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected` |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `name`      | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
+| `opts`      |           | `object`                     | {}      | Runtime configuration settings                   |
+| `uib`       |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
 
 ## Methods
 
@@ -31,7 +30,7 @@
 
 | Event                              | Description                                      |
 |------------------------------------|--------------------------------------------------|
-| `component-template:attribChanged` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
+| `component-template:attribChanged` | When a watched attribute changes. `evt.details.data` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
 | `component-template:connected`     | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
 | `component-template:disconnected`  | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
 | `component-template:ready`         | Alias for connected. The instance can handle property & attribute changes |

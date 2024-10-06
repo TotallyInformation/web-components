@@ -9,17 +9,16 @@
 
 ## Properties
 
-| Property    | Attribute | Type                         | Default      | Description                                      |
-|-------------|-----------|------------------------------|--------------|--------------------------------------------------|
-| `$`         |           | `function(string): Element`  |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`        |           | `function(string): NodeList` |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected` |           | `boolean`                    | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `icon`      | `icon`    | `string`                     | ""           | Optional. If present, will override the callout title icon<br /><br />Non-watched but still used attributes: |
-| `name`      | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
-| `opts`      |           | `object`                     | {}           | Runtime configuration settings                   |
-| `type`      | `type`    | `string`                     | ""           | Optional. If present, a title will be added above other child content |
-| `uib`       |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `version`   |           | `string`                     | "2024-09-29" | Component version                                |
+| Property    | Attribute | Type                         | Default | Description                                      |
+|-------------|-----------|------------------------------|---------|--------------------------------------------------|
+| `$`         |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`        |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected` |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `icon`      | `icon`    | `string`                     | ""      | Optional. If present, will override the callout title icon<br /><br />Non-watched but still used attributes: |
+| `name`      | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
+| `opts`      |           | `object`                     | {}      | Runtime configuration settings                   |
+| `type`      | `type`    | `string`                     | ""      | Optional. If present, a title will be added above other child content |
+| `uib`       |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
 
 ## Methods
 

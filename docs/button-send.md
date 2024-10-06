@@ -14,7 +14,7 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 If using UIBUILDER for Node-RED, the button sends a message back to Node-RED with content very similar to using the `uibuilder.eventSend(event)` function.
 
-## Usage
+## Useage
 
 You can use this with or without Node-RED and uibuilder but it is most use when used with uibuilder since the button will, on clicking, send a message back to Node-RED with no JavaScript code required.
 

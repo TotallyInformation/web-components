@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: alpha/labelled-value.js</title>
+    <title>JSDoc: Source: src/labelled-value.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: alpha/labelled-value.js</h1>
+    <h1 class="page-title">Source: src/labelled-value.js</h1>
 
     
 
@@ -47,6 +47,8 @@
 
 /** TODO
  * - Should be using label and computed, not divs
+ * - Handle non-object proxy
+ * - If variable doesn't exist, create it on window
  * - Not accessible
  * - Needs CSS control vars
  * - Needs colour/formatting controls
@@ -63,31 +65,66 @@ const template = document.createElement('template')
 template.innerHTML = /*html*/`
     &lt;style>
         :host {
+            --label-before: '';
+            --label-after: ':';
+            --output-before: '';
+            --output-after: '';
+            --width: 100%;
+            --label-flex: 1;
+            --output-flex: 1;
+            --label-align: left;
+            --output-align: right;
+            --label-font: '';
+            --output-font: '';
+
             display: flex;   /* default is inline */
-            flex-flow: row nowrap;
-            width: 100%;
             contain: content; /* performance boost */
+            flex-flow: row nowrap;
+            width: var(--width);
+            flex-direction: row;
         }
-        label, output {
-            flex-grow: 1;
-            flex-shrink: 1;
+        label {
+            flex-grow: var(--label-flex);
+            flex-shrink: var(--label-flex);
+            text-align: var(--label-align);
+            font: var(--label-font);
         }
-        label:after {
-            content: ':';
+        label::before {
+            content: var(--label-before);
+        }
+        label::after {
+            content: var(--label-after);
         }
         output {
-            text-align: right;
+            flex-grow: var(--output-flex);
+            flex-shrink: var(--output-flex);
+            text-align: var(--output-align);
+            font: var(--output-font);
+        }
+        output::before {
+            content: var(--output-before);
+        }
+        output::after {
+            content: var(--output-after);
+        }
+        /* Small screen (37.5em @ 16pt is about 600px) */
+        @media all and (max-width: 37.5em) {
+            :host {
+                /* On small screens, we are no longer using row direction but column */
+                flex-direction: column;
+                --output-align: var(--label-align);
+            }
         }
     &lt;/style>
     &lt;!--&lt;div id="label">&lt;/div>-->
     &lt;!--&lt;div id="value" class="value" aria-labelledby="label">&lt;/div>-->
     &lt;label>&lt;/label>
     &lt;output>&lt;/output>
-    &lt;slot>&lt;/slot>
+    &lt;div>&lt;slot>&lt;/slot>&lt;/div>
 `
 
 /** Namespace
- * @namespace Alpha
+ * @namespace Beta
  */
 
 // Define the class and make it the default export
@@ -97,7 +134,7 @@ template.innerHTML = /*html*/`
  * @description A zero dependency custom web component that displays a value with a label
  *
  * @element labelled-value
- * @memberOf Alpha
+ * @memberOf Beta
 
  * METHODS FROM BASE:
  * @method config Update runtime configuration, return complete config
@@ -113,7 +150,7 @@ template.innerHTML = /*html*/`
  * None
 
  * @fires labelled-value:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires component-template:ready - Alias for connected. The instance can handle property &amp; attribute changes
+ * @fires labelled-value:ready - Alias for connected. The instance can handle property &amp; attribute changes
  * @fires labelled-value:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
  * @fires labelled-value:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
@@ -145,7 +182,7 @@ template.innerHTML = /*html*/`
  */
 class LabelledValue extends TiBaseComponent {
     /** Component version */
-    static version = '2024-09-29'
+    static componentVersion = '2024-10-06'
 
     /** Makes HTML attribute change watched
      * @returns {Array&lt;string>} List of all of the html attribs (props) listened to
@@ -155,23 +192,31 @@ class LabelledValue extends TiBaseComponent {
             // Standard watched attributes:
             'inherit-style', 'name',
             // Other watched attributes:
-            'label', 'value', 'var',
+            'label', 'value',
         ]
     }
 
-    /** PRIVATE. Internal version of the label text to show on the label tag */
+    /** PRIVATE. Internal version of the label text to show on the label tag @type {string|undefined} */
     #label = undefined
-    /** PRIVATE. Internal version of the value to show on the output tag */
+    /** PRIVATE. Internal version of the value to show on the output tag @type {any} */
     #value = undefined
-    /** PRIVATE. Reference to the label tag */
+    /** PRIVATE. Reference to the label tag @type {HTMLLabelElement} */
     #labelEl
-    /** PRIVATE. Reference to the output tag */
+    /** PRIVATE. Reference to the output tag @type {HTMLOutputElement} */
     #outputEl
+    /** PRIVATE. Reference to the slot tag @type {HTMLSlotElement} */
+    #slotEl
+    /** If true, keeps the slot content when the value changes */
+    'keep-slot'
 
     /** Set the value to show */
     set value(val) {
+        if (val === null) return
+        if (val === this.#value) return
+
         this.#value = val
         this.#outputEl.textContent = val
+        this.setAttribute('value', val)
     }
 
     /** Get the current shown value */
@@ -181,8 +226,12 @@ class LabelledValue extends TiBaseComponent {
 
     /** Set the label to show */
     set label(val) {
+        if (val === null) return
+        if (val === this.#label) return
+
         this.#label = val
         this.#labelEl.textContent = val
+        // this.setAttribute('label', val)
     }
 
     /** Get the current shown label */
@@ -198,11 +247,16 @@ class LabelledValue extends TiBaseComponent {
 
         this.#outputEl = this.shadowRoot.querySelector('output')
         this.#labelEl = this.shadowRoot.querySelector('label')
+        this.#slotEl =  this.shadowRoot.querySelector('slot')
     }
 
     /** Runs when an instance is added to the DOM */
     connectedCallback() {
         this._connect() // Keep at start.
+
+        this['keep-slot'] =  this.getAttribute('keep-slot')
+        this.label =  this.getAttribute('label')
+        this.value =  this.getAttribute('value')
 
         this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected &amp; is ready
     }
@@ -217,7 +271,7 @@ class LabelledValue extends TiBaseComponent {
         /** Optionally ignore attrib changes until instance is fully connected
          * Otherwise this can fire BEFORE everthing is fully connected.
          */
-        // if (!this.connected) return
+        if (!this.connected) return
 
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
@@ -226,34 +280,6 @@ class LabelledValue extends TiBaseComponent {
 
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
-
-        switch (attrib) {
-            case 'var': {
-                console.log('var changed: ', newVal, window[newVal], Object.getOwnPropertyDescriptor(window, newVal))
-                // @ts-ignore
-                if (window[newVal]) this.shadowRoot.querySelector('output').textContent = window[newVal]
-                // Use Object.defineProperty to replace the setter for the existing variable
-                const that = this
-                // Doh! this can't be undone!
-                Object.defineProperty(window, newVal, {
-                    get() {
-                        return this[`_${newVal}`]
-                    },
-                    set(value) {
-                        console.log(`Setting '${newVal}' to: ${value}`)
-                        that.#outputEl.textContent = value
-                        // Prevent recursion
-                        this[`_${newVal}`] = value
-                    },
-                    configurable: true // Ensures the property remains configurable
-                })
-                break
-            }
-
-            default: {
-                break
-            }
-        }
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
@@ -287,7 +313,7 @@ customElements.define('labelled-value', LabelledValue)
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Oct 01 2024 21:17:17 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Oct 06 2024 17:24:45 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
