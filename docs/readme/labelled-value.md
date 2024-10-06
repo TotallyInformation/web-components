@@ -5,21 +5,20 @@
 | Attribute       | Type              | Description                                      |
 |-----------------|-------------------|--------------------------------------------------|
 | `inherit-style` | `string\|boolean` | Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load. |
-| `var`           |                   |                                                  |
 
 ## Properties
 
-| Property    | Attribute | Type                         | Default      | Description                                      |
-|-------------|-----------|------------------------------|--------------|--------------------------------------------------|
-| `$`         |           | `function(string): Element`  |              | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`        |           | `function(string): NodeList` |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected` |           | `boolean`                    | false        | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `label`     | `label`   | `undefined`                  |              | Set the label to show                            |
-| `name`      | `name`    | `string`                     |              | Placeholder for the optional name attribute      |
-| `opts`      |           | `object`                     | {}           | Runtime configuration settings                   |
-| `uib`       |           | `boolean`                    | false        | Is UIBUILDER for Node-RED loaded?                |
-| `value`     | `value`   | `undefined`                  |              | Set the value to show                            |
-| `version`   |           | `string`                     | "2024-09-29" | Component version                                |
+| Property    | Attribute | Type                         | Default | Description                                      |
+|-------------|-----------|------------------------------|---------|--------------------------------------------------|
+| `$`         |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`        |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected` |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `keep-slot` |           |                              |         | If true, keeps the slot content when the value changes |
+| `label`     | `label`   | `string \| undefined`        |         | Set the label to show                            |
+| `name`      | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
+| `opts`      |           | `object`                     | {}      | Runtime configuration settings                   |
+| `uib`       |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
+| `value`     | `value`   |                              |         | Set the value to show                            |
 
 ## Methods
 
@@ -34,10 +33,10 @@
 
 | Event                          | Description                                      |
 |--------------------------------|--------------------------------------------------|
-| `component-template:ready`     | Alias for connected. The instance can handle property & attribute changes |
 | `labelled-value:attribChanged` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
 | `labelled-value:connected`     | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
 | `labelled-value:disconnected`  | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
+| `labelled-value:ready`         | Alias for connected. The instance can handle property & attribute changes |
 
 ## Slots
 

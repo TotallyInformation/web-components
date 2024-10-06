@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
 
     <script defer src="/dist/call-out.iife.min.js"></script>
-    <script defer src="/dist/alpha/labelled-value.iife.min.js"></script>
+    <script defer src="/dist/labelled-value.iife.min.js"></script>
 
 </head><body>
     <main>
@@ -16,18 +16,22 @@
 
         <section>
             <call-out type="" title="Status" icon="❔">
-                <b>Alpha</b>: Still in early development
+                <b>Beta</b>: Ready for basic use. <a href="https://wc.totallyinformation.net/docs/#/labelled-value">Documentation</a>.
             </call-out>
 
             <p>
                 A very simple label/value output.
+            </p>
+            <p>
+                But with lots of CSS variables to control style.
             </p>
         </section>
 
         <section>
             <article>
                 <h2>Simplest use. Manual label and value</h2>
-                <labelled-value label="My Label" value="My Value"></labelled-value>
+                <labelled-value label="My Label" value="My Value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labelled-value>
+                <p><i>We override one of the style variables to change the font of the label.</i></p>
             </article>
 
             <article>
@@ -37,28 +41,44 @@
 
             <article>
                 <h2>No value</h2>
-                <labelled-value label="No value label"></labelled-value>
+                <labelled-value label="No value label" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labelled-value>
+                <p><i>We override one of the style variables to add some text before and after the label.
+                    You can do the same with the output by using <code>--output-before</code> and <code>--output-after</code> CSS variables.
+                </i></p>
             </article>
 
             <article>
                 <h2>Controlled by JavaScript managed variable</h2>
-                <labelled-value label="Managed global variable (myvar)" var="myvar"></labelled-value>
-                <p><i>Note that this feature is a little simplistic and will not always work perfectly.
-                    Also the specified variable has to be in the window context.
-                    See the source for this page for details.</i></p>
+                <labelled-value id="lv4" label="Value changed in script"></labelled-value>
+                <p><i>Start with no value. Initial value is set in JavaScript and then updated a few seconds later.</i></p>
             </article>
         </section>
     </main>
 
     <script>
-        // For the var attribute to work, the variable HAS to be in the global context.
-        // JavaScript var here makes it global but locked, let or const would not make it global.
-        // So use window or globalThis
-        window.myvar = 123
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', LabelledValue.version)
+
+            // Sets the value early on, overriding what is set in the HTML.
+            lv4.value = 'DOMContentLoaded'
+            console.log('Value changed to: ', lv4.value, lv4)            
+        })
+
+        // First get a reference to 1 or more of the custom components
+        // const lv4 = document.getElementsByTagName('labelled-value')[3]
+        const lv4 = document.getElementById('lv4')
+        
+        // DON'T DO THIS! Trying to set the value too early prevents later updates - a component standards limitation
+        // Wait for DOMContentLoaded as shown above
+        // lv4.value = 'aaaa'
+
+        // After 3 seconds, change the value - this is just for testing
         setTimeout(() => {
-            myvar = 321
-            console.log('myvar changed to: ', myvar)
-        }, 1000)
+            lv4.value = '3 seconds'
+            console.log('Value changed to: ', lv4.value, lv4)            
+        }, 3000)
     </script>
 
 </body></html>
