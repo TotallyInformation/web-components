@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing Totally Information's web-components - collapsible-headings</title>
+
+    <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+
+    <style>
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            font-family: Arial, sans-serif;
+        }
+
+        .gauge {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            background: linear-gradient(to right, #bbb 0%, #bbb 33%, #f0f0f0 50%, #fbb 66%, #f88 100%);
+            display: flex;
+            align-items: center;
+        }
+
+        .gauge .scale {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .gauge .scale span {
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .gauge .needle {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: red;
+            z-index: 2;
+        }
+
+        .gauge-label {
+            margin-top: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
+    </style>
+</head><body>
+    <main>
+        <h1>ChatGPT Interpretation of an edgewise gauge</h1>
+
+        <article>
+            <edgewise-gauge min="5" max="10" value="7" label="T-out °C"></edgewise-gauge>
+        </article>
+
+        <article>
+            <div class="gauge-container" aria-labelledby="gaugeLabel">
+                <div class="gauge" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="7" aria-live="polite">
+                    <div class="scale">
+                        <span>0</span>
+                        <span>2</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>8</span>
+                        <span>10</span>
+                    </div>
+                    <div class="needle"></div>
+                </div>
+                <div id="gaugeLabel" class="gauge-label">T-out °C</div>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        class EdgewiseGauge extends HTMLElement {
+            static get observedAttributes() {
+                return ['min', 'max', 'label', 'value'];
+            }
+
+            constructor() {
+                super();
+                const shadow = this.attachShadow({ mode: 'open' });
+
+                shadow.innerHTML = `
+                <style>
+                    /* styles from the CSS part above */
+                </style>
+                <div class="gauge-container">
+                    <div class="gauge" role="progressbar">
+                    <div class="scale"></div>
+                    <div class="needle"></div>
+                    </div>
+                    <div class="gauge-label"></div>
+                </div>
+                `;
+
+                this.gaugeElement = shadow.querySelector('.gauge');
+                this.scaleElement = shadow.querySelector('.scale');
+                this.labelElement = shadow.querySelector('.gauge-label');
+            }
+
+            connectedCallback() {
+                this.updateGauge();
+            }
+
+            attributeChangedCallback() {
+                this.updateGauge();
+            }
+
+            updateGauge() {
+                const min = parseFloat(this.getAttribute('min')) || 0;
+                const max = parseFloat(this.getAttribute('max')) || 10;
+                const value = parseFloat(this.getAttribute('value')) || (min + max) / 2;
+                const label = this.getAttribute('label') || '';
+
+                this.labelElement.textContent = label;
+                this.gaugeElement.setAttribute('aria-valuemin', min);
+                this.gaugeElement.setAttribute('aria-valuemax', max);
+                this.gaugeElement.setAttribute('aria-valuenow', value);
+
+                // Update the scale
+                const step = (max - min) / 5;  // Adjust the number of steps as needed
+                this.scaleElement.innerHTML = '';
+                for (let i = min; i <= max; i += step) {
+                    const span = document.createElement('span');
+                    span.textContent = i.toFixed(1);
+                    this.scaleElement.appendChild(span);
+                }
+            }
+        }
+
+        customElements.define('edgewise-gauge', EdgewiseGauge);
+
+        let x = document.getElementsByTagName('edgewise-gauge')
+        setInterval(() => {
+            // let x = document.querySelector('.gauge')
+            if (x) {
+                y = Math.random() * 10
+                // x.setAttribute('value', y)
+                x.value = y
+                console.log('set', y)
+            } else {
+                console.log('not found')
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>
