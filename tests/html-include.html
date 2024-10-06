@@ -42,18 +42,24 @@
         </section>
     </main>
 
-    <script defer>
-        console.info('Dynamic content test ...')
-        // const hi1 = document.getElementsByTagName('html-include')[0]
-        const hi1 = document.getElementById('hi1')
-        if (hi1) {
+    <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', HtmlInclude.version)
+        })
 
-            setTimeout(() => {
-                console.info('... complete')
-            }, 5000)
-        } else {
-            console.error('html-include hi1 tag not found')
-        }
+        // console.info('Dynamic content test ...')
+        // // const hi1 = document.getElementsByTagName('html-include')[0]
+        // const hi1 = document.getElementById('hi1')
+        // if (hi1) {
+        //     // Just for testing
+        //     setTimeout(() => {
+        //         console.info('... complete')
+        //     }, 5000)
+        // } else {
+        //     console.error('html-include hi1 tag not found')
+        // }
     </script>
 
 </body></html>

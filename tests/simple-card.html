@@ -35,44 +35,11 @@
     </main>
 
     <script>
-        // Event Listeners set in module scripts wont get set up early enough to pick up the initial component load events
-        // BUT an ordinary script like this WILL trigger early enough.
-        // HOWEVER, this triggers so early that if you load uibuilder in a module script, it
-        //   wont be available here immediately. You would have to wait for ~300 ms.
-
-        // document.addEventListener('simple-card:connected', e => {
-        //     console.log('>> (document) EVENT simple-card:connected >>', e.target, e.detail)
-        // })
-
-        // This CAN pick up the initial setup event
-        // document.addEventListener('simple-card:attribChanged', e => {
-        //     console.log('>> (document) EVENT simple-card:attribChanged >>', e.target, e.detail)
-        // })
-
-        // Things set up in uibuilder won't be available here for ~300ms
-        // setTimeout(function(){
-        //     console.log('HELLO', window.$)
-        //     $('#card3').setAttribute("name", "helloButton")
-        // }, 300)
-
-        // We can also listen at the component instance level:
-        // const sc = document.getElementsByTagName('simple-card')
-        // for (const i of sc) {
-        //     // When the component constructor is run
-        //     // i.addEventListener('simple-card:construction', e => {
-        //     //     console.log('>> EVENT simple-card:construction >>', e)
-        //     // })
-            
-        //     // When the component instance is connected to the DOM
-        //     // i.addEventListener('simple-card:connected', e => {
-        //     //     console.log('>> EVENT simple-card:connected >>', e)
-        //     // })
-
-        //     // When the component instance is disconnected from the DOM
-        //     // i.addEventListener('simple-card:disconnected', e => {
-        //     //     console.log('>> EVENT simple-card:disconnected >>', e)
-        //     // })
-
-        // }
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('SimpleCard version: ', SimpleCard.version)
+            console.info('SimpleContainer version: ', SimpleContainer.version)
+        })
     </script>
 </body></html>

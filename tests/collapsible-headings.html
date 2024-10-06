@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Testing web-components - collapsible-headings</title>
+    <title>Testing Totally Information's web-components - collapsible-headings</title>
 
     <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
 
@@ -13,7 +13,7 @@
 
 </head><body>
     <main>
-        <h1>Testing Totally Information's web-components package - collapsible-headings</h1>
+        <h1>Testing Totally Information's web-components - collapsible-headings</h1>
 
         <section>
             <call-out type="" title="Status" icon="❔">
@@ -59,6 +59,12 @@
     </main>
 
     <script defer>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', CollapsibleHeadings.version)
+        })
+
         console.info('Adding dynamic content ...')
         const ch = document.getElementsByTagName('collapsible-headings')[0]
         if (ch) {
@@ -67,6 +73,7 @@
             newH.innerText = 'Dynamically added section'
             newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
+            // Just for testing
             setTimeout(() => {
                 // ch.appendChild(
                 ch.appendChild(newH)

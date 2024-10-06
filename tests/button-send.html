@@ -60,6 +60,12 @@
     </main>
 
     <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', ButtonSend.version)
+        })
+
         // Listen to clicks from all buttons on-page
         document.addEventListener('button-send:click', (data) => {
             console.log(`Click event data for button: '${data.detail._ui.id}'`)

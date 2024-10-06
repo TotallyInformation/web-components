@@ -34,17 +34,13 @@
     </main>
 
     <script>
-        /** NOTE: There is a 2ms delay in the browser to set up the component.
-         *        So make sure to allow for that before trying to send data.
-         */
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', SyntaxHighlight.version)
+        })
 
         console.info('Dynamic content test ...')
-
-        // Triggered for all instances when they are ready
-        // document.addEventListener('syntax-highlight:connected', (data) => {
-        //     console.log('connected', data.details.id)
-        //     if (data.details.id === 'sh2') sh2.json = '{"a":42,"b":"Hello","c":{"x":12,"y":"99 red balloons"}}'
-        // })
 
         const highlighters = document.getElementsByTagName('syntax-highlight')
         

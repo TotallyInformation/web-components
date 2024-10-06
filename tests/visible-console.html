@@ -7,7 +7,7 @@
 
     <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
 
-    <script defer src="/dist/visible-console.iife.min.js" type="text/javascript"></script>
+    <script defer src="/dist/visible-console.iife.min.js"></script>
 
 </head><body>
     
@@ -29,6 +29,13 @@
     </section>
 
     <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', VisibleConsole.version)
+        })
+        
+        // Simple tests
         const data = {
             name: 'Alice',
             age: 30,
