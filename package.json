@@ -4,7 +4,7 @@
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "scripts": {
     "build": "node ./libs/build-index.js && node esbuild.config.js",
-    "test": "npx wrangler pages dev ./",
+    "test": "npx wrangler pages dev ./ --live-reload: true --show-interactive-dev-session",
     "analyse": "npm run analyse1 && npm run analyse2 && npm run vscode-custom && npm run jsdoc",
     "watch": "esbuild --watch ./esbuild.config.js",
     "lint": "eslint .",
