@@ -120,18 +120,12 @@ class CallOut extends TiBaseComponent {
     type = ''
     icon = ''
 
-    connected = false
-
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
 
-        // Only attach the shadow dom if code and style isolation is needed
-        // this.attachShadow({ mode: 'open', delegatesFocus: true })
-            // .append(template.content.cloneNode(true))
-
-        // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
-        this.createShadowSelectors()  // in base class
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        // this._construct(template.content.cloneNode(true))
 
         // Apply styles using a <style> tag in the light DOM
         const style = document.createElement('style')
@@ -159,30 +153,19 @@ class CallOut extends TiBaseComponent {
 
     /** Runs when an instance is added to the DOM */
     connectedCallback() {
-        // Make sure instance has an ID. Create an id from name or calculation if needed
-        this.ensureId()  // in base class
-        // Apply parent styles from a stylesheet if required - only required if using an applied template
-        this.doInheritStyles()  // in base class
-
-        // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
-        // if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+        this._connect() // Keep at start.
 
         this.type = this.getAttribute('type')
         this.icon = this.getAttribute('icon')
 
         this.doType(this.type)
 
-        // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
-        this._ready()
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
     /** Runs when an instance is removed from the DOM */
     disconnectedCallback() {
-        // @ts-ignore Remove optional uibuilder event listener
-        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
-
-        // Keep at end. Let everyone know that an instance of the component has been disconnected
-        this._event('disconnected')
+        this._disconnect() // Keep at end.
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
