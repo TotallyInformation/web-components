@@ -23,6 +23,8 @@ Note that slot content is not subject to this restriction since it exists in the
 
 ## Components
 
+Each of the components that are in any form of usable state have a [test/demo page](https://wc.totallyinformation.net/tests/index.html), click on the link to see them.
+
 ### Usable
 
 While these are certainly fully usable in their current form, they may still continue to evolve, possibly fairly dramatically.
