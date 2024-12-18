@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing TotallyInformation's web-components - chart-statetrail</title>
+
+    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+
+    <script defer src="../dist/call-out.iife.min.js"></script>
+    <script defer src="../dist/alpha/chart-statetrail.iife.min.js"></script>
+
+</head><body>
+    <main>
+        <h1>Testing Totally Information's web-components - chart-statetrail</h1>
+
+        <p>
+            <a href="https://wc.totallyinformation.net/docs/#/chart-statetrail">Documentation</a>.
+        </p>
+        <section>
+            <call-out type="" title="Status" icon="❔">
+                <b>Alpha</b>: Experimental. <a href="https://wc.totallyinformation.net/docs/#/chart-statetrail">Documentation</a> <a href="./fasdaf">HERE</a>.
+            </call-out>
+
+            <p>
+                Show a list of states for one or more items over time. Each item is shown as a separate line.
+                States are shown as coloured blocks along a horizontal timeline.
+            </p>
+            <p>
+                Each state block has a tooltip showing the state name, value, and the start and end times.
+            </p>
+            <p>
+                Clicking on a block will trigger a custom event and (if Node-RED/UIBUILDER is used) 
+                will send a message back to Node-RED.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>1. Static, pre-defined data</h2>
+                <chart-statetrail id="cst1">Test 1</chart-statetrail>
+            </article>
+            <article>
+                <h2>2. Static initial data with random streamed additions</h2>
+                <chart-statetrail id="cst2"></chart-statetrail>
+            </article>
+            <article>
+                <h2>3. Initial data and updates from Node-RED via UIBUILDER</h2>
+                <chart-statetrail id="cst3"></chart-statetrail>
+            </article>
+        </section>
+        <section>
+            <h2>Future tests/demos</h2>
+            <ul>
+                <li>Rolling timeline</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+
+
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', ChartStatetrail.version)
+        })
+
+        // After 3 seconds, add new data - this is just for testing
+        // setTimeout(() => {
+        // }, 3000)
+    </script>
+
+</body></html>
