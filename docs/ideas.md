@@ -10,12 +10,6 @@ updated: 2024-10-04 16:28:11
 
 Note that some of these might not even be possible.
 
-### `show-var` Version of uib-var
-
-* Shows content from a JavaScript variable.
-* Possibly allows dynamic overrides of attributes.
-* Test with component version text.
-
 ### `light-switch` - on/off, level, colour. Location.
 
 ### `layout-area` - Switch between a few core layouts such as blog & dash
@@ -31,7 +25,7 @@ Note that some of these might not even be possible.
 * Optional checkbox with data store
 * UIBUILDER data enabled. Controllable updates back to Node-RED (e.g. when no longer visible or immediate)
 
-### `smart-table` - Like smart-list
+### [STARTED] `smart-table` - Like smart-list
 
 * Build from data
 * Optional columns data - if not provided, auto-build from content
@@ -48,11 +42,37 @@ Note that some of these might not even be possible.
 * *Maybe - Optional drag/drop re-oder*
 * *Maybe - double-click to content edit*
 
+### `led-gauge`
+
+* horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
+* Segmented (led style, with LED's "lit" up to the current value)
+* Max & Min limit options (defaulting to 0-100)
+* Unit attribute: Default to `%`, text string used to indicate what the measure represents
+* Optional label attribute + label position attribute - left/right/above/below - defaults to above. Allow HTML in the label.
+  * Option to display the current value and/or the unit string. To appears inside the label. Option to show before or after any label text.
+* Value attribute & property: defines the current value to be shown
+* `segments` property: defines how many "ticks" - (max-min)/#ticks = the step value of each tick.
+  * Show segment value beneath the display - where the color changes & min/max values only. Have the segment value as a title attribute so it shows on hover.
+  * Maybe allow override (e.g. an array of tick definitions) to facilitate non-linear gauges.
+* colour segments property (array): Allows setting each segment to a defined colour.
+* Allow click handler for each display segment.
+* Use CSS classes where possible. Use CSS Variables to allow overrides of key CSS properties.
+
+Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
+
 ### `linear-gauge`
 
-* horizontal/vertical
-* Segmented (led style) or smooth
-* Multiple colour segments
+* horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
+* Segmented (led style, with LED's "lit" up to the current value) or smooth display (with pointer showing the current value)
+* Max & Min limit options (defaulting to 0-100)
+* Measure option: Default to %, text string used to indicate what the measure represents
+* Optional label attribute + label position attribute - left/right/above/below - defaults to above
+* Value attribute & property: defines the current value to be shown
+* `segments` property: defines how many "ticks" - (max-min)/#ticks = the step value of each tick.
+  * For LED style, show segment value beneath the display - where the color changes only. Have the segment value as a title attribute so it shows on hover.
+  * For smooth style, 
+  * Maybe allow override to facilitate non-linear gauges
+* colour segments property: Allows setting each segment to a defined colour.
 * Optional current value with positioning
 
 Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
@@ -67,6 +87,8 @@ Maybe with optional sub-title. Also option to use different string instead.
 
 * [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
 
+### `simple-timeline`
+
 ## Thoughts
 
 * Any way to have a component that is able to get meta-data from another component. Eg version, docs, etc?
@@ -79,3 +101,14 @@ Maybe with optional sub-title. Also option to use different string instead.
 
 * Documentation
   * call-out
+
+## Probably not
+
+### `show-var` Version of uib-var - probably not worth the effort
+
+Better to simply update the innerText of a selected element.
+
+* Shows content from a JavaScript variable.
+* Possibly allows dynamic overrides of attributes.
+* Test with component version text.
+
