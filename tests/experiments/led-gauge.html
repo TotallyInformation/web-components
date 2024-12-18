@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing Totally Information's web-components - collapsible-headings</title>
+
+    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+
+</head>
+
+<body>
+    <main>
+        <h1>ChatGPT Interpretation of an edgewise gauge</h1>
+
+        <article>
+            <led-gauge value="24" segments="11">Gauge Label</led-gauge>
+        </article>
+
+    </main>
+
+    <template id="led-gauge-template">
+        <style>
+            :host {
+                --led-on-color: green;
+                --led-off-color: lightgray;
+                /* --value-color: black; */
+                --label-color: var(--value-color, inherit);
+                --segment-count: 10;
+                --segment-gap: 0.3rem;
+                --gauge-columns: 1fr 1fr;
+                --gauge-layout: 
+                    "label value"
+                    "segments segments"
+                    "segvals segvals";
+                --value-justification: end;
+
+                display: grid;
+                width: 100%;
+                grid-template-columns: var(--gauge-columns);
+                grid-template-areas: var(--gauge-layout);
+                padding: 1rem;
+            }
+
+            .segments {
+                grid-area: segments;
+                display: grid;
+                grid-template-columns: repeat(var(--segment-count, 10), 1fr);
+                gap: var(--segment-gap);
+            }
+
+            .segvals {
+                grid-area: segvals;
+                display: grid;
+                grid-template-columns: 0fr repeat(var(--segment-count, 10), 1fr) 0fr;
+                justify-items: start;
+                /* margin-left: -.5rem; */
+                /* gap: var(--segment-gap); */
+            }
+
+            .led {
+                background-color: var(--led-off-color);
+                height: 20px;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+            .led.on {
+                background-color: var(--led-on-color);
+            }
+
+            slot {
+                grid-area: label;
+                color: var(--label-color, inherit);
+            }
+            output {
+                grid-area: value;
+                justify-self: var(--value-justification, end);
+                color: var(--value-color, inherit);
+            }
+        </style>
+
+        <slot class="label"></slot>
+        <output class="value"></output>
+        <div class="segments" arial-label="Visual LED Gauge"></div>
+        <div class="segvals"></div>
+    </template>
+
+    <script>
+        class LedGauge extends HTMLElement {
+            static get observedAttributes() {
+                return ['value', 'min', 'max', 'unit', 'label', 'label-position', 'segments', 'colour-segments'];
+            }
+
+            #value = 0;
+            #segments = 10;
+
+            min = 0;
+            max = 100;
+            unit = '%';
+            colourSegments = [];
+
+            set segments(val) {
+                this.#segments = parseInt(val);
+                this.style.setProperty('--segment-count', this.#segments);
+                this._render();
+            }
+
+            get segments() {
+                return this.#segments;
+            }
+
+            set value(val) {
+                this.#value = parseFloat(val);
+                this._render();
+            }
+
+            get value() {
+                return this.#value;
+            }
+
+            constructor() {
+                super();
+                const template = document.getElementById('led-gauge-template').content;
+                this.attachShadow({ mode: 'open' }).appendChild(template.cloneNode(true));
+
+                this.segmentsEl = this.shadowRoot.querySelector('.segments');
+                this.segValsEl = this.shadowRoot.querySelector('.segvals');
+                this.valueEl = this.shadowRoot.querySelector('.value');
+            }
+
+            connectedCallback() {
+                this._render();
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if (oldValue !== newValue) {
+                    console.log('attr chg ', name, oldValue, newValue)
+                    this[name] = newValue;
+                    this._render();
+                }
+            }
+
+            _render() {
+                const step = (this.max - this.min) / this.segments;
+                this.segmentsEl.innerHTML = '';
+                this.segValsEl.innerHTML = '';
+
+                // Create LED segments
+                for (let i = 0; i < this.segments; i++) {
+                    // Create the segments
+                    const segment = document.createElement('div');
+                    segment.classList.add('led');
+                    const segmentValue = this.min + i * step;
+                    segment.title = segmentValue;
+
+                    // Create the segment values
+                    if (i === 0) {
+                        const segVal = document.createElement('div')
+                        this.segValsEl.appendChild(segVal)
+                    }
+                    const segVal = document.createElement('div')
+                    // segVal.classList.add('led');
+                    segVal.innerText = Math.round(segmentValue)
+                    
+
+
+                    // Set segment color and on/off state based on the current value
+                    if (this.colourSegments.length > 0) {
+                        const segmentColor = this.colourSegments[i] || 'var(--led-off-color)';
+                        segment.style.backgroundColor = segmentColor;
+                    }
+
+
+                    if (this.value >= segmentValue) {
+                        segment.classList.add('on');
+                    }
+
+                    // Attach click event listener
+                    segment.addEventListener('click', () => {
+                        console.log('INNER led-gauge-segment-click', { id: this.id, segment: i, segmentValue: segmentValue, gaugeValue: this.value })
+                        this.dispatchEvent(new CustomEvent('led-gauge-segment-click', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                id: this.id,
+                                segment: i,
+                                segmentValue: segmentValue,
+                                gaugeValue: this.value
+                            } 
+                        }));
+                    });
+
+                    this.segmentsEl.appendChild(segment)
+                    this.segValsEl.appendChild(segVal)
+                }
+
+                const segVal = document.createElement('div')
+                this.segValsEl.appendChild(segVal)
+                segVal.innerText = this.max
+
+
+                // Render label with current value and unit if applicable
+                // const labelPosition = this.getAttribute('label-position') || 'above';
+                // const labelContent = this.getAttribute('label') || '';
+                this.valueEl.innerText = `${this.value}${this.unit}`
+                // const showValue = this.hasAttribute('show-value') ? `<span class="value">${this.value}${this.unit}</span>` : '';
+                // this.labelElement.innerHTML = labelPosition.includes('below') ? labelContent + showValue : showValue + labelContent;
+
+                // Adjust layout for label position
+                // const isHorizontal = this.getAttribute('layout') === 'horizontal' ?? true;
+                // this.shadowRoot.querySelector('.gauge').style.gridTemplateColumns = isHorizontal ? 'auto 1fr' : '1fr';
+            }
+        }
+
+        customElements.define('led-gauge', LedGauge);
+
+        const myGauge = document.querySelector('led-gauge')
+        // document.addEventListener('led-gauge-segment-click', (data) => {
+        //     console.log('DOC led-gauge-segment-click', data.detail)
+        // })
+        // myGauge.addEventListener('led-gauge-segment-click', (data) => {
+        //     console.log('myGauge led-gauge-segment-click', data.detail)
+        // })
+
+        setTimeout(() => {
+            console.warn('setting value')
+            // myGauge.setAttribute('value', 75)
+            myGauge.value = '75'
+        }, 1000);
+
+        // setTimeout(() => {
+        //     myGauge.segments = 20
+        // }, 5000);
+    </script>
+
+</body>
+
+</html>
