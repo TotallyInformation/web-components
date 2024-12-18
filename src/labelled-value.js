@@ -18,14 +18,8 @@
  **/
 
 /** TODO
- * - Should be using label and computed, not divs
- * - Handle non-object proxy
- * - If variable doesn't exist, create it on window
  * - Not accessible
- * - Needs CSS control vars
- * - Needs colour/formatting controls
- * - Needs virt/horizontal option
- * - Needs media width control
+ * - Partially complete - Needs colour/formatting controls
  * - Needs managed var and uib integration
  * - Allow HTML (via html attribute)
  */
