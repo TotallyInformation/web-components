@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing TotallyInformation's web-components - smart-table</title>
+
+    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+
+    <script defer src="../dist/call-out.iife.min.js"></script>
+    <script defer src="../dist/alpha/smart-table.iife.min.js"></script>
+
+</head><body>
+    <main>
+        <h1>Testing Totally Information's web-components - smart-table</h1>
+
+        <p>
+            <a href="https://wc.totallyinformation.net/docs/#/smart-table">Documentation</a> <a href="./fasdaf">HERE</a>.
+        </p>
+        <section>
+            <call-out type="" title="Status" icon="❔">
+                <b>Alpha</b>: Experimental. <a href="https://wc.totallyinformation.net/docs/#/smart-table">Documentation</a> <a href="./fasdaf">HERE</a>.
+            </call-out>
+
+            <p>
+                Turn data into a displayed table.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>1. From an array of objects (named columns)</h2>
+                <smart-table></smart-table>
+            </article>
+            <article>
+                <h2>2. From an object of objects (named rows &amp; columns)</h2>
+                <smart-table></smart-table>
+            </article>
+            <article>
+                <h2>3. From an array of arrays (unnamed rows &amp; columns)</h2>
+                <smart-table></smart-table>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        // Array of objects data - common tabular format
+        const arrObj = [
+            {
+                "COL1":"R1C1",
+                "COL2":"R1C2",
+                "COL3":"R1C3",
+            },
+            {
+                "COL1":"R2C1",
+                "COL2":"R2C2",
+                "COL3":"R2C3",
+            },
+            {
+                "COL1":"R3C1",
+                "COL2":"R3C2",
+                "COL3":"R3C3",
+            }
+        ]
+        // Object of objects data - named rows
+        const objObj = {
+            "ROW1": {
+                "COL1":"R1C1",
+                "COL2":"R1C2",
+                "COL3":"R1C3",
+            },
+            "ROW2":{
+                "COL1":"R2C1",
+                "COL2":"R2C2",
+                "COL3":"R2C3",
+            },
+            "ROW3": {
+                "COL1":"R3C1",
+                "COL2":"R3C2",
+                "COL3":"R3C3",
+            },
+        }
+        // Array of arrays data - unnamed columns
+        const arrArr = [
+            [ "R1C1", "R1C2", "R1C3", ],
+            [ "R2C1", "R2C2", "R2C3", ],
+            [ "R3C1", "R3C2", "R3C3", ],
+        ]
+
+        // First get a reference to 1 or more of the custom components
+        const tbl1 = document.getElementsByTagName('smart-table')[0]
+        const tbl2 = document.getElementsByTagName('smart-table')[1]
+        const tbl3 = document.getElementsByTagName('smart-table')[2]
+        // const tbl1 = document.getElementById('tbl1')
+        
+        // DON'T DO THIS! Trying to set the value too early prevents later updates - a component standards limitation
+        // Wait for DOMContentLoaded as shown above
+        // tbl1.data = arr
+
+        /** TODO
+         * - Apply col metadata
+         * - Add rows/columns to each table type
+         * - Remove rows/columns from each table type
+         */
+
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            console.info('Component version: ', SmartTable.version)
+
+            // Sets the initial table data
+            tbl1.data = arrObj
+            tbl2.data = objObj
+            tbl3.data = arrArr
+
+            // const tbl1 = document.getElementById('smart-table-1') // @type {HTMLTableElement}
+            const cellEl = tbl1.getCellById('R2C3') // @type {HTMLTableCellElement}
+            if (cellEl) {
+                console.log('Reference to cell in row 2, column 3: ', cellEl)
+                console.log(`The text content of cell R2C3 is: "${cellEl.innerText}"`)
+                // At present, this kind of processing is not responsive to data changes
+                // So styling is lost if the data is changed. To be fixed in a future release
+                if ( tbl1.getValueByCellId('R2C3') === 'R2C3' ) {
+                    cellEl.style.backgroundColor = 'green' // background-color: 'green'
+                }
+            } else {
+                console.warn('Cell R2C3 not found')
+            }
+        })
+
+        // After 3 seconds, change some cell values by changing the data - this is just for testing
+        // NB: Although we are changing specific data cells, in the initial release, the table is always fully rebuilt.
+        //     This will be improved in future releases.
+        setTimeout(() => {
+            tbl1.data[1].COL2 = 99 // tbl1 is an array of objects
+            tbl2.data.ROW1.COL1 = 98 // tbl2 is an object of objects
+            tbl3.data[2][2] = 97 // tbl3 is an array of arrays
+        }, 3000)
+    </script>
+
+</body></html>
