@@ -28,6 +28,9 @@
  * limitations under the License.
  **/
 
+// ! DO NOT USE SHADOW DOM FOR THIS - See https://github.com/plotly/plotly.js/issues/1433
+// See: https://ginkgobioworks.github.io/plotly-plot/components/plotly-plot/
+
 // import Chart from 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js'
 
 // import 'https://cdn.jsdelivr.net/npm/plotly.js@2.12.1/dist/plotly.min.js'
