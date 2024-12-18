@@ -1,12 +1,12 @@
 {
   "name": "@totallyinformation/web-components",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "scripts": {
-    "build": "node ./libs/build-index.js && node esbuild.config.js",
-    "test": "npx wrangler pages dev ./ --live-reload: true --show-interactive-dev-session",
+    "watch": "esbuild --watch ./esbuild.config.mjs",
+    "build": "node ./libs/build-index.js && node esbuild.config.mjs",
+    "test": "npx wrangler pages dev ./ --live-reload --show-interactive-dev-session",
     "analyse": "npm run analyse1 && npm run analyse2 && npm run vscode-custom && npm run jsdoc",
-    "watch": "esbuild --watch ./esbuild.config.js",
     "lint": "eslint .",
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
-    "esbuild": "^0.23.1",
+    "esbuild": "^0.24.0",
     "eslint": "^8.15.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
