@@ -5,34 +5,44 @@
 
     <title>Testing TotallyInformation's web-components - visible-console</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
+    <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/visible-console.iife.min.js"></script>
 
 </head><body>
-    
-    <h1>Testing Totally Information's web-components - visible-console</h1>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - visible-console</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/visible-console">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
+            </call-out>
 
-    <section>
-        <p>
-            Intercepts JavaScript calls to <code>console</code> methods and copies the data to an on-page panel.
-        </p><p>
-            There is a script on the page that outputs some example console logging.
-        </p>
-    </section>
+            <p>
+                Intercepts JavaScript calls to <code>console</code> methods and copies the data to an on-page panel.
+            </p><p>
+                There is a script on this page that outputs some example console logging.
+                See the source code for details.
+            </p>
+        </section>
 
-    <section>
-        <article>
-            <h2><code>visible-console</code></h2>
-            <visible-console></visible-console>
-        </article>
-    </section>
+        <section>
+            <article>
+                <h2><code>visible-console</code></h2>
+                <visible-console></visible-console>
+            </article>
+        </section>
+    </main>
 
     <script>
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', VisibleConsole.version)
+            document.getElementById('op2').value = VisibleConsole.version
         })
         
         // Simple tests

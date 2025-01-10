@@ -5,21 +5,21 @@
 
     <title>Testing TotallyInformation's web-components - chart-statetrail</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/alpha/chart-statetrail.iife.min.js"></script>
 
 </head><body>
-    <main>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
         <h1>Testing Totally Information's web-components - chart-statetrail</h1>
-
-        <p>
-            <a href="https://wc.totallyinformation.net/docs/#/chart-statetrail">Documentation</a>.
-        </p>
+    </header>
+    <main>
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Alpha</b>: Experimental. <a href="https://wc.totallyinformation.net/docs/#/chart-statetrail">Documentation</a> <a href="./fasdaf">HERE</a>.
+            <call-out type="caution" title="Status: Alpha">
+                Experimental. <a href="/docs/#/chart-statetrail">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
@@ -58,12 +58,10 @@
     </main>
 
     <script>
-
-
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', ChartStatetrail.version)
+            document.getElementById('op2').value = ChartStatetrail.version
         })
 
         // After 3 seconds, add new data - this is just for testing

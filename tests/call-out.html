@@ -5,17 +5,20 @@
 
     <title>Testing TotallyInformation's web-components - call-out</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
 
 </head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - call-out</h1>
+    </header>
     <main>
-        <h1>Testing TotallyInformation's web-components - call-out</h1>
-
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Beta</b>: Ready for basic use
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/call-out">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
@@ -74,7 +77,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', CallOut.version)
+            document.getElementById('op2').value = CallOut.version
         })
 
         // console.info('Adding dynamic content ...')

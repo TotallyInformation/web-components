@@ -1,0 +1,21 @@
+@import url('./uib-brand.css');
+
+header {
+    display: flex;
+    margin: 1em auto !important;
+}
+header > div {
+    flex: 0 1 auto;
+    margin: 0;
+    padding: 0;
+    margin-right: 16px; /* Add gap between div and h1 */
+}
+header > h1 {
+    margin: 0;
+    flex: 1 1 auto;
+}
+
+header > div img {
+    width: 1.5em;
+    height: 1.5em;
+}

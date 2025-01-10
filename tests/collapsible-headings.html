@@ -5,19 +5,22 @@
 
     <title>Testing Totally Information's web-components - collapsible-headings</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
     <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/collapsible-headings.iife.min.js"></script>
 
 </head><body>
-    <main>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
         <h1>Testing Totally Information's web-components - collapsible-headings</h1>
-
+    </header>
+    <main>
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Beta</b>: Ready for basic use
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/collapsible-headings">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
@@ -62,7 +65,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', CollapsibleHeadings.version)
+            document.getElementById('op2').value = CollapsibleHeadings.version
         })
 
         console.info('Adding dynamic content ...')

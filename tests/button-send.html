@@ -5,36 +5,43 @@
 
     <title>Testing TotallyInformation's web-components - button-send</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
+    <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/button-send.iife.min.js"></script>
     <script defer src="../dist/visible-console.iife.min.js"></script>
 
 </head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - button-send</h1>
+    </header>
     <main>
-        <h1>Testing TotallyInformation's web-components - button-send</h1>
-
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Beta</b>: Ready for basic use
+            <call-out type="warning" title="Status: Beta">
+                <b>Beta</b>: Ready for basic use. <a href="/docs/#/button-send">Documentation</a>. Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
                 A dynamic button that triggers an event with standardised meta-data on-click.
                 It also allows more complex content than the standard HTML button tag.
             </p>
-            <p>If UIBUILDER for Node-RED is in use, clicking will automatically send a message back
+            <p>
+                If UIBUILDER for Node-RED is in use, clicking will automatically send a message back
                 to the Node-RED server.
             </p>
-            <p>The detail data sent on the click event mirrors that for UIBUILDER output.
+            <p>
+                The detail data sent on the click event mirrors that for UIBUILDER output.
                 Create an event listener in JavaScript to pick up the data.
                 See the source code of this page for examples.
             </p>
         </section>
 
-        <section>
+        <article>
+            <h2>Basic Usage</h2>
+
             <button-send>
-                This is a button
+                This is a basic button
             </button-send>
 
             <button-send id="btnSend" topic="my-topic" payload="my payload" 
@@ -51,7 +58,7 @@
                     (e.g. &lt;br>, &lt;p>, etc) in a &lt;button> but you can now!
                 </p>
             </button-send>
-        </section>
+        </article>
 
         <section>
             <h2 title="Uses the visible-console component"><code>console.log</code> output</h2>
@@ -63,7 +70,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', ButtonSend.version)
+            document.getElementById('op2').value = ButtonSend.version
         })
 
         // Listen to clicks from all buttons on-page

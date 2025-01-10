@@ -3,20 +3,34 @@
     <meta charset="utf-8">
     <title>Testing TotallyInformation's web-components - simple-container and simple-card</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
+    <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/alpha/simple-container.iife.min.js"></script>
     <script defer src="../dist/alpha/simple-card.iife.min.js"></script>
 
 </head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - simple-container and simple-card</h1>
+    </header>
     <main>
-        <h1>Testing TotallyInformation's web-components - simple-container and simple-card</h1>
-
         <section>
+            <call-out type="caution" title="Status: Alpha">
+                Experimental. Documentation: <a href="/docs/#/simple-card">simple-card</a>, <a href="/docs/#/simple-container">simple-container</a>.
+                simple-card Version: <output id="op2">--</output>.
+                simple-container Version: <output id="op3">--</output>.
+            </call-out>
+
             <p>This example uses <code>&lt;simple-container</code> and <code>&lt;simple-card></code>.</p>
             <p>
                 The container component uses a flex row layout. The card component has header and footer slots.
             </p>
+            <call-out type="note">
+                If using the <code>uib-brand.css</code> as on this website,
+                you may find the native <code>&lt;article></code> element wrapped 
+                in a native <code>&lt;main></code> element simpler to use.
+            </call-out>
         </section>
 
         <simple-container>
@@ -29,7 +43,8 @@
                 Another card
             </simple-card>
             <simple-card id="card3" data-something="Hello">
-                Card #3
+                Card #3.
+                These cards are all contained in a simple-container.
             </simple-card>
         </simple-container>
     </main>
@@ -38,8 +53,8 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('SimpleCard version: ', SimpleCard.version)
-            console.info('SimpleContainer version: ', SimpleContainer.version)
+            document.getElementById('op2').value = SimpleCard.version
+            document.getElementById('op3').value = SimpleContainer.version
         })
     </script>
 </body></html>

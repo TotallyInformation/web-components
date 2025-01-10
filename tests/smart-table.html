@@ -5,21 +5,24 @@
 
     <title>Testing TotallyInformation's web-components - smart-table</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/alpha/smart-table.iife.min.js"></script>
 
 </head><body>
-    <main>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
         <h1>Testing Totally Information's web-components - smart-table</h1>
-
+    </header>
+    <main>
         <p>
             <a href="https://wc.totallyinformation.net/docs/#/smart-table">Documentation</a> <a href="./fasdaf">HERE</a>.
         </p>
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Alpha</b>: Experimental. <a href="https://wc.totallyinformation.net/docs/#/smart-table">Documentation</a> <a href="./fasdaf">HERE</a>.
+            <call-out type="caution" title="Status: Alpha">
+                Experimental. <a href="/docs/#/smart-table">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
@@ -44,6 +47,12 @@
     </main>
 
     <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = SmartTable.version
+        })
+
         // Array of objects data - common tabular format
         const arrObj = [
             {

@@ -5,15 +5,23 @@
 
     <title>Testing TotallyInformation's web-components - syntax-highlight</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
+    <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/syntax-highlight.iife.min.js"></script>
 
 </head><body>
-    <main>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
         <h1>Testing Totally Information's web-components - syntax-highlight</h1>
-
+    </header>
+    <main>
         <section>
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/syntax-highlight">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
+            </call-out>
+
             <p>
                 Uses the <code>json</code> property of the element to dynamically convert the JSON input into
                 HTML formatted output.
@@ -37,7 +45,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', SyntaxHighlight.version)
+            document.getElementById('op2').value = SyntaxHighlight.version
         })
 
         console.info('Dynamic content test ...')

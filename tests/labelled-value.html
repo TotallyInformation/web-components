@@ -5,18 +5,21 @@
 
     <title>Testing TotallyInformation's web-components - labelled-value</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/labelled-value.iife.min.js"></script>
 
 </head><body>
-    <main>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
         <h1>Testing Totally Information's web-components - labelled-value</h1>
-
+    </header>
+    <main>
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Beta</b>: Ready for basic use. <a href="https://wc.totallyinformation.net/docs/#/labelled-value">Documentation</a>.
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/labelled-value">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
@@ -30,7 +33,7 @@
         <section>
             <article>
                 <h2>Simplest use. Manual label and value</h2>
-                <labelled-value label="My Label" value="My Value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labelled-value>
+                <labelled-value label="My Label" value="A static value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labelled-value>
                 <p><i>We override one of the style variables to change the font of the label.</i></p>
             </article>
 
@@ -41,7 +44,7 @@
 
             <article>
                 <h2>No value</h2>
-                <labelled-value label="No value label" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labelled-value>
+                <labelled-value label="Label but no value" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labelled-value>
                 <p><i>We override one of the style variables to add some text before and after the label.
                     You can do the same with the output by using <code>--output-before</code> and <code>--output-after</code> CSS variables.
                 </i></p>
@@ -59,7 +62,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', LabelledValue.version)
+            document.getElementById('op2').value = LabelledValue.version
 
             // Sets the value early on, overriding what is set in the HTML.
             lv4.value = 'DOMContentLoaded'

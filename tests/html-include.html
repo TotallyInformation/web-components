@@ -5,18 +5,21 @@
 
     <title>Testing web-components - html-include</title>
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/html-include.iife.min.js"></script>
     <script defer src="../dist/call-out.iife.min.js"></script>
 
 </head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - html-include</h1>
+    </header>
     <main>
-        <h1>Testing Totally Information's web-components package - html-include</h1>
-
         <section>
-            <call-out type="" title="Status" icon="❔">
-                <b>Beta</b>: Ready for basic use
+            <call-out type="warning" title="Status: Beta" icon="❔">
+                Ready for basic use. <a href="/docs/#/html-include">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
             </call-out>
             <p>
                 The <code>src</code> attribute defines the URL resource to include.
@@ -46,7 +49,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            console.info('Component version: ', HtmlInclude.version)
+            document.getElementById('op2').value = HtmlInclude.version
         })
 
         // console.info('Dynamic content test ...')
