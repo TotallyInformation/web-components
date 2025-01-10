@@ -4,7 +4,7 @@
  * Version: See the class code
  *
  **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -31,40 +31,41 @@
  *
  * @element ti-base-component
  * @memberOf Library
- *
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
- * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+
+ * STANDARD METHODS:
+  * @method config Update runtime configuration, return complete config
+  * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
+  * @method deepAssign Object deep merger
+  * @method doInheritStyles If requested, add link to an external style sheet
+  * @method ensureId Adds a unique ID to the tag if no ID defined.
+  * @method _uibMsgHandler Not yet in use
+  * @method _event(name,data) Standardised custom event dispatcher
+  * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * Other watched attributes:
- * None
+  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
 
  * Standard props (common across all my components):
- * @prop {string} baseVersion Static. The component version string (date updated). Also has a getter.
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {boolean} connected False until connectedCallback finishes
- * @prop {string} name Placeholder for the optional name attribute
- * @prop {object} opts This components controllable options - get/set using the `config()` method
- * 
- * @prop {string} version Getter that returns the class version & baseVersion static strings.
+  * @prop {string} baseVersion Static. The component version string (date updated). Also has a getter.
+  * @prop {number} _iCount Static. The component version string (date updated)
+  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
+  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
+  * @prop {function(string): Element} $ jQuery-like shadow dom selector
+  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+  * @prop {boolean} connected False until connectedCallback finishes
+  * @prop {string} name Placeholder for the optional name attribute
+  * @prop {object} opts This components controllable options - get/set using the `config()` method
+  * 
+  * @prop {string} version Getter that returns the class version & baseVersion static strings.
+
  * Other props:
- * By default, all attributes are also created as properties
+  * By default, all attributes are also created as properties
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2024-10-06'
+    static baseVersion = '2025-01-09'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -73,6 +74,8 @@ class TiBaseComponent extends HTMLElement {
 
     /** Is UIBUILDER for Node-RED loaded? */
     uib = !!window['uibuilder']
+    uibuilder = window['uibuilder']
+
     /** Mini jQuery-like shadow dom selector (see constructor)
      * @type {function(string): Element}
      * @param {string} selector - A CSS selector to match the element within the shadow DOM.
