@@ -10,6 +10,35 @@ updated: 2024-10-04 16:28:11
 
 Note that some of these might not even be possible.
 
+### `editable-list` - A list that can be edited in place
+
+Updates the list data when the list is edited.
+
+```html
+<editable-list data="myData" type="unordered" prefix="date" checkbox></editable-list>
+```
+
+* `data` - The data that the list is based on
+* `type` - The type of list, e.g. ordered, unordered
+* `prefix` - The prefix to use for each item
+* `checkbox` - Whether to include a checkbox for each item
+
+If using uibuilder, updates will be returned to Node-RED.
+
+### `for-next` - A looping component
+
+```html
+<for-next from="1" to="10" step="1">
+  <p>Count: <for-var></for-var></p>
+</for-next>
+```
+
+```html
+<ol><for-next input="myvar" key="colId">
+  <for-item><li><for-var col="colId"></for-var><li></for-item>
+</for-next></ol>
+```
+
 ### `light-switch` - on/off, level, colour. Location.
 
 ### `layout-area` - Switch between a few core layouts such as blog & dash
@@ -24,6 +53,12 @@ Note that some of these might not even be possible.
 * Optionally content editable - double-click on icon, prefix and text to edit
 * Optional checkbox with data store
 * UIBUILDER data enabled. Controllable updates back to Node-RED (e.g. when no longer visible or immediate)
+
+```html
+<smart-list data="myData" type="ordered" prefix="date" checkbox>
+  <smart-item><span>1</span> <span>Item 1</span></smart-item>
+</smart-list>
+```
 
 ### [STARTED] `smart-table` - Like smart-list
 
@@ -59,6 +94,7 @@ Note that some of these might not even be possible.
 * Use CSS classes where possible. Use CSS Variables to allow overrides of key CSS properties.
 
 Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
+ [2](https://discourse.nodered.org/t/led-bar-graph-display-template-conversion-to-dashboard2-0/94463)
 
 ### `linear-gauge`
 

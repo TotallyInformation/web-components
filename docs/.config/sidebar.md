@@ -1,13 +1,28 @@
 * [Home](/)
-* Ready for use
-* [`button-send`](./button-send)
-* [`collapsible-headings`](./collapsible-headings)
-* [`visible-console`](./visible-console)
-* Alpha-quality
-* [`labelled-value`](./labelled-value)
-* [`html-include`](./html-include)
-* [`syntax-highlight`](./syntax-highlight)
 
+* Live: Ready for extended use
+
+  * &nbsp;&nbsp;*None as yet*
+
+* Beta: Ready for basic use
+
+  * [`button-send`](button-send)
+  * [`call-out`](call-out)
+  * [`collapsible-headings`](collapsible-headings)
+  * [`labelled-value`](labelled-value)
+  * [`syntax-highlight`](syntax-highlight)
+  * [`visible-console`](visible-console)
+
+* Alpha: Experimental, in early development
+
+  * [`chart-statetrail`](chart-statetrail)
+  * [`html-include`](html-include)
+  * [`led-gauge`](led-gauge)
+  * [`simple-card`](simple-card)
+  * [`simple-container`](simple-container)
+  * [`smart-table`](smart-table)
+
+- [Live Demos](https://wc.totallyinformation.net/tests)
 - [Roadmap](./roadmap)
 
 - **Links**
