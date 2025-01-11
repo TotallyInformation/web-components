@@ -38,6 +38,7 @@
   * @method deepAssign Object deep merger
   * @method doInheritStyles If requested, add link to an external style sheet
   * @method ensureId Adds a unique ID to the tag if no ID defined.
+  * @method uibSend Send a message to the Node-RED server via uibuilder if available.
   * @method _uibMsgHandler Not yet in use
   * @method _event(name,data) Standardised custom event dispatcher
   * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
@@ -65,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-01-09'
+    static baseVersion = '2025-01-11'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -203,11 +204,11 @@ class TiBaseComponent extends HTMLElement {
      * @example
      *   this._event('ready', {age: 42, type: 'android'})
      *
-     * @param {string} name A name to give the event, added to the component-name separated with a :
+     * @param {string} evtName A name to give the event, added to the component-name separated with a :
      * @param {*=} data Optional data object to pass to event listeners via the evt.detail property
      */
-    _event(name, data) {
-        this.dispatchEvent(new CustomEvent(`${this.localName}:${name}`, {
+    _event(evtName, data) {
+        this.dispatchEvent(new CustomEvent(`${this.localName}:${evtName}`, {
             bubbles: true,
             composed: true,
             detail: {
@@ -216,6 +217,20 @@ class TiBaseComponent extends HTMLElement {
                 data: data,
             },
         } ) )
+    }
+
+    /** Send a message to the Node-RED server via uibuilder if available
+     * NB: These web components are NEVER dependent on Node-RED or uibuilder.
+     * @param {string} evtName The event name to send
+     * @param {*} data The data to send
+     */
+    uibSend(evtName, data){
+        if (this.uib) this.uibuilder.send({
+            topic: `${this.localName}:${evtName}`,
+            payload: data,
+            id: this.id,
+            name: this.name,
+        })
     }
 
     /** Standardised constructor. Keep after call to super()
