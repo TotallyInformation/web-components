@@ -31,8 +31,7 @@ template.innerHTML = /*html*/`
         :host {
             --value-color: var(--text2, inherit);
             --gauge-background-color: var(--surface2, inherit);
-            --on-hue: 0; /* 0 = red, 120 = green, 240 = blue */
-            --off-hue: 0;
+            --hue: 0; /* 0 = red, 120 = green, 240 = blue */
             --on-sat: 100%;
             --off-sat: 20%;
             --on-lum: 45%;
@@ -77,7 +76,7 @@ template.innerHTML = /*html*/`
         }
 
         .led {
-            background-color: hsl(var(--off-hue, 0), var(--off-sat, 20%), var(--off-lum, 25%));
+            background-color: hsl(var(--hue, 0), var(--off-sat, 20%), var(--off-lum, 25%));
             height: 20px;
             border-radius: 3px;
             border: 1px solid var(--gauge-background-color);
@@ -85,8 +84,8 @@ template.innerHTML = /*html*/`
         }
 
         .led.on {
-            background-color: hsl(var(--on-hue, 0), var(--on-sat, 100%), var(--on-lum, 45%));
-            /* box-shadow: 0 0 5px hsl(var(--on-hue, 0), var(--on-sat, 100%), var(--on-lum, 45%)); */
+            background-color: hsl(var(--hue, 0), var(--on-sat, 100%), var(--on-lum, 45%));
+            /* box-shadow: 0 0 5px hsl(var(--hue, 0), var(--on-sat, 100%), var(--on-lum, 45%)); */
         }
 
         slot {
@@ -256,13 +255,20 @@ class LedGauge extends TiBaseComponent {
      * @param {string|number} val The value to set
      */
     set value(val) {
+        const oldVal = this.#value
         // Ensure that saved #segments value is numeric
         this.#value = parseFloat(val.toString())
         // (Re)Create and show the gauge
         this._renderGauge()
         // Notify listeners of the change
         this._event('value-change', {
-            value: this.value,
+            value: this.#value,
+            oldValue: oldVal,
+        })
+        // If using uibuilder, send the new value to Node-RED.
+        this.uibSend('value-change', {
+            value: this.#value,
+            oldValue: oldVal,
         })
     }
 
@@ -311,11 +317,10 @@ class LedGauge extends TiBaseComponent {
         // Create a property from the value - WARN: Be careful with name clashes
         this[attrib] = newVal
 
+        // NOTE: value and segments are handled by their own setters.
+
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
-        if (attrib === 'value') {
-            this.valueChanged(newVal, oldVal)
-        }
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
@@ -388,14 +393,6 @@ class LedGauge extends TiBaseComponent {
         // Adjust layout for label position
         // const isHorizontal = this.getAttribute('layout') === 'horizontal' ?? true;
         // this.shadowRoot.querySelector('.gauge').style.gridTemplateColumns = isHorizontal ? 'auto 1fr' : '1fr';
-    }
-
-    /** Process value changed event
-     * @param {string} newVal The new value
-     * @param {string} oldVal The old value
-     */
-    valueChanged(newVal, oldVal) {
-        console.log('Value changed', newVal, oldVal)
     }
 } // ---- end of Class ---- //
 
