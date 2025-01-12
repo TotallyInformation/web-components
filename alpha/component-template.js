@@ -83,15 +83,15 @@ template.innerHTML = /*html*/`
   * None
 
  * PROPS FROM BASE:
-  * @prop {number} _iCount Static. The component version string (date updated)
-  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
-  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
+  * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
   * @prop {function(string): Element} $ jQuery-like shadow dom selector (or undefined if shadow dom not used)
   * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector (or undefined if shadow dom not used)
+  * @prop {string} baseVersion Static. The base component version string (date updated).
   * @prop {boolean} connected False until connectedCallback finishes
   * @prop {string} name Placeholder for the optional name attribute
   * @prop {object} opts This components controllable options - get/set using the `config()` method - empty object by default
-  * @prop {string} baseVersion Static. The base component version string (date updated).
+  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
+  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
   * OTHER STANDARD PROPS:
   * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
@@ -107,7 +107,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-01-09'
+    static componentVersion = '2025-01-12'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
