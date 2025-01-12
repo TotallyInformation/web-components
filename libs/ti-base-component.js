@@ -48,7 +48,7 @@
 
  * Standard props (common across all my components):
   * @prop {string} baseVersion Static. The component version string (date updated). Also has a getter.
-  * @prop {number} _iCount Static. The component version string (date updated)
+  * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
   * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
   * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
   * @prop {function(string): Element} $ jQuery-like shadow dom selector
@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-01-11'
+    static baseVersion = '2025-01-12'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -106,6 +106,16 @@ class TiBaseComponent extends HTMLElement {
         // @ts-ignore
         return `${this.componentVersion} (Base: ${this.baseVersion})`
     }
+
+    // get id() {
+    //     return this.id
+    // }
+
+    // set id(value) {
+    //     // this.id = value
+    //     console.log('>> SETTING ID:', value, this.id, this.getAttribute('id'))
+    // }
+
 
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
@@ -182,20 +192,11 @@ class TiBaseComponent extends HTMLElement {
     }
 
     // TODO Needs enhancing - does nothing at the moment
-    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
-     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
+    /** Handle a `${this.localName}::${this.id}` custom event
+     * @param {object} msg A uibuilder message object
      */
-    _uibMsgHandler(evt) {
-        // If there is a payload, we want to replace the slot - easiest done from the light DOM
-        // if ( evt['detail'].payload ) {
-        //     const el = document.getElementById(this.id)
-        //     el.innerHTML = evt['detail'].payload
-        // }
-        // If there is a payload, we want to replace the VALUE
-        // if ( evt['detail'].payload ) {
-        //     const el = this.shadowRoot.getElementById('value')
-        //     el.innerHTML = evt['detail'].payload
-        // }
+    _uibMsgHandler(msg) {
+        console.log(`[${this.localName}:${this.id}] uibuilder message received:`, msg)
     }
 
     /** Custom event dispacher `component-name:name` with detail data
@@ -254,8 +255,8 @@ class TiBaseComponent extends HTMLElement {
         // Apply parent styles from a stylesheet if required - only required if using an applied template
         this.doInheritStyles()  // in base class
 
-        // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
-        // if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
+        // Listen for a uibuilder msg that is targetted at this instance of the component
+        if (this.uib) this.uibuilder.onTopic(`${this.localName}::${this.id}`, this._uibMsgHandler.bind(this) )
     }
 
     /** Standardised disconnection. Call from the END of disconnectedCallback fn */
