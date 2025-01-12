@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
-    <script defer src="../dist/alpha/led-gauge.iife.min.js"></script>
+    <script defer src="../dist/led-gauge.iife.min.js"></script>
 </head><body>
     <header>
         <div><a href="./"><img src="./resources/home.svg"></a></div>
@@ -16,8 +16,8 @@
     </header>
     <main>
         <section>
-            <call-out type="caution" title="Status: Alpha">
-                Experimental. <a href="/docs/#/led-gauge">Documentation</a>.
+            <call-out type="tip" title="Status: Live">
+                Ready for production use. <a href="/docs/#/led-gauge">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
 
@@ -29,7 +29,7 @@
         <section>
             <article>
                 <h2>Basic Usage</h2>
-                <led-gauge value="24" segments="11">Gauge Label</led-gauge>
+                <led-gauge value="24" segments="10">Gauge Label</led-gauge>
             </article>
 
             <article>
@@ -68,13 +68,25 @@
     </main>
 
     <script>
+        const myGauge = document.querySelector('led-gauge')
+
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
             document.getElementById('op2').value = LedGauge.version
-        })
 
-        const myGauge = document.querySelector('led-gauge')
+            // Make each segment a different colour
+            const hueStep = (360 - myGauge.segments) / myGauge.segments
+            const segStep = myGauge.max / myGauge.segments
+            let hue = 0
+            const colors = {}
+            for (let i = 0; i < myGauge.max; i += segStep) {
+                hue += hueStep
+                colors[i] = hue
+            }
+            myGauge.colors = colors
+            console.log('COLORS: ', myGauge.colors)
+        })
 
         // Show updated gauge values on-page
         myGauge.addEventListener('led-gauge:value-change', (data) => {
