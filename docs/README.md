@@ -38,7 +38,7 @@ Each of the components that are in any form of usable state have a [test/demo pa
 
 These are fully usable in their current form. They may still evolve but are considered relatively stable.
 
-* None as yet
+* [`led-gauge`](led-gauge) - An LED-style gauge.
 
 ### Beta
 
@@ -57,7 +57,6 @@ These are certainly fully usable in their current form. However, they will still
 These probably should not be used in anger just yet. They will generally do something useful but are not yet considered a minimum viable product.
 
 * [`chart-statetrail`](chart-statetrail) - A chart that shows a trail of states over time (AKA, a timeline).
-* [`led-gauge`](led-gauge) - An LED-style gauge.
 * [`simple-card`](simple-card)
 * [`simple-container`](simple-container)
 * [`smart-table`](smart-table) - Turns array or object data into an HTML table with optional column definitions.

@@ -6,6 +6,29 @@ created: 2024-09-25 02:04:04
 updated: 2024-10-04 16:28:11
 ---
 
+## In progress
+
+### `led-gauge`
+
+* horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
+* Segmented (led style, with LED's "lit" up to the current value)
+* Max & Min limit options (defaulting to 0-100)
+* Unit attribute: Default to `%`, text string used to indicate what the measure represents
+* Optional label attribute + label position attribute - left/right/above/below - defaults to above. Allow HTML in the label.
+  * Option to display the current value and/or the unit string. To appears inside the label. Option to show before or after any label text.
+* Value attribute & property: defines the current value to be shown
+* `segments` property: defines how many "ticks" - (max-min)/#ticks = the step value of each tick.
+  * Show segment value beneath the display - where the color changes & min/max values only. Have the segment value as a title attribute so it shows on hover.
+  * Maybe allow override (e.g. an array of tick definitions) to facilitate non-linear gauges.
+* colour segments property (array): Allows setting each segment to a defined colour.
+* Allow click handler for each display segment.
+* Use CSS classes where possible. Use CSS Variables to allow overrides of key CSS properties.
+
+Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
+ [2](https://discourse.nodered.org/t/led-bar-graph-display-template-conversion-to-dashboard2-0/94463)
+
+
+
 ## Possible future components
 
 Note that some of these might not even be possible.
@@ -76,25 +99,6 @@ If using uibuilder, updates will be returned to Node-RED.
 * Multiple ways to update content: DOM changes, custom event, proxied property. For uibuilder: auto-topic updates
 * *Maybe - Optional drag/drop re-oder*
 * *Maybe - double-click to content edit*
-
-### `led-gauge`
-
-* horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
-* Segmented (led style, with LED's "lit" up to the current value)
-* Max & Min limit options (defaulting to 0-100)
-* Unit attribute: Default to `%`, text string used to indicate what the measure represents
-* Optional label attribute + label position attribute - left/right/above/below - defaults to above. Allow HTML in the label.
-  * Option to display the current value and/or the unit string. To appears inside the label. Option to show before or after any label text.
-* Value attribute & property: defines the current value to be shown
-* `segments` property: defines how many "ticks" - (max-min)/#ticks = the step value of each tick.
-  * Show segment value beneath the display - where the color changes & min/max values only. Have the segment value as a title attribute so it shows on hover.
-  * Maybe allow override (e.g. an array of tick definitions) to facilitate non-linear gauges.
-* colour segments property (array): Allows setting each segment to a defined colour.
-* Allow click handler for each display segment.
-* Use CSS classes where possible. Use CSS Variables to allow overrides of key CSS properties.
-
-Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
- [2](https://discourse.nodered.org/t/led-bar-graph-display-template-conversion-to-dashboard2-0/94463)
 
 ### `linear-gauge`
 

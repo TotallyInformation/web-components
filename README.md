@@ -2,9 +2,9 @@
 
 [![](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge)](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
 
-A repository of simple W3C Web Components. These may have extra capabilities for use with node-red-contrib-uibuilder but all work independently as well.
+A repository of simple W3C Web Components. These may have extra capabilities for use with UIBUILDER for Node-RED but all work independently as well.
 
-Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.
+Additional documentation is available in the docs folder which is also exposed as a website at https://wc.totallyinformation.net/.
 
 ## Useage
 
@@ -51,6 +51,8 @@ If using with Node-RED, you can install the components with the help of node-red
 If you wish to install locally, you can npm install from the GitHub repository with `npm install totallyinformation/web-components`. If these ever get published to npm, you would install with `npm install @totallyinformation/web-components`. However, note that, at this point, I am not intending to publish them quickly as they are still evolving quite rapidly.
 
 If installing locally, you will need to make the installed `web-components/components/` folder available to your web server as a static resource folder.
+
+If using with UIBUILDER for Node-RED, you can use UIBUILDER's library manager to install the components directly from GitHub. This will make them available to your front-end code as `../uibuilder/vendor/@totallyinformation/web-components/dist/button-send.js`.
 
 ### Loading components into your web page
 
@@ -112,14 +114,21 @@ Alternatively, there is a built-in Node.js mini web server. Running the npm scri
 
 ## Components
 
+These components can be considered `live` and ready for production use.
+
+| Name                                  | Description                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `led-gauge` (LedGauge)                | A simple LED-style gauge widget with easily controlled colours and responsive layout. |
+
 These components can be considered `beta` quality or better. They may not be complete but they should have basic usefulness.
 
 | Name                                  | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
-| `button-send` (ButtonSend)    | A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button. |
-| `call-out` (CallOut)          | Displays nicely formatted callout boxes. |
+| `button-send` (ButtonSend)            | A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button. |
+| `call-out` (CallOut)                  | Displays nicely formatted callout boxes. |
 | `collapsible-headings` (CollapsibleHeadings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. |
 | `html-include` (HtmlInclude)          | Dynamically load external HTML content very easily without needing an iFrame. |
+| `labelled-value` (LabelledValue)      | A simple label and value pair with easy styling.             |
 | `syntax-highlight` (SyntaxHighlight)  | A simple, easy to use JSON object highlight element. |
 | `visible-console` (VisibleConsole)    | Reflects `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
 
@@ -140,12 +149,12 @@ These components can be considered `beta` quality or better. They may not be com
 | | |
 | `chart-frappe` (ChartFrappe)          | A chart component using the Frappe chart library |
 | `chart-high` (ChartHigh)              | A chart component using the HighCharts library |
+| `chart-statetrail` (ChartStateTrail)  | A chart that shows a trail of states over time (AKA, a timeline). |
 | `container-br` (ContainerBr)          | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
 | `data-list` (DataList)                | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
 | `definition-list` (DefinitionList)    | Similar to `data-list` but outputs a DL instead.             |
 | `gauge-steel` (GaugeSteel)            | A gauge component using the Steel Series library |
 | `ghost-thermometer` (GhostThermometer)| A thermometer style gauge |
-| `labelled-value` (LabelledValue)      | Text output with a label.                                    |
 | `multi-way-switch` (MultiWaySwitch)   | A flexible multi-switch that can display in several styles (buttons, rotary, etc) |
 | `nav-bar` (NavBar)                    | A standardised navigation menu bar |
 | `simple-card` (SimpleCard)            | A card container with optional header and footer. |
