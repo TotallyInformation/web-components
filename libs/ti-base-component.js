@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-01-12'
+    static baseVersion = '2025-01-13'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -191,12 +191,22 @@ class TiBaseComponent extends HTMLElement {
         this.$$ = this.shadowRoot?.querySelectorAll.bind(this.shadowRoot)
     }
 
-    // TODO Needs enhancing - does nothing at the moment
     /** Handle a `${this.localName}::${this.id}` custom event
+     * Each prop in the msg.payload is set as a prop on the component instance.
      * @param {object} msg A uibuilder message object
      */
     _uibMsgHandler(msg) {
-        console.log(`[${this.localName}:${this.id}] uibuilder message received:`, msg)
+        // if msg.payload is not an object, ignore
+        if (typeof msg.payload !== 'object') {
+            console.warn(`[${this.localName}] Ignoring msg, payload is not an object:`, msg)
+            return
+        }
+
+        // set properties from the msg
+        Object.keys(msg.payload).forEach(key => {
+            if (key.startsWith('_')) return
+            this[key] = msg.payload[key]
+        })
     }
 
     /** Custom event dispacher `component-name:name` with detail data
