@@ -109,13 +109,6 @@ template.innerHTML = /*html*/`
  * @namespace Alpha
  */
 
-/** TODO
- * Update class docs
- * Add uibuilder support
- * Add segment colors
- *
- */
-
 /**
  * @class
  * @extends TiBaseComponent
@@ -165,6 +158,7 @@ template.innerHTML = /*html*/`
   * @attr {string} max
   * @attr {string} unit
   * @attr {string} segments
+  * @attr {string} hide-segment-labels
 
  * PROPS FROM BASE:
   * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
@@ -181,6 +175,7 @@ template.innerHTML = /*html*/`
 
  * Other props:
     * @prop {string[]} colors The color of each segment in the gauge
+    * @prop {boolean} hideSegmentLabels If true, hide the segment labels (hide-segment-labels attribute)
     * @prop {number} max The maximum value of the gauge
     * @prop {number} min The minimum value of the gauge
     * @prop {HTMLElement} segContainerEl The container for the gauge segments
@@ -198,20 +193,19 @@ template.innerHTML = /*html*/`
  */
 class LedGauge extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-01-12'
+    static componentVersion = '2025-01-13'
 
     #value = 0
     #segments = 10
     #colors = {}
     // #colors = {
-    //     // 60: 40, // 60%+ is orange
+    //     60: 40, // 60%+ is orange
     //     80: 0, // 80%+ is red
     // }
-
-    // TODO Add getters and setters for all props - force re-render on change
-    min = 0
-    max = 100
-    unit = '%'
+    #min = 0
+    #max = 100
+    #unit = '%'
+    #hideSegmentLabels = false
 
     /** @type {HTMLElement} */
     segContainerEl
@@ -231,7 +225,7 @@ class LedGauge extends TiBaseComponent {
             'inherit-style', 'name',
             // Other watched attributes:
             'value', 'min', 'max', 'unit',
-            'segments',
+            'segments', 'hide-segment-labels',
         ]
     }
 
@@ -299,6 +293,74 @@ class LedGauge extends TiBaseComponent {
         return this.#colors
     }
 
+    /** Set the minimum value of the gauge
+     * @param {string|number} val The minimum value
+     */
+    set min(val) {
+        // Ensure that the internal value is numeric
+        this.#min = parseFloat(val.toString())
+        // (Re)Create and show the gauge
+        this._renderGauge()
+    }
+
+    /** Get the minimum value of the gauge
+     * @returns {number} The minimum value
+     */
+    get min() {
+        return this.#min
+    }
+
+    /** Set the maximum value of the gauge
+     * @param {string|number} val The maximum value
+     */ 
+    set max(val) {
+        this.#max = parseFloat(val.toString())
+        // (Re)Create and show the gauge
+        this._renderGauge()
+    }
+    
+    /** Get the maximum value of the gauge
+     * @returns {number} The maximum value
+     */
+    get max() {
+        return this.#max
+    }
+
+    /** Set the unit of the gauge
+     * @param {string} val The unit
+     * @default '%'
+     * @example '°C'
+     */
+    set unit(val) {
+        this.#unit = val
+        this.valueEl.innerText = `${this.value}${this.#unit}`
+    }
+
+    /** Get the unit of the gauge
+     * @returns {string} The unit
+     */
+    get unit() {
+        return this.#unit
+    }
+
+    /** Set whether to hide the segment labels
+     * @param {string|boolean} val Whether to hide the segment labels
+     * @default false
+     */
+    set hideSegmentLabels(val) {
+        if (val === '' || val.toString().toLowerCase() === 'true') val = true
+        else val = false
+        this.#hideSegmentLabels = val
+        this.valsContainerEl.style.display = val ? 'none' : 'grid'
+    }
+
+    /** Get whether segment labels are hidden
+     * @returns {boolean} Whether segment labels are hidden
+     */
+    get hideSegmentLabels() {
+        return this.#hideSegmentLabels
+    }
+
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() { // eslint-disable-line no-useless-constructor
         super()
@@ -356,18 +418,18 @@ class LedGauge extends TiBaseComponent {
     /** Create the gauge */
     _renderGauge() {
         // Calculate the segment step size
-        const step = (this.max - this.min) / this.segments
+        const step = (this.#max - this.#min) / this.#segments
 
         // Clear out the existing segments
         this.segContainerEl.innerHTML = ''
         this.valsContainerEl.innerHTML = ''
 
         // Create LED segments
-        for (let i = 0; i < this.segments; i++) {
+        for (let i = 0; i < this.#segments; i++) {
             // Create the segments
             const segment = document.createElement('div')
             segment.classList.add('led')
-            const segmentValue = this.min + i * step
+            const segmentValue = this.#min + i * step
             segment.title = segmentValue.toString()
 
             // Create the segment values
@@ -380,7 +442,7 @@ class LedGauge extends TiBaseComponent {
 
             // if colorSegments has a key greater than or equal to the segVal, set the hue to the value of the key
             const hueKey = Object.keys(this.#colors).reverse().find(key => {
-                return Number(key) <= segmentValue + step - 1
+                return Number(key) <= segmentValue + step - 0.01
             })
             if (hueKey !== undefined) segment.style.setProperty('--hue', this.#colors[hueKey])
 
@@ -392,7 +454,7 @@ class LedGauge extends TiBaseComponent {
                 const data = {
                     gaugeValue: this.#value,
                     segment: i,
-                    segmentValue: segmentValue,
+                    segmentValue: Number(segmentValue),
                 }
                 // Fire custom event
                 this._event('segment-click', data)
@@ -409,18 +471,10 @@ class LedGauge extends TiBaseComponent {
 
         const segVal = document.createElement('div')
         this.valsContainerEl.appendChild(segVal)
-        segVal.innerText = this.max.toString()
+        segVal.innerText = this.#max.toString()
 
-        // Render label with current value and unit if applicable
-        // const labelPosition = this.getAttribute('label-position') || 'above';
-        // const labelContent = this.getAttribute('label') || '';
-        this.valueEl.innerText = `${this.value}${this.unit}`
-        // const showValue = this.hasAttribute('show-value') ? `<span class="value">${this.value}${this.unit}</span>` : '';
-        // this.labelElement.innerHTML = labelPosition.includes('below') ? labelContent + showValue : showValue + labelContent;
-
-        // Adjust layout for label position
-        // const isHorizontal = this.getAttribute('layout') === 'horizontal' ?? true;
-        // this.shadowRoot.querySelector('.gauge').style.gridTemplateColumns = isHorizontal ? 'auto 1fr' : '1fr';
+        // Render current value and unit if applicable
+        this.valueEl.innerText = `${this.value}${this.#unit}`
     }
 } // ---- end of Class ---- //
 

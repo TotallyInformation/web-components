@@ -19,8 +19,13 @@ updated: 2025-01-11 16:47:41
 
 ### Attributes
 
+All of the attributes are optional.
+
+* `hide-segment-labels` - If present, hides the segment labels (`hideSegmentLabels` when used as a property).
+* `inherit-style` - Load external styles into component. If present but empty, will default to './index.css'. Optionally give a URL to load.
 * `max` - The maximum value. Default `100`.
 * `min` - The minimum value. Default `0`.
+* `name` - HTML name attribute. Included in output _meta prop.
 * `segments` - The number of segments to display. Default `10`.
 * `unit` - The unit of measure. Default `%`.
 * `value` - The current value to be displayed. Default `0`.
@@ -29,8 +34,9 @@ updated: 2025-01-11 16:47:41
 
 Each attribute has a corresponding property. You can set the property directly in JavaScript or by using the `setAttribute` method. Note that setting the property will not change the attribute
 
-* {number} `value` (getter/setter) The current value of the gauge. #value is the private equivalent property. (Default=0)
-* {number} `segments` (getter/setter) The number of segments in the gauge. #segments is the private equivalent property. (Default=10)
+* {number} `value` The current value of the gauge. #value is the private equivalent property. (Default=0)
+* {boolean} `hideSegmentLabels` If true, hide the segment labels. (hide-segment-labels attribute, default=false)
+* {number} `segments` The number of segments in the gauge. #segments is the private equivalent property. (Default=10)
 * {number} `min` The minimum value of the gauge. (Default=0)
 * {number} `max` The maximum value of the gauge. (Default=100)
 * {string} `unit` The unit of the gauge value. (Default="%")
@@ -38,7 +44,7 @@ Each attribute has a corresponding property. You can set the property directly i
 * {HTMLElement} `segContainerEl` The container for the gauge segments.
 * {HTMLElement} `valsContainerEl` The container for the segment values.
 * {HTMLElement} `valueEl` The container for the gauge value.
-* {HTMLCollection} `segmentElements` A collection of the segment div elements.
+* {HTMLCollection} `segmentElements` The collection of the segment div elements.
 
 * Properties inherited from the `BaseComponent`:
 
@@ -59,10 +65,9 @@ Each attribute has a corresponding property. You can set the property directly i
 > [!NOTE]
 > Static properties have to be accessed via the component's classname. e.g. `LedGauge.componentVersion`
 
-
 ## Slots
 
-The default component slot is used for the gauge's label. Leave the tag content empty if you don't want a label. e.g. With label: `<led-gauge>My Gauge</led-gauge>`, without label: `<led-gauge></led-gauge>`.
+The default component slot is used for the gauge's *label*. Leave the tag content empty if you don't want a label. e.g. With label: `<led-gauge>My Gauge</led-gauge>`, without label: `<led-gauge></led-gauge>`.
 
 ## Styling
 
@@ -188,7 +193,40 @@ These methods can be used from JavaScript by first getting a reference to the ap
 
 ## Extensions for UIBUILDER for Node-RED
 
+### Browser to Node-RED
+
 As mentioned above, when used with uibuilder, value-changed and segment-click events are sent back to Node-RED using msg.topic settings of `led-gauge:value-changed` and `led-gauge:segment-click`. The payload contains the new value and the segment details respectively. The id and name properties are also sent back.
+
+### Node-RED to Browser
+
+You can send messages to the component from Node-RED via the `uibuilder` node. The `msg.topic` should be set to the `led-gauge::<htmlid>` (note the double `:`). Where `<htmlid>` is the HTML ID of the component instance. If you have not set an id manually, the component automatically creates one for you in the format `led-gauge-<number>` where number is derived from a count of the components on the page (counting from top to bottom).
+
+The `msg.payload` should be an object containing the component properties you want to change.
+
+#### Examples
+
+```json
+{
+  "topic": "led-gauge-1",
+  "payload": {
+    "value": 50
+  }
+}
+```
+
+or
+
+```json
+{
+  "topic": "led-gauge-1",
+  "payload": {
+    "colors": {
+      "60": 40,
+      "80": 0
+    }
+  }
+}
+```
 
 ## Original Requirements
 
@@ -205,18 +243,22 @@ As mentioned above, when used with uibuilder, value-changed and segment-click ev
 * [x] Set colours for each segment - ideally grouped.
 * [x] Option to display the current value and/or the unit string.
 * [x] Colour segments property (array): Allows setting each segment to a defined colour.
-* [ ] Horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
-* [ ] Label position attribute - left/right/above/below - defaults to above. Allow HTML in the label.
-* [ ] Option to show value/unit before or after any label text.
-
-Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
- [2](https://discourse.nodered.org/t/led-bar-graph-display-template-conversion-to-dashboard2-0/94463)
-
-## Nice-to-have features
-
-* Logarithmic scale option
 * UIBUILDER for Node-RED integration
   * [x] Send value changes back to Node-RED
   * [x] Click handler sends back to Node-RED
-  * [ ] Direct update from UIBUILDER for Node-RED via msg.topic = html id and msg.payload = value
-* [ ] Maybe allow override (e.g. an array of tick definitions) to facilitate non-linear gauges.
+  * [x] Direct update from UIBUILDER for Node-RED via msg.topic = html id and msg.payload = value
+
+## Nice-to-have features
+
+Possibly in future versions.
+
+* [ ] Logarithmic scale option
+* [ ] Horizontal/vertical layout option - using one of CSS grid or flex (whichever is best for the component)
+* [ ] Label position attribute - left/right/above/below - defaults to above. Allow HTML in the label.
+* [ ] Option to show value/unit before or after any label text.
+* [ ] Maybe allow non-linear gauges?
+
+## Design References
+
+* [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955)
+* [2](https://discourse.nodered.org/t/led-bar-graph-display-template-conversion-to-dashboard2-0/94463)
