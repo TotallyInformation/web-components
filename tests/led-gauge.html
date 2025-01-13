@@ -40,15 +40,17 @@
                     <button onclick="myGauge.segments = 20">Set segments to 20</button>
                     <button onclick="myGauge.segments = 100">Set segments to 100</button>
                 </div>
-                <!--
                 <div>
+                    <button onclick="toggleSegLabels()">Toggle segment labels</button>
+                    <button onclick="rainbowSegments()" title="each segment a different colour">Rainbow Segments</button>
+                    <button onclick="gorSegments()" title="60%+ Orange, 80%+ Red">Green/Orange/Red Segments</button>
+                    <!--
                     <button>Toggle value display</button>
                     <button>Toggle label</button>
-                    <button>Toggle segment labels</button>
+                    
                     <button></button>
-                    <button></button>
+                    -->
                 </div>
-                -->
                 <p>Click on a segment to see the value in the dev tools console</p>
                 <p>Gauge Value: <output id="op1">--</output></p>
                 <p></p>
@@ -72,12 +74,11 @@
     <script>
         const myGauge = document.querySelector('led-gauge')
 
-        /** We need to wait for everything to be loaded before using components from JavaScript */
-        addEventListener("DOMContentLoaded", (event) => {
-            // What version are we using? This is static so we use the class global reference
-            document.getElementById('op2').value = LedGauge.version
+        function toggleSegLabels() {
+            myGauge.hideSegmentLabels = !myGauge.hideSegmentLabels
+        }
 
-            // Make each segment a different colour
+        function rainbowSegments() {
             const hueStep = (360 - myGauge.segments) / myGauge.segments
             const segStep = myGauge.max / myGauge.segments
             let hue = 0
@@ -88,6 +89,22 @@
             }
             myGauge.colors = colors
             console.log('COLORS: ', myGauge.colors)
+        }
+
+        function gorSegments() {
+            const colors = {
+                // green from 0% to 60%
+                60: 40, // orange from 60% to 80%
+                80: 0,  // red from 80% to 100%
+            }
+            myGauge.colors = colors
+            console.log('COLORS: ', myGauge.colors)
+        }
+
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = LedGauge.version
         })
 
         // Show updated gauge values on-page
