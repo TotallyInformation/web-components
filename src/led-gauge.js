@@ -348,7 +348,7 @@ class LedGauge extends TiBaseComponent {
      * @default false
      */
     set hideSegmentLabels(val) {
-        if (val === '' || val.toString().toLowerCase() === 'true') val = true
+        if (val === '' || val === null || val.toString().toLowerCase() === 'true') val = true
         else val = false
         this.#hideSegmentLabels = val
         this.valsContainerEl.style.display = val ? 'none' : 'grid'
@@ -400,6 +400,8 @@ class LedGauge extends TiBaseComponent {
          * Otherwise this can fire BEFORE everthing is fully connected.
          */
         // if (!this.connected) return
+
+        if (attrib === 'hide-segment-labels') attrib = 'hideSegmentLabels'
 
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
