@@ -48,17 +48,7 @@ template.innerHTML = /*html*/`
  * @element component-template
  * @memberOf Alpha
 
- * METHODS FROM BASE:
-  * @method config Update runtime configuration, return complete config
-  * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
-  * @method deepAssign Object deep merger
-  * @method doInheritStyles If requested, add link to an external style sheet
-  * @method ensureId Adds a unique ID to the tag if no ID defined.
-  * @method _connect Call from start of connectedCallback. Sets connected prop and creates shadow selectors
-  * @method _event(name,data) Standardised custom event dispatcher
-  * @method _disconnect Call from end of disconnectedCallback. Clears connected prop and removes shadow selectors
-  * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
-  * @method _uibMsgHandler Not yet in use
+ * METHODS FROM BASE: (see TiBaseComponent)
  * STANDARD METHODS:
   * @method attributeChangedCallback Called when an attribute is added, removed, updated or replaced
   * @method connectedCallback Called when the element is added to a document
@@ -82,17 +72,8 @@ template.innerHTML = /*html*/`
  * Other watched attributes:
   * None
 
- * PROPS FROM BASE:
-  * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
-  * @prop {function(string): Element} $ jQuery-like shadow dom selector (or undefined if shadow dom not used)
-  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector (or undefined if shadow dom not used)
-  * @prop {string} baseVersion Static. The base component version string (date updated).
-  * @prop {boolean} connected False until connectedCallback finishes
-  * @prop {string} name Placeholder for the optional name attribute
-  * @prop {object} opts This components controllable options - get/set using the `config()` method - empty object by default
-  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
-  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
-  * OTHER STANDARD PROPS:
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
   * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
