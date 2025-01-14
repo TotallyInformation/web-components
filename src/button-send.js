@@ -97,46 +97,35 @@ template.innerHTML = /*html*/`
  * @element button-send
  * @memberOf Beta
 
- * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
+ * METHODS FROM BASE: (see TiBaseComponent)
 
  * OTHER METHODS:
- * None
+  * None
 
- * @fires button-send:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires button-send:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires button-send:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires button-send:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
- * @fires button-send:click - Document object event. evt.details contains the data
- * @fires uibuilder.send {function} - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ * CUSTOM EVENTS:
+  * @fires button-send:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * @fires button-send:ready - Alias for connected. The instance can handle property & attribute changes
+  * @fires button-send:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * @fires button-send:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+  * @fires button-send:click - Document object event. evt.details contains the data
+  * @fires uibuilder.send {function} - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
- * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
+  * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
+  * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
 
- * Standard props (common across all my components):
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded. In base class
- * @prop {function(string): Element} $ jQuery-like shadow dom selector. In base class
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector. In base class
- * @prop {number} _iCount The component version string (date updated). In base class
- * @prop {object} opts This components controllable options - get/set using the `config()` method. In base class
- *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
- * By default, all attributes are also created as properties
+  * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
+  * By default, all attributes are also created as properties
 
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
 
@@ -146,7 +135,7 @@ template.innerHTML = /*html*/`
  */
 class ButtonSend extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-06'
+    static componentVersion = '2024-10-14'
 
     sendEvents = true
     /** The topic to include in the output
@@ -184,14 +173,7 @@ class ButtonSend extends TiBaseComponent {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         this._construct(template.content.cloneNode(true))
-
-        // const mydata = { ...this.dataset }
-
-        /** The output msg @type {object} */
-        this._setMsg('component load')
-
-        // if ( this.uib && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
-    } // --- end of constructor --- //
+    }
 
     /** Runs when an instance is added to the DOM */
     connectedCallback() {
@@ -199,11 +181,6 @@ class ButtonSend extends TiBaseComponent {
 
         /** Listen for the button click */
         this.addEventListener('click', this.handleClick)
-
-        /** Instance registration event @type {CustomEvent} */
-        // this._setMsg('instance load')
-        // document.dispatchEvent( new CustomEvent('button-send:instanceAdded', {'detail': this._msg._ui}) )
-        // if ( window.uibuilder && this.sendEvents ) window.uibuilder.send({_ui: {...this._ui}})
 
         this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
@@ -234,44 +211,40 @@ class ButtonSend extends TiBaseComponent {
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
-        this._setMsg('attribute change')
-
-        if ( window['uibuilder'] && this.sendEvents ) { window['uibuilder'].send( {
-            payload: { name: attrib, oldVal: oldVal, newVal: newVal },
-            _ui: { ...this._ui }
-        } ) }
+        // this.payload = { name: attrib, oldVal: oldVal, newVal: newVal, ...this.dataset }
+        // this._setMsg('attribute change')
+        // if ( this.uib && this.sendEvents ) { this.uibuilder.send( this._msg ) }
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
 
     _setMsg(evtName) {
+        this._msg = {}
         const mydata = { ...this.dataset }
-        this._msg.topic = this.topic
+        this._msg.topic = this.topic || `${this.localName}:${evtName}`
         this._msg.payload = this.payload ? this.payload : mydata
         this._msg._ui = { ...this._ui }
         if (evtName) this._msg._ui.event = evtName
-        if ( this.id !== '') this._msg._ui.id = this.id
-        const n = this.getAttribute('name')
-        if ( n !== null ) this._msg._ui.name = n
+        this._msg._ui.id = this._msg.id = this.id
+        if ( this.name ) this._msg._ui.name = this._msg.name = this.name
         // this._msg._ui.data = mydata // All of the data-* attributes as an object
     }
 
     /** fn to run when the button is clicked
-     * @param {PointerEvent} evt The event object
+     * @param {PointerEvent|MouseEvent} evt The event object
      */
     handleClick(evt) {
-        const uibLib = window?.['uibuilder']
-
         evt.preventDefault()
-        this._setMsg('click')
 
+        this._setMsg('click')
+        
         const _ui = this._msg._ui
         const target = /** @type {Element} */ (evt.currentTarget)
 
         // Get target properties - only shows custom props not element default ones
         const props = {}
-        const ignoreProps = ['name', 'sendEvents', 'payload', '$', '_ui', '_msg']
+        const ignoreProps = ['name', 'sendEvents', 'payload', '$', '$$', 'uibuilder', '_ui', '_msg']
         Object.keys(target).forEach( key => {
             if ( !ignoreProps.includes(key) ) props[key] = target[key]
         })
@@ -301,12 +274,13 @@ class ButtonSend extends TiBaseComponent {
         _ui.shiftKey = evt.shiftKey
         _ui.metaKey = evt.metaKey
 
+        // @ts-ignore
         _ui.pointerType = evt.pointerType
         _ui.nodeName = target.nodeName
-        if ( uibLib ) {
-            _ui.clientId = uibLib.clientId
-            _ui.pageName = uibLib.pageName
-            _ui.tabId = uibLib.tabId
+        if ( this.uib ) {
+            _ui.clientId = this.uibuilder.clientId
+            _ui.pageName = this.uibuilder.pageName
+            _ui.tabId = this.uibuilder.tabId
         }
 
         /** Output a custom document event `button-send:click`, data is in evt.details */
@@ -317,7 +291,7 @@ class ButtonSend extends TiBaseComponent {
         }) )
 
         /** Send a message to uibuilder with the output data */
-        if (uibLib) uibLib.send(this._msg)
+        if (this.uib) this.uibuilder.send(this._msg)
         // if (uibLib) uibLib.eventSend(evt)
         // else console.debug('[ButtonSend:handleClick] uibuilder not available, cannot send')
     }
