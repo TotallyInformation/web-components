@@ -211,10 +211,6 @@ class ButtonSend extends TiBaseComponent {
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
-        // this.payload = { name: attrib, oldVal: oldVal, newVal: newVal, ...this.dataset }
-        // this._setMsg('attribute change')
-        // if ( this.uib && this.sendEvents ) { this.uibuilder.send( this._msg ) }
-
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
     }
@@ -292,8 +288,6 @@ class ButtonSend extends TiBaseComponent {
 
         /** Send a message to uibuilder with the output data */
         if (this.uib) this.uibuilder.send(this._msg)
-        // if (uibLib) uibLib.eventSend(evt)
-        // else console.debug('[ButtonSend:handleClick] uibuilder not available, cannot send')
     }
 } // ---- End of class definition ---- //
 
