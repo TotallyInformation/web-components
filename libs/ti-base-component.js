@@ -236,12 +236,18 @@ class TiBaseComponent extends HTMLElement {
      * @param {*} data The data to send
      */
     uibSend(evtName, data){
-        if (this.uib) this.uibuilder.send({
-            topic: `${this.localName}:${evtName}`,
-            payload: data,
-            id: this.id,
-            name: this.name,
-        })
+        if (this.uib) {
+            if (this.uibuilder.ioConnected) {
+                this.uibuilder.send({
+                    topic: `${this.localName}:${evtName}`,
+                    payload: data,
+                    id: this.id,
+                    name: this.name,
+                })
+            } else {
+                console.warn(`[${this.localName}] uibuilder not connected to server, cannot send:`, evtName, data)
+            }
+        }
     }
 
     /** Standardised constructor. Keep after call to super()
