@@ -258,16 +258,19 @@ class LedGauge extends TiBaseComponent {
         this.#value = parseFloat(val.toString())
         // (Re)Create and show the gauge
         this._renderGauge()
-        // Notify listeners of the change
-        this._event('value-change', {
-            value: this.#value,
-            oldValue: oldVal,
-        })
-        // If using uibuilder, send the new value to Node-RED.
-        this.uibSend('value-change', {
-            value: this.#value,
-            oldValue: oldVal,
-        })
+        // Only notify once the component is fully connected
+        if (this.connected) {
+            // Notify listeners of the change
+            this._event('value-change', {
+                value: this.#value,
+                oldValue: oldVal,
+            })
+            // If using uibuilder, send the new value to Node-RED.
+            this.uibSend('value-change', {
+                value: this.#value,
+                oldValue: oldVal,
+            })
+        }
     }
 
     /** Get the value of the gauge
