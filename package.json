@@ -16,14 +16,14 @@
     "jsdoc": "npx jsdoc ./src ./alpha -c jsdoc.config.json -r --destination ./docs/jsdoc"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@types/node": "^22.5.5",
-    "esbuild": "^0.24.0",
-    "eslint": "^8.15.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^48.0.2",
-    "eslint-plugin-n": "^16.0.1",
-    "eslint-plugin-promise": "^6.0.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^9.20.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsdoc": "^50.6.3",
+    "eslint-plugin-promise": "^7.2.1",
+    "globals": "^16.0.0",
     "jsdoc": "^4.0.3"
   },
   "directories": {
@@ -56,5 +56,8 @@
   "bugs": {
     "url": "https://github.com/TotallyInformation/web-components/issues"
   },
-  "homepage": "https://totallyinformation.github.io/web-components/#/"
+  "homepage": "https://totallyinformation.github.io/web-components/#/",
+  "dependencies": {
+    "@stylistic/eslint-plugin": "^4.0.1"
+  }
 }
