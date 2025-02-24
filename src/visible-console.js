@@ -1,9 +1,9 @@
 /** A zero dependency web component that will display JavaScript console output on-page.
  *
- * @version See Class version property
+ * Version See Class version property
  *
  */
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -17,10 +17,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 
 /** TODO
+ * - [STARTED] Add actual calling fn/line number to the output. Add extra line to console output and a tooltip or similar for the visible display.
  * - Add part transparent color backgrounds for at least warn and err
  * - std parts
  * - allow to be separate from console (via an attribute) for custom visual logging
@@ -97,13 +98,34 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
     <div class="wrapper"></div>
 `
 
+/** Get the file, line and column number of the calling function
+ * Used to capture the originating file and line number of the console output for output because the process otherwise changes the file/line number.
+ * @returns {Array|null} An array of arrays containing the file, line and column number or null if parsing fails
+ */
+function getStackTrace() {
+    return new Error().stack.split('\n').slice(1).map(line => { // eslint-disable-line @stylistic/newline-per-chained-call
+        // Ignore any line that contains the text "dist/visible-console." ie this file
+        if (line.includes('dist/visible-console.')) return null
+        /** Only return the file, line and column number @type {Array<string|number>} */
+        const match = line.match(/\/([^\/:]+):(\d+):(\d+)\)?$/)
+        if (match) {
+            try { match[2] = Number(match[2]) } catch (e) { /* empty */ }
+            try { match[3] = Number(match[3]) } catch (e) { /* empty */ }
+            return [match[1], match[2], match[3]]
+        }
+        // Return null if parsing fails
+        return null
+        // Remove null entries if parsing fails
+    }).filter(Boolean) // eslint-disable-line @stylistic/newline-per-chained-call
+}
+
 /**
  * @namespace Beta
  */
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description A zero dependency web component that will display JavaScript console output on-page.
  *
  * @element component-template
@@ -113,47 +135,41 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
  *    <visible-console></visible-console>
 
  * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
-
+  * @function config Update runtime configuration, return complete config
+  * @function createShadowSelectors Creates the jQuery-like $ and $$ methods
+  * @function deepAssign Object deep merger
+  * @function doInheritStyles If requested, add link to an external style sheet
+  * @function ensureId Adds a unique ID to the tag if no ID defined.
+  * @function _uibMsgHandler Not yet in use
+  * @function _event (name,data) Standardised custom event dispatcher
  * OTHER METHODS:
- * @method redirectConsole Capture console.xxxx and write to the div
- * @method newLog Creates a new HTML log entry
- * @method checkType Find out the input JavaScript var type
- * @method createHTMLVisualizer Creates an HTML visualisation of the input
+  * @function redirectConsole Capture console.xxxx and write to the div
+  * @function newLog Creates a new HTML log entry
+  * @function checkType Find out the input JavaScript var type
+  * @function createHTMLVisualizer Creates an HTML visualisation of the input
 
- * @fires visible-console:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires visible-console:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires visible-console:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ * CUSTOM EVENTS:
+  * "visible-console:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "component-template:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "visible-console:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "visible-console:attribChanged" - When a watched attribute changes. `evt.details` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
- * 
- * Other watched attributes:
- * None
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
- * Standard props (common across all my components):
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {string} name Placeholder for the optional name attribute
- * @prop {object} opts This components controllable options - get/set using the `config()` method
- *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
- * 
+ * Other watched attributes:
+  * None
+
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+
  * Other props:
- * @prop {object} colors
- * @prop {object} bgColors
- * @prop {object} icons
+  * @property {object} colors The colors to use for different console output types
+  * @property {object} bgColors The background colors to use for different console output types
+  * @property {object} icons The icons to use for different console output types
 
  * @slot No slot
 
@@ -161,7 +177,7 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
  */
 class VisibleConsole extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-06'
+    static componentVersion = '2025-02-12'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -169,10 +185,13 @@ class VisibleConsole extends TiBaseComponent {
     static get observedAttributes() {
         return [
             // Standard watched attributes:
-            'inherit-style', 'name'
+            'inherit-style', 'name',
             // Other watched attributes:
         ]
     }
+
+    // Keep a COPY of the original console so we can still use it if we want
+    nativeConsole = { ...console, }
 
     /** Runtime configuration settings */
     opts = {}
@@ -204,7 +223,7 @@ class VisibleConsole extends TiBaseComponent {
     constructor() {
         super()
 
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
 
@@ -213,9 +232,6 @@ class VisibleConsole extends TiBaseComponent {
 
         // @ts-ignore
         this.wrapper = this.shadowRoot.querySelector('.wrapper')
-
-        // Keep a COPY of the original console so we can still use it if we want
-        this.originalConsole = { ...console }
     }
 
     /** Runs when an instance is added to the DOM */
@@ -243,8 +259,8 @@ class VisibleConsole extends TiBaseComponent {
      * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
      * Attribute values can only ever be strings
      * @param {string} attrib The name of the attribute that is changing
-     * @param {string} newVal The new value of the attribute
      * @param {string} oldVal The old value of the attribute
+     * @param {string} newVal The new value of the attribute
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
         // Don't bother if the new value same as old
@@ -256,16 +272,20 @@ class VisibleConsole extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
-    /** Capture console.xxxx and write to the div  */
+    /** Capture console.xxxx and write to the div
+     * NB: Cannot use bind here and so console output will have the wrong file/line number
+      */
     redirectConsole() {
-        Object.keys(this.icons).forEach( type => {
-            console[type] = (...args) => {
+        Object.keys(this.icons).forEach( method => {
+            console[method] = (...args) => {
+                // capture the originating file and line number
+                this.nativeConsole.log(getStackTrace())
                 // Call the original console.log
-                this.originalConsole[type].apply(console[type], args)
-                this.newLog(type, args)
+                this.nativeConsole[method].apply(console[method], args)
+                this.newLog(method, args)
             }
         })
     }
@@ -312,14 +332,14 @@ class VisibleConsole extends TiBaseComponent {
             return 'array'
         } else if (typeof input === 'object') {
             return 'object'
-        } else {
-            return typeof input
         }
+
+        return typeof input
     }
 
     /** Creates an HTML visualisation of the input
-     * @param {*} input 
-     * @returns {HTMLDivElement}
+     * @param {*} input Input data value to visualise
+     * @returns {HTMLDivElement} DIV element containing the visualisation
      */
     createHTMLVisualizer(input) {
         const container = document.createElement('div')
@@ -404,7 +424,7 @@ class VisibleConsole extends TiBaseComponent {
             if (Array.isArray(value)) {
                 summary = value.map(v => getPrimitiveSummary(v)).join(', ')
             } else if (typeof value === 'object') {
-                summary = Object.keys(value).map(key => `${key}: ${getPrimitiveSummary(value[key])}`).join(', ')
+                summary = Object.keys(value).map(key => `${key}: ${getPrimitiveSummary(value[key])}`).join(', ') // eslint-disable-line @stylistic/newline-per-chained-call
             }
             if (summary.length > 30) {
                 summary = summary.slice(0, 30) + '...'

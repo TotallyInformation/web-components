@@ -3,7 +3,7 @@
  *
  * Version: See the class code
  *
- **/
+ */
 /** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
@@ -18,7 +18,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** Namespace
  * @namespace Library
@@ -26,38 +26,38 @@
 
 /**
  * @class
- * @extends HTMLElement
+ * @augments HTMLElement
  * @description Define the base component extensions for other components in this package.
  *
  * @element ti-base-component
  * @memberOf Library
 
  * STANDARD METHODS:
-  * @method config Update runtime configuration, return complete config
-  * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
-  * @method deepAssign Object deep merger
-  * @method doInheritStyles If requested, add link to an external style sheet
-  * @method ensureId Adds a unique ID to the tag if no ID defined.
-  * @method uibSend Send a message to the Node-RED server via uibuilder if available.
-  * @method _uibMsgHandler Not yet in use
-  * @method _event(name,data) Standardised custom event dispatcher
-  * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+  * @function config Update runtime configuration, return complete config
+  * @function createShadowSelectors Creates the jQuery-like $ and $$ methods
+  * @function deepAssign Object deep merger
+  * @function doInheritStyles If requested, add link to an external style sheet
+  * @function ensureId Adds a unique ID to the tag if no ID defined.
+  * @function uibSend Send a message to the Node-RED server via uibuilder if available.
+  * @function _uibMsgHandler Not yet in use
+  * @function _event (name,data) Standardised custom event dispatcher
+  * @function _ready Call from end of connectedCallback. Sets connected prop and outputs events
 
  * Standard watched attributes (common across all my components):
-  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
 
  * Standard props (common across all my components):
-  * @prop {string} baseVersion Static. The component version string (date updated). Also has a getter.
-  * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
-  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
-  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
-  * @prop {function(string): Element} $ jQuery-like shadow dom selector
-  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
-  * @prop {boolean} connected False until connectedCallback finishes
-  * @prop {string} name Placeholder for the optional name attribute
-  * @prop {object} opts This components controllable options - get/set using the `config()` method
-  * 
-  * @prop {string} version Getter that returns the class version & baseVersion static strings.
+  * @property {string} baseVersion Static. The component version string (date updated). Also has a getter.
+  * @property {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
+  * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
+  * @property {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
+  * @property {function(string): Element} $ jQuery-like shadow dom selector
+  * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+  * @property {boolean} connected False until connectedCallback finishes
+  * @property {string} name Placeholder for the optional name attribute
+  * @property {object} opts This components controllable options - get/set using the `config()` method
+  *
+  * @property {string} version Getter that returns the class version & baseVersion static strings.
 
  * Other props:
   * By default, all attributes are also created as properties
@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-01-14'
+    static baseVersion = '2025-02-24'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -75,7 +75,7 @@ class TiBaseComponent extends HTMLElement {
 
     /** Is UIBUILDER for Node-RED loaded? */
     uib = !!window['uibuilder']
-    uibuilder = window['uibuilder']
+    uibuilder = window['uibuilder'] // eslint-disable-line @stylistic/lines-between-class-members
 
     /** Mini jQuery-like shadow dom selector (see constructor)
      * @type {function(string): Element}
@@ -88,11 +88,12 @@ class TiBaseComponent extends HTMLElement {
      * @param {string} selector - A CSS selector to match the element within the shadow DOM.
      * @returns {NodeList} A STATIC list of all shadow dom elements that match the selector.
      */
-    $$
+    $$ // eslint-disable-line @stylistic/lines-between-class-members
 
     /** True when instance finishes connecting.
      * Allows initial calls of attributeChangedCallback to be
-     * ignored if needed. */
+     * ignored if needed.
+     */
     connected = false
 
     /** Placeholder for the optional name attribute @type {string} */
@@ -101,7 +102,9 @@ class TiBaseComponent extends HTMLElement {
     /** Runtime configuration settings @type {object} */
     opts = {}
 
-    /** Report the current component version string */
+    /** Report the current component version string
+     * @returns {string} The component version & base version as a string
+     */
     static get version() {
         // @ts-ignore
         return `${this.componentVersion} (Base: ${this.baseVersion})`
@@ -123,7 +126,7 @@ class TiBaseComponent extends HTMLElement {
     }
 
     /** Optionally apply an external linked style sheet (called from connectedCallback)
-     * @param {*} url The URL for the linked style sheet
+     * param {*} url The URL for the linked style sheet
      */
     async doInheritStyles() {
         if (!this.hasAttribute('inherit-style')) return
@@ -143,6 +146,7 @@ class TiBaseComponent extends HTMLElement {
 
     /** OPTIONAL. Update runtime configuration, return complete config
      * @param {object|undefined} config If present, partial or full set of options. If undefined, fn returns the current full option settings
+     * @returns {object} The full set of options
      */
     config(config) {
         // Merge config but ensure that default states always present
@@ -161,7 +165,7 @@ class TiBaseComponent extends HTMLElement {
             for (let k in source) { // eslint-disable-line prefer-const
                 const vs = source[k]
                 const vt = target[k]
-                if (Object(vs) == vs && Object(vt) === vt) { // eslint-disable-line eqeqeq
+                if (Object(vs) == vs && Object(vt) === vt) {
                     target[k] = TiBaseComponent.deepAssign(vt, vs)
                     continue
                 }
@@ -255,7 +259,7 @@ class TiBaseComponent extends HTMLElement {
      * @param {{mode:'open'|'closed',delegatesFocus:boolean}=} shadowOpts Options passed to attachShadow
      */
     _construct(template, shadowOpts) {
-        if (!shadowOpts) shadowOpts = { mode: 'open', delegatesFocus: true }
+        if (!shadowOpts) shadowOpts = { mode: 'open', delegatesFocus: true, }
         // Only attach the shadow dom if code and style isolation is needed
         this.attachShadow(shadowOpts)
             .append(template)

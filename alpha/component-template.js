@@ -5,7 +5,7 @@
  *
  * Version: See the class code
  *
- **/
+ */
 /** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
@@ -20,7 +20,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 import TiBaseComponent from '../libs/ti-base-component'
 
@@ -42,7 +42,7 @@ template.innerHTML = /*html*/`
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * @element component-template
@@ -50,31 +50,31 @@ template.innerHTML = /*html*/`
 
  * METHODS FROM BASE: (see TiBaseComponent)
  * STANDARD METHODS:
-  * @method attributeChangedCallback Called when an attribute is added, removed, updated or replaced
-  * @method connectedCallback Called when the element is added to a document
-  * @method constructor Construct the component
-  * @method disconnectedCallback Called when the element is removed from a document
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
 
  * OTHER METHODS:
   * None
 
  * CUSTOM EVENTS:
-  * @fires component-template:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
-  * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
-  * @fires component-template:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
-  * @fires component-template:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * "component-template:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "component-template:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "component-template:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "component-template:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
   * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
-  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
-  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
   * None
 
  * PROPS FROM BASE: (see TiBaseComponent)
  * OTHER STANDARD PROPS:
-  * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
   * By default, all attributes are also created as properties
@@ -88,7 +88,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-01-12'
+    static componentVersion = '2025-02-24'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -121,6 +121,7 @@ class ComponentTemplate extends TiBaseComponent {
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
      * @param {string} attrib Name of watched attribute that has changed
      * @param {string} oldVal The previous attribute value
      * @param {string} newVal The new attribute value
@@ -140,7 +141,7 @@ class ComponentTemplate extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 } // ---- end of Class ---- //
 
