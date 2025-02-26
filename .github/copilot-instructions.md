@@ -10,7 +10,7 @@
 
 ### JavaScript/TypeScript
 
-- For node.js, use features available to v20
+- For node.js, use features available to v22 or below
 - For browsers, use features available to 90%+ browsers/users
 - No trailing semicolons
 - Single quotes for strings
@@ -20,6 +20,7 @@
 - Use optional chaining
 - Add JSDoc if missing
 - Add TypeScript types/interfaces
+- Use JavaScript Standard Style where possible https://standardjs.com
 
 ### Documentation
 
