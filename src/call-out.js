@@ -1,7 +1,7 @@
 /** Define a new zero dependency custom web component ECMA module that can be used to show a GitHub Markdown-style callout box
  * Version: See the class code
- **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** TODO
  * - Use a css var for background transparency
@@ -42,60 +42,51 @@ import TiBaseComponent from '../libs/ti-base-component'
 // `
 
 /** Namespace
- * @namespace Alpha
+ * @namespace Live
  */
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component that outputs a standardised callout box
  *
  * @element call-out
- * @memberOf Alpha
+ * @memberOf Live
 
- * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
- * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+ * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
 
  * OTHER METHODS:
- * None
+  * @function doType Process the type attribute
 
- * @fires call-out:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires call-out:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires call-out:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires call-out:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ * CUSTOM EVENTS:
+  * "call-out:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "call-out:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "call-out:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "call-out:attribChanged" - When a watched attribute changes. `evt.details` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} type - Optional. If present, a title will be added above other child content
- * @attr {string} icon - Optional. If present, will override the callout title icon
+  * @property {string} type - Optional. If present, a title will be added above other child content
+  * @property {string} icon - Optional. If present, will override the callout title icon
 
  * Non-watched but still used attributes:
- * @attr {string} title - Optional. If present, will override the callout title text
+  * @property {string} title - Optional. If present, will override the callout title text
 
- * Standard props (common across all my components):
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {boolean} connected False until connectedCallback finishes
- * @prop {string} name Placeholder for the optional name attribute
- * @prop {object} opts This components controllable options - get/set using the `config()` method
- *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * By default, all attributes are also created as properties
+  * By default, all attributes are also created as properties
 
  * @slot Container contents
 
@@ -103,7 +94,7 @@ import TiBaseComponent from '../libs/ti-base-component'
  */
 class CallOut extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-06'
+    static componentVersion = '2025-02-25'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -186,11 +177,11 @@ class CallOut extends TiBaseComponent {
 
         // Add other dynamic attribute processing here.
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
-        
+
         if (attrib === 'type') this.doType(this.type)
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     doType(type) {
@@ -213,7 +204,7 @@ class CallOut extends TiBaseComponent {
                 headStyle = '--callout-color: hsl(188.2deg 77.78% 40.59%);'
                 break
             }
-        
+
             case 'hint':
             case 'tip': {
                 headIcon = '💡 '
@@ -221,7 +212,7 @@ class CallOut extends TiBaseComponent {
                 headStyle = '--callout-color: hsl(133.7deg 61.35% 40.59%);'
                 break
             }
-        
+
             case 'warn':
             case 'warning': {
                 headIcon = '⚠️ '
@@ -229,7 +220,7 @@ class CallOut extends TiBaseComponent {
                 headStyle = '--callout-color: var(--warning-intense, hsl(35.19deg 84.38% 62.35%));'
                 break
             }
-        
+
             // These supported by GitHub, Typora, Obsidian
             case 'important': {
                 headIcon = '🔖 '
@@ -237,14 +228,14 @@ class CallOut extends TiBaseComponent {
                 headStyle = '--callout-color: hsl(262.44deg 89.78% 73.14%);'
                 break
             }
-        
+
             case 'caution': {
                 headIcon = '❗ '
                 headText = 'Caution'
                 headStyle = '--callout-color: hsl(2.74deg 92.59% 62.94%);'
                 break
             }
-        
+
             default: {
                 break
             }
@@ -260,6 +251,7 @@ class CallOut extends TiBaseComponent {
 
         if (headText) {
             headEl.textContent = `${headIcon}${headText}`
+            // @ts-ignore
             this.style = headStyle
             this.prepend(headEl)
         }

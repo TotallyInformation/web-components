@@ -2,7 +2,7 @@
  *
  * Version: See the class code
  *
- */
+ **/
 /** Copyright (c) 2024-2024 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
@@ -17,7 +17,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ **/
 
 /** TODO
  * - Make deep dynamic additions work (currently only works on initial load)
@@ -126,7 +126,7 @@ class CollapsibleHeadings extends TiBaseComponent {
         this.observer = new MutationObserver((mutations) => {
             this.processSlotContent(mutations)
         })
-        this.observer.observe(this, { childList: true, subtree: true, })
+        this.observer.observe(this, { childList: true, subtree: true })
 
         // Cannot use the slotchange event as it doesn't fire except for top-level changes to the slot, not deep changes.
 
@@ -171,7 +171,6 @@ class CollapsibleHeadings extends TiBaseComponent {
      * Called once when connected and then every time slot content changes
      * param {*} records Mutated records
      * param {*} observer Reference to the observer object
-     * @param {MutationRecord[]} [mutations] Optional. The mutation records to process
      */
     processSlotContent(mutations) {
         // console.log('>> Processing slot content >>', mutations, this)
@@ -186,7 +185,7 @@ class CollapsibleHeadings extends TiBaseComponent {
         // })
 
         // Get the contents of the slot
-        const assignedNodes = this.shadowSlot.assignedNodes({ flatten: true, })
+        const assignedNodes = this.shadowSlot.assignedNodes({ flatten: true })
         // console.log('>> Assigned nodes >>', assignedNodes)
         // NB: assignedElements would be better but not supported in Safari 12.1/12.2
 
@@ -250,3 +249,21 @@ window['CollapsibleHeadings'] = CollapsibleHeadings
 
 // Self-register the HTML tag
 customElements.define('collapsible-headings', CollapsibleHeadings)
+
+//#region TEST
+// const ch = document.getElementsByTagName('collapsible-headings')[0]
+// if (ch) {
+//     const newH = document.createElement('h2')
+//     const newP = document.createElement('p')
+//     newH.innerText = 'Dynamically added section'
+//     newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+
+//     setTimeout(() => {
+//         // ch.appendChild(
+//         ch.appendChild(newH)
+//         ch.append(newP)
+//     }, 5000)
+// } else {
+//     console.debug('collapsible-headings tag not found')
+// }
+//#endregion

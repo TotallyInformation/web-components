@@ -6,8 +6,8 @@
  *
  * Version: See the class code
  *
- **/
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -21,7 +21,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** ToDo:
  * - Add variants (see simple-card)
@@ -83,7 +83,7 @@ template.innerHTML = /*html*/`
 `
 
 /** Namespace
- * @namespace Beta
+ * @namespace Live
  */
 
 /** A Zero dependency button web component that sends a msg or a document event when clicked.
@@ -91,58 +91,68 @@ template.innerHTML = /*html*/`
  *  includes a _meta object showing whether any modifier keys were used, the element id/name
  *
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * @element button-send
- * @memberOf Beta
+ * @memberOf Live
 
  * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
 
  * OTHER METHODS:
-  * None
+  * @function handleClick fn to run when the button is clicked
 
  * CUSTOM EVENTS:
-  * @fires button-send:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
-  * @fires button-send:ready - Alias for connected. The instance can handle property & attribute changes
-  * @fires button-send:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
-  * @fires button-send:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
-  * @fires button-send:click - Document object event. evt.details contains the data
-  * @fires uibuilder.send {function} - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
+  * "button-send:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "button-send:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "button-send:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "button-send:attribChanged" - When a watched attribute changes. `evt.details` contains the details of the change.
+  * "button-send:click" - Document object event. evt.details contains the data.
   * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
-  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
-  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
-  * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
-  * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
+  * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
+  * @property {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
 
  * PROPS FROM BASE: (see TiBaseComponent)
  * OTHER STANDARD PROPS:
-  * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
-  * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
   * By default, all attributes are also created as properties
 
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
 
  * @csspart button - Uses the uib-styles.css uibuilder master for variables where available.
 
+ * @example
+  * <button-send id="myButton">
+  *     Click me to send a message
+  * </button-send>
+
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class ButtonSend extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-14'
+    static componentVersion = '2025-02-25'
 
     sendEvents = true
     /** The topic to include in the output
-     * @type {string|undefined} */
+     * @type {string|undefined}
+     */
     topic
     /** The payload to include in the output
-     * @type {any} */
+     * @type {any}
+     */
     payload
     /** Standard _ui object to include in msgs */
     _ui = {
@@ -163,7 +173,7 @@ class ButtonSend extends TiBaseComponent {
         return [
             // Standard watched attributes:
             'inherit-style', 'name',
-            // Other watched attributes:            
+            // Other watched attributes:
             'topic', 'payload',
         ]
     }
@@ -212,15 +222,15 @@ class ButtonSend extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     _setMsg(evtName) {
         this._msg = {}
-        const mydata = { ...this.dataset }
+        const mydata = { ...this.dataset, }
         this._msg.topic = this.topic || `${this.localName}:${evtName}`
         this._msg.payload = this.payload ? this.payload : mydata
-        this._msg._ui = { ...this._ui }
+        this._msg._ui = { ...this._ui, }
         if (evtName) this._msg._ui.event = evtName
         this._msg._ui.id = this._msg.id = this.id
         if ( this.name ) this._msg._ui.name = this._msg.name = this.name
@@ -234,7 +244,7 @@ class ButtonSend extends TiBaseComponent {
         evt.preventDefault()
 
         this._setMsg('click')
-        
+
         const _ui = this._msg._ui
         const target = /** @type {Element} */ (evt.currentTarget)
 
@@ -248,9 +258,9 @@ class ButtonSend extends TiBaseComponent {
         const ignoreAttribs = ['class', 'id', 'name']
         const attribs = Object.assign({},
             ...Array.from(target.attributes,
-                ( { name, value } ) => {
+                ( { name, value, } ) => {
                     if ( !ignoreAttribs.includes(name) ) {
-                        return ({ [name]: value })
+                        return ({ [name]: value, })
                     }
                     return undefined
                 }
@@ -262,7 +272,7 @@ class ButtonSend extends TiBaseComponent {
         _ui.props = props
         _ui.attribs = attribs
         // @ts-ignore
-        _ui.dataset = {...target.dataset}
+        _ui.dataset = {...target.dataset,}
         _ui.classes = Array.from(target.classList)
 
         _ui.altKey = evt.altKey
@@ -283,7 +293,7 @@ class ButtonSend extends TiBaseComponent {
         document.dispatchEvent( new CustomEvent(`${this.localName}:click`, {
             bubbles: true,
             composed: true,
-            'detail': this._msg
+            'detail': this._msg,
         }) )
 
         /** Send a message to uibuilder with the output data */

@@ -5,7 +5,7 @@
  *
  * Version: See the class code
  *
- **/
+ */
 /** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
@@ -20,7 +20,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 import TiBaseComponent from '../libs/ti-base-component'
 
@@ -111,80 +111,56 @@ template.innerHTML = /*html*/`
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * @element led-gauge
  * @memberOf Alpha
 
- * METHODS FROM BASE:
-  * @method config Update runtime configuration, return complete config
-  * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
-  * @method deepAssign Object deep merger
-  * @method doInheritStyles If requested, add link to an external style sheet
-  * @method ensureId Adds a unique ID to the tag if no ID defined.
-  * @method _connect Call from start of connectedCallback. Sets connected prop and creates shadow selectors
-  * @method _event(name,data) Standardised custom event dispatcher
-  * @method _disconnect Call from end of disconnectedCallback. Clears connected prop and removes shadow selectors
-  * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
-  * @method _uibMsgHandler Not yet in use
+ * METHODS FROM BASE: (see TiBaseComponent)
  * STANDARD METHODS:
-  * @method attributeChangedCallback Called when an attribute is added, removed, updated or replaced
-  * @method connectedCallback Called when the element is added to a document
-  * @method constructor Construct the component
-  * @method disconnectedCallback Called when the element is removed from a document
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
 
  * OTHER METHODS:
-  * @method valueChanged Process value changed event
-  * @method _renderGauge (Re)Create the gauge
+  * @function valueChanged Process value changed event
+  * @function _renderGauge (Re)Create the gauge
 
  * CUSTOM EVENTS:
-  * @fires led-gauge:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
-  * @fires led-gauge:ready - Alias for connected. The instance can handle property & attribute changes
-  * @fires led-gauge:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
-  * @fires led-gauge:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * "led-gauge:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "led-gauge:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "led-gauge:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "led-gauge:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
   *
-  * @fires led-gauge:value-changed - When the value changes. `evt.details.data` contains the new value.
-  * @fires led-gauge:segment-click - When a segment is clicked. `evt.details.data` contains the details of the segment & current value.
+  * "led-gauge:value-changed" - When the value changes. `evt.details.data` contains the new value.
+  * "led-gauge:segment-click" - When a segment is clicked. `evt.details.data` contains the details of the segment & current value.
   * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
-  * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
-  * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
-  * @attr {string} value
-  * @attr {string} min
-  * @attr {string} max
-  * @attr {string} unit
-  * @attr {string} segments
-  * @attr {string} hide-segment-labels
+  * @property {string|number} value (getter/setter) The current value of the gauge. #value is the private equivalent property
+  * @property {string|number} max The maximum value of the gauge
+  * @property {string|number} min The minimum value of the gauge
+  * @property {string|number} segments (getter/setter) The number of segments in the gauge. #segments is the private equivalent property
+  * @property {string} unit The unit of the gauge value
+  * @property {string} hide-segment-labels
 
- * PROPS FROM BASE:
-  * @prop {number} _iCount Static. The count of instances of this component that weren't given an id. Creates a unique id as needed.
-  * @prop {function(string): Element} $ jQuery-like shadow dom selector (or undefined if shadow dom not used)
-  * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector (or undefined if shadow dom not used)
-  * @prop {string} baseVersion Static. The base component version string (date updated).
-  * @prop {boolean} connected False until connectedCallback finishes
-  * @prop {string} name Placeholder for the optional name attribute
-  * @prop {object} opts This components controllable options - get/set using the `config()` method - empty object by default
-  * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
-  * @prop {object} uibuilder Reference to loaded UIBUILDER for Node-RED client library if loaded (else undefined)
+ * PROPS FROM BASE: (see TiBaseComponent)
  * OTHER STANDARD PROPS:
-  * @prop {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
-    * @prop {string[]} colors The color of each segment in the gauge
-    * @prop {boolean} hideSegmentLabels If true, hide the segment labels (hide-segment-labels attribute)
-    * @prop {number} max The maximum value of the gauge
-    * @prop {number} min The minimum value of the gauge
-    * @prop {HTMLElement} segContainerEl The container for the gauge segments
-    * @prop {number} segments (getter/setter) The number of segments in the gauge. #segments is the private equivalent property
-    * @prop {HTMLCollection} segmentElements A collection of the segment div elements
-    * @prop {string} unit The unit of the gauge value
-    * @prop {HTMLElement} valsContainerEl The container for the segment values
-    * @prop {number} value (getter/setter) The current value of the gauge. #value is the private equivalent property
-    * @prop {HTMLElement} valueEl The container for the gauge value
+  * @property {string[]} colors The color of each segment in the gauge
+  * @property {boolean} hideSegmentLabels If true, hide the segment labels (hide-segment-labels attribute)
+  * @property {HTMLElement} segContainerEl The container for the gauge segments
+  * @property {HTMLCollection} segmentElements A collection of the segment div elements
+  * @property {HTMLElement} valsContainerEl The container for the segment values
+  * @property {HTMLElement} valueEl The container for the gauge value
   * By default, all attributes are also created as properties
 
  * @slot Container contents
@@ -193,7 +169,7 @@ template.innerHTML = /*html*/`
  */
 class LedGauge extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-01-13'
+    static componentVersion = '2025-02-25'
 
     #value = 0
     #segments = 10
@@ -315,13 +291,13 @@ class LedGauge extends TiBaseComponent {
 
     /** Set the maximum value of the gauge
      * @param {string|number} val The maximum value
-     */ 
+     */
     set max(val) {
         this.#max = parseFloat(val.toString())
         // (Re)Create and show the gauge
         this._renderGauge()
     }
-    
+
     /** Get the maximum value of the gauge
      * @returns {number} The maximum value
      */
@@ -365,7 +341,7 @@ class LedGauge extends TiBaseComponent {
     }
 
     /** NB: Attributes not available here - use connectedCallback to reference */
-    constructor() { // eslint-disable-line no-useless-constructor
+    constructor() {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         if (template && template.content) this._construct(template.content.cloneNode(true))
@@ -417,7 +393,7 @@ class LedGauge extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     /** Create the gauge */
@@ -446,7 +422,7 @@ class LedGauge extends TiBaseComponent {
             segVal.innerText = Math.round(segmentValue).toString()
 
             // if colorSegments has a key greater than or equal to the segVal, set the hue to the value of the key
-            const hueKey = Object.keys(this.#colors).reverse().find(key => {
+            const hueKey = Object.keys(this.#colors).reverse().find(key => { // eslint-disable-line @stylistic/newline-per-chained-call
                 return Number(key) <= segmentValue + step - 0.01
             })
             if (hueKey !== undefined) segment.style.setProperty('--hue', this.#colors[hueKey])

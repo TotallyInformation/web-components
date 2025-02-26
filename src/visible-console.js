@@ -177,7 +177,7 @@ function getStackTrace() {
  */
 class VisibleConsole extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-02-12'
+    static componentVersion = '2025-02-25'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -282,9 +282,10 @@ class VisibleConsole extends TiBaseComponent {
         Object.keys(this.icons).forEach( method => {
             console[method] = (...args) => {
                 // capture the originating file and line number
-                this.nativeConsole.log(getStackTrace())
-                // Call the original console.log
+                // this.nativeConsole.log(getStackTrace())
+                // Call the original console.log - apply adds this fn to the callback trace 😞
                 this.nativeConsole[method].apply(console[method], args)
+                // Add the log to the visible console
                 this.newLog(method, args)
             }
         })
