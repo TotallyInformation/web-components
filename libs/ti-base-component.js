@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-02-24'
+    static baseVersion = '2025-02-25'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -75,7 +75,7 @@ class TiBaseComponent extends HTMLElement {
 
     /** Is UIBUILDER for Node-RED loaded? */
     uib = !!window['uibuilder']
-    uibuilder = window['uibuilder'] // eslint-disable-line @stylistic/lines-between-class-members
+    uibuilder = window['uibuilder']
 
     /** Mini jQuery-like shadow dom selector (see constructor)
      * @type {function(string): Element}
@@ -88,7 +88,7 @@ class TiBaseComponent extends HTMLElement {
      * @param {string} selector - A CSS selector to match the element within the shadow DOM.
      * @returns {NodeList} A STATIC list of all shadow dom elements that match the selector.
      */
-    $$ // eslint-disable-line @stylistic/lines-between-class-members
+    $$
 
     /** True when instance finishes connecting.
      * Allows initial calls of attributeChangedCallback to be
