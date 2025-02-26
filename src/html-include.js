@@ -2,7 +2,7 @@
  * Version: See the class code
  * See https://github.com/justinfagnani/html-include-element for inspiration
  */
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -16,14 +16,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** TODO
  * - Allow scripts to work on imports
  * - Check if styles work on html import
- * - JSON load to global var?
  * - optional load to template?
- * - Maybe: add syntax highlights for json
+ * - Test dynamic changes to src
  */
 
 import TiBaseComponent from '../libs/ti-base-component'
@@ -36,63 +35,71 @@ template.innerHTML = /*html*/`
             display: block;   /* default is inline */
             contain: content; /* performance boost */
         }
+        pre {
+            font-family: Consolas, "ui-monospace", "Lucida Console", monospace;
+            white-space: pre;
+            margin: 0;
+        }
+        .key {color:#ffbf35}
+        .string {color:#5dff39;}
+        .number {color:#70aeff;}
+        .boolean {color:#b993ff;}
+        .null {color:#93ffe4;}
+        .undefined {color:#ff93c9;}
     </style>
     <slot></slot>
     <inner-load></inner-load>
 `
 
 /** Namespace
- * @namespace Beta
+ * @namespace Live
  */
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description A zero dependency custom web component ECMA module that imports HTML from an external resource.
  *   The src attribute defines the resource to load. The resource can be dynamically changed either by changing
  *   the src attribute OR by getting a reference to the instance and changing the src property.
  *
  * @element html-include
- * @memberOf Beta
+ * @memberOf Live
 
  * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
+  * @function config Update runtime configuration, return complete config
+  * @function createShadowSelectors Creates the jQuery-like $ and $$ methods
+  * @function deepAssign Object deep merger
+  * @function doInheritStyles If requested, add link to an external style sheet
+  * @function ensureId Adds a unique ID to the tag if no ID defined.
+  * @function _uibMsgHandler Not yet in use
+  * @function _event (name,data) Standardised custom event dispatcher
 
  * OTHER METHODS:
- * @method doInclude(url) Replaces the shadow dom content with the imported HTML.
+  * @function doInclude(url) Replaces the shadow dom content with the imported HTML.
+  * @function highlight(json) [Static] Return a formatted HTML version of JSON object
 
- * @fires html-include:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires component-template:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires html-include:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires html-include:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ * CUSTOM EVENTS:
+  * "html-include:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "html-include:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "html-include:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "html-include:attribChanged" - When a watched attribute changes. `evt.details` contains the details of the change.
+  * "html-include:content-loaded" - When the src has been loaded and inserted into the DOM. `evt.details` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} src - URL of the source to include
+  * @property {string} src - URL of the source to include
 
- * Standard props (common across all my components):
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {string} name Placeholder for the optional name attribute
- * @prop {object} opts This components controllable options - get/set using the `config()` method
- *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {string} url The URL to load. Reflected to/from the src attribute.
- * By default, all attributes are also created as properties
+  * @property {string} url The URL to load. Reflected to/from the src attribute.
+  * By default, all attributes are also created as properties
 
  * @slot Container contents
 
@@ -100,7 +107,7 @@ template.innerHTML = /*html*/`
  */
 class HtmlInclude extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-06'
+    static componentVersion = '2025-02-25'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -137,39 +144,23 @@ class HtmlInclude extends TiBaseComponent {
         this.setAttribute('src', value)
     }
 
+    /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
-
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
-            // Only append the template if code and style isolation is needed
-            .append(template.content.cloneNode(true))
-
-        // jQuery-like selectors but for the shadow. NB: Returns are STATIC not dynamic lists
-        this.createShadowSelectors()  // in base class
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        if (template && template.content) this._construct(template.content.cloneNode(true))
     }
 
     /** Runs when an instance is added to the DOM */
     connectedCallback() {
-        // Make sure instance has an ID. Create an id from name or calculation if needed
-        this.ensureId()  // in base class
-        // Apply parent styles from a stylesheet if required - only required if using an applied template
-        this.doInheritStyles()  // in base class
+        this._connect() // Keep at start.
 
-        // OPTIONAL. Listen for a uibuilder msg that is targetted at this instance of the component
-        if (this.uib) document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
-
-        // Keep at end. Let everyone know that a new instance of the component has been connected
-        this._event('connected')
-        this._event('ready')
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
     /** Runs when an instance is removed from the DOM */
     disconnectedCallback() {
-        // @ts-ignore Remove optional uibuilder event listener
-        document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
-
-        // Keep at end. Let everyone know that an instance of the component has been disconnected
-        this._event('disconnected')
+        this._disconnect() // Keep at end.
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
@@ -178,8 +169,18 @@ class HtmlInclude extends TiBaseComponent {
      * @param {string} newVal The new attribute value
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
+        /** Optionally ignore attrib changes until instance is fully connected
+         * Otherwise this can fire BEFORE everthing is fully connected.
+         */
+        // if (!this.connected) return
+
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[attrib] = newVal
+
+        // Add other dynamic attribute processing here.
+        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // We are allowing src to be change dynamically both by attrib change AND by instance property change.
         if (attrib === 'src') {
@@ -191,7 +192,7 @@ class HtmlInclude extends TiBaseComponent {
         }
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     /** Replaces the shadow dom content with the imported HTML.
@@ -236,11 +237,13 @@ class HtmlInclude extends TiBaseComponent {
 
             case 'json': {
                 this.json = await response.json()
-                this.text = JSON.stringify(this.json, null, 4)
+                this.text = JSON.stringify(this.json, null, 2)
                 this.shadowRoot.removeChild(this.shadowRoot.lastElementChild)
-                const myHtml = document.createElement('pre')
-                myHtml.textContent = this.text
-                this.shadowRoot.appendChild( myHtml )
+                // const myHtml = document.createElement('pre')
+                // myHtml.textContent = this.text
+                // this.shadowRoot.appendChild( myHtml )
+                // @ts-ignore
+                this.shadowRoot.appendChild(this.constructor.highlight(this.text))
                 break
             }
 
@@ -260,6 +263,36 @@ class HtmlInclude extends TiBaseComponent {
                 break
             }
         }
+
+        // Raise 'html-include:content-loaded' event to let everyone know that the content has been loaded
+        this._event('content-loaded', { url: url, contentType: this.contentType, text: this.text, json: this.json, })
+    }
+
+    /** Return a formatted HTML version of JSON object
+     * @param {object|JSON} json JSON object to convert
+     * @returns {HTMLElement} Highlighted JSON wrapped in a `<pre>` tag
+     */
+    static highlight(json) {
+        // json = JSON.stringify(json, undefined, 2)
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // eslint-disable-line @stylistic/newline-per-chained-call
+        json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            let cls = 'number'
+            if ((/^"/).test(match)) {
+                if ((/:$/).test(match)) {
+                    cls = 'key'
+                } else {
+                    cls = 'string'
+                }
+            } else if ((/true|false/).test(match)) {
+                cls = 'boolean'
+            } else if ((/null/).test(match)) {
+                cls = 'null'
+            }
+            return '<span class="' + cls + '">' + match + '</span>'
+        })
+        const myHtml = document.createElement('pre')
+        myHtml.innerHTML = json
+        return myHtml
     }
 } // ---- end of Class ---- //
 
