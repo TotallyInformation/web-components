@@ -28,6 +28,9 @@ export default [
     importPlugin.flatConfigs.recommended,
     // nodePlugin.configs["flat/recommended-script"], // Node.js only
     {
+        ignores: ['docs/jsdoc/*.html'],
+    },
+    {
         // files: ['**/*.{js,mjs,cjs}'],
         languageOptions: {
             sourceType: 'module',
@@ -43,7 +46,7 @@ export default [
             'jsdoc/check-indentation': 'off',
             'jsdoc/check-param-names': 'warn',
             'jsdoc/check-tag-names': ['warn', {
-                definedTags: ['typicalname', 'element', 'memberOf', 'slot'],
+                definedTags: ['typicalname', 'element', 'memberOf', 'slot', 'csspart'],
             }],
             'jsdoc/multiline-blocks': ['error', {
                 noZeroLineText: false,
@@ -68,7 +71,7 @@ export default [
                 'SwitchCase': 1,
             }],
             '@stylistic/linebreak-style': ['error', 'unix'],
-            '@stylistic/lines-between-class-members': ['error', 'always'],
+            '@stylistic/lines-between-class-members': 'off',
             '@stylistic/newline-per-chained-call': ['error', {
                 'ignoreChainWithDepth': 2,
             }],
