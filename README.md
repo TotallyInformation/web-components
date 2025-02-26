@@ -73,7 +73,7 @@ This is the preferred method. However, it is generally best to load via a script
 They **must** be loaded as a type "module".
 
 ```html
-<script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script>
+<script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js"></script>
 ```
 
 Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.
@@ -84,7 +84,7 @@ Alternatively, you can load them in your main JavaScript script using dynamic im
 
 ```html
 <script defer async>
-   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
+   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js')
 </script>
 ```
 
@@ -114,13 +114,7 @@ Alternatively, there is a built-in Node.js mini web server. Running the npm scri
 
 ## Components
 
-These components can be considered `live` and ready for production use.
-
-| Name                                  | Description                                                  |
-| ------------------------------------- | ------------------------------------------------------------ |
-| `led-gauge` (LedGauge)                | A simple LED-style gauge widget with easily controlled colours and responsive layout. |
-
-These components can be considered `beta` quality or better. They may not be complete but they should have basic usefulness.
+These components can be considered `live` and ready for extended use.
 
 | Name                                  | Description                                                  |
 | ------------------------------------- | ------------------------------------------------------------ |
@@ -128,6 +122,12 @@ These components can be considered `beta` quality or better. They may not be com
 | `call-out` (CallOut)                  | Displays nicely formatted callout boxes. |
 | `collapsible-headings` (CollapsibleHeadings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. |
 | `html-include` (HtmlInclude)          | Dynamically load external HTML content very easily without needing an iFrame. |
+| `led-gauge` (LedGauge)                | A simple LED-style gauge widget with easily controlled colours and responsive layout. |
+
+These components can be considered `beta` quality or better. They may not be complete but they should have basic usefulness.
+
+| Name                                  | Description                                                  |
+| ------------------------------------- | ------------------------------------------------------------ |
 | `labelled-value` (LabelledValue)      | A simple label and value pair with easy styling.             |
 | `syntax-highlight` (SyntaxHighlight)  | A simple, easy to use JSON object highlight element. |
 | `visible-console` (VisibleConsole)    | Reflects `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. |
@@ -139,7 +139,7 @@ These components can be considered `beta` quality or better. They may not be com
 > 
 > Currently, all of the alpha components should be considered *experimental*. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.
 >
-> Also note that the documentation is incomplete and may be wrong in places.
+> Also note that the documentation is incomplete and may be wrong in places. Not all of these will have test/demo pages.
 >
 > However, please do give them a go and let me have some feedback.
 
@@ -147,9 +147,13 @@ These components can be considered `beta` quality or better. They may not be com
 | ------------------------------------- | ------------------------------------------------------------ |
 | *`component-template`*                | *Unlike the other entries, this is complete. It can be used as a base for new components.* |
 | | |
+| `chart-statetrail` (ChartStateTrail)  | A chart that shows a trail of states over time (AKA, a timeline). |
+| `simple-card` (SimpleCard)            | A card container with optional header and footer. |
+| `simple-container` (SimpleContainer)  | A UI container for easy, automated layout of contained elements (specifically cards). |
+| `smart-table` (SmartTable)            | HTML Table created from an input object or array. |
+| | |
 | `chart-frappe` (ChartFrappe)          | A chart component using the Frappe chart library |
 | `chart-high` (ChartHigh)              | A chart component using the HighCharts library |
-| `chart-statetrail` (ChartStateTrail)  | A chart that shows a trail of states over time (AKA, a timeline). |
 | `container-br` (ContainerBr)          | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container) |
 | `data-list` (DataList)                | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. |
 | `definition-list` (DefinitionList)    | Similar to `data-list` but outputs a DL instead.             |
@@ -157,8 +161,6 @@ These components can be considered `beta` quality or better. They may not be com
 | `ghost-thermometer` (GhostThermometer)| A thermometer style gauge |
 | `multi-way-switch` (MultiWaySwitch)   | A flexible multi-switch that can display in several styles (buttons, rotary, etc) |
 | `nav-bar` (NavBar)                    | A standardised navigation menu bar |
-| `simple-card` (SimpleCard)            | A card container with optional header and footer. |
-| `simple-container` (SimpleContainer)  | A UI container for easy, automated layout of contained elements (specifically cards). |
 | `simple-gauge` (SimpleGauge)          | A simple gauge style display component. |
 | `simple-switch` (SimpleSwitch)        | A simple 2-way latching switch. |
 | `state-timeline` (StateTimeline)      | A horizontal timeline display designed to show status/state. |

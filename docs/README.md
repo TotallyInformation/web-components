@@ -3,7 +3,7 @@ title: Totally Information's web components documentation
 description: |
   This is the documentation for TotallyInformation's pure Web Components.
 created: 2022-04-07 16:51:03
-updated: 2025-01-10 18:13:20
+updated: 2025-02-25 17:13:26
 ---
 
 These components mostly do not require any external modules or frameworks. However, they do contain (optional) features to use with node-red-contrib-uibuilder.
@@ -38,16 +38,16 @@ Each of the components that are in any form of usable state have a [test/demo pa
 
 These are fully usable in their current form. They may still evolve but are considered relatively stable.
 
+* [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data and enables block content.
+* [`call-out`](call-out) - Creates a GitHub/Obsidian style call-out information box. Colour coded with an icon and over-ridable default title.
+* [`collapsible-headings`](collapsible-headings) - Turns a section of Hn headings and block contents into collapsible content around the heading levels.
+* [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
 * [`led-gauge`](led-gauge) - An LED-style gauge.
 
 ### Beta
 
 These are certainly fully usable in their current form. However, they will still continue to evolve, possibly fairly dramatically.
 
-* [`button-send`](button-send) - A simple &lt;button> wrapper that exposes useful data and enables block content.
-* [`call-out`](call-out) - Creates a GitHub/Obsidian style call-out information box. Colour coded with an icon and over-ridable default title.
-* [`collapsible-headings`](collapsible-headings) - Turns a section of Hn headings and block contents into collapsible content around the heading levels.
-* [`html-include`](html-include) - Dynamically include HTML snippets or documents from a web server into your current web page.
 * [`labelled-value`](labelled-value) - A simple label and value pair with easy styling.
 * [`syntax-highlight`](syntax-highlight) - Show JSON or JavaScript object data as highlighted HTML.
 * [`visible-console`](visible-console) - Clones `console.xxxx()` outputs to the web-page.
