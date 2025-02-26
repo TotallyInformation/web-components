@@ -38,7 +38,13 @@ function generateIndex() {
         <body>
             <main>
             <h1>Testing and demo of TotallyInformation's web-components</h1>
-            <article><h2>Index of test/demo pages</h2><ul>
+            <article><h2>Index of test/demo pages</h2>
+            <h3>Live components (ready for extended use)</h3>
+            <ul></ul>
+            <h3>Beta components (not yet ready for extended use)</h3>
+            <ul></ul>
+            <h3>Alpha components (for testing use only)</h3>
+            <ul>
         `
 
         // Add each HTML file as a list item
@@ -75,6 +81,7 @@ function generateIndex() {
                 return
             }
             console.log('index.html has been generated successfully!')
+            console.warn("Don't forget to manually move entries to the correct list.")
         })
     })
 }
