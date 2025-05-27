@@ -74,26 +74,26 @@ import TiBaseComponent from '../libs/ti-base-component'
 // Define the class and make it the default export
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description A zero dependency custom lightweight web component that builds an HTML table from data
  *
  * @element smart-table
  * @memberOf Alpha
 
  * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
- * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+ * @function config Update runtime configuration, return complete config
+ * @function createShadowSelectors Creates the jQuery-like $ and $$ methods
+ * @function deepAssign Object deep merger
+ * @function doInheritStyles If requested, add link to an external style sheet
+ * @function ensureId Adds a unique ID to the tag if no ID defined.
+ * @function _uibMsgHandler Not yet in use
+ * @function _event (name,data) Standardised custom event dispatcher
+ * @function _ready Call from end of connectedCallback. Sets connected prop and outputs events
 
  * OTHER METHODS:
- * @method getCellById Get an HTML element reference to a cell using `RxCx` referencing
- * @method getValueByCellId Get the data value of a cell using `RxCx` referencing
- * @method getValueByOffset(obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
+ * @function getCellById Get an HTML element reference to a cell using `RxCx` referencing
+ * @function getValueByCellId Get the data value of a cell using `RxCx` referencing
+ * @function getValueByOffset(obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
 
  * @fires smart-table:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
  * @fires smart-table:ready - Alias for connected. The instance can handle property & attribute changes
@@ -102,26 +102,26 @@ import TiBaseComponent from '../libs/ti-base-component'
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
  * None
 
  * Standard props (common across all my components):
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {boolean} connected False until connectedCallback finishes
- * @prop {string} name Placeholder for the optional name attribute
+ * @property {number} _iCount Static. The component version string (date updated)
+ * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
+ * @property {boolean} connected False until connectedCallback finishes
+ * @property {string} name Placeholder for the optional name attribute
  *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {object|array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
- * @prop {object} cols Override the column metadata. If not supplied, cols is built from the first entry of the data array/object
+ * @property {object|array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
+ * @property {object} cols Override the column metadata. If not supplied, cols is built from the first entry of the data array/object
  *
- * @prop {HTMLTableElement} elThead Reference to the thead element
- * @prop {HTMLTableElement} elTfoot Reference to the tfoot element
- * @prop {HTMLTableElement} elTbody Reference to the tbody element
+ * @property {HTMLTableElement} elThead Reference to the thead element
+ * @property {HTMLTableElement} elTfoot Reference to the tfoot element
+ * @property {HTMLTableElement} elTbody Reference to the tbody element
  * By default, all attributes are also created as properties
 
  * @slot None, this component does not use the shadow dom

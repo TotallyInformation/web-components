@@ -50,13 +50,13 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ `
  * @fires button-send:click - Document object event. evt.details contains the data
  * @fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
  *
- * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
- * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
- * @attr {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
- * @attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
+ * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
+ * @property {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
+ * @property {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
+ * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * @property {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
- * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
+ * @property {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
  *
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
  *

@@ -108,13 +108,13 @@ template.innerHTML = html`
  * @fires simple-card:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
- * @attr {string} variant - Optional. Sets the cards colour variant
+ * @property {string} variant - Optional. Sets the cards colour variant
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
- * @prop {string} variant - Sync'd from name attribute
- * @prop {string|html} slot - Populates the cards default slot content
- * @prop {string|html} header - Populates the cards header slot content
- * @prop {string|html} footer - Populates the cards footer slot content
+ * @property {string} variant - Sync'd from name attribute
+ * @property {string|html} slot - Populates the cards default slot content
+ * @property {string|html} header - Populates the cards header slot content
+ * @property {string|html} footer - Populates the cards footer slot content
  *
  * @slot Container contents
  * @slot header - Content to go in the header section of the card

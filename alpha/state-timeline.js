@@ -86,15 +86,15 @@ template.innerHTML = /*html*/`
 
 /**
  * @class
- * @extends HTMLElement
+ * @augments HTMLElement
  * @description A zero dependency web component that will display JavaScript console output on-page.
  *
  * @element state-timeline
  * @memberOf Alpha
  *
- * @method config Update runtime configuration, return complete config
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method deepAssign Object deep merger
+ * @function config Update runtime configuration, return complete config
+ * @function doInheritStyles If requested, add link to an external style sheet
+ * @function deepAssign Object deep merger
  * method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
  *
  * @fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
@@ -103,17 +103,17 @@ template.innerHTML = /*html*/`
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
  * Other watched attributes:
  * None
  *
  * Standard props (common across all my components):
- * @prop {string} version Static. The component version string (date updated). Also has a getter.
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {number} _iCount The component version string (date updated)
- * @prop {object} opts This components controllable options - get/set using the `config()` method
+ * @property {string} version Static. The component version string (date updated). Also has a getter.
+ * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
+ * @property {function(string): Element} $ jQuery-like shadow dom selector
+ * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+ * @property {number} _iCount The component version string (date updated)
+ * @property {object} opts This components controllable options - get/set using the `config()` method
  * Other props:
  * By default, all attributes are also created as properties
  *
