@@ -16,8 +16,8 @@
     </header>
     <main>
         <section>
-            <call-out type="warning" title="Status: Beta">
-                Ready for basic use. <a href="/docs/#/call-out">Documentation</a>.
+            <call-out type="tip" title="Status: Live" icon="✅">
+                Ready for extended use. <a href="/docs/#/call-out">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
 
@@ -79,24 +79,6 @@
             // What version are we using? This is static so we use the class global reference
             document.getElementById('op2').value = CallOut.version
         })
-
-        // console.info('Adding dynamic content ...')
-        // const ch = document.getElementsByTagName('collapsible-headings')[0]
-        // if (ch) {
-        //     const newH = document.createElement('h2')
-        //     const newP = document.createElement('p')
-        //     newH.innerText = 'Dynamically added section'
-        //     newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-
-        //     setTimeout(() => {
-        //         // ch.appendChild(
-        //         ch.appendChild(newH)
-        //         ch.append(newP)
-        //         console.info('... complete')
-        //     }, 5000)
-        // } else {
-        //     console.error('collapsible-headings tag not found')
-        // }
     </script>
 
 </body></html>

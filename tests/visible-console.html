@@ -25,7 +25,7 @@
             <p>
                 Intercepts JavaScript calls to <code>console</code> methods and copies the data to an on-page panel.
             </p><p>
-                There is a script on this page that outputs some example console logging.
+                There is a script on this page that outputs some example <code>console</code> logging.
                 See the source code for details.
             </p>
         </section>
@@ -39,16 +39,26 @@
     </main>
 
     <script>
+        function test() {
+            console.log('TEST: This is an error message 2');
+            test2()
+        }
+
+        function test2() {
+            console.log('TEST1 > TEST2: This is an error message 3');
+        }
+
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
             document.getElementById('op2').value = VisibleConsole.version
+            test()
         })
         
         // Simple tests
         const data = {
             name: 'Alice',
-            age: 30,
+            age: Math.random()*100,
             isAdmin: true,
             hobbies: ['Reading', 'Gaming', 'Cycling'],
             preferences: {

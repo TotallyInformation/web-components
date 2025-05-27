@@ -3,12 +3,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Testing web-components - html-include</title>
+    <title>Testing TotallyInformation's web-components - html-include</title>
 
     <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
-    <script defer src="../dist/html-include.iife.min.js"></script>
     <script defer src="../dist/call-out.iife.min.js"></script>
+    <script defer src="../dist/html-include.iife.min.js"></script>
 
 </head><body>
     <header>
@@ -17,15 +17,16 @@
     </header>
     <main>
         <section>
-            <call-out type="warning" title="Status: Beta" icon="❔">
-                Ready for basic use. <a href="/docs/#/html-include">Documentation</a>.
+            <call-out type="tip" title="Status: Live" icon="✅">
+                Ready for extended use. <a href="/docs/#/html-include">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
             <p>
                 The <code>src</code> attribute defines the URL resource to include.
+                HTML pages, HTML fragments, returned HTML Form data, JSON and text are supported.
             </p>
             <p>
-                To-do: Test dynamic change of src
+                Check the page source and browser console for details on using the <code>html-include:content-loaded</code> event.
             </p>
         </section>
 
@@ -51,6 +52,15 @@
             // What version are we using? This is static so we use the class global reference
             document.getElementById('op2').value = HtmlInclude.version
         })
+
+        // Listen for the JSON loading and output details to console
+        const hi3 = document.getElementById('hi3')
+        if (hi3) {
+            hi3.addEventListener('html-include:content-loaded', (event) => {
+                console.info('JSON loaded (id=hi3)', event.detail)
+            })
+        }
+        // Could also listen on `document` for all loads
 
         // console.info('Dynamic content test ...')
         // // const hi1 = document.getElementsByTagName('html-include')[0]

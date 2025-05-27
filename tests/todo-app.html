@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>Testing TotallyInformation's web-components - todo-app</title>
+
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
+
+    <script defer src="../dist/call-out.iife.min.js"></script>
+    <script defer src="../dist/alpha/todo-app.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - todo-app</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="caution" title="Status: Alpha">
+                Experimental. Documentation: <a href="/docs/#/todo-app">todo-app</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+
+            <p>This example uses <code>&lt;todo-app</code>.</p>
+            <p>
+                This is a complete To Do (or Actions, Task or Project) web application.
+            </p>
+            <p>
+                All it needs, apart from loading the component and adding <code>&lt;todo-app>&lt;/todo-app></code> to the page, 
+                is a global array variable to hold the tasks. This variable will be persisted in the browser's local storage.
+                But, in real use, you would probably also want to use a database or some other form of external storage.
+            </p>
+            <p>
+                The <code>todo-app</code> is enhanced for use with UIBUILDER for Node-RED. In that environment, you can easily
+                send a task list to connecting browser clients. Any updates done by the client will be automatically sent back to Node-RED.
+                An example Node-RED flow will be available in the Node-RED library if you are using UIBUILDER.
+            </p>
+        </section>
+
+        <todo-app></todo-app>
+    </main>
+
+    <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = TodoApp.version
+        })
+    </script>
+</body></html>

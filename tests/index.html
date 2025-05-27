@@ -5,48 +5,60 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Testing TotallyInformation's web-components - Index Page</title>
             <link type="text/css" rel="stylesheet" href="/tests/resources/uib-brand.css" media="all">
+            <script defer src="../dist/call-out.iife.min.js"></script>
         </head>
-        <body>
-            <main>
+        <body><main>
             <h1>Testing and demo of TotallyInformation's web-components</h1>
-            <article><h2>Index of test/demo pages</h2><ul>
-        
-                <li><a href="button-send.html">Button Send</a></li>
-            
-                <li><a href="call-out.html">Call Out</a></li>
-            
-                <li><a href="chart-statetrail.html">Chart Statetrail</a></li>
-            
-                <li><a href="collapsible-headings.html">Collapsible Headings</a></li>
-            
-                <li><a href="html-include.html">Html Include</a></li>
-            
-                <li><a href="labelled-value.html">Labelled Value</a></li>
-            
-                <li><a href="led-gauge.html">Led Gauge</a></li>
-            
-                <li><a href="simple-card.html">Simple Card</a></li>
-            
-                <li><a href="smart-table.html">Smart Table</a></li>
-            
-                <li><a href="syntax-highlight.html">Syntax Highlight</a></li>
-            
-                <li><a href="visible-console.html">Visible Console</a></li>
-            
-            </ul></article>
-            <article>
+            <section>
+                <h2>Index of test/demo pages</h2>
+                <article>
+                    <h3>Live components (ready for extended use)</h3>
+                    <ul>
+                        <li><a href="button-send.html">Button Send</a></li>
+                        <li><a href="call-out.html">Call Out</a></li>
+                        <li><a href="collapsible-headings.html">Collapsible Headings</a></li>
+                        <li><a href="html-include.html">Html Include</a></li>
+                        <li><a href="led-gauge.html">Led Gauge</a></li>
+                    </ul>    
+                </article>
+                <article>
+                    <h3>Beta components (ready for basic use)</h3>
+                    <ul>
+                        <li><a href="labelled-value.html">Labelled Value</a></li>
+                        <li><a href="syntax-highlight.html">Syntax Highlight</a></li>
+                        <li><a href="visible-console.html">Visible Console</a></li>
+                    </ul>
+                </article>
+                <article>
+                    <h3>Alpha components (for testing use only)</h3>
+                    <ul>
+                        <li><a href="chart-statetrail.html">Chart Statetrail</a></li>
+                        <li><a href="simple-card.html">Simple Card</a></li>
+                        <li><a href="simple-card.html">Simple Container</a></li>
+                        <li><a href="smart-table.html">Smart Table</a></li>
+                    </ul>
+                </article>
+            </section>
+            <section>
                 <h2>Information</h2>
                 <p><a href="/docs">Component documentation</a></p>
                 <p><a href="https://github.com/TotallyInformation/web-components">Source Code (GitHub)</a></p>
                 <p><a href="https://npmjs.org/TotallyInformation/">npm Published Version (not yet available)</a></p>
-                <p>These web components from TotallyInformation are stand-alone without external dependencies.
+                <p>These <a href="https://github.com/TotallyInformation/web-components" target="_blank">web components</a> from <a href="https://github.com/TotallyInformation" target="_blank">TotallyInformation</a> are mostly stand-alone (without external dependencies).
                     Each one aims to simplify the use of HTML as a User Interface (UI).
                     They work on any page without the need for a framework or other dependencies.
                     Where they use 3rd-party libraries, these are integrated so you don't need to worry about them.</p>
-                <p>All you need to do is create a reference to the component's library in your page as shown in the readme and documentation.</p>
-                <p>Some of the pages have a script that may add dynamic content after a few seconds.
+                <p>All you need to do is create a reference to the component's library in your page as shown in the readme, documentation, and test page source code.</p>
+                <p>Some of the test pages have a script that may add dynamic content after a few seconds.
                     The demos all use the pre-built IIFE version of the component for example code simplicity. However, they all have ESM versions as well that can be imported.</p>
-            </article>
-        </main>
-        </body></html>
+                
+                <call-out type="tip" title="Use with UIBUILDER for Node-RED">
+                    All of these components have integrations for 
+                    <a href="https://flows.nodered.org/node/node-red-contrib-uibuilder" target="_blank">UIBUILDER for Node-RED</a>.
+                    But none of them require it.
+
+                    You can also use them in any other web page or framework including Node-RED's other Dashboards.
+                </call-out>
+            </section>
+        </main></body></html>
         

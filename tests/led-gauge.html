@@ -16,8 +16,8 @@
     </header>
     <main>
         <section>
-            <call-out type="tip" title="Status: Live">
-                Ready for production use. <a href="/docs/#/led-gauge">Documentation</a>.
+            <call-out type="tip" title="Status: Live" icon="✅">
+                Ready for extended use. <a href="/docs/#/led-gauge">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
 
@@ -41,9 +41,9 @@
                     <button onclick="myGauge.segments = 100">Set segments to 100</button>
                 </div>
                 <div>
-                    <button onclick="toggleSegLabels()">Toggle segment labels</button>
-                    <button onclick="rainbowSegments()" title="each segment a different colour">Rainbow Segments</button>
-                    <button onclick="gorSegments()" title="60%+ Orange, 80%+ Red">Green/Orange/Red Segments</button>
+                    <button  type="button" onclick="toggleSegLabels()">Toggle segment labels</button>
+                    <button  type="button" onclick="rainbowSegments()" title="each segment a different colour">Rainbow Segments</button>
+                    <button  type="button" onclick="gorSegments()" title="60%+ Orange, 80%+ Red">Green/Orange/Red Segments</button>
                     <!--
                     <button>Toggle value display</button>
                     <button>Toggle label</button>

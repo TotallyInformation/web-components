@@ -18,15 +18,19 @@
     </header>
     <main>
         <section>
-            <call-out type="warning" title="Status: Beta">
-                Ready for basic use. <a href="/docs/#/collapsible-headings">Documentation</a>.
+            <call-out type="tip" title="Status: Live" icon="✅">
+                Ready for extended use. <a href="/docs/#/collapsible-headings">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
 
             <p>
                 Slot content is dynamically amended to make headings clickable. Clicking hides/shows lower-level content.
             </p><p>
-                There is a script on the page that dynamically adds an extra section to ensure that dynamic content is also handled.
+                There is a script on the page that dynamically adds an extra section to ensure that dynamic content is 
+                also handled.
+                Note, however, that deep (e.g. a nested <code>h4</code> section) dynamic content cannot currently be supported. Please see the documentation for
+                more information.
+                Dynamically adding a top-level h2 section is fine though.
             </p>
         </section>
 
@@ -73,7 +77,7 @@
         if (ch) {
             const newH = document.createElement('h2')
             const newP = document.createElement('p')
-            newH.innerText = 'Dynamically added section'
+            newH.innerText = 'Dynamically added section (h2)'
             newP.innerText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 
             // Just for testing
@@ -83,6 +87,29 @@
                 ch.append(newP)
                 console.info('... complete')
             }, 5000)
+
+            // Unfortunately, this cannot currently work. Please see the docs.
+            // After 7s
+            // setTimeout(() => {
+            //     console.info('Adding deep dynamic content ...')
+            //     // Get reference to #collapsible-headings-1 > div:nth-child(2) > div > p:nth-child(2)
+            //     const p = ch.querySelector('div > div > p:nth-child(2)')
+            //     if (p) {
+            //         // Add a new h4 and p
+            //         const newH4 = document.createElement('h4')
+            //         const newP2 = document.createElement('p')
+            //         newH4.innerText = 'Dynamically added h4'
+            //         // set newP2 to some ipsum lorem
+            //         newP2.innerText = 'Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.'
+            //         // Insert newH4 after p
+            //         p.after(newH4)
+            //         // Insert newP2 after newH4
+            //         newH4.after(newP2)
+            //     } else {
+            //         console.error('div > div > p:nth-child(2) not found')
+            //     }
+            //     console.info('... done')
+            // }, 7000)
         } else {
             console.error('collapsible-headings tag not found')
         }
