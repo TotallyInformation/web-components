@@ -7,7 +7,7 @@ updated: 2025-01-11 16:47:41
 ---
 
 > [!NOTE]
-> STATUS: Live. Ready for production use. [Demo](https://wc.totallyinformation.net/tests/led-gauge).
+> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/led-gauge).
 
 ## Useage
 

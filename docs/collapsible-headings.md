@@ -3,17 +3,24 @@ title: collapsible-headings
 description: |
   A Zero dependency web component that Makes slot content collapsible by heading level.
 created: 2024-09-24 19:39:42
-updated: 2024-09-24 21:43:21
+updated: 2025-02-26 18:36:49
 ---
 
 > [!NOTE]
-> STATUS: Beta - ready for basic use
+> STATUS: Live - ready for extended use.  [Demo](https://wc.totallyinformation.net/tests/collapsible-headings).
 
 Fill the slot content of this custom component with report-style text. e.g. headings followed by paragraph or other block text, images, etc.
 
 The text will automatically become collapsible. Click on one of the headings to collapse (hide) all of the content up to the next same or higher level heading.
 
 If further headings and text are dynamically added after the page has loaded (e.g. from Node-RED), that will also be made collapsible.
+
+## Current limitations
+
+* You cannot currently pre-select sections to collapse. All sections are expanded by default.
+* You cannot currently store the collapsed state in browser storage.
+* `<h2>` to `<h5>` are made collapsible by default. Override by setting the `levels` attribute.
+* If you dynamically add deep content (e.g. a new nested `<h4>` section), it will not be made collapsible.
 
 ## Example use
 
@@ -65,3 +72,11 @@ For Markdown, you can also manually send low-code Markdown by adding something l
     }]
 }]
 ```
+
+## To Do
+
+* Add a host attrib or class to allow sections to be pre-hidden (add to the hx tag?)
+  * sub-option to store collapsed sections in browser storage (probably needs ID's to be added to all heads and wrappers)
+* Maybe add another option to make headings auto-numbered?
+* Add option for an icon
+* How to ignore outer div (as delivered by uib-element) - maybe something with observer?

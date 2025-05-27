@@ -3,11 +3,11 @@ title: button-send
 description: |
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-updated: 2024-09-24 19:39:33
+updated: 2025-02-12 16:41:04
 ---
 
 > [!NOTE]
-> STATUS: Beta - ready for basic use
+> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/button-send).
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name
@@ -31,7 +31,7 @@ When used without uibuilder, you need to detect the custom event that is fired o
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script defer src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/dist/button-send.iife.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/dist/button-send.iife.min.js"></script>
     <script defer src="./index.js"></script> 
 
 </head><body>
@@ -41,7 +41,7 @@ When used without uibuilder, you need to detect the custom event that is fired o
                  data-something="Something from the button">
         <!-- In ordinary button tags, you cannot include block elements in the slot. 
              But with this custom button, you can. -->
-        Send a msg back to Node-RED.
+        Notify a custom event with button details.
         <p>
             Use <code>topic</code>, <code>payload</code> and <code>data-*</code> 
             attributes to pass to the custom event.
