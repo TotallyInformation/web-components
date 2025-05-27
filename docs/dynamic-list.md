@@ -28,7 +28,7 @@ When used without uibuilder, you need to detect the custom event that is fired o
 
     <!-- Can load the web components here as type=module but you have to load everything in the right order.
          Alternatively, use an import in index.js -->
-    <!-- <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script> -->
+    <!-- <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js"></script> -->
 
     <script type="module" async src="./index.js"></script> 
 
@@ -92,7 +92,7 @@ NB: Same as the non-uibuilder version.
 
     <!-- Can load the web components here as type=module but you have to load everything in the right order.
          Alternatively, use an import in index.js -->
-    <!-- <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js"></script> -->
+    <!-- <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js"></script> -->
 
     <script type="module" async src="./index.js"></script> 
 
