@@ -3,7 +3,7 @@ title: labelled-value
 description: |
   A Zero dependency web component that Displays a value with a label prefix.
 created: 2022-04-07 21:05:42
-updated: 2024-10-06 17:23:59
+updated: 2025-02-26 18:28:01
 ---
 
 > [!NOTE]
@@ -14,6 +14,12 @@ This is a simple convenience component. It displays a value attribute/property a
 It uses CSS Flexbox and has lots of CSS variables to allow overriding of the styles.
 
 The value output uses an `<output>` tag so that screen-readers will automatically announce changes correctly.
+
+## Current limitations
+
+* Accessibility improvements needed
+* Needs colour/formatting controls
+* Should allow HTML in the label (via a `rich-label` attribute)
 
 ## Useage
 
@@ -34,7 +40,7 @@ The value output uses an `<output>` tag so that screen-readers will automaticall
 Both `label` and `value` can be set from JavaScript.
 
 ```js
-const myLV = document..getElementsByTagName('labelled-value')[0]
+const myLV = document.getElementsByTagName('labelled-value')[0]
 myLV.value = 'Some new value'
 myLV.label = 'Some new label'
 ```
@@ -88,22 +94,20 @@ The `inherit-style` attribute must contain a URL pointing to a loadable CSS reso
 
 The standard events for this library of components are available:
 
-```js
-/**
- * @fires labelled-value:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires labelled-value:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires labelled-value:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires labelled-value:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
- */
-```
+ * "labelled-value:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * "labelled-value:ready" - Alias for connected. The instance can handle property & attribute changes
+ * "labelled-value:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * "labelled-value:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+
+> [!NOTE]
+> Listeners can be attached either to the `document` or to the specific element instance.
 
 All events contain `evt.details.id` and `evt.details.name`. Some events contain `evt.details.data` if indicated.
 
 ## Methods
 
-`LabelledValue.version` will 
+`LabelledValue.version` will return the version numbers of the component and the base component.
 
 ## Extensions for UIBUILDER for Node-RED
 
-None at this time.
+None at this time. Use the uibuilder client library's standard features to interact with this component.
