@@ -114,7 +114,7 @@ template.innerHTML = /*html*/`
 
 /**
  * @class
- * @extends HTMLElement
+ * @augments HTMLElement
  * @description A zero dependency web component that will display JavaScript console output on-page.
  *
  * @element state-timeline
@@ -131,17 +131,17 @@ template.innerHTML = /*html*/`
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
  * Other watched attributes:
  * None
  *
  * Standard props (common across all my components):
- * @prop {string} version Static. The component version string (date updated). Also has a getter.
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {number} _iCount The component version string (date updated)
- * @prop {object} opts This components controllable options - get/set using the `config()` method
+ * @property {string} version Static. The component version string (date updated). Also has a getter.
+ * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
+ * @property {function(string): Element} $ jQuery-like shadow dom selector
+ * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+ * @property {number} _iCount The component version string (date updated)
+ * @property {object} opts This components controllable options - get/set using the `config()` method
  * Other props:
  * By default, all attributes are also created as properties
  *
@@ -205,10 +205,10 @@ class StateTimeline extends HTMLElement {
     /** Runtime configuration settings */
     opts = {
         /** State schema
-         * @property {object} states Each state ID'd by name
-         * @property {string} states.name Unique name of the state
-         * @property {string} states.label Long label for the state
-         * @property {string} states.color CSS Color specification of timeline state
+         * @propertyerty {object} states Each state ID'd by name
+         * @propertyerty {string} states.name Unique name of the state
+         * @propertyerty {string} states.label Long label for the state
+         * @propertyerty {string} states.color CSS Color specification of timeline state
          */
         states: StateTimeline.defaultStates,
         /** Max # seconds in the timeline display, old entries will be dropped

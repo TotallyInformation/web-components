@@ -119,7 +119,7 @@ template.innerHTML = /*html*/`
  *  includes a _meta object showing whether any modifier keys were used, the element id/name
  *
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * @element button-send
@@ -146,24 +146,24 @@ template.innerHTML = /*html*/`
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} topic - Optional. Topic string to use. Mostly for node-red messages
- * @attr {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
+ * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
+ * @property {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
 
  * Standard props (common across all my components):
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded. In base class
- * @prop {function(string): Element} $ jQuery-like shadow dom selector. In base class
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector. In base class
- * @prop {number} _iCount The component version string (date updated). In base class
- * @prop {object} opts This components controllable options - get/set using the `config()` method. In base class
+ * @property {boolean} uib True if UIBUILDER for Node-RED is loaded. In base class
+ * @property {function(string): Element} $ jQuery-like shadow dom selector. In base class
+ * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector. In base class
+ * @property {number} _iCount The component version string (date updated). In base class
+ * @property {object} opts This components controllable options - get/set using the `config()` method. In base class
  *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
+ * @property {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
  * By default, all attributes are also created as properties
 
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).

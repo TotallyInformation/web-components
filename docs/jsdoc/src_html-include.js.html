@@ -75,7 +75,7 @@ template.innerHTML = /*html*/`
 
 /**
  * @class
- * @extends TiBaseComponent
+ * @augments TiBaseComponent
  * @description A zero dependency custom web component ECMA module that imports HTML from an external resource.
  *   The src attribute defines the resource to load. The resource can be dynamically changed either by changing
  *   the src attribute OR by getting a reference to the instance and changing the src property.
@@ -102,24 +102,24 @@ template.innerHTML = /*html*/`
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @attr {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @attr {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+ * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * @attr {string} src - URL of the source to include
+ * @property {string} src - URL of the source to include
 
  * Standard props (common across all my components):
- * @prop {number} _iCount Static. The component version string (date updated)
- * @prop {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @prop {function(string): Element} $ jQuery-like shadow dom selector
- * @prop {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @prop {string} name Placeholder for the optional name attribute
- * @prop {object} opts This components controllable options - get/set using the `config()` method
+ * @property {number} _iCount Static. The component version string (date updated)
+ * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
+ * @property {function(string): Element} $ jQuery-like shadow dom selector
+ * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
+ * @property {string} name Placeholder for the optional name attribute
+ * @property {object} opts This components controllable options - get/set using the `config()` method
  *
- * @prop {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @prop {string} url The URL to load. Reflected to/from the src attribute.
+ * @property {string} url The URL to load. Reflected to/from the src attribute.
  * By default, all attributes are also created as properties
 
  * @slot Container contents

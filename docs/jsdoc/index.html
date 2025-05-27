@@ -83,13 +83,13 @@
 </code></pre>
 <h4>Load from HTML with a script tag</h4>
 <p>They <strong>must</strong> be loaded as a type &quot;module&quot;.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js&quot;>&lt;/script>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js&quot;>&lt;/script>
 </code></pre>
 <p>Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.</p>
 <h4>Load from a standard script</h4>
 <p>Alternatively, you can load them in your main JavaScript script using dynamic imports as:</p>
 <pre class="prettyprint source lang-html"><code>&lt;script defer async>
-   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@master/components/button-send.js')
+   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js')
 &lt;/script>
 </code></pre>
 <p>The disadvantage of this method is that the import function is asynchronous and so your own code may try to execute before the module has loaded. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level async or the promise-style then/catch.</p>
