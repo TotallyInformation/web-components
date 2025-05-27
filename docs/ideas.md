@@ -29,9 +29,28 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 
 
 
+### `smart-table` - Like smart-list
+
+* Build from data
+* Optional columns data - if not provided, auto-build from content
+* Save altered data
+* Custom event on changed data
+
 ## Possible future components
 
 Note that some of these might not even be possible.
+
+### `button-group` - A group of buttons
+
+### `count-down` - A visual and/or audible countdown timer
+
+* Visual and audible options.
+* Length of time to count down. Number with options for hours, minutes, seconds. (Days?)
+* Option to Auto-start after previous time-er ends.
+* Visuals: Circular or linear countdown display.
+* Audible: Beep, chime, etc.
+* Optional pause, stop, reset buttons.
+* Optional start time.
 
 ### `editable-list` - A list that can be edited in place
 
@@ -62,43 +81,27 @@ If using uibuilder, updates will be returned to Node-RED.
 </for-next></ol>
 ```
 
-### `light-switch` - on/off, level, colour. Location.
+### `h1-title` - Use the page's title tag as the `<h1>`
+
+Maybe with optional sub-title. Also option to use different string instead.
+
+### `key-value-list` (or possibly `property-list`?) - A list of key/value pairs using various views
+
+Views include:
+* Table
+* List
+* Checkbox list
+* Cards
+
+### `image-meta` - access to image exif metadata
+
+* [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
+* [ref](https://jsdev.space/howto/javascript-exif-parser/)
 
 ### `layout-area` - Switch between a few core layouts such as blog & dash
 #### `area-*` - Define an area for a layout, e.g. `area-main`, `area-head`, `area-foot`, `area-sidebar` - all included in the parent component's package.
 
-### `smart-list` - 2-way data controllable list wrapper
-
-* Wraps around lists to easily add different entry formats including numbering (nested), icons, checkboxes, prefixes (e.g. dates)
-* Dynamic property to store contents - ideally 2-way
-* Multiple ways to update content: DOM changes, custom event, proxied property. For uibuilder: auto-topic updates
-* Optionally drag/drop to re-order with data property updated
-* Optionally content editable - double-click on icon, prefix and text to edit
-* Optional checkbox with data store
-* UIBUILDER data enabled. Controllable updates back to Node-RED (e.g. when no longer visible or immediate)
-
-```html
-<smart-list data="myData" type="ordered" prefix="date" checkbox>
-  <smart-item><span>1</span> <span>Item 1</span></smart-item>
-</smart-list>
-```
-
-### [STARTED] `smart-table` - Like smart-list
-
-* Build from data
-* Optional columns data - if not provided, auto-build from content
-* Save altered data
-* Custom event on changed data
-
-### `smart-report` - Like collapsible-headings but also data controllable
-
-* Wraps around a collection of `<hx>` and `<p>`/`<div>`/`<img>` tags adding smarter formatting and control
-* Optional collapsible headings
-* Optional numbered headings (including nested numbers), format controllable
-* Dynamic property to store contents - ideally 2-way
-* Multiple ways to update content: DOM changes, custom event, proxied property. For uibuilder: auto-topic updates
-* *Maybe - Optional drag/drop re-oder*
-* *Maybe - double-click to content edit*
+### `light-switch` - on/off, level, colour. Location.
 
 ### `linear-gauge`
 
@@ -117,17 +120,61 @@ If using uibuilder, updates will be returned to Node-RED.
 
 Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
 
-### `standard-footer` or extend `page-meta` - (c), date (range), author, version and other metadata
+### `todo-list` - A managable list of TODO items or shopping list
 
-### `h1-title` - Use the page's title tag as the `<h1>`
-
-Maybe with optional sub-title. Also option to use different string instead.
-
-### `image-meta` - access to image exif metadata
-
-* [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
+[ref](https://discourse.nodered.org/t/convert-dashboard-shopping-list-to-v2/96553)
 
 ### `simple-timeline`
+
+### `simple-gallery`
+
+* A simple image gallery with optional captions and/or descriptions
+* Requires a list of urls pointing to images that will be dynamically loaded
+* Possible extensions
+  * Use [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js) library to load metadata
+  * Add automated image rotation when the gallary overflows
+  * Dialog version option (rather than just inline)
+
+[ref](https://discourse.nodered.org/t/created-image-gallery-using-the-template-node-in-dashboard-2/96601)
+[ref 2](https://jsdev.space/howto/javascript-exif-parser/)
+
+### `smart-list` - 2-way data controllable list wrapper
+
+* Wraps around lists to easily add different entry formats including numbering (nested), icons, checkboxes, prefixes (e.g. dates)
+* Dynamic property to store contents - ideally 2-way
+* Multiple ways to update content: DOM changes, custom event, proxied property. For uibuilder: auto-topic updates
+* Optionally drag/drop to re-order with data property updated
+* Optionally content editable - double-click on icon, prefix and text to edit
+* Optional checkbox with data store
+* UIBUILDER data enabled. Controllable updates back to Node-RED (e.g. when no longer visible or immediate)
+
+```html
+<smart-list data="myData" type="ordered" prefix="date" checkbox>
+  <smart-item><span>1</span> <span>Item 1</span></smart-item>
+</smart-list>
+```
+
+### `smart-report` - Like collapsible-headings but also data controllable
+
+* Wraps around a collection of `<hx>` and `<p>`/`<div>`/`<img>` tags adding smarter formatting and control
+* Optional collapsible headings
+* Optional numbered headings (including nested numbers), format controllable
+* Dynamic property to store contents - ideally 2-way
+* Multiple ways to update content: DOM changes, custom event, proxied property. For uibuilder: auto-topic updates
+* *Maybe - Optional drag/drop re-oder*
+* *Maybe - double-click to content edit*
+
+### `standard-footer` or extend `page-meta` - (c), date (range), author, version and other metadata
+
+### `tab-view` - A tabbed view
+
+### Other ideas
+
+* Steppper - step through a form
+* Status tracker - show the status/steps of a process
+* Data map - map data to a visual representation
+* Data tree - show a tree of data
+* Guitar Chord - show a guitar chord diagram [ref](https://dev.to/madsstoumann/guitar-chords-in-css-3hk8)
 
 ## Thoughts
 
