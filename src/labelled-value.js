@@ -1,6 +1,6 @@
 /** A zero dependency custom web component that displays a value with a label
  * Version: See the class code
- **/
+ */
 /** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
@@ -15,13 +15,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** TODO
- * - Not accessible
+ * - Accessibility improvements needed
  * - Partially complete - Needs colour/formatting controls
  * - Needs managed var and uib integration
- * - Allow HTML (via html attribute)
+ * - Allow HTML in the label (via html attribute)
  */
 
 import TiBaseComponent from '../libs/ti-base-component'
@@ -162,7 +162,7 @@ class LabelledValue extends TiBaseComponent {
     /** PRIVATE. Reference to the output tag @type {HTMLOutputElement} */
     #outputEl
     /** PRIVATE. Reference to the slot tag @type {HTMLSlotElement} */
-    #slotEl
+    // #slotEl
     /** If true, keeps the slot content when the value changes */
     'keep-slot'
 
@@ -176,7 +176,9 @@ class LabelledValue extends TiBaseComponent {
         this.setAttribute('value', val)
     }
 
-    /** Get the current shown value */
+    /** Get the current shown value
+     * @returns {any} The current value
+     */
     get value() {
         return this.#value
     }
@@ -191,7 +193,9 @@ class LabelledValue extends TiBaseComponent {
         // this.setAttribute('label', val)
     }
 
-    /** Get the current shown label */
+    /** Get the current shown label
+     * @returns {string} The current label
+     */
     get label() {
         return this.#label
     }
@@ -204,7 +208,7 @@ class LabelledValue extends TiBaseComponent {
 
         this.#outputEl = this.shadowRoot.querySelector('output')
         this.#labelEl = this.shadowRoot.querySelector('label')
-        this.#slotEl =  this.shadowRoot.querySelector('slot')
+        // this.#slotEl =  this.shadowRoot.querySelector('slot')
     }
 
     /** Runs when an instance is added to the DOM */
@@ -239,7 +243,7 @@ class LabelledValue extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 } // ---- end of Class ---- //
 

@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** To Do
  * - Use highlighter from visible-console
@@ -124,7 +124,7 @@ class SyntaxHighlight extends TiBaseComponent {
     }
 
     /** Element.json = {...} to show the json object
-     * @param {Object|JSON|string} value JS Object or JSON string to show
+     * @param {object | JSON | string} value JS Object or JSON string to show
      */
     set json(value) {
         if (typeof value === 'string') {
@@ -149,7 +149,7 @@ class SyntaxHighlight extends TiBaseComponent {
     /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
 
@@ -200,7 +200,7 @@ class SyntaxHighlight extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     } // --- end of attributeChangedCallback --- //
 
     /** Return a formatted HTML version of JSON object
@@ -209,9 +209,9 @@ class SyntaxHighlight extends TiBaseComponent {
      */
     static highlight(json) {
         json = JSON.stringify(json, undefined, 4)
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') // eslint-disable-line @stylistic/newline-per-chained-call
         json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            var cls = 'number'
+            let cls = 'number'
             if ((/^"/).test(match)) {
                 if ((/:$/).test(match)) {
                     cls = 'key'
