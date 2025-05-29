@@ -21,7 +21,7 @@
  * limitations under the License.
  **/
 
-import TiBaseComponent from '../libs/ti-base-component'
+import TiBaseComponent from '../../libs/ti-base-component'
 
 /**
  * @typedef {string} CSSColor - A CSS color value (e.g., "red", "#ff0000", "rgb(255, 0, 0)").

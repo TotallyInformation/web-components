@@ -49,7 +49,7 @@
  * - What happens when pushing both new row/col (array)
  */
 
-import TiBaseComponent from '../libs/ti-base-component'
+import TiBaseComponent from '../../libs/ti-base-component'
 
 /** Only use a template if you want to isolate the code and CSS */
 // const template = document.createElement('template')

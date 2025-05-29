@@ -1,12 +1,10 @@
-/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
- *
- * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'ComponentTemplate' and 'component-template'
- * For better formatting of HTML in template strings, use VSCode's "ES6 String HTML" extension
+
+/** A complete action/todo/project list in a single web component
  *
  * Version: See the class code
  *
  */
-/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
+/** Copyright (c) 2025-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -22,7 +20,7 @@
  * limitations under the License.
  */
 
-import TiBaseComponent from '../libs/ti-base-component'
+import TiBaseComponent from '../../libs/ti-base-component'
 
 /** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
@@ -45,7 +43,7 @@ template.innerHTML = /*html*/`
  * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @element component-template
+ * @element todo-app
  * @memberOf Alpha
 
  * METHODS FROM BASE: (see TiBaseComponent)
@@ -59,10 +57,10 @@ template.innerHTML = /*html*/`
   * None
 
  * CUSTOM EVENTS:
-  * "component-template:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
-  * "component-template:ready" - Alias for connected. The instance can handle property & attribute changes
-  * "component-template:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
-  * "component-template:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * "todo-app:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "todo-app:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "todo-app:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "todo-app:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
   * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -82,13 +80,13 @@ template.innerHTML = /*html*/`
  * @slot Container contents
 
  * @example
-  * <component-template name="myComponent" inherit-style="./myComponent.css"></component-template>
+  * <todo-app name="myComponent" inherit-style="./myComponent.css"></todo-app>
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class ComponentTemplate extends TiBaseComponent {
+class TodoApp extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-02-24'
+    static componentVersion = '2025-04-22'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -146,13 +144,13 @@ class ComponentTemplate extends TiBaseComponent {
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default ComponentTemplate
+export default TodoApp
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['ComponentTemplate'] = ComponentTemplate
+window['TodoApp'] = TodoApp
 
 // Self-register the HTML tag
-customElements.define('component-template', ComponentTemplate)
+customElements.define('todo-app', TodoApp)
