@@ -3,7 +3,8 @@ title: data-list
 description: >
   A Zero dependency web component lets you create a ul or ol list from a JavaScript object or array.
 created: 2022-04-24 16:57:57
-lastUpdated: 2022-04-24 16:58:02
+lastUpdated: 2025-05-29 20:32:10
+status: alpha # alpha, beta, live
 ---
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
@@ -36,7 +37,7 @@ When used without uibuilder, you need to detect the custom event that is fired o
 
 <div>
     <!-- The simplest use. Apply the data in your index.js. Give it an ID to make it easier to reference. -->
-    <definition-list id="dl1"></definition-list>
+    <data-list id="dl1"></data-list>
 
     <!-- If you give it a name, it will be used as its ID but with spaces replace with underscores. -->
     <!-- <data-list name="jims list">Jim's Simple List</data-list> -->

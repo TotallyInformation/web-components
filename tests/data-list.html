@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>Testing TotallyInformation's web-components - data-list</title>
+
+    <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
+
+    <script defer src="../dist/call-out.iife.min.js"></script>
+    <script defer src="../dist/alpha/data-list.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="./"><img src="./resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - data-list</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="caution" title="Status: Alpha">
+                Experimental. Documentation: <a href="/docs/#/components/data-list">data-list</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+        </section>
+
+        <article>
+            <h2>Items added dynamically using JavaScript</h2>
+            <data-list id="dl1">Items added by JavaScript</data-list>
+        </article>
+
+        <article>
+            <h2>Items added dynamically from a global variable</h2>
+            <data-list id="dl2" listvar="mylist">Items added by global variable</data-list>
+        </article>
+    </main>
+
+    <script>
+        // List variable to use in dl2 - it MUST be global
+        mylist = {
+            "Alpha": "Entry one",
+            "Beta": "Entry two",
+            "Gamma": "Entry three",
+            "Delta": "Entry four",
+            "Epsilon": "Entry five",
+        }
+
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = DataList.version
+
+            // Get a reference to your data-list tag
+            const dl1 = document.querySelector('#dl1')
+
+            // Initialise the data-list.
+            dl1.data = {
+                "one": "This is the first list entry",
+                "two": "This is the second list entry",
+                "three": "This is the third list entry",
+            }
+
+            // Change one of the entries in the list after 4 seconds
+            setTimeout(function(){
+
+                dl1.entry('two', 'This is the second entry amended')
+
+            }, 4000)
+        })
+    </script>
+</body></html>
