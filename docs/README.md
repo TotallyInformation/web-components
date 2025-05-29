@@ -72,11 +72,11 @@ These components can be considered `beta` quality or better. They may not be ful
 | Component                                         | Description                                                       | Class Name        |
 | ------------------------------------------------- | ----------------------------------------------------------------- | ----------------- |
 | [`chart-statetrail`](components/chart-statetrail) | A chart that shows a trail of states over time (AKA, a timeline). | `ChartStateTrail` |
-| *[`dynamic-list`](components/dynamic-list)        | Create a list from a data object. (*) No demo yet                 | `DynamicList`     |
-| *[`on-off`](components/on-off.md)                 | A simple on/off switch. (*) No demo yet                           | `OnOff`           |
+| *[`data-list`](components/data-list)              | Create a list from a data object. (*) No demo yet                 | `DataList`        |
 | [`simple-card`](components/simple-card)           | A card container with optional header and footer.                 | `SimpleCard`      |
 | [`simple-container`](components/simple-container) | A UI container for easy, automated layout of contained elements (specifically cards). | `SimpleContainer` |
 | [`smart-table`](components/smart-table)           | Turns array or object data into an HTML table with optional column definitions.       | `SmartTable`      |
+| [`todo-app`](components/todo-app) | A simple todo app that can be used to manage a list of tasks. | `TodoApp`          |
 
 The following alpha components do not yet have documentation or test/demo pages. They are included in the package and can be used but may not be fully functional or documented.
 
@@ -85,12 +85,12 @@ The following alpha components do not yet have documentation or test/demo pages.
 | `chart-frappe`      | A chart component using the Frappe chart library.                                                        | `ChartFrappe`      |
 | `chart-high`        | A chart component using the HighCharts library.                                                          | `ChartHigh`        |
 | `container-br`      | Like `<br>` for flex layouts. Forces a new row in a `simple-container` (or any other flex row container).| `ContainerBr`      |
-| `data-list`         | Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list. (replaced by `dynamic-list`?) | `DataList` |
 | `definition-list`   | Similar to `data-list` but outputs a DL instead. (replaced by `dynamic-list`?)                           | `DefinitionList`   |
 | `gauge-steel`       | A gauge component using the Steel Series library.                                                        | `GaugeSteel`       |
 | `ghost-thermometer` | A thermometer style gauge.                                                                               | `GhostThermometer` |
 | `multi-way-switch`  | A flexible multi-switch that can display in several styles (buttons, rotary, etc).                       | `MultiWaySwitch`   |
 | `nav-bar`           | A standardised navigation menu bar.                                                                      | `NavBar`           |
+| [`on-off`](components/on-off.md) | A simple on/off switch.                                                                     | `OnOff`            |
 | `simple-gauge`      | A simple gauge style display component.                                                                  | `SimpleGauge`      |
 | `simple-switch`     | A simple 2-way latching switch.                                                                          | `SimpleSwitch`     |
 | `state-timeline`    | A horizontal timeline display designed to show status/state.                                             | `StateTimeline`    |

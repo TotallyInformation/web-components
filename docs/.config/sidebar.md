@@ -17,6 +17,7 @@
 * Alpha: Experimental, in early development
 
   * [`chart-statetrail`](components/chart-statetrail)
+  * [`data-list`](components/data-list)
   * [`simple-card`](components/simple-card)
   * [`simple-container`](components/simple-container)
   * [`smart-table`](components/smart-table)
