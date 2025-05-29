@@ -3,13 +3,25 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-lastUpdated: 2022-05-09 19:49:19
+lastUpdated: 2025-05-29 17:34:51
 ---
+
+## Next
+
+* Switch `simple-card` and `simple-container` to use the new `BaseComponent` class.
+* Add demo for `dynmic-list` component.
+* Add demo for `on-off` component.
 
 ## Components In Progress
 
-Please see the main README file.
+### simple-card
 
+* Needs refactoring to use the new `BaseComponent` class.
+
+### simple-container
+
+* Needs refactoring to use the new `BaseComponent` class.
+  
 ## Changes/Improvements to Existing Components
 
 N/A

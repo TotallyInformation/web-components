@@ -3,11 +3,9 @@ title: call-out
 description: |
   A Zero dependency web component that displays GitHub/Obsidian style callout boxes.
 created: 2025-01-14 16:51:19
-updated: 2025-01-14 16:51:25
+updated: 2025-05-29 15:29:05
+status: live # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/call-out).
 
 Callouts are also known as "admonitions" or "alerts". They are used to draw attention to specific content.
 

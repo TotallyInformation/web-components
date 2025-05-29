@@ -3,16 +3,16 @@ title: Developer documentation
 description: |
   The standards and processes used in the development of these web components.
 created: 2024-09-22 14:34:00
-updated: 2024-12-14 15:59:03
+updated: 2025-05-29 16:30:10
 ---
 
 ## Standards
 
 These are the requirements and standards for any web component to be included in this repository.
 
-* MUST be standalone with no external requirements. Common include library modules (e.g. charts) MAY be imported however. The resulting file MUST be useable stand-alone.
+* MUST be loadable in the browser with either a *single* script link or a single import (for ES Module use).
 
-* MUST be useable in the majority of modern browsers, anything supporting ES2019+ should be usable. IE will not be supported.
+* MUST be useable in the majority of modern browsers, anything supporting ES2019+ should be usable. IE will not be supported. Use ESBUILD to enforce this.
 
 * MUST be run through ESBUILD to produce minimised ESM and IIFE versions. The built versions should target common browser features no newer than 2-years old. Built versions will be in the `./dist` folder with alpha quality components built to the `./dist/alpha` folder. All built versions will include `.map` files for debugging.
 
@@ -20,9 +20,9 @@ These are the requirements and standards for any web component to be included in
 
 * The Class is the default export and is also self-registered to the window global.
 
-* MUST provide source-code in either `./src` (for production ready components) or `./alpha`. Any component in `./src` MUST be usable even if it is not feature complete.
+* MUST provide source-code in either `./src` (for production ready components) or `./src/alpha`. Any component in `./src` MUST be usable even if it is not feature complete.
 
-* MUST use JSDoc to self-document. MUST use ESLint and follow the modified _JavaScript Standard_ formatting.
+* MUST use JSDoc to self-document. MUST use ESLint and follow the provided ESLINT config formatting.
 
 * MUST provide a document file in `./docs` describing use, settings, etc.
 
@@ -38,9 +38,11 @@ These are the requirements and standards for any web component to be included in
 
 * MUST NOT be dependent on UIBUILDER for Node-RED. SHOULD be enhanced if the UIBUILDER client library is loaded.
 
-* SHOULD extend `ti-base-component` to inherit standard variables and methods.
+* MUST extend `ti-base-component` to inherit standard variables and methods.
 
-* SHOULD be derived from the `./libs/ti-base-component.js` class to inherit standard properties and methods.
+* MUST be derived from the `./libs/ti-base-component.js` class to inherit standard properties and methods.
+
+* SHOULD be standalone with no external requirements. Common include library modules (e.g. charts) MAY be imported however. The resulting file MUST be useable stand-alone.
 
 * SHOULD meet the [Web Components Gold Standard](https://github.com/webcomponents/gold-standard/wiki).
 
@@ -120,19 +122,23 @@ Shadow dom elements can be selectively styled based on a class or other identifi
 
 ## Development workflow
 
-See `./alpha/component-template.js` which should be used as the basis for all new components in this package.
-
-1. Copy the component-template.js file to a new file in the `./alpha` folder.
+1. Copy the `./src/alpha/component-template.js` file to a new file in the `./src/alpha` folder.
 2. Update the class name, component name, and file name to match the new component.
-3. Create a matching document file in the `./docs` folder.
-4. Create a matching test/demo HTML page in the `./tests` folder.
-5. Run the `watch` script to start esbuild in watch mode. Auto-creates the ESM and IIFE versions of the component.
-6. _develop the component - add properties, methods, and events as required._
-7. Run the `build` script to rebuild the tests/demos index page & run a final esbuild on all components.
-8. Run the `test` script to run the Cloudflare Wrangler web server to test out the doc/demo/test website.
-9. Git commit and push the changes to GitHub.
+3. Create a matching document file in the `./docs` folder. Use `./docs/_component-doc-template.md` as a template.
 
-Pushing to GitHub will trigger the Cloudflare Pages build and deployment process.
+   * Update the `./docs/.config/sidebar.md` file to include the new component in the sidebar.
+   * Update the table of components in the `./docs/index.md` file to include the new component.
+
+4. Create a matching test/demo HTML page in the `./tests` folder.
+5. Run the `npm run watch` script to start esbuild in watch mode. Auto-creates the ESM and IIFE versions of the component.
+6. _develop the component - add properties, methods, and events as required._
+7. Run the `npm run build` script to rebuild the tests/demos index page & run a final esbuild on all components.
+8. Run the `npm run test` script to run the Cloudflare Wrangler web server to test out the doc/demo/test website.
+9.  Git commit and push the changes to GitHub.
+
+NB: Prior to final push, run `npm run buildDocBundle` to update the documentation bundle script.
+
+Pushing to GitHub will trigger the Cloudflare Pages build and deployment process for the `https://wc.totallyinformation.net` website.
 
 ## Progressive enhancements for UIBUILDER
 

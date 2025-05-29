@@ -3,11 +3,9 @@ title: html-include
 description: |
   A zero-dependency web component that pulls in HTML pages, HTML fragments, returned HTML Form data, JSON or text from a URL and displays it in the page.
 created: 2024-09-22 14:34:00
-updated: 2024-09-22 15:32:13
+updated: 2025-05-29 15:31:00
+status: live # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/html-include).
 
 ## Current Limitations
 

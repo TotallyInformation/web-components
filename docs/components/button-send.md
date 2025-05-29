@@ -3,11 +3,9 @@ title: button-send
 description: |
   A Zero dependency button web component that sends a msg or a document event when clicked.
 created: 2022-04-07 17:42:42
-updated: 2025-02-12 16:41:04
+updated: 2025-05-29 15:27:28
+status: live # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/button-send).
 
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name

@@ -3,11 +3,9 @@ title: collapsible-headings
 description: |
   A Zero dependency web component that Makes slot content collapsible by heading level.
 created: 2024-09-24 19:39:42
-updated: 2025-02-26 18:36:49
+updated: 2025-05-29 15:31:10
+status: live # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Live - ready for extended use.  [Demo](https://wc.totallyinformation.net/tests/collapsible-headings).
 
 Fill the slot content of this custom component with report-style text. e.g. headings followed by paragraph or other block text, images, etc.
 

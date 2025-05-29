@@ -3,11 +3,9 @@ title: labelled-value
 description: |
   A Zero dependency web component that Displays a value with a label prefix.
 created: 2022-04-07 21:05:42
-updated: 2025-02-26 18:28:01
+updated: 2025-05-29 15:31:23
+status: beta # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Beta. Ready for basic use. [Demo](https://wc.totallyinformation.net/tests/labelled-value).
 
 This is a simple convenience component. It displays a value attribute/property and prefixes it with a defined label.
 

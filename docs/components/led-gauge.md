@@ -3,11 +3,9 @@ title: led-gauge
 description: |
   A Zero dependency web component that displays a horizontal gauge with an LED-like appearance.
 created: 2025-01-09 10:44:17
-updated: 2025-01-11 16:47:41
+updated: 2025-05-29 15:31:49
+status: live # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Live. Ready for extended use. [Demo](https://wc.totallyinformation.net/tests/led-gauge).
 
 ## Useage
 

@@ -86,37 +86,46 @@ window.$docsify = { //  eslint-disable-line no-undef
                 footer[5] = ''
 
                 if (vm.frontmatter) { // vm only exists per page, requires plugin
+                    const fm = vm.frontmatter
                     //#region --- Add front-matter (YAML) standard metadata to each page if present ---
-                    if (vm.frontmatter.description) {
-                        content = `${vm.frontmatter.description}\n\n${content}`
+                    if (fm.status) {
+                        const statusType = {
+                            'live': 'Ready for extended use',
+                            'beta': 'Ready for basic use',
+                            'alpha': 'Experimental, still in early development',
+                        }
+                        content = `> [!NOTE]
+                         > STATUS: _${fm.status}_. ${statusType[fm.status.toLowerCase()]}. [Demo](https://wc.totallyinformation.net/tests/${fm.title}).
+
+                        ${content}`
                     }
 
-                    if (vm.frontmatter.status) {
-                        content = `> Status: ${vm.frontmatter.status}\n\n${content}`
+                    if (fm.description) {
+                        content = `${fm.description}\n\n${content}`
                     }
 
-                    if (vm.frontmatter.title) {
-                        content = `# ${vm.frontmatter.title}\n\n${content}`
+                    if (fm.title) {
+                        content = `# ${fm.title}\n\n${content}`
                     }
                     //#endregion ---  ---
 
                     //#region --- Add page specific (c) and last updated date to each page if available from YAML front-matter ---
-                    if (vm.frontmatter.created) { // uib docs/Obsidian
-                        mydate = new Date(vm.frontmatter.created)
+                    if (fm.created) { // uib docs/Obsidian
+                        mydate = new Date(fm.created)
                         yearFrom = mydate.getFullYear()
-                    } else if (vm.frontmatter.date) { // Hugo
-                        mydate = new Date(vm.frontmatter.date)
+                    } else if (fm.date) { // Hugo
+                        mydate = new Date(fm.date)
                         yearFrom = mydate.getFullYear()
                     }
 
-                    if (vm.frontmatter.updated) { // Obsidian
-                        mydate = new Date(vm.frontmatter.updated)
+                    if (fm.updated) { // Obsidian
+                        mydate = new Date(fm.updated)
                         yearTo = mydate.getFullYear()
-                    } else if (vm.frontmatter.lastUpdated) { // uib/IT Stds docs
-                        mydate = new Date(vm.frontmatter.lastUpdated)
+                    } else if (fm.lastUpdated) { // uib/IT Stds docs
+                        mydate = new Date(fm.lastUpdated)
                         yearTo = mydate.getFullYear()
-                    } else if (vm.frontmatter.Lastmod) { // Hugo
-                        mydate = new Date(vm.frontmatter.Lastmod)
+                    } else if (fm.Lastmod) { // Hugo
+                        mydate = new Date(fm.Lastmod)
                         yearTo = mydate.getFullYear()
                     }
 
@@ -136,10 +145,16 @@ window.$docsify = { //  eslint-disable-line no-undef
             }) // ------- End of Custom Plugin ------- //
 
             // Runs against the rendered HTML for each page
-            hook.afterEach(function (html, next) {
-                html = html.replace(/UIBUILDER/g, '<span class="uib-name"><span class="uib-red">UI</span>BUILDER</span>')
-                next(html + footer.join(''))
-            })
+            // hook.afterEach(function (html, next) {
+            //     html = html.replace(/UIBUILDER/g, '<span class="uib-name"><span class="uib-red">UI</span>BUILDER</span>')
+            //     next(html + footer.join(''))
+            // })
+
+            // Invoked on each page load after new HTML has been appended to the DOM
+            // hook.doneEach(() => {
+            //     // replace the <title> tag
+            //     document.title = document.title.replace(/<title>(.*?)<\/title>/, '<title>UIBUILDER: $1')
+            // })
         },
     ],
 }

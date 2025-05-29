@@ -4,12 +4,8 @@ description: |
   A Zero dependency web component that displays a horizontal timeline of states.
 created: 2024-12-14 16:51:03
 updated: 2024-12-14 16:51:08
+status: alpha # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Alpha. Experimental, still in early development. [Demo](https://wc.totallyinformation.net/tests/chart-statetrail).
-
-
 
 ## Useage
 

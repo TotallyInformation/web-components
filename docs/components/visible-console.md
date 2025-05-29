@@ -3,11 +3,9 @@ title: visible-console
 description: |
   A zero-dependency web component that intercepts the browser console output and mirrors it to an on-page element.
 created: 2024-09-22 14:34:00
-updated: 2024-09-22 15:32:13
+updated: 2025-05-29 15:26:33
+status: beta # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Beta. Ready for basic use. [Demo](https://wc.totallyinformation.net/tests/visible-console).
 
 Creates an on-page output block that shows any `console.xxxx()` output created in JavaScript. Also outputs to the browser console.
 

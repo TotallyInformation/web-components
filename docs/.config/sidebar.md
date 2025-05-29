@@ -2,27 +2,29 @@
 
 * Live: Ready for extended use
 
-  * [`button-send`](button-send)
-  * [`call-out`](call-out)
-  * [`collapsible-headings`](collapsible-headings)
-  * [`html-include`](html-include)
-  * [`led-gauge`](led-gauge)
+  * [`button-send`](components/button-send)
+  * [`call-out`](components/call-out)
+  * [`collapsible-headings`](components/collapsible-headings)
+  * [`html-include`](components/html-include)
+  * [`led-gauge`](components/led-gauge)
 
 * Beta: Ready for basic use
 
-  * [`labelled-value`](labelled-value)
-  * [`syntax-highlight`](syntax-highlight)
-  * [`visible-console`](visible-console)
+  * [`labelled-value`](components/labelled-value)
+  * [`syntax-highlight`](components/syntax-highlight)
+  * [`visible-console`](components/visible-console)
 
 * Alpha: Experimental, in early development
 
-  * [`chart-statetrail`](chart-statetrail)
-  * [`simple-card`](simple-card)
-  * [`simple-container`](simple-container)
-  * [`smart-table`](smart-table)
+  * [`chart-statetrail`](components/chart-statetrail)
+  * [`simple-card`](components/simple-card)
+  * [`simple-container`](components/simple-container)
+  * [`smart-table`](components/smart-table)
+  * [`todo-app`](components/todo-app)
 
 - [Live Demos](https://wc.totallyinformation.net/tests)
 - [Roadmap](./roadmap)
+- [Development](./dev "Development and building standards and practices")
 
 - **Links**
 - [Main README <sup>🔗</sup>](https://totallyinformation.github.io/web-components/)

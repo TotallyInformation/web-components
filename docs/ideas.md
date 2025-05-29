@@ -175,6 +175,7 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 * Data map - map data to a visual representation
 * Data tree - show a tree of data
 * Guitar Chord - show a guitar chord diagram [ref](https://dev.to/madsstoumann/guitar-chords-in-css-3hk8)
+* Scheduler - show/edit a schedule of events [ref](https://discourse.nodered.org/t/announce-scheduler-node-for-dashboard-2-0/95076)
 
 ## Thoughts
 

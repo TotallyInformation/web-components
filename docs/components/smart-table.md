@@ -3,11 +3,9 @@ title: smart-table
 description: |
   A Zero dependency web component that displays an HTML table from input data
 created: 2024-10-06 22:32:05
-updated: 2024-10-06 22:32:09
+updated: 2025-05-29 15:32:16
+status: alpha # alpha, beta, live
 ---
-
-> [!NOTE]
-> STATUS: Alpha. Experimental, still in early development. [Demo](https://wc.totallyinformation.net/tests/smart-table).
 
 Automatically creates an HTML table layout from input data. The purpose of this component is to make it very easy to produce good quality HTML tables simply based on standard input data, this is normally a complex HTML authoring task.
 
