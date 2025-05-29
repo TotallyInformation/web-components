@@ -1,21 +1,9 @@
-/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+/** Define a new zero dependency custom web component ECMA module that can be used as card with optional header & footer
  *
- * TODO: color const not really needed, convert to make direct changes to style (see theme changer for code)
- *       Use uib-brand.css rather than trying to do local css processing for light/dark
- *       Improve slot change handlers and remove on disconnect
- *       Allow varient for slots not just the card
+ * Version: See the class code
  *
- * @version 0.2 2022-05-10 Early-release
- *
- * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
- * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
- *     or paste into https://runem.github.io/web-component-analyzer/
- * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
- *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
- *
- **/
-/**
- * Copyright (c) 2022 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -29,51 +17,31 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
-const componentName = 'simple-card'
-const className = 'SimpleCard'
+import TiBaseComponent from '../../libs/ti-base-component'
 
-// function invert(rgb) {
-//     rgb = Array.prototype.join.call(arguments).match(/(-?[0-9\.]+)/g);
-//     for (let i = 0; i < 3; i++) {
-//         rgb[i] = (i === 3 ? 1 : 255) - rgb[i];
-//     }
-//     return rgb.slice(0,3)
-// }
+/**
+ * TODO: color const not really needed, convert to make direct changes to style (see theme changer for code)
+ *       Use uib-brand.css rather than trying to do local css processing for light/dark
+ *       Improve slot change handlers and remove on disconnect
+ *       Allow varient for slots not just the card
+ */
 
-// Detect browser light/dark mode - See https://stackoverflow.com/a/57795495, attach eventListener if needing to detect change
-// Assume light mode if not dark (could have no preference set)
-// const color = {
-//     mode: 'light',
-//     fg: 'rgb(var(--uib-color-bg-lighter, 0,0,0))',
-//     bg: 'rgba(var(--uib-color-fg, 255,255,255), 1)',
-//     border: 'rgba(255,255,255, .25)',
-//     //footer:
-// }
 const color = {
     mode: 'light',
     fg: 'var(--text2)',
     bg: 'var(--surface4)',
-    border: 'var(--text4)' // 'rgba(255,255,255, .25)',
+    border: 'var(--text4)', // 'rgba(255,255,255, .25)',
     // footer:
 }
 if ( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
     color.mode = 'dark'
 }
 
-// const bgStyle = window.getComputedStyle(document.body.children[0], null)
-// console.log('bgStyle', bgStyle.color, bgStyle.background, bgStyle)
-
-// tagged template - just for syntax highlighting in VSCode
-function html(strings, ...keys) {
-    return strings.map( (s, i) => {
-        return s + (keys[i] || '')
-    }).join('')
-}
-
+/** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
-template.innerHTML = html`
+template.innerHTML = /*html*/`
     <style>
         :host {
             display: block;
@@ -97,61 +65,163 @@ template.innerHTML = html`
     </article>
 `
 
-// Define the class and make it the default export
-/** A simple card component
+/** Namespace
+ * @namespace Alpha
+ */
+
+/**
+ * @class
+ * @augments TiBaseComponent
+ * @description Define a new zero dependency custom web component ECMA module that can be used as card with optional header & footer
  *
  * @element simple-card
- *
- * @fires simple-card:construction - Document object event. evt.details contains the data
- * @fires simple-card:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires simple-card:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires simple-card:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
- *
- * @property {string} variant - Optional. Sets the cards colour variant
- * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- *
- * @property {string} variant - Sync'd from name attribute
- * @property {string|html} slot - Populates the cards default slot content
- * @property {string|html} header - Populates the cards header slot content
- * @property {string|html} footer - Populates the cards footer slot content
- *
+ * @memberOf Alpha
+
+ * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
+
+ * OTHER METHODS:
+  * None
+
+ * CUSTOM EVENTS:
+  * "simple-card:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "simple-card:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "simple-card:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "simple-card:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+
+ * Standard watched attributes (common across all my components):
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+
+ * Other watched attributes:
+   * @property {string} variant - Optional. Sets the cards colour variant
+
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+
+ * Other props:
+  * By default, all attributes are also created as properties
+  * @property {string} slot - Populates the cards default slot content (can contain HTML markup)
+  * @property {string} header - Populates the cards header slot content (can contain HTML markup)
+  * @property {string} footer - Populates the cards footer slot content (can contain HTML markup)
+
  * @slot Container contents
  * @slot header - Content to go in the header section of the card
  * @slot footer - Content to go in the footer section of the card
- *
- * csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
+
+ * @example
+  * <simple-card name="myComponent" inherit-style="./myComponent.css"></simple-card>
+
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-export default class SimpleCard extends HTMLElement {
-    // #region ---- Class Variables ----
+class SimpleCard extends TiBaseComponent {
+    /** Component version */
+    static componentVersion = '2025-05-29'
 
-    name = undefined
-
-    // List of useful properties/attributes
-    static props = [
-        'variant',
-    ]
-
-    /** Standard _ui object to include in msgs */
-    _ui = {
-        type: componentName,
-        event: undefined,
-        id: undefined,
-        name: undefined,
-        data: undefined, // All of the data-* attributes as an object
+    /** Makes HTML attribute change watched
+     * @returns {Array<string>} List of all of the html attribs (props) listened to
+     */
+    static get observedAttributes() {
+        return [
+            // Standard watched attributes:
+            'inherit-style', 'name',
+            // Other watched attributes:
+            'variant',
+        ]
     }
 
-    static _iCount = 0
+    /** NB: Attributes not available here - use connectedCallback to reference */
+    constructor() {
+        super()
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        if (template && template.content) this._construct(template.content.cloneNode(true))
+    }
 
-    // #endregion ---- ---- ---- ----
+    /** Runs when an instance is added to the DOM */
+    connectedCallback() {
+        this._connect() // Keep at start.
 
-    // #region ---- Utility Functions ----
+        // Check if header/footer slots get content and turn on border if so
+        const slots = this.shadowRoot.querySelectorAll('slot')
+        slots[0].addEventListener('slotchange', (e) => {
+            const slot = slots[0]
+            const nodes = slot.assignedNodes()
+            if (nodes.length > 0) {
+                Object.assign(slot.style, {
+                    color: color.bg,
+                    backgroundColor: color.fg,
+                    border: `1px solid ${color.border}`,
+                    borderRadius: '0.5rem 0.5rem 0 0',
+                    // borderBottom: '1px solid silver',
+                    display: 'block',
+                    padding: '1rem 0.5rem',
+                    fontWeight: 'bolder',
+                    fontSize: '120%',
+                })
+            } else slot.style.display = 'none'
+        })
+        slots[2].addEventListener('slotchange', (e) => {
+            const slot = slots[2]
+            const nodes = slot.assignedNodes()
+            if (nodes.length > 0) {
+                Object.assign(slot.style, {
+                    border: `1px solid ${color.border}`,
+                    borderRadius: '0 0 0.5rem 0.5rem',
+                    // borderTop: '1px solid silver',
+                    display: 'block',
+                    padding: '1rem 0.5rem',
+                    fontStyle: 'italic',
+                })
+            } else slot.style.display = 'none'
+        })
 
-    /** Mini jQuery-like shadow dom selector
-     * @param {keyof HTMLElementTagNameMap} selection HTML element selector
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
+    }
+
+    /** Runs when an instance is removed from the DOM */
+    disconnectedCallback() {
+        this._disconnect() // Keep at end.
+    }
+
+    /** Runs when an observed attribute changes - Note: values are always strings
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
+     * @param {string} attrib Name of watched attribute that has changed
+     * @param {string} oldVal The previous attribute value
+     * @param {string} newVal The new attribute value
      */
-    $(selection) {
-        return this.shadowRoot && this.shadowRoot.querySelector(selection)
+    attributeChangedCallback(attrib, oldVal, newVal) {
+        /** Optionally ignore attrib changes until instance is fully connected
+         * Otherwise this can fire BEFORE everthing is fully connected.
+         */
+        // if (!this.connected) return
+
+        // Don't bother if the new value same as old
+        if ( oldVal === newVal ) return
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[attrib] = newVal
+
+        // Add other dynamic attribute processing here.
+        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
+        if (attrib === 'variant') {
+            this._setVariant(newVal)
+        }
+
+        // Keep at end. Let everyone know that an attribute has changed for this instance of the component
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
+    }
+
+    get variant() {
+        return this.getAttribute('variant')
+    }
+
+    set variant(value) {
+        this.setAttribute('variant', value)
     }
 
     /** Set colour variant to use as background colour
@@ -193,203 +263,16 @@ export default class SimpleCard extends HTMLElement {
             }
         }
     }
-
-    // #endregion ---- ---- ---- ----
-
-    // #region ---- Event Handlers ----
-
-    /** Handle a `uibuilder:msg:_ui:update:${this.id}` custom event
-     * @param {CustomEvent} evt uibuilder `uibuilder:msg:_ui:update:${this.id}` custom event evt.details contains the data
-     */
-    DEPRECATED_uibMsgHandler(evt) {
-
-        // If there is a payload, we want to replace the slot - easiest done from the light DOM
-        if ( evt['detail'].slot ) {
-            const el = document.getElementById(this.id)
-            el.innerHTML = evt['detail'].slot
-        } else if ( evt['detail'].payload ) {
-            const el = document.getElementById(this.id)
-            el.innerHTML = evt['detail'].payload
-        }
-
-        if ( evt['detail'].variant ) {
-            this._setVariant(evt['detail'].variant)
-        }
-
-        if ( evt['detail'].header ) {
-            let el = document.querySelector(`#${this.id} > *[slot=header]`)
-            if ( el ) {
-                // Was found so replace it
-                el.innerHTML = evt['detail'].header
-            } else {
-                // Was not found so create new element
-                el = document.getElementById(this.id)
-                const el2 = document.createElement('div')
-                el2.setAttribute('slot', 'header')
-                el2.innerHTML = evt['detail'].header
-                el.appendChild(el2)
-            }
-        }
-
-        if ( evt['detail'].footer ) {
-            let el = document.querySelector(`#${this.id} > *[slot=footer]`)
-            if ( el ) {
-                // Was found so replace it
-                el.innerHTML = evt['detail'].footer
-            } else {
-                // Was not found so create new element
-                el = document.getElementById(this.id)
-                const el2 = document.createElement('div')
-                el2.setAttribute('slot', 'footer')
-                el2.innerHTML = evt['detail'].footer
-                el.appendChild(el2)
-            }
-        }
-
-    }
-
-    // #endregion ---- ---- ---- ----
-
-    constructor() {
-        super()
-
-        // const bgStyle = window.getComputedStyle(this, null)
-
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
-            .append(template.content.cloneNode(true))
-
-        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
-
-    } // ---- end of constructor ---- //
-
-    get variant() {
-        return this.getAttribute('variant')
-    }
-
-    set variant(value) {
-        this.setAttribute('variant', value)
-    }
-
-    // List all attribs we want to observe
-    static get observedAttributes() { return SimpleCard.props }
-
-    // Runs when an observed attribute changes - Note: values are always strings
-    attributeChangedCallback(name, oldVal, newVal) {
-
-        // Don't bother if the new value same as old
-        if (oldVal === newVal) return
-
-        // Create a property from the value - WARN: Be careful with name clashes
-        this[name] = newVal
-
-        this.dispatchEvent(new CustomEvent(`${componentName}:attribChanged`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name,
-                attribute: name,
-                newVal: newVal,
-                oldVal: oldVal,
-            }
-        }))
-
-        if (name === 'variant') {
-            this._setVariant(newVal)
-        }
-
-    } // --- end of attributeChangedCallback --- //
-
-    // Runs when an instance is added to the DOM
-    connectedCallback() {
-        ++SimpleCard._iCount // increment total instance count
-
-        // Invert the heading text/bg colours
-        // const divStyle = window.getComputedStyle(this, null)
-        // Object.assign(this.shadowRoot.querySelector('slot[name="header"]').style, {
-        //     color: color.bg,
-        //     backgroundColor: color.fg,
-        // })
-
-        // Create an id from name or calculation if needed
-        this.name = this.getAttribute('name')
-        if (!this.id) {
-            if (this.name) this.id = this.name.toLowerCase().replace(/\s/g, '_')
-            else this.id = `${componentName}-${SimpleCard._iCount}`
-        }
-
-        // Listen for a uibuilder msg that is targetted at this instance of the component
-        // document.addEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler.bind(this) )
-
-        // Check if header/footer slots get content and turn on border if so
-        const slots = this.shadowRoot.querySelectorAll('slot')
-        slots[0].addEventListener('slotchange', (e) => {
-            const slot = slots[0]
-            const nodes = slot.assignedNodes()
-            if (nodes.length > 0) {
-                Object.assign(slot.style, {
-                    color: color.bg,
-                    backgroundColor: color.fg,
-                    border: `1px solid ${color.border}`,
-                    borderRadius: '0.5rem 0.5rem 0 0',
-                    // borderBottom: '1px solid silver',
-                    display: 'block',
-                    padding: '1rem 0.5rem',
-                    fontWeight: 'bolder',
-                    fontSize: '120%',
-                })
-            } else slot.style.display = 'none'
-        })
-        slots[2].addEventListener('slotchange', (e) => {
-            const slot = slots[2]
-            const nodes = slot.assignedNodes()
-            if (nodes.length > 0) {
-                Object.assign(slot.style, {
-                    border: `1px solid ${color.border}`,
-                    borderRadius: '0 0 0.5rem 0.5rem',
-                    // borderTop: '1px solid silver',
-                    display: 'block',
-                    padding: '1rem 0.5rem',
-                    fontStyle: 'italic',
-                })
-            } else slot.style.display = 'none'
-        })
-
-        this.dispatchEvent(new CustomEvent(`${componentName}:connected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        }))
-
-    } // ---- end of connectedCallback ---- //
-
-    // Runs when an instance is removed from the DOM
-    disconnectedCallback() {
-        // NB: Dont decrement SimpleCard._iCount because that could lead to id nameclashes
-
-        // document.removeEventListener(`uibuilder:msg:_ui:update:${this.id}`, this._uibMsgHandler )
-
-        this.dispatchEvent(new CustomEvent(`${componentName}:disconnected`, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                id: this.id,
-                name: this.name
-            },
-        }))
-
-    } // ---- end of disconnectedCallback ---- //
-
 } // ---- end of Class ---- //
+
+// Make the class the default export so it can be used elsewhere
+export default SimpleCard
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window[className] = SimpleCard
+window['SimpleCard'] = SimpleCard
 
 // Self-register the HTML tag
-customElements.define(componentName, SimpleCard)
+customElements.define('simple-card', SimpleCard)

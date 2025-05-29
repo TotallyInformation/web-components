@@ -37,7 +37,7 @@ All of the attributes are optional.
 
 * Attributes specific to this component
 
-  * None.
+  * `variant` - Sets the cards colour variant.
 
 * Attributes inherited from the `BaseComponent`:
 

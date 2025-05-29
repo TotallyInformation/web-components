@@ -1,16 +1,9 @@
-/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+/** A new zero dependency custom web component ECMA module that can be used as a flexible container
  *
- * @version 0.2 2022-05-10 Early-release
+ * Version: See the class code
  *
- * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
- * Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation
- *     or paste into https://runem.github.io/web-component-analyzer/
- * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
- *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
- *
- **/
-/**
- * Copyright (c) 2022 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -24,17 +17,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
-// tagged template - just for syntax highlighting in VSCode
-function html(strings, ...keys) {
-    return strings.map( (s, i) => {
-        return s + (keys[i] || '')
-    }).join('')
-}
+import TiBaseComponent from '../../libs/ti-base-component'
 
+/** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
-template.innerHTML = html`
+template.innerHTML = /*html*/`
     <style>
         :host {
             position: relative;
@@ -53,80 +42,117 @@ template.innerHTML = html`
     <slot role="region" aria-label="Content Grid"></slot>
 `
 
-// Define the class and make it the default export
-/** A simple container component
+/** Namespace
+ * @namespace Alpha
+ */
+
+/**
+ * @class
+ * @augments TiBaseComponent
+ * @description Define a new zero dependency custom web component ECMA module that can be used as a flexible container
  *
  * @element simple-container
- *
- * fires simple-container:click - Document object event. evt.details contains the data
- *
- * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- *
- * prop {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
- *
+ * @memberOf Alpha
+
+ * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
+
+ * OTHER METHODS:
+  * None
+
+ * CUSTOM EVENTS:
+  * "simple-container:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "simple-container:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "simple-container:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "simple-container:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+
+ * Standard watched attributes (common across all my components):
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+
+ * Other watched attributes:
+  * None
+
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+
+ * Other props:
+  * By default, all attributes are also created as properties
+
  * @slot Container contents
- *
- * @csspart ??? - Uses the uib-styles.css uibuilder master for variables where available.
+
+ * @example
+  * <simple-container name="myComponent" inherit-style="./myComponent.css"></simple-container>
+
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-export default class SimpleContainer extends HTMLElement {
-    //#region ---- Class Variables ----
+class SimpleContainer extends TiBaseComponent {
+    /** Component version */
+    static componentVersion = '2025-05-29'
 
-    /** Standard _ui object to include in msgs */
-    _ui = {
-        type: 'button-send',
-        event: undefined,
-        id: undefined,
-        name: undefined,
-        data: undefined, // All of the data-* attributes as an object
-    }
-
-    //#endregion ---- ---- ---- ----
-
-    //#region ---- Utility Functions ----
-
-    /** Mini jQuery-like shadow dom selector
-     * @param {keyof HTMLElementTagNameMap} selection HTML element selector
+    /** Makes HTML attribute change watched
+     * @returns {Array<string>} List of all of the html attribs (props) listened to
      */
-    $(selection) {
-        return this.shadowRoot && this.shadowRoot.querySelector(selection)
+    static get observedAttributes() {
+        return [
+            // Standard watched attributes:
+            'inherit-style', 'name',
+            // Other watched attributes:
+        ]
     }
 
-    //#endregion ---- ---- ---- ----
-
+    /** NB: Attributes not available here - use connectedCallback to reference */
     constructor() {
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
-            .append(template.content.cloneNode(true))
-
-        // this._list = this.shadowRoot.querySelector('ul')
-
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        if (template && template.content) this._construct(template.content.cloneNode(true))
     }
 
-    // List all attribs we want to observe
-    static get observedAttributes() { return [
+    /** Runs when an instance is added to the DOM */
+    connectedCallback() {
+        this._connect() // Keep at start.
 
-    ] }
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
+    }
 
-    // Runs when an observed attribute changes - Note: values are always strings
-    attributeChangedCallback(name, oldVal, newVal) {
+    /** Runs when an instance is removed from the DOM */
+    disconnectedCallback() {
+        this._disconnect() // Keep at end.
+    }
+
+    /** Runs when an observed attribute changes - Note: values are always strings
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
+     * @param {string} attrib Name of watched attribute that has changed
+     * @param {string} oldVal The previous attribute value
+     * @param {string} newVal The new attribute value
+     */
+    attributeChangedCallback(attrib, oldVal, newVal) {
+        /** Optionally ignore attrib changes until instance is fully connected
+         * Otherwise this can fire BEFORE everthing is fully connected.
+         */
+        // if (!this.connected) return
 
         // Don't bother if the new value same as old
         if ( oldVal === newVal ) return
-
         // Create a property from the value - WARN: Be careful with name clashes
-        this[name] = newVal
+        this[attrib] = newVal
 
-    } // --- end of attributeChangedCallback --- //
+        // Add other dynamic attribute processing here.
+        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
-    // Runs when an instance is added to the DOM
-    connectedCallback() {
+        // Keep at end. Let everyone know that an attribute has changed for this instance of the component
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
-
-    // Runs when an instance is removed from the DOM
-    disconnectedCallback() {
-    }
-
 } // ---- end of Class ---- //
+
+// Make the class the default export so it can be used elsewhere
+export default SimpleContainer
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
