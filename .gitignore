@@ -106,3 +106,9 @@ typings/
 web-components.code-workspace
 .vscode/
 .wrangler/tmp/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
