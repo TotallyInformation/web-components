@@ -26,7 +26,7 @@ export default {
     // Alpha components
     alphaESM: {
         // logLevel: 'debug',
-        entryPoints: [`alpha/*.js`], // Input ESM file that defines the web component
+        entryPoints: [`src/alpha/*.js`], // Input ESM file that defines the web component
         minify: true, // Minify the output
         bundle: true, // Bundle all dependencies into the output
         sourcemap: true, // Generate source map file
@@ -36,7 +36,7 @@ export default {
     },
     alphaIIFE: {
         // logLevel: 'info',
-        entryPoints: [`alpha/*.js`], // Same input file
+        entryPoints: [`src/alpha/*.js`], // Same input file
         minify: true, // Minify the output
         bundle: true, // Bundle all dependencies
         sourcemap: true, // Generate source map file
