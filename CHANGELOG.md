@@ -1,15 +1,17 @@
 # Totally Information Web Components - Change Log
 
-## To Do
+## v1.2.0
 
-* Move `const template` to static var for all components.
-* Move `const componentName` to static var for all components.
+* Lots of ESLINT fixes.
+* Tidy up and rationalise the docs home page, roadmap and ideas pages.
+* Start to document the standard Node-RED/UIBUILDER to browser remote-control integration.
+* A few minor documentation fixes.
 
-### Other Component Ideas
+## v1.1.0
 
-* Extended input. Refs: [1](https://stackoverflow.com/questions/25495849/can-a-custom-element-extend-an-input-element), [2](https://elements-x.com/?path=/docs/getting-started--docs), [3](https://medium.com/@andresander/extending-html-inputs-in-a-framework-agnostic-way-with-web-components-9227532b6139), [4](https://blog.revillweb.com/extending-native-dom-elements-with-web-components-233350c8e86a).
-* Ideas from [elements-x](https://elements-x.com/?path=/docs/getting-started--docs)
+Initial release. First release [published to npm](https://www.npmjs.com/package/@totallyinformation/web-components).
 
+This is the first proper release of these web components. They have now matured sufficiently to be worth publishing.
 
 ## v0.2.4
 
