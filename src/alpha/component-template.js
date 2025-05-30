@@ -79,6 +79,8 @@ template.innerHTML = /*html*/`
  * Other props:
   * By default, all attributes are also created as properties
 
+ NB: properties marked with 💫 are dynamic and have getters/setters.
+
  * @slot Container contents
 
  * @example
@@ -88,7 +90,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-02-24'
+    static componentVersion = '2025-05-30'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -108,7 +110,9 @@ class ComponentTemplate extends TiBaseComponent {
         if (template && template.content) this._construct(template.content.cloneNode(true))
     }
 
-    /** Runs when an instance is added to the DOM */
+    /** Runs when an instance is added to the DOM
+     * Runs AFTER the initial attributeChangedCallback's
+     */
     connectedCallback() {
         this._connect() // Keep at start.
 
@@ -121,7 +125,8 @@ class ComponentTemplate extends TiBaseComponent {
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
-     * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML.
+     *       and BEFORE connectedCallback is called.
      * @param {string} attrib Name of watched attribute that has changed
      * @param {string} oldVal The previous attribute value
      * @param {string} newVal The new attribute value

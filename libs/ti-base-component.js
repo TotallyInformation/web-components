@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-02-25'
+    static baseVersion = '2025-05-30'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -129,6 +129,7 @@ class TiBaseComponent extends HTMLElement {
      * param {*} url The URL for the linked style sheet
      */
     async doInheritStyles() {
+        if (!this.shadowRoot) return
         if (!this.hasAttribute('inherit-style')) return
 
         let url = this.getAttribute('inherit-style')
@@ -138,7 +139,6 @@ class TiBaseComponent extends HTMLElement {
         linkEl.setAttribute('type', 'text/css')
         linkEl.setAttribute('rel', 'stylesheet')
         linkEl.setAttribute('href', url)
-        // @ts-ignore
         this.shadowRoot.appendChild(linkEl)
 
         console.info(`[${this.localName}] Inherit-style requested. Loading: "${url}"`)
@@ -259,6 +259,7 @@ class TiBaseComponent extends HTMLElement {
      * @param {{mode:'open'|'closed',delegatesFocus:boolean}=} shadowOpts Options passed to attachShadow
      */
     _construct(template, shadowOpts) {
+        if (!template) return
         if (!shadowOpts) shadowOpts = { mode: 'open', delegatesFocus: true, }
         // Only attach the shadow dom if code and style isolation is needed
         this.attachShadow(shadowOpts)
