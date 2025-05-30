@@ -3,7 +3,7 @@ title: Totally Information's web components documentation
 description: |
   This is the documentation for TotallyInformation's pure Web Components.
 created: 2022-04-07 16:51:03
-updated: 2025-05-29 17:35:00
+updated: 2025-05-30 15:02:09
 ---
 
 These components mostly do not require any external modules or frameworks. However, they do contain (optional) features to use with node-red-contrib-uibuilder.
@@ -40,21 +40,22 @@ These are fully usable in their current form. They may still evolve but are cons
 
 These components can be considered `live` and ready for extended use.
 
-| Component                         | Description                                                  | Class Name |
-| ----------------------------------| ------------------------------------------------------------ | ---------- |
-| [`button-send`](components/button-send) | A simple button that outputs key info either via a custom document event. When used with UIBUILDER for Node-RED, will send a message back to Node-RED. Also allows block contents on the button. | `ButtonSend` |
-| [`call-out`](components/call-out) | Displays nicely formatted GitHub/Obsidian style call-out information boxes. Colour coded with an icon and over-ridable default title. | `CallOut` |
-|  [`collapsible-headings`](components/collapsible-headings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. | `CollapsibleHeadings` |
-| [`html-include`](components/html-include) | Dynamically load external HTML content very easily without needing an iFrame. | `HtmlInclude` |
-| [`led-gauge`](components/led-gauge) | A simple LED-style gauge widget with easily controlled colours and responsive layout. | `LedGauge` |
+| Component                                 | Description                                                                           | Class Name |
+| ------------------------------------------| ------------------------------------------------------------------------------------- | ---------- |
+| [`button-send`](components/button-send)   | A simple button that outputs key info either via a custom document event. When used with UIBUILDER for Node-RED, will send a message back to Node-RED. Also allows block contents on the button. | `ButtonSend` |
+| [`call-out`](components/call-out)         | Displays nicely formatted GitHub/Obsidian style call-out information boxes. Colour coded with an icon and over-ridable default title. | `CallOut` |
+| [`collapsible-headings`](components/collapsible-headings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. | `CollapsibleHeadings` |
+| [`data-list`](components/data-list)       | Create a list from a data object. (*) No demo yet                                     | `DataList`    |
+| [`html-include`](components/html-include) | Dynamically load external HTML content very easily without needing an iFrame.         | `HtmlInclude` |
+| [`led-gauge`](components/led-gauge)       | A simple LED-style gauge widget with easily controlled colours and responsive layout. | `LedGauge`    |
 
 ### Beta
 
 These components can be considered `beta` quality or better. They may not be fully comprehensive but they have basic usefulness.
 
-| Name                                   | Description                                                  | Class Name |
-| -------------------------------------- | ------------------------------------------------------------ | ---------- |
-| [`labelled-value`](components/labelled-value)     | A simple label and value pair with easy styling.             | `LabelledValue` |
+| Name                                              | Description                                                  | Class Name        |
+| ------------------------------------------------- | ------------------------------------------------------------ | ----------------- |
+| [`labelled-value`](components/labelled-value)     | A simple label and value pair with easy styling.             | `LabelledValue`   |
 | [`syntax-highlight`](components/syntax-highlight) | Show JSON or JavaScript object data as highlighted HTML.     | `SyntaxHighlight` |
 | [`visible-console`](components/visible-console)   | Reflects (clones) browser `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. | `VisibleConsole` |
 
@@ -72,7 +73,6 @@ These components can be considered `beta` quality or better. They may not be ful
 | Component                                         | Description                                                       | Class Name        |
 | ------------------------------------------------- | ----------------------------------------------------------------- | ----------------- |
 | [`chart-statetrail`](components/chart-statetrail) | A chart that shows a trail of states over time (AKA, a timeline). | `ChartStateTrail` |
-| *[`data-list`](components/data-list)              | Create a list from a data object. (*) No demo yet                 | `DataList`        |
 | [`simple-card`](components/simple-card)           | A card container with optional header and footer.                 | `SimpleCard`      |
 | [`simple-container`](components/simple-container) | A UI container for easy, automated layout of contained elements (specifically cards). | `SimpleContainer` |
 | [`smart-table`](components/smart-table)           | Turns array or object data into an HTML table with optional column definitions.       | `SmartTable`      |
