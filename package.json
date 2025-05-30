@@ -14,7 +14,7 @@
     "analyse1": "npx web-component-analyzer ./src/**/*.js --format markdown --outDir docs/readme",
     "vscode-custom": "npx web-component-analyzer ./{src,libs}/**/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json",
     "jsdoc": "npx jsdoc ./src ./src/alpha -c jsdoc.config.json -r --destination ./docs/jsdoc",
-    "release": "node ./libs/release.mjs --skip-tests",
+    "release": "node ./libs/release.mjs --skip-checks",
     "release:dry-run": "node ./libs/release.mjs --dry-run",
     "release:tag-only": "node ./libs/release.mjs --tag-only",
     "release:publish-only": "node ./libs/release.mjs --publish-only"
