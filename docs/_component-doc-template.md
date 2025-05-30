@@ -31,7 +31,7 @@ All of the attributes are optional.
   * `name` - HTML name attribute. Included in output _meta prop.
 
 > [!NOTE]
-> The 💫 symbol indicates that the property is dynamic when changed by JavaScript. Technically, this means that the property has a getter and setter function.
+> A 💫 symbol indicates that the property is dynamic when changed by JavaScript. Technically, this means that the property has a getter and setter function.
 
 ### Properties
 
@@ -55,10 +55,12 @@ Each attribute has a corresponding property. You can set the property directly i
 
 * Other standard properties:
 
-  * `{string} componentVersion` Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+  * {string} `componentVersion` Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
 > [!NOTE]
 > Static properties have to be accessed via the component's classname. e.g. `CallOut.componentVersion`
+>
+> If you do not explicitly set an `id` attribute, one will be auto-created in the format `id="xxxx-xxxx-1"`. Where the number is unique on-page. Please note that changing the order of `xxxx-xxxx` elements on the HTML page will change the numbering. It is always best to add your own unique id's.
 
 ## Slots
 
@@ -68,7 +70,6 @@ Each attribute has a corresponding property. You can set the property directly i
 > Slots are used to allow the component to accept HTML content. By default, the main slot, if defined, will contain any content between the opening and closing tags of the component. You can also define named slots to allow for more complex content arrangements.
 
 ## Styling
-
 
 ### Inheriting Styles
 
@@ -113,7 +114,26 @@ None.
 
 ### Node-RED to Browser
 
-None.
+#### Standard remote control messages
+
+All of the live and beta components support a standard remote control message format. This allows you to control the component from Node-RED via UIBUILDER for Node-RED.
+
+The standard message format is:
+
+```json
+{
+  // The specific topic format routes the msg to the correct component
+  // where `id` is the id of the component to control.
+  "topic": "xxxx-xxxx::id",
+  // The payload is the data to set for the component.
+  "payload": {
+    // Each property of the payload must match a property or attribute name of the component.
+    // The value will be set against the property or attribute.
+    // ...
+  }
+}
+```
+
 
 #### Examples
 

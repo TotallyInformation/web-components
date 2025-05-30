@@ -3,7 +3,7 @@ title: data-list
 description: >
   A Zero dependency web component lets you create a ul or ol list from a JavaScript object or array.
 created: 2022-04-24 16:57:57
-lastUpdated: 2025-05-30 13:44:55
+lastUpdated: 2025-05-30 20:27:40
 author: Julian Knight (Totally Information)
 status: live # alpha, beta, live
 ---
@@ -129,11 +129,46 @@ None.
 
 ### Node-RED to Browser
 
-None.
+#### Standard remote control messages
+
+All of the live and beta components support a standard remote control message format. This allows you to control the component from Node-RED via UIBUILDER for Node-RED.
+
+The standard message format is:
+
+```json
+{
+  // The specific topic format routes the msg to the correct component
+  // where `id` is the id of the component to control.
+  "topic": "data-list::id",
+  // The payload is the data to set for the component.
+  "payload": {
+    // Each property of the payload must match a property or attribute name of the component.
+    // ...
+  }
+}
+```
 
 #### Examples
 
-
+```json
+{
+  // The specific topic format routes the msg to the correct component
+  // where `id` is the id of the component to control.
+  "topic": "data-list::dl1",
+  // The payload is the data to set for the component.
+  "payload": {
+    // Each property of the payload must match a property or attribute name of the component.
+    "keyvalueseparator": " 💠 ",
+    "liststyle": "'😎 '",
+    "data": {
+      "xxx": "Triple x",
+      "yyy": "Triple y",
+      "zzz": "triple z"
+    },
+    "style": "background-color: var(--surface4);"
+  }
+}
+```
 
 ## Original Requirements
 
@@ -150,98 +185,9 @@ None.
 
 Possibly in future versions.
 
-* [ ] Allow direct update of data from a uibuilder msg.
+* [x] Allow direct update of data from a uibuilder msg.
 
 
 ## Design References
 
 * None.
-
-
-
-
-
-
-
-
-### With uibuilder
-
-#### index.html
-
-NB: Same as the non-uibuilder version.
-
-```html
-<!doctype html>
-<html lang="en"><head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Can load the web components here as type=module but you have to load everything in the right order.
-         Alternatively, use an import in index.js -->
-    <!-- <script type="module" async src="https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js"></script> -->
-
-    <script type="module" async src="./index.js"></script> 
-
-</head><body>
-
-<div>
-    <!-- The simplest use. Apply the data in your index.js. Give it an ID to make it easier to reference. -->
-    <definition-list id="dl1"></definition-list>
-
-    <!-- If you give it a name, it will be used as its ID but with spaces replace with underscores. -->
-    <data-list name="jims list">Jim's Simple List</data-list>
-
-    <!-- If you don't give an ID or name, the component will apply an ID for you. -->
-    <data-list>Simple List</data-list>
-</div>
-
-</body></html>
-```
-
-#### index.js
-
-```js
-/** Main app script
- * NOTES: 
- * - Any imports are relative to THIS script.
- */
-
-// Load the uibuilder client library - to load here, you have to use the module version.
-import '../uibuilder/vendor/@totallyinformation/web-components/libs/uibuilder.module.js'  // Does NOT LOAD any exports
-
-// Load the component. The component self-registers & adds the `DataList` object to the `window` global.
-import '../uibuilder/vendor/@totallyinformation/web-components/components/data-list.js'
-
-// Start uibuilder
-uibuilder.start()
-
-// Get a reference to your data-list tag
-const dl1 = $('#dl1')
-
-/** Initialise the data-list using an Object.
- * Uses uibuilder's $ shortcut to reference.
- * When using an object, each `<li>` will have its id set to the key & the slot text to the value.
- * If you use an array, each `<li>` will get a numbered id.
- */
-dl1.data = {
-    "one": "This is the first list entry",
-    "two": "This is the second list entry",
-    "three": "This is the third list entry",
-}
-
-// Change one of the entries in the list from a uibuilder msg from Node-RED
-uibuilder.onTopic('update dl1', function(msg) {
-    console.log('>> onTopic `update dl1` >>', msg)
-
-    dl1.entry(msg.entryRef, msg.payload)
-})
-
-/* Example msg
-    {
-        "topic": "update dl1",
-        "entryRef": "two",
-        "payload": "This is the second entry amended"
-    }
-*/
-```
