@@ -112,7 +112,7 @@ There is also an `alpha/not-complete` folder. This contains some components not 
 
 It is possible that these will never be fully developed. But they represent some ideas that are being explored.
 
-See the [Ideas](ideas.md) document for more information on what is being considered for future components.
+See the [Roadmap](roadmap.md) page for more information on what is being considered for future components.
 
 * `chart-apex` - Charts using the ApexCharts library.
 * `chart-js` - Charts using the ChartJS library.

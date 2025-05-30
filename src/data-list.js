@@ -121,7 +121,7 @@ class DataList extends TiBaseComponent {
             // Standard watched attributes:
             'inherit-style', 'name',
             // Other watched attributes:
-            'keyvalueseparator', 'liststyle', 'listvar', 'type',
+            'keyvalueseparator', 'liststyle', 'listvar', 'type', 'topic',
         ]
     }
 
