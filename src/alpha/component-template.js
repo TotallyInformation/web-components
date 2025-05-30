@@ -47,6 +47,7 @@ template.innerHTML = /*html*/`
  *
  * @element component-template
  * @memberOf Alpha
+ * @license Apache-2.0
 
  * METHODS FROM BASE: (see TiBaseComponent)
  * STANDARD METHODS:
