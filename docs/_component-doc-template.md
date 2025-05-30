@@ -3,7 +3,7 @@ title: xxxx-xxxx
 description: >
   A Zero dependency web component that ...
 created: 2025-05-29 09:41:39
-updated: 2025-05-29 09:41:43
+updated: 2025-05-30 14:18:31
 author: Julian Knight (Totally Information)
 status: alpha # alpha, beta, live
 ---
@@ -29,6 +29,9 @@ All of the attributes are optional.
 
   * `inherit-style` - Load external styles into component. If present but empty, will default to './index.css'. Optionally give a URL to load.
   * `name` - HTML name attribute. Included in output _meta prop.
+
+> [!NOTE]
+> The 💫 symbol indicates that the property is dynamic when changed by JavaScript. Technically, this means that the property has a getter and setter function.
 
 ### Properties
 
@@ -59,7 +62,7 @@ Each attribute has a corresponding property. You can set the property directly i
 
 ## Slots
 
-None.
+* None.
 
 > [!NOTE]
 > Slots are used to allow the component to accept HTML content. By default, the main slot, if defined, will contain any content between the opening and closing tags of the component. You can also define named slots to allow for more complex content arrangements.
@@ -75,7 +78,7 @@ This component uses the Shadow DOM to encapsulate its styles. This means that th
 
 The following CSS variables are available for styling:
 
-N/A
+* None.
 
 ## Events
 
@@ -129,4 +132,4 @@ Possibly in future versions.
 
 ## Design References
 
-* 
+* None.
