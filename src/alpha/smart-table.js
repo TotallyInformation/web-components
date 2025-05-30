@@ -1,7 +1,8 @@
+// @ts-nocheck
 /** A zero dependency custom lightweight web component that builds a table from data
  * Version: See the class code
- **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -15,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** TODO
  * - Add row ID (R1, ...) - add col ID (C1, ...)
@@ -93,16 +94,16 @@ import TiBaseComponent from '../../libs/ti-base-component'
  * OTHER METHODS:
  * @function getCellById Get an HTML element reference to a cell using `RxCx` referencing
  * @function getValueByCellId Get the data value of a cell using `RxCx` referencing
- * @function getValueByOffset(obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
+ * @function getValueByOffset (obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
 
- * @fires smart-table:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires smart-table:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires smart-table:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires smart-table:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires smart-table:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires smart-table:ready - Alias for connected. The instance can handle property & attribute changes
+ * fires smart-table:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires smart-table:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
  * None
@@ -116,7 +117,7 @@ import TiBaseComponent from '../../libs/ti-base-component'
  * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @property {object|array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
+ * @property {object|Array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
  * @property {object} cols Override the column metadata. If not supplied, cols is built from the first entry of the data array/object
  *
  * @property {HTMLTableElement} elThead Reference to the thead element
@@ -173,13 +174,15 @@ class SmartTable extends TiBaseComponent {
         // this.setAttribute('value', val)
     }
 
-    /** Get the current shown value */
+    /** Get the current shown value
+     * @returns {object|Array} The data used to build the table
+    */
     get data() {
         return this.#data
     }
 
     /** NB: Attributes not available here - use connectedCallback to reference */
-    constructor() { // eslint-disable-line no-useless-constructor
+    constructor() {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         // this._construct(template.content.cloneNode(true))
@@ -220,11 +223,11 @@ class SmartTable extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     /** Allows access to a cell using numeric row/col offsets
-     * @param {object|array} obj The 2d object to search
+     * @param {object|Array} obj The 2d object to search
      * @param {number} rowOffset The row offset
      * @param {number} colOffset The column offset
      * @returns {*} Cell value
@@ -257,7 +260,7 @@ class SmartTable extends TiBaseComponent {
      * @returns {*} The value of the cell if found else Null or Undefined
      */
     getValueByCellId(cellId) {
-        let [, row, col,] = cellId.split(/^R(\d+)C(\d+)$/ig)
+        let [, row, col] = cellId.split(/^R(\d+)C(\d+)$/ig)
         // @ts-ignore
         row = Number(row) - 1
         // @ts-ignore
@@ -280,10 +283,10 @@ class SmartTable extends TiBaseComponent {
                     if (parentKey !== null) {
                         console.warn(`[${this.localName}:_createProxy:${this.id}] Data is >2d. Can only deal with 2d (tabular) data.`)
                         return value
-                    } else return this._createProxy(value, prop)
-                } else {
-                    return value
+                    }
+                    return this._createProxy(value, prop)
                 }
+                return value
             },
 
             set: (target, prop, value) => {
@@ -312,7 +315,7 @@ class SmartTable extends TiBaseComponent {
                 }
 
                 return success
-            }
+            },
         })
     }
 

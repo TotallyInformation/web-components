@@ -24,7 +24,7 @@
  *   const showMsg = document.getElementsByTagName('syntax-highlight')[0]
  *   showMsg.dispatchEvent(new CustomEvent('new-msg', { bubbles: false, detail: msg }))
  *   showMsg.evt('new-msg', msg)
- * 
+ *
  */
 /*
   Copyright (c) 2022 Julian Knight (Totally Information)
@@ -62,15 +62,16 @@ export class FloorPlan extends HTMLElement {
 
     constructor() {
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(template.content.cloneNode(true))
 
         // this.addEventListener('new-msg', evt => {
-            
+
         // })
 
         // Get a reference to the uibuilder FE client library if possible
         try {
+            // @ts-ignore
             this.uibuilder = window.uibuilder
         } catch (e) {
             this.uibuilder = undefined
@@ -82,12 +83,12 @@ export class FloorPlan extends HTMLElement {
     // }
 
     // static get observedAttributes() { return [
-    //     'auto', 
+    //     'auto',
     // ]}
 
     attributeChangedCallback(name, oldVal, newVal) {
         if ( oldVal === newVal ) return
-        
+
     } // --- end of attributeChangedCallback --- //
 
 } // ---- End of FloorPlan class definition ---- //

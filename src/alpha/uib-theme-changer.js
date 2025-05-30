@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * TODO:
@@ -10,7 +11,7 @@
  *   - Add hidden attrib to allow for just msg handling
  *   - Update documentation
  *
- * @version See the class code
+ * version See the class code
  *
  * References:
  *   - https://web.dev/building-a-color-scheme/
@@ -21,8 +22,8 @@
  * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
  *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
  *
- **/
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -36,7 +37,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 const componentName = 'uib-theme-changer'
 const className = 'UibThemeChanger'
@@ -184,16 +185,14 @@ template.innerHTML = /*html*/`
  *
  * @element uib-theme-changer
  *
- * @fires uib-theme-changer:construction - Document object event. evt.details contains the data
- * @fires uib-theme-changer:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires uib-theme-changer:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires uib-theme-changer:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires uib-theme-changer:construction - Document object event. evt.details contains the data
+ * fires uib-theme-changer:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires uib-theme-changer:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires uib-theme-changer:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * @property {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- *
- * @property {string} name - Sync'd from name attribute
  *
  * slot Container contents
  *
@@ -239,7 +238,9 @@ class UibThemeChanger extends HTMLElement {
         ]
     }
 
-    /** Report the current component version string */
+    /** Report the current component version string
+     *  @returns {string} The component version string
+     */
     get version() {
         return UibThemeChanger.version
     }
@@ -265,7 +266,7 @@ class UibThemeChanger extends HTMLElement {
     constructor() {
         super()
 
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
 
@@ -292,7 +293,7 @@ class UibThemeChanger extends HTMLElement {
             this.doInheritStyles(styleUrl)
         }
 
-        if ( !getComputedStyle(this).getPropertyValue('--uib-css').includes('uib-brand') ) {
+        if ( !getComputedStyle(this).getPropertyValue('--uib-css').includes('uib-brand') ) { // eslint-disable-line @stylistic/newline-per-chained-call
             console.warn('[uib-theme-changer] WARNING: It appears that you are not using uibuilder\'s uib-brand.css stylesheet. This component may not work as expected.')
         }
 
@@ -331,7 +332,7 @@ class UibThemeChanger extends HTMLElement {
         } else if ( this.uibThemeSettings[window.location.pathname] && this.uibThemeSettings[window.location.pathname].contrast ) {
             // not manually set but does have a saved page setting
             this.shadowRoot.querySelector(`input[value=${this.uibThemeSettings[window.location.pathname].contrast}][name=contrast]`).checked = true
-            this.evtClickContrast({ target: { name: 'contrast', value: this.uibThemeSettings[window.location.pathname].contrast } })
+            this.evtClickContrast({ target: { name: 'contrast', value: this.uibThemeSettings[window.location.pathname].contrast, }, })
         } else {
             this.shadowRoot.querySelector('input[value=standard][name=contrast]').checked = true
         }
@@ -366,7 +367,7 @@ class UibThemeChanger extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -382,7 +383,7 @@ class UibThemeChanger extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -411,7 +412,7 @@ class UibThemeChanger extends HTMLElement {
                 attribute: attrib,
                 newVal: newVal,
                 oldVal: oldVal,
-            }
+            },
         }))
     }
 
@@ -433,6 +434,7 @@ class UibThemeChanger extends HTMLElement {
 
     /** OPTIONAL. Update runtime configuration, return complete config
      * @param {object|undefined} config If present, partial or full set of options. If undefined, fn returns the current full option settings
+     * @returns {object} The current full option settings
      */
     config(config) {
         // Merge config but ensure that default states always present
@@ -451,7 +453,7 @@ class UibThemeChanger extends HTMLElement {
             for (let k in source) { // eslint-disable-line prefer-const
                 const vs = source[k]
                 const vt = target[k]
-                if (Object(vs) == vs && Object(vt) === vt) { // eslint-disable-line eqeqeq
+                if (Object(vs) == vs && Object(vt) === vt) {
                     target[k] = UibThemeChanger.deepAssign(vt, vs)
                     continue
                 }
@@ -478,9 +480,9 @@ class UibThemeChanger extends HTMLElement {
     }
 
     /**
-     * 
-     * @param {*} theme 
-     * @returns 
+     *
+     * @param {*} theme _
+     * @returns {string} _
      */
     setTheme(theme) {
         const $ = this.shadowRoot.querySelector.bind(this.shadowRoot)
@@ -529,14 +531,14 @@ class UibThemeChanger extends HTMLElement {
     }
 
     /** TODO Handle the icon
-     * @param {MouseEvent} evt
+     * @param {MouseEvent} evt _
      */
     evtClickToggle(evt) {
         console.log('icon click: ', evt.target.tagName)
     }
 
     /** Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html
-     * @param {MouseEvent} evt
+     * @param {MouseEvent} evt _
      */
     evtClickChooser(evt) {
         if (evt.target.name !== 'input-color-scheme-choose') return
@@ -551,7 +553,7 @@ class UibThemeChanger extends HTMLElement {
     }
 
     /** Handle reset button. Override contrast css variables and set appropriate class on html
-     * @param {MouseEvent} evt
+     * @param {MouseEvent} evt _
      */
     evtClickReset(evt) {
         this.setTheme('none')
@@ -560,7 +562,7 @@ class UibThemeChanger extends HTMLElement {
             els[i].checked = false
         }
 
-        this.evtClickContrast({ target: { name: 'contrast', value: 'standard' } })
+        this.evtClickContrast({ target: { name: 'contrast', value: 'standard', }, })
         const els1 = this.shadowRoot.querySelectorAll('input[name=contrast]')
         for (let i = 0; i < els1.length; i++) {
             els1[i].checked = false

@@ -1,8 +1,9 @@
+// @ts-nocheck
 /** A zero dependency web component that will display a "bar-chart" style "LED" gauge.
  *
  * See ./docs/simple-gauge.md for detailed documentation on installation and use.
  *
- * @version: 0.0.1 2024-01-30
+ * version: 0.0.1 2024-01-30
  *
  * TODO: Add custom events to allow processing of updates in the browser
  *
@@ -138,7 +139,7 @@ export default class SimpleGauge extends HTMLElement {
         <div></div>
         <caption><slot></slot></caption>
         `
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(SimpleGauge.template.content.cloneNode(true))
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
@@ -150,7 +151,11 @@ export default class SimpleGauge extends HTMLElement {
         // console.log('construct ended')
     }
 
-    /** NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called  */
+    /** NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called
+     * @param {string} attrib Name of watched attribute that has changed
+     * @param {string} oldVal The previous attribute value
+     * @param {string} newVal The new attribute value
+     */
     attributeChangedCallback(attrib, oldVal, newVal) {
         if ( oldVal === newVal ) return
         console.log('attributeChangedCallback', attrib, oldVal, newVal)

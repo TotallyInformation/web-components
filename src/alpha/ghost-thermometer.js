@@ -3,7 +3,7 @@
  *
  * See ./docs/ghost-thermometer.md for detailed documentation on installation and use.
  *
- * @version: 0.0.2 2023-08-12
+ * version: 0.0.2 2023-08-12
  *
  * TODO: Add custom events to allow processing of updates in the browser
  *
@@ -18,7 +18,7 @@
  * -
  */
 /*
-  Copyright (c) 2023 Julian Knight (Totally Information)
+  Copyright (c) 2023-2025 Julian Knight (Totally Information)
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -200,17 +200,16 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ /*html*/`
  *
  * @element button-send
  *
- * @fires button-send:click - Document object event. evt.details contains the data
- * @fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
+ * fires button-send:click - Document object event. evt.details contains the data
+ * fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
  *
  * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
  * @property {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
  * @property {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
- * @property {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
+ * @property {string} data -* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
- * @property {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.
- * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
+ * property {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.
  * @property {Array<string>} props - List of watched HtML Attributes
  *
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
@@ -267,7 +266,7 @@ export default class GhostThermometer extends HTMLElement {
 
     /** Convert a string 'true' or 'false' to a boolean true/false
      * @param {*} strvalue The string representation of the boolean
-     * @returns {boolean}
+     * @returns {boolean}  True if strvalue is 'true', false if 'false' or anything else
      */
     str2bool(strvalue) {
         return (strvalue && typeof strvalue === 'string') ? (strvalue.toLowerCase() === 'true') : (strvalue === true)
@@ -292,7 +291,7 @@ export default class GhostThermometer extends HTMLElement {
                 switchState: this.switchState,
                 mode: this.mode,
                 setpoint: this.numSetpoint,
-            }
+            },
         })
     }
 
@@ -445,7 +444,8 @@ export default class GhostThermometer extends HTMLElement {
     }
 
     set minset(value) {
-        this.setAttribute('minset', value || -999)
+        // @ts-ignore
+        this.setAttribute('minset', value || '-999')
     }
 
     get maxset() {
@@ -453,7 +453,8 @@ export default class GhostThermometer extends HTMLElement {
     }
 
     set maxset(value) {
-        this.setAttribute('maxset', value || 999)
+        // @ts-ignore
+        this.setAttribute('maxset', value || '999')
     }
 
     get setincrement() {
@@ -461,6 +462,7 @@ export default class GhostThermometer extends HTMLElement {
     }
 
     set setincrement(value) {
+        // @ts-ignore
         this.setAttribute('setincrement', value || 0.1)
     }
 
@@ -476,10 +478,10 @@ export default class GhostThermometer extends HTMLElement {
 
     constructor() {
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(template.content.cloneNode(true))
 
-        this._data = { ...this.dataset } // All of the data-* attributes as an object
+        this._data = { ...this.dataset, } // All of the data-* attributes as an object
         this._name = this.getAttribute('name')
         this._msg = {
             'topic': this.topic,
@@ -488,11 +490,11 @@ export default class GhostThermometer extends HTMLElement {
                 id: this.id,
                 name: this._name,
                 data: this._data, // All of the data-* attributes as an object
-            }
+            },
         }
 
-        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg })
-        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg, })
+        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true, }))
 
         // Get a reference to the (optional) uibuilder FE client library if possible
         try {
@@ -522,7 +524,11 @@ export default class GhostThermometer extends HTMLElement {
         return GhostThermometer.props
     }
 
-    /** NOTE: On initial startup, this is called for each watch attrib set in HTML - BEFORE connectedCallback is called  */
+    /** NOTE: On initial startup, this is called for each watch attrib set in HTML - BEFORE connectedCallback is called
+     *  @param {string} attrib Name of watched attribute that has changed
+     *  @param {string} oldVal The previous attribute value
+     *  @param {string} newVal The new attribute value
+     */
     attributeChangedCallback(attrib, oldVal, newVal) {
         // Make sure instance has an ID. Create an id from name or calculation if needed
         // NB: Done here, not in connectedCallback because this fn is called BEFORE that one on first startup

@@ -45,7 +45,7 @@ These components can be considered `live` and ready for extended use.
 | [`button-send`](components/button-send)   | A simple button that outputs key info either via a custom document event. When used with UIBUILDER for Node-RED, will send a message back to Node-RED. Also allows block contents on the button. | `ButtonSend` |
 | [`call-out`](components/call-out)         | Displays nicely formatted GitHub/Obsidian style call-out information boxes. Colour coded with an icon and over-ridable default title. | `CallOut` |
 | [`collapsible-headings`](components/collapsible-headings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. | `CollapsibleHeadings` |
-| [`data-list`](components/data-list)       | Create a list from a data object. (*) No demo yet                                     | `DataList`    |
+| [`data-list`](components/data-list)       | Create a list from a data object.                                                     | `DataList`    |
 | [`html-include`](components/html-include) | Dynamically load external HTML content very easily without needing an iFrame.         | `HtmlInclude` |
 | [`led-gauge`](components/led-gauge)       | A simple LED-style gauge widget with easily controlled colours and responsive layout. | `LedGauge`    |
 

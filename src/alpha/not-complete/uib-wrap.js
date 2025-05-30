@@ -1,9 +1,10 @@
+// @ts-nocheck
 /** Web component for UIBUILDER for Node-RED that lets you wrap around
  *  a 3rd-party JavaScript library to make it responsive to data from Node-RED.
  *
  * See ./docs/uib-wrap.md for detailed documentation on installation and use.
  *
- * @version: 0.0.1 2024-01-31
+ * version: 0.0.1 2024-01-31
  *
  * TODO: Add custom events to allow processing of updates in the browser
  *
@@ -62,14 +63,18 @@ export default class UibWrap extends HTMLElement {
         </style>
         <slot></slot>
         `
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(UibWrap.template.content.cloneNode(true))
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
         // console.log('construct ended')
     }
 
-    /** NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called  */
+    /** NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called
+     * @param {string} attrib - The name of the attribute that has changed
+     * @param {string} oldVal - The old value of the attribute
+     * @param {string} newVal - The new value of the attribute
+     */
     attributeChangedCallback(attrib, oldVal, newVal) {
         if (oldVal === newVal) return
         console.log('attributeChangedCallback', attrib, oldVal, newVal)
@@ -109,7 +114,8 @@ export default class UibWrap extends HTMLElement {
     connectedCallback() {
         setTimeout(() => {
             console.log(this.config, window['tbConfig'], window['uibuilder'].tbConfig)
-            let args = uibuilder.get(this.config)
+            // @ts-ignore
+            let args = uibuilder.get(this.config) // eslint-disable-line no-undef
             if (!Array.isArray(args)) args = [args]
             console.log(args)
             this.initialiseLib(args)

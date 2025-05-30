@@ -4,8 +4,8 @@
  *
  * Version: See the class code
  *
- **/
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -19,7 +19,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 import TiBaseComponent from '../../libs/ti-base-component'
 
@@ -65,10 +65,10 @@ template.innerHTML = /*html*/`
  * OTHER METHODS:
  * None
 
- * @fires chart-statetrail:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires chart-statetrail:ready - Alias for connected. The instance can handle property & attribute changes
- * @fires chart-statetrail:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires chart-statetrail:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
+ * fires chart-statetrail:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires chart-statetrail:ready - Alias for connected. The instance can handle property & attribute changes
+ * fires chart-statetrail:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires chart-statetrail:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -84,7 +84,6 @@ template.innerHTML = /*html*/`
  * @property {function(string): Element} $ jQuery-like shadow dom selector
  * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
  * @property {boolean} connected False until connectedCallback finishes
- * @property {string} name Placeholder for the optional name attribute
  * @property {object} opts This components controllable options - get/set using the `config()` method
  *
  * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
@@ -112,9 +111,9 @@ class ChartStatetrail extends TiBaseComponent {
          * @type {Array<{range: [number, number], title: string, color: CSSColor}>}
          */
         categoryMap: [
-            { range: [0, 0.3], title: 'Off', color: 'var(--failure, red)' },
-            { range: [0.3, 0.6], title: 'Partial', color: 'var(--warning, #c8b421)' },
-            { range: [0.6, 1], title: 'On', color: 'var(--success, green)' }
+            { range: [0, 0.3], title: 'Off', color: 'var(--failure, red)', },
+            { range: [0.3, 0.6], title: 'Partial', color: 'var(--warning, #c8b421)', },
+            { range: [0.6, 1], title: 'On', color: 'var(--success, green)', }
         ],
         /** Allows a nice title to be displayed for each item */
         itemMap: {},
@@ -177,7 +176,7 @@ class ChartStatetrail extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     updateMinMaxTimestamps() {

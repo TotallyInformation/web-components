@@ -1,6 +1,6 @@
 {
   "name": "@totallyinformation/web-components",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "scripts": {
     "watch": "node ./libs/esbuild.watch.mjs",
@@ -8,7 +8,7 @@
     "buildDocBundle": "node ./libs/doc-bundle/build.mjs",
     "test": "npx wrangler pages dev ./ --live-reload --show-interactive-dev-session",
     "analyse": "npm run analyse1 && npm run vscode-custom && npm run jsdoc",
-    "lint": "eslint .",
+    "lint": "eslint ./src/ --ext .js,.mjs,.cjs",
     "docs": "docsify serve ./docs",
     "edit-docs": "%LOCALAPPDATA%/Programs/Typora/Typora.exe ./",
     "analyse1": "npx web-component-analyzer ./src/**/*.js --format markdown --outDir docs/readme",

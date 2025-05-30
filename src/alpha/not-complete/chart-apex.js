@@ -1,6 +1,7 @@
+// @ts-nocheck
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @version 0.1 2022-05-17 Pre-release
+ * version 0.1 2022-05-17 Pre-release
  *
  * See: https://web.dev/custom-elements-v1/, https://web.dev/shadowdom-v1/
  *
@@ -10,7 +11,7 @@
  * Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`
  *     to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
  *
- **/
+ */
 /**
  * Copyright (c) 2022 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
@@ -26,24 +27,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 // import Chart from 'https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js'
 
-import ApexCharts from 'https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.esm.js'
+import ApexCharts from 'https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.esm.js' // eslint-disable-line import/no-unresolved
 
 const componentName = 'chart-apex'
 const className = 'ChartApex'
 
-// just for syntax highlighting in VSCode
-function html(strings, ...keys) {
-    return strings.map( (s, i) => {
-        return s + (keys[i] || '')
-    }).join('')
-}
-
 const template = document.createElement('template')
-template.innerHTML = html`
+template.innerHTML = /*html*/`
     <style>
         :host {
             @import url(https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css);
@@ -64,16 +58,14 @@ template.innerHTML = html`
 /**
  * @element chart-apex
  *
- * @fires chart-apex:construction - Document object event. evt.details contains the data
- * @fires chart-apex:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires chart-apex:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires chart-apex:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires chart-apex:construction - Document object event. evt.details contains the data
+ * fires chart-apex:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires chart-apex:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires chart-apex:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * @property {string} name - Optional. Will be used to synthesize an ID if no ID is provided.
  * attr {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- *
- * @property {string} name - Sync'd from name attribute
  *
  * @slot Container contents
  *
@@ -129,12 +121,12 @@ export default class ChartApex extends HTMLElement {
     constructor() {
 
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(template.content.cloneNode(true))
 
         this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot)
 
-        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true }))
+        this.dispatchEvent(new Event(`${componentName}:construction`, { bubbles: true, composed: true, }))
 
     } // ---- end of constructor ----
 
@@ -161,7 +153,7 @@ export default class ChartApex extends HTMLElement {
                 attribute: name,
                 newVal: newVal,
                 oldVal: oldVal,
-            }
+            },
         } ) )
 
     } // --- end of attributeChangedCallback --- //
@@ -182,15 +174,15 @@ export default class ChartApex extends HTMLElement {
 
         const options = {
             chart: {
-                type: 'bar'
+                type: 'bar',
             },
             series: [{
                 name: 'sales',
-                data: [30, 40, 45, 50, 49, 60, 70, 91, 125]
+                data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
             }],
             xaxis: {
-                categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-            }
+                categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+            },
         }
 
         // const chart = new ApexCharts(this.shadowRoot.getElementById('chart'), options)
@@ -202,7 +194,7 @@ export default class ChartApex extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
 
@@ -220,7 +212,7 @@ export default class ChartApex extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
 

@@ -1,10 +1,10 @@
 // super-star.js
 
-const options = { duration: 300, iterations: 5, easing: 'ease-in-out' }
+const options = { duration: 300, iterations: 5, easing: 'ease-in-out', }
 const keyframes = [
-    { opacity: 1.0, blur: '0px', transform: 'rotate(0deg)' },
-    { opacity: 0.7, blur: '2px', transform: 'rotate(360deg)' },
-    { opacity: 1.0, blur: '0px', transform: 'rotate(0deg)' },
+    { opacity: 1.0, blur: '0px', transform: 'rotate(0deg)', },
+    { opacity: 0.7, blur: '2px', transform: 'rotate(360deg)', },
+    { opacity: 1.0, blur: '0px', transform: 'rotate(0deg)', },
 ]
 
 const template = document.createElement('template')
@@ -17,7 +17,7 @@ template.innerHTML = `
   </style>
   <span><slot></slot></span>
   <abbr title="click or mouse over">🖱</abbr>
-`;
+`
 
 export class SuperStar extends HTMLElement {
 
@@ -28,7 +28,7 @@ export class SuperStar extends HTMLElement {
     constructor() {
         super()
         this.shine = this.shine.bind(this)
-        const root = this.attachShadow({ mode: 'open' })
+        const root = this.attachShadow({ mode: 'open', })
         root.appendChild(template.content.cloneNode(true))
         this.addEventListener('click', this.shine)
         this.addEventListener('mouseover', this.shine)

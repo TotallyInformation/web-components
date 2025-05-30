@@ -16,10 +16,10 @@ export class HelloWorld extends HTMLElement {
 
     constructor() {
         super()
-        console.log('>> HelloWorld constructor >>', this.getAttribute("name"))
+        console.log('>> HelloWorld constructor >>', this.getAttribute('name'))
         //this.name = 'World'
-        this.attachShadow({ mode: 'open' })
-          .appendChild(template.content.cloneNode(true))
+        this.attachShadow({ mode: 'open', })
+            .appendChild(template.content.cloneNode(true))
     }
 
     // component attributes
@@ -28,11 +28,11 @@ export class HelloWorld extends HTMLElement {
     }
 
     set name(val) {
-      console.log('>> setting name in hello-world >>', val, this.name)
-      this.shadowRoot.getElementById('name').textContent = val
+        console.log('>> setting name in hello-world >>', val, this.name)
+        this.shadowRoot.getElementById('name').textContent = val
     }
     get name() {
-      return this.getAttribute('name')
+        return this.getAttribute('name')
     }
 
     // attribute change

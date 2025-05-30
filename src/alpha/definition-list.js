@@ -1,8 +1,9 @@
+/* eslint-disable jsdoc/no-undefined-types */
 /** A zero dependency DL web component that will auto-create a DL list given a suitable object or sent a suitable message via uibuilder.
  *
  * See ./docs/definition-list.md for detailed documentation on installation and use.
  *
- * @version: 1.0.0 2022-04-07
+ * version: 1.0.0 2022-04-07
  *
  * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
  *
@@ -47,16 +48,14 @@ template.innerHTML = /** @type {HTMLTemplateElement} */ `
  *
  * @element button-send
  *
- * @fires button-send:click - Document object event. evt.details contains the data
- * @fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
+ * fires button-send:click - Document object event. evt.details contains the data
+ * fires {function} uibuilder.send - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.
  *
  * @property {string} topic - Optional. Topic string to use. Mostly for node-red messages
  * @property {string} payload - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below
  * @property {string} id - Optional. HTML ID, must be unique on page. Included in output _meta prop.
  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
- * @property {string} data-* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
- *
- * @property {any|string} payload - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.
+ * @property {string} data -* - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.
  *
  * @slot default - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).
  *
@@ -68,6 +67,7 @@ export default class DefinitionList extends HTMLElement {
 
     /** Mini jQuery-like shadow dom selector
      * @param {keyof HTMLElementTagNameMap} selection HTML element selector
+     * @returns {HTMLElement|null} The first matching element or null if not found
      */
     $(selection) {
         return this.shadowRoot && this.shadowRoot.querySelector(selection)
@@ -75,10 +75,10 @@ export default class DefinitionList extends HTMLElement {
 
     constructor() {
         super()
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(template.content.cloneNode(true))
 
-        this._data = { ...this.dataset } // All of the data-* attributes as an object
+        this._data = { ...this.dataset, } // All of the data-* attributes as an object
         this._name = this.getAttribute('name')
         this._msg = {
             'topic': this.topic,
@@ -87,13 +87,14 @@ export default class DefinitionList extends HTMLElement {
                 id: this.id,
                 name: this._name,
                 data: this._data, // All of the data-* attributes as an object
-            }
+            },
         }
 
-        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg })
+        this._clickEvt = new CustomEvent('button-send:click', { 'detail': this._msg, })
 
         // Get a reference to the uibuilder FE client library if possible
         try {
+            // @ts-ignore
             this.uibuilder = window.uibuilder
         } catch (e) {
             this.uibuilder = undefined
@@ -113,6 +114,8 @@ export default class DefinitionList extends HTMLElement {
             document.dispatchEvent(this._clickEvt)
             this.uibuilder.send(this._msg)
         })
+        this.topic = undefined
+        this.payload = undefined
 
     }
 

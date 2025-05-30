@@ -1,7 +1,9 @@
+// @ts-nocheck
+/* eslint-disable jsdoc/no-undefined-types */
 // ts-nocheck
 /** A zero dependency web component that will display JavaScript console output on-page.
  *
- * @version - see class var
+ * version - see class var
  *
  * @example
  *  <div id="more">
@@ -97,9 +99,9 @@ template.innerHTML = /*html*/`
  * @function deepAssign Object deep merger
  * method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
  *
- * @fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires state-timeline:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires state-timeline:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires state-timeline:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires state-timeline:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * Standard watched attributes (common across all my components):
@@ -170,8 +172,8 @@ class StateTimeline extends HTMLElement {
     }
 
     static defaultStates = {
-        'undefined': { name: 'undefined', label: 'Undefined', color: 'darkslategray' },
-        'offline': { name: 'offline', label: 'Offline', color: 'grey' },
+        'undefined': { name: 'undefined', label: 'Undefined', color: 'darkslategray', },
+        'offline': { name: 'offline', label: 'Offline', color: 'grey', },
     }
 
     /** Runtime configuration settings */
@@ -198,7 +200,9 @@ class StateTimeline extends HTMLElement {
         return ['inherit-style']
     }
 
-    /** Report the current component version string */
+    /** Report the current component version string
+     * @returns {string} The component version string
+    */
     get version() {
         return StateTimeline.version
     }
@@ -209,7 +213,7 @@ class StateTimeline extends HTMLElement {
     constructor() {
         super()
 
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
 
@@ -267,7 +271,7 @@ class StateTimeline extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -280,7 +284,7 @@ class StateTimeline extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -289,8 +293,8 @@ class StateTimeline extends HTMLElement {
      * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
      * Attribute values can only ever be strings
      * @param {string} attrib The name of the attribute that is changing
-     * @param {string} newVal The new value of the attribute
      * @param {string} oldVal The old value of the attribute
+     * @param {string} newVal The new value of the attribute
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
         // Don't bother if the new value same as old
@@ -311,12 +315,13 @@ class StateTimeline extends HTMLElement {
                 attribute: attrib,
                 newVal: newVal,
                 oldVal: oldVal,
-            }
+            },
         } ) )
     }
 
     /** OPTIONAL. Update runtime configuration, return complete config
      * @param {object|undefined} config If present, partial or full set of options. If undefined, fn returns the current full option settings
+     * @returns {object} The current full option settings
      */
     config(config) {
         // Merge config but ensure that default states always present
@@ -349,6 +354,7 @@ class StateTimeline extends HTMLElement {
 
         // date/time of new entry
         const ts = new Date()
+        // @ts-ignore
         const stateDuration = ts - this.prevTs
 
         // Get a reference to the PREVIOUS entry
@@ -420,7 +426,7 @@ class StateTimeline extends HTMLElement {
             for (let k in source) { // eslint-disable-line prefer-const
                 const vs = source[k]
                 const vt = target[k]
-                if (Object(vs) == vs && Object(vt) === vt) { // eslint-disable-line eqeqeq
+                if (Object(vs) == vs && Object(vt) === vt) {
                     target[k] = StateTimeline.deepAssign(vt, vs)
                     continue
                 }
@@ -455,13 +461,13 @@ if (timeline) {
 
     // Define possible states
     const statesConfig = {
-        'true': { name: 'true', label: 'ON', color: 'green' },
-        'false': { name: 'false', label: 'OFF', color: 'red' }
+        'true': { name: 'true', label: 'ON', color: 'green', },
+        'false': { name: 'false', label: 'OFF', color: 'red', },
     }
 
     // Set config for the component (e.g., 30 seconds span)
     // ts-ignore
-    timeline.config({ states: statesConfig, timespan: 30 })
+    timeline.config({ states: statesConfig, timespan: 30, })
 
     // Randomly add "true" and "false" states every 3 seconds
     setInterval(() => {

@@ -1,7 +1,8 @@
+// @ts-nocheck
 /** A zero-dependency multi-way switch component.
  * Allows for 3 different display modes: button-row, slider and knob
  *
- * @version 0.1.0 2024-09-14
+ * version 0.1.0 2024-09-14
  *
  * @example
  * <multi-way-switch mode="buttons" positions="5" values="10,20,30,40,50"></multi-way-switch>
@@ -121,7 +122,7 @@ class MultiWaySwitch extends HTMLElement {
     constructor() {
         super()
 
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             .append(template.content.cloneNode(true))
 
         // @ts-ignore
@@ -131,7 +132,7 @@ class MultiWaySwitch extends HTMLElement {
         this.knobRotation = 0
         this._customValues = []
 
-        this.dispatchEvent(new Event('multi-way-switch:construction-complete', { bubbles: true, composed: true }))
+        this.dispatchEvent(new Event('multi-way-switch:construction-complete', { bubbles: true, composed: true, }))
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
@@ -196,7 +197,7 @@ class MultiWaySwitch extends HTMLElement {
         const positions = Math.max(2, Math.min(parseInt(this.getAttribute('positions'), 10), 255)) || 2
 
         knob.addEventListener('mousedown', (event) => {
-            const knobCenter = { x: knob.offsetLeft + knob.offsetWidth / 2, y: knob.offsetTop + knob.offsetHeight / 2 }
+            const knobCenter = { x: knob.offsetLeft + knob.offsetWidth / 2, y: knob.offsetTop + knob.offsetHeight / 2, }
             const onMouseMove = (moveEvent) => {
                 const dx = moveEvent.pageX - knobCenter.x
                 const dy = moveEvent.pageY - knobCenter.y
@@ -204,12 +205,12 @@ class MultiWaySwitch extends HTMLElement {
                 handle.style.transform = `rotate(${this.knobRotation}deg)`
                 const position = Math.round(((this.knobRotation + 180) % 360) / 360 * (positions - 1))
                 this.value = position
-            };
+            }
 
             const onMouseUp = () => {
                 window.removeEventListener('mousemove', onMouseMove)
                 window.removeEventListener('mouseup', onMouseUp)
-            };
+            }
 
             window.addEventListener('mousemove', onMouseMove)
             window.addEventListener('mouseup', onMouseUp)
@@ -222,12 +223,10 @@ class MultiWaySwitch extends HTMLElement {
             const values = valuesAttr.split(',').map(val => val.trim())
             if (values.length >= positions) {
                 return values.slice(0, positions)
-            } else {
-                return [...values, ...Array(positions - values.length).fill(values[values.length - 1])]
             }
-        } else {
-            return Array.from({ length: positions }, (_, i) => i)
+            return [...values, ...Array(positions - values.length).fill(values[values.length - 1])]
         }
+        return Array.from({ length: positions, }, (_, i) => i)
     }
 
     _updateUI() {

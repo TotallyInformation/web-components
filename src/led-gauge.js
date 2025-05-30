@@ -306,8 +306,7 @@ class LedGauge extends TiBaseComponent {
     }
 
     /** Set the unit of the gauge
-     * @param {string} val The unit
-     * @default '%'
+     * @param {string} val The unit. Default '%'
      * @example '°C'
      */
     set unit(val) {
@@ -323,8 +322,7 @@ class LedGauge extends TiBaseComponent {
     }
 
     /** Set whether to hide the segment labels
-     * @param {string|boolean} val Whether to hide the segment labels
-     * @default false
+     * @param {string|boolean} val Whether to hide the segment labels. Default false
      */
     set hideSegmentLabels(val) {
         if (val === '' || val === null || val.toString().toLowerCase() === 'true') val = true

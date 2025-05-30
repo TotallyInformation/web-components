@@ -3,7 +3,7 @@
  * Version: See the class code
  *
  */
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -171,7 +171,7 @@ class CollapsibleHeadings extends TiBaseComponent {
      * Called once when connected and then every time slot content changes
      * param {*} records Mutated records
      * param {*} observer Reference to the observer object
-     * @param {MutationRecord[]} [mutations] Optional. The mutation records to process
+     * @param {MutationRecord[]=} [mutations] Optional. The mutation records to process
      */
     processSlotContent(mutations) {
         // console.log('>> Processing slot content >>', mutations, this)
