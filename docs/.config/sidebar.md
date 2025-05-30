@@ -5,6 +5,7 @@
   * [`button-send`](components/button-send)
   * [`call-out`](components/call-out)
   * [`collapsible-headings`](components/collapsible-headings)
+  * [`data-list`](components/data-list)
   * [`html-include`](components/html-include)
   * [`led-gauge`](components/led-gauge)
 
@@ -17,7 +18,6 @@
 * Alpha: Experimental, in early development
 
   * [`chart-statetrail`](components/chart-statetrail)
-  * [`data-list`](components/data-list)
   * [`simple-card`](components/simple-card)
   * [`simple-container`](components/simple-container)
   * [`smart-table`](components/smart-table)
