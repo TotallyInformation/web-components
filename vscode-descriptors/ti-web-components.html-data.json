@@ -2,16 +2,17 @@
   "version": 1,
   "tags": [
     {
+      "name": "ti-base-component",
+      "description": "Properties:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nStandard props (common across all my components):\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": []
+    },
+    {
       "name": "chart-frappe",
-      "description": "Events:\n\n  * `chart-frappe:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-frappe:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "description": "Events:\n\n  * `chart-frappe:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-frappe:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-frappe:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
           "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
         },
         {
           "name": "onchart-frappe:construction",
@@ -33,15 +34,11 @@
     },
     {
       "name": "chart-high",
-      "description": "Events:\n\n  * `chart-high:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-high:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "description": "Events:\n\n  * `chart-high:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-high:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-high:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
           "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
         },
         {
           "name": "onchart-high:construction",
@@ -62,64 +59,62 @@
       ]
     },
     {
-      "name": "component-template",
-      "description": "Events:\n\n  * `component-template:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `component-template:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:attribChanged` {} - When a watched attribute changes. `evt.details.data` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "name": "chart-statetrail",
+      "description": "Events:\n\n  * `chart-statetrail:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-statetrail:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `chart-statetrail:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-statetrail:attribChanged` {} - When a watched attribute changes. `evt.details.data` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `minTime` {`number`} - The minimum timestamp for the time axis\n\n  * `maxTime` {`number`} - The maximum timestamp for the time axis\n\n  * `totalDuration` {`number`} - The total duration of the time axis\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n  * `opts` {object} - Default component options",
       "attributes": [
         {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "oncomponent-template:connected",
-          "description": "`component-template:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperty: name"
         },
         {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
+          "name": "onchart-statetrail:connected",
+          "description": "`chart-statetrail:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
         },
         {
-          "name": "oncomponent-template:disconnected",
-          "description": "`component-template:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+          "name": "onchart-statetrail:ready",
+          "description": "`chart-statetrail:ready` {} - Alias for connected. The instance can handle property & attribute changes"
         },
         {
-          "name": "oncomponent-template:attribChanged",
-          "description": "`component-template:attribChanged` {} - When a watched attribute changes. `evt.details.data` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "onchart-statetrail:disconnected",
+          "description": "`chart-statetrail:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-statetrail:attribChanged",
+          "description": "`chart-statetrail:attribChanged` {} - When a watched attribute changes. `evt.details.data` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
+      "name": "component-template",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "button-send",
-      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperties:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nProperties:\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
       "attributes": [
         {
-          "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "id",
-          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
-        {
           "name": "topic",
-          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n"
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic"
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nProperty: payload"
         },
         {
           "name": "onbutton-send:click",
@@ -133,32 +128,15 @@
     },
     {
       "name": "definition-list",
-      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperties:\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nProperties:\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
       "attributes": [
         {
-          "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "id",
-          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
-        {
           "name": "topic",
-          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n"
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic"
+        },
+        {
+          "name": "payload",
+          "description": "`payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nProperty: payload"
         },
         {
           "name": "onbutton-send:click",
@@ -171,30 +149,12 @@
       ]
     },
     {
-      "name": "data-list",
-      "description": "Attributes:\n\n  * `listvar` {} - \n\n  * `type` {} - \n\nProperties:\n\n  * `data` - \n\n  * `_list` - \n\n  * `_entries` - ",
-      "attributes": [
-        {
-          "name": "listvar",
-          "description": "`listvar` {} - \n\n"
-        },
-        {
-          "name": "type",
-          "description": "`type` {} - \n\n"
-        }
-      ]
-    },
-    {
       "name": "gauge-steel",
-      "description": "Events:\n\n  * `gauge-steel:construction` {} - Document object event. evt.details contains the data\n\n  * `gauge-steel:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "description": "Events:\n\n  * `gauge-steel:construction` {} - Document object event. evt.details contains the data\n\n  * `gauge-steel:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `gauge-steel:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
           "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
         },
         {
           "name": "ongauge-steel:construction",
@@ -216,33 +176,8 @@
     },
     {
       "name": "button-send",
-      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nProperties:\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
       "attributes": [
-        {
-          "name": "topic",
-          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic\n\nDefault: "
-        },
-        {
-          "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "id",
-          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
         {
           "name": "onbutton-send:click",
           "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
@@ -255,33 +190,8 @@
     },
     {
       "name": "ghost-thermometer",
-      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
+      "description": "A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nProperties:\n\n  * `id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n  * `data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\n  * `displayMode` {`string`} - What is the current display mode?\n\n  * `switchState` {`string`} - \n\n  * `modes` {`{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }`} - \n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `props` {Array<string>} - List of watched HtML Attributes\n\n  * `temperature` {`string`} - \n\n  * `setpoint` {`string`} - \n\n  * `minset` {`string | -999`} - \n\n  * `maxset` {`string | 999`} - \n\n  * `setincrement` {`string | 0.1`} - \n\n  * `mode` {`string`} - \n\n  * `_data` - \n\n  * `_name` - \n\n  * `_msg` - \n\n  * `_clickEvt` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: {}; }; }>`} - ",
       "attributes": [
-        {
-          "name": "topic",
-          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic\n\nDefault: "
-        },
-        {
-          "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, allows any data to be attached to payload. As an attribute, allows a string only.\n\nProperty: payload\n\nDefault: ",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "id",
-          "description": "`id` {string} - Optional. HTML ID, must be unique on page. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\n"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
         {
           "name": "onbutton-send:click",
           "description": "`button-send:click` {`CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string | null; data: { [x: string]: string | undefined; }; }; }>`} - Document object event. evt.details contains the data"
@@ -316,15 +226,11 @@
     },
     {
       "name": "nav-bar",
-      "description": "Events:\n\n  * `nav-bar:construction` {} - Document object event. evt.details contains the data\n\n  * `nav-bar:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "description": "Events:\n\n  * `nav-bar:construction` {} - Document object event. evt.details contains the data\n\n  * `nav-bar:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `nav-bar:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
           "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
-        },
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
         },
         {
           "name": "onnav-bar:construction",
@@ -345,47 +251,192 @@
       ]
     },
     {
-      "name": "simple-card",
-      "description": "A simple card component\n\nEvents:\n\n  * `simple-card:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-card:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-card:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-card:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\n  * `header` {} - Content to go in the header section of the card\n\n  * `footer` {} - Content to go in the footer section of the card\n\ncsspart ??? - Uses the uib-styles.css uibuilder master for variables where available.\n\nAttributes:\n\n  * `data-*` {string} variant - Optional. Sets the cards colour variant\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `slot` {string|html} - Populates the cards default slot content\n\n  * `header` {string|html} - Populates the cards header slot content\n\n  * `footer` {string|html} - Populates the cards footer slot content\n\n  * `name` {`undefined`} - \n\n  * `props` {`string[]`} - \n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - \n\n  * `variant` {string} - Sync'd from name attribute",
-      "attributes": [
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} variant - Optional. Sets the cards colour variant\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
-        {
-          "name": "onsimple-card:construction",
-          "description": "`simple-card:construction` {} - Document object event. evt.details contains the data"
-        },
-        {
-          "name": "onsimple-card:connected",
-          "description": "`simple-card:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onsimple-card:disconnected",
-          "description": "`simple-card:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onsimple-card:attribChanged",
-          "description": "`simple-card:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
-        }
-      ]
-    },
-    {
-      "name": "simple-container",
-      "description": "A simple container component\n\nSlots:\n\n  * ` ` {} - Container contents\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs",
-      "attributes": []
-    },
-    {
-      "name": "simple-switch",
-      "description": "Events:\n\n  * `simple-switch:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-switch:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\nProperties:\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "name": "chart-apex",
+      "description": "Events:\n\n  * `chart-apex:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-apex:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-apex:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-apex:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
       "attributes": [
         {
           "name": "name",
           "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
         },
         {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+          "name": "onchart-apex:construction",
+          "description": "`chart-apex:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onchart-apex:connected",
+          "description": "`chart-apex:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-apex:disconnected",
+          "description": "`chart-apex:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-apex:attribChanged",
+          "description": "`chart-apex:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "chart-js",
+      "description": "Events:\n\n  * `chart-js:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-js:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-js:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-js:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "onchart-js:construction",
+          "description": "`chart-js:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onchart-js:connected",
+          "description": "`chart-js:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-js:disconnected",
+          "description": "`chart-js:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-js:attribChanged",
+          "description": "`chart-js:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "chart-plotly",
+      "description": "Events:\n\n  * `chart-plotly:construction` {} - Document object event. evt.details contains the data\n\n  * `chart-plotly:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `chart-plotly:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `chart-plotly:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "onchart-plotly:construction",
+          "description": "`chart-plotly:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onchart-plotly:connected",
+          "description": "`chart-plotly:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-plotly:disconnected",
+          "description": "`chart-plotly:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onchart-plotly:attribChanged",
+          "description": "`chart-plotly:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "container-br",
+      "description": "Events:\n\n  * `container-br:construction` {} - Document object event. evt.details contains the data\n\n  * `container-br:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `container-br:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `container-br:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `name` {string} - Sync'd from name attribute",
+      "attributes": [
+        {
+          "name": "oncontainer-br:construction",
+          "description": "`container-br:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "oncontainer-br:connected",
+          "description": "`container-br:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncontainer-br:disconnected",
+          "description": "`container-br:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "oncontainer-br:attribChanged",
+          "description": "`container-br:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "floor-plan",
+      "attributes": []
+    },
+    {
+      "name": "hello-world",
+      "description": "Attributes:\n\n  * `name` {`string | null`} - \n\nProperties:\n\n  * `name` {`string | null`} - ",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {`string | null`} - \n\nProperty: name",
+          "values": []
+        }
+      ]
+    },
+    {
+      "name": "simple-container",
+      "description": "Events:\n\n  * `simple-container:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-container:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-container:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-container:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
+        },
+        {
+          "name": "onsimple-container:construction",
+          "description": "`simple-container:construction` {} - Document object event. evt.details contains the data"
+        },
+        {
+          "name": "onsimple-container:connected",
+          "description": "`simple-container:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-container:disconnected",
+          "description": "`simple-container:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsimple-container:attribChanged",
+          "description": "`simple-container:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance."
+        }
+      ]
+    },
+    {
+      "name": "super-star",
+      "description": "Properties:\n\n  * `shine` - ",
+      "attributes": []
+    },
+    {
+      "name": "simple-card",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\n  * `header` {} - Content to go in the header section of the card\n\n  * `footer` {} - Content to go in the footer section of the card\n\nAttributes:\n\n  * `variant` {string} - Optional. Sets the cards colour variant\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `slot` {string} - Populates the cards default slot content (can contain HTML markup)\n\n  * `header` {string} - Populates the cards header slot content (can contain HTML markup)\n\n  * `footer` {string} - Populates the cards footer slot content (can contain HTML markup)\n\n  * `componentVersion` {`string`} - Component version\n\n  * `variant` {string} - Optional. Sets the cards colour variant\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "`variant` {string} - Optional. Sets the cards colour variant\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: variant"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "simple-container",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "simple-switch",
+      "description": "Events:\n\n  * `simple-switch:construction` {} - Document object event. evt.details contains the data\n\n  * `simple-switch:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `simple-switch:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nSlots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `name` {string} - Sync'd from name attribute\n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\n\n  * `name` {string} - Sync'd from name attribute\n\n  * `$` - Mini jQuery-like shadow dom selector (see constructor)",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "`name` {string} - Sync'd from name attribute\n\nProperty: name\n\nDefault: undefined"
         },
         {
           "name": "onsimple-switch:construction",
@@ -406,12 +457,43 @@
       ]
     },
     {
-      "name": "state-timeline",
-      "description": "Events:\n\n  * `state-timeline:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `online` {`boolean`} - Are we online?\n\n  * `uib` {`boolean`} - Is UIBUILDER loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `colors` {`{ log: string; error: string; warn: string; }`} - \n\n  * `bgColors` {`{ info: string; warn: string; error: string; }`} - \n\n  * `icons` {`{ log: string; info: string; debug: string; trace: string; warn: string; error: string; }`} - \n\n  * `defaultStates` {`{ undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }`} - \n\n  * `opts` {`{ states: { undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }; timespan: number; maxEntries: number; }`} - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "name": "smart-table",
+      "description": "Events:\n\n  * `smart-table:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `smart-table:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `smart-table:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `smart-table:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - None, this component does not use the shadow dom\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nStandard props (common across all my components):\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `elThead` {HTMLTableElement} - Reference to table head\n\n  * `elTfoot` {HTMLTableElement} - Reference to table foot\n\n  * `elTbody` {HTMLTableElement} - Reference to table body\n\n  * `data` - Set the value to show\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nStandard props (common across all my components):\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nStandard props (common across all my components):\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperty: name"
+        },
+        {
+          "name": "onsmart-table:connected",
+          "description": "`smart-table:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsmart-table:ready",
+          "description": "`smart-table:ready` {} - Alias for connected. The instance can handle property & attribute changes"
+        },
+        {
+          "name": "onsmart-table:disconnected",
+          "description": "`smart-table:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+        },
+        {
+          "name": "onsmart-table:attribChanged",
+          "description": "`smart-table:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+        }
+      ]
+    },
+    {
+      "name": "state-timeline",
+      "description": "Events:\n\n  * `state-timeline:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `state-timeline:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `online` {`boolean`} - Are we online?\n\n  * `uib` {`boolean`} - Is UIBUILDER loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `colors` {`{ log: string; error: string; warn: string; }`} - \n\n  * `bgColors` {`{ info: string; warn: string; error: string; }`} - \n\n  * `icons` {`{ log: string; info: string; debug: string; trace: string; warn: string; error: string; }`} - \n\n  * `defaultStates` {`{ undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }`} - \n\n  * `opts` {`{ states: { undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }; timespan: number; maxEntries: number; }`} - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "attributes": [
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperty: inherit-style",
           "values": []
         },
         {
@@ -429,13 +511,24 @@
       ]
     },
     {
-      "name": "component-template",
-      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "name": "todo-app",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
         },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "component-template",
+      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "attributes": [
         {
           "name": "inherit-style",
           "description": "`inherit-style` {} - \n\n"
@@ -460,12 +553,8 @@
     },
     {
       "name": "uib-theme-changer",
-      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
+      "description": "A uibuilder for Node-RED Theme Changer component\n\nEvents:\n\n  * `uib-theme-changer:construction` {} - Document object event. evt.details contains the data\n\n  * `uib-theme-changer:connected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:disconnected` {`CustomEvent<{ id: string; name: string | null | undefined; }>`} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `uib-theme-changer:attribChanged` {`CustomEvent<{ id: string; name: string | null | undefined; attribute: string; newVal: string; oldVal: string; }>`} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nAttributes:\n\n  * `inherit-style` {} - \n\nProperties:\n\n  * `data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n  * `name` {string} - Sync'd from name attribute\n\nslot Container contents\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `opts` - Runtime configuration settings\n\n  * `version` {`string`} - Component version\n\n  * `uibThemeSettings` - Holds the uib theme settings for all pages in this domain (from/to localStorage)\n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; data: undefined; }`} - Standard _ui object to include in msgs\n\n  * `scheme` {`undefined`} - What is the current scheme? 'light', 'dark' or 'auto'\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)",
       "attributes": [
-        {
-          "name": "data-*",
-          "description": "`data-*` {string} name - Optional. Will be used to synthesize an ID if no ID is provided.\nattr {string} - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.\n\n"
-        },
         {
           "name": "inherit-style",
           "description": "`inherit-style` {} - \n\n"
@@ -489,72 +578,31 @@
       ]
     },
     {
-      "name": "ti-base-component",
-      "description": "Attributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\nProperties:\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
-      "attributes": [
-        {
-          "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\nOther watched attributes:\nNone\n\nStandard props (common across all my components):\n\n",
-          "values": []
-        }
-      ]
-    },
-    {
       "name": "button-send",
-      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nEvents:\n\n  * `button-send:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `button-send:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `button-send:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `button-send:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\n\n  * `button-send:click` {} - Document object event. evt.details contains the data\n\n  * `uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string|undefined} - The topic to include in the output\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `sendEvents` {`boolean`} - \n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_msg` {object} - The output msg\n\n  * `topic` {string|undefined} - The topic to include in the output\n\n  * `payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "A Zero dependency button web component that sends a msg or a document event when clicked.\nContains relevant data from data-*, topic and payload attributes (or properties),\nincludes a _meta object showing whether any modifier keys were used, the element id/name\n\nSlots:\n\n  * `default` {} - Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags).\n\nAttributes:\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `sendEvents` {`boolean`} - \n\n  * `_ui` {`{ type: string; event: undefined; id: undefined; name: undefined; }`} - Standard _ui object to include in msgs\n\n  * `_msg` {object} - The output msg\n\n  * `topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\n  * `payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "topic",
-          "description": "`topic` {string|undefined} - The topic to include in the output\n\nProperty: topic",
-          "values": []
+          "description": "`topic` {string} - Optional. Topic string to use. Mostly for node-red messages\n\nProperty: topic"
         },
         {
           "name": "payload",
-          "description": "`payload` {any|string} - Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.\nBy default, all attributes are also created as properties\n\nProperty: payload",
-          "values": [
-            {
-              "name": "any"
-            }
-          ]
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
+          "description": "`payload` {string} - Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: payload"
         },
         {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "onbutton-send:connected",
-          "description": "`button-send:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onbutton-send:ready",
-          "description": "`button-send:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "onbutton-send:disconnected",
-          "description": "`button-send:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onbutton-send:attribChanged",
-          "description": "`button-send:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change."
-        },
-        {
-          "name": "onbutton-send:click",
-          "description": "`button-send:click` {} - Document object event. evt.details contains the data"
-        },
-        {
-          "name": "onuibuilder.send",
-          "description": "`uibuilder.send` - Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "call-out",
-      "description": "Events:\n\n  * `call-out:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `call-out:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `call-out:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `call-out:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `type` {string} - Optional. If present, a title will be added above other child content\n\n  * `icon` {string} - Optional. If present, will override the callout title icon\n\nNon-watched but still used attributes:\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `title` {string} - Optional. If present, will override the callout title text\n\nStandard props (common across all my components):\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `type` {string} - Optional. If present, a title will be added above other child content\n\n  * `icon` {string} - Optional. If present, will override the callout title icon\n\nNon-watched but still used attributes:\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `type` {string} - Optional. If present, a title will be added above other child content\n\n  * `icon` {string} - Optional. If present, will override the callout title icon\n\nNon-watched but still used attributes:\n\n  * `title` {string} - Optional. If present, will override the callout title text\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `type` {string} - Optional. If present, a title will be added above other child content\n\n  * `icon` {string} - Optional. If present, will override the callout title icon\n\nNon-watched but still used attributes:\n\n  * `title` {string} - Optional. If present, will override the callout title text\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "type",
@@ -565,241 +613,220 @@
           "description": "`icon` {string} - Optional. If present, will override the callout title icon\n\nNon-watched but still used attributes:\n\nProperty: icon\n\nDefault: "
         },
         {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
           "name": "title",
-          "description": "`title` {string} - Optional. If present, will override the callout title text\n\nStandard props (common across all my components):\n\n"
+          "description": "`title` {string} - Optional. If present, will override the callout title text\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: title"
         },
         {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "oncall-out:connected",
-          "description": "`call-out:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncall-out:ready",
-          "description": "`call-out:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "oncall-out:disconnected",
-          "description": "`call-out:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncall-out:attribChanged",
-          "description": "`call-out:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "collapsible-headings",
-      "description": "Events:\n\n  * `collapsible-headings:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `collapsible-headings:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `collapsible-headings:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "levels",
-          "description": "`levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nStandard props (common across all my components):\n\nProperty: levels\n\nDefault: h2, h3, h4, h5"
-        },
-        {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
+          "description": "`levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: levels\n\nDefault: h2, h3, h4, h5"
         },
         {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "oncollapsible-headings:connected",
-          "description": "`collapsible-headings:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "collapsible-headings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "levels",
+          "description": "`levels` {string} - Optional. Default='h2, h3, h4, h5'. A single string detailing the heading levels to make collapsible.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: levels\n\nDefault: h2, h3, h4, h5"
         },
         {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
         },
         {
-          "name": "oncollapsible-headings:disconnected",
-          "description": "`collapsible-headings:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "data-list",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nAttributes:\n\n  * `keyvalueseparator` {string} - Optional. The separator to use between key and value in the list items when input is an object. Default is ' :: '. Set to \"NULL\" to disable key display.\n\n  * `liststyle` {string} - 💫 Optional. The style type to use for the list. Default is `disc` for `ul` and `decimal` for `ol`. May contain any valid CSS list-style string value.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `listvar` {string} - 💫 Optional. The global variable name to use for the list data. If not set, set the data property directly from JS.\n\n  * `type` {string} - 💫 Optional. The type of list to use, ul or ol. Default is ul.\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `data` {object} - 💫 The data to use for the list. Either set directly or via the `listvar` attribute. If an object, the key/value separator is used to separate the key and value in the list items.\n\nNB: properties marked with 💫 are dynamic and have getters/setters. They will cause the list to rebuild.\n\n  * `keyvalueseparator` {string} - Optional. The separator to use between key and value in the list items when input is an object. Default is ' :: '. Set to \"NULL\" to disable key display.\n\n  * `liststyle` {string} - 💫 Optional. The style type to use for the list. Default is `disc` for `ul` and `decimal` for `ol`. May contain any valid CSS list-style string value.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `listvar` {string} - 💫 Optional. The global variable name to use for the list data. If not set, set the data property directly from JS.\n\n  * `type` {string} - 💫 Optional. The type of list to use, ul or ol. Default is ul.\n\n  * `#list` - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "keyvalueseparator",
+          "description": "`keyvalueseparator` {string} - Optional. The separator to use between key and value in the list items when input is an object. Default is ' :: '. Set to \"NULL\" to disable key display.\n\nProperty: keyvalueseparator\n\nDefault:  :: "
         },
         {
-          "name": "oncollapsible-headings:attribChanged",
-          "description": "`collapsible-headings:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "liststyle",
+          "description": "`liststyle` {string} - 💫 Optional. The style type to use for the list. Default is `disc` for `ul` and `decimal` for `ol`. May contain any valid CSS list-style string value.\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: liststyle"
+        },
+        {
+          "name": "listvar",
+          "description": "`listvar` {string} - 💫 Optional. The global variable name to use for the list data. If not set, set the data property directly from JS.\n\nProperty: listvar\n\nDefault: null"
+        },
+        {
+          "name": "type",
+          "description": "`type` {string} - 💫 Optional. The type of list to use, ul or ol. Default is ul.\n\nProperty: type"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "html-include",
-      "description": "Events:\n\n  * `html-include:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `html-include:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `html-include:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `src` {string} - The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.\nSetting this property causes a fetch the HTML from the URL.\nWe are reflecting the src attrib and the src prop.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `contentType` {\"text\"|\"html\"|\"json\"|\"form\"} - Content type of the imported resource\n\n  * `text` {`string`} - \n\n  * `json` - \n\n  * `src` {string} - The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.\nSetting this property causes a fetch the HTML from the URL.\nWe are reflecting the src attrib and the src prop.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `src` {string} - URL of the source to include\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `contentType` {\"text\"|\"html\"|\"json\"|\"form\"} - Content type of the imported resource\n\n  * `text` {`string`} - \n\n  * `json` - \n\n  * `src` {string} - URL of the source to include\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "src",
-          "description": "`src` {string} - The URL to fetch an HTML document from. Allows change via instance prop as well as attribute change.\nSetting this property causes a fetch the HTML from the URL.\nWe are reflecting the src attrib and the src prop.\n\nProperty: src",
+          "description": "`src` {string} - URL of the source to include\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: src"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
           "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
-          "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
-          "values": []
-        },
-        {
-          "name": "onhtml-include:connected",
-          "description": "`html-include:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "onhtml-include:disconnected",
-          "description": "`html-include:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onhtml-include:attribChanged",
-          "description": "`html-include:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "labelled-value",
-      "description": "Events:\n\n  * `labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `label` {`string | undefined`} - Set the label to show\n\n  * `value` - Set the value to show\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `keep-slot` - If true, keeps the slot content when the value changes\n\n  * `label` {`string | undefined`} - Set the label to show\n\n  * `value` - Set the value to show\n\n  * `#outputEl` - \n\n  * `#labelEl` - \n\n  * `#slotEl` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `label` {`string`} - Set the label to show\n\n  * `value` - Set the value to show\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `keep-slot` {HTMLSlotElement} - PRIVATE. Reference to the slot tag\n\n  * `label` {`string`} - Set the label to show\n\n  * `value` - Set the value to show\n\n  * `#outputEl` - \n\n  * `#labelEl` - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
           "name": "label",
-          "description": "`label` {`string | undefined`} - Set the label to show\n\nProperty: label",
-          "values": []
+          "description": "`label` {`string`} - Set the label to show\n\nProperty: label"
         },
         {
           "name": "value",
           "description": "`value` - Set the value to show\n\nProperty: value"
         },
         {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "onlabelled-value:connected",
-          "description": "`labelled-value:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
+        }
+      ]
+    },
+    {
+      "name": "led-gauge",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `value` {`string | number`} - Set the value of the gauge\n\n  * `min` {`string | number`} - Set the minimum value of the gauge\n\n  * `max` {`string | number`} - Set the maximum value of the gauge\n\n  * `unit` {`string`} - Set the unit of the gauge\n\n  * `segments` {`string | number`} - Set the number of segments\n\n  * `hide-segment-labels` {string} - PROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `segmentElements` {HTMLCollection} - \n\n  * `colors` - Set the value of the gauge\n\n  * `hideSegmentLabels` {`string | boolean`} - Set whether to hide the segment labels\n\n  * `value` {`string | number`} - Set the value of the gauge\n\n  * `min` {`string | number`} - Set the minimum value of the gauge\n\n  * `max` {`string | number`} - Set the maximum value of the gauge\n\n  * `unit` {`string`} - Set the unit of the gauge\n\n  * `segments` {`string | number`} - Set the number of segments\n\n  * `hide-segment-labels` {string} - PROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `segContainerEl` {HTMLElement} - \n\n  * `valsContainerEl` {HTMLElement} - \n\n  * `valueEl` {HTMLElement} - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\n  * `opts` {object} - Runtime configuration settings",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "`value` {`string | number`} - Set the value of the gauge\n\nProperty: value",
+          "values": []
         },
         {
-          "name": "onlabelled-value:ready",
-          "description": "`labelled-value:ready` {} - Alias for connected. The instance can handle property & attribute changes"
+          "name": "min",
+          "description": "`min` {`string | number`} - Set the minimum value of the gauge\n\nProperty: min",
+          "values": []
         },
         {
-          "name": "onlabelled-value:disconnected",
-          "description": "`labelled-value:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
+          "name": "max",
+          "description": "`max` {`string | number`} - Set the maximum value of the gauge\n\nProperty: max",
+          "values": []
         },
         {
-          "name": "onlabelled-value:attribChanged",
-          "description": "`labelled-value:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "unit",
+          "description": "`unit` {`string`} - Set the unit of the gauge\n\nProperty: unit\n\nDefault: '%'"
+        },
+        {
+          "name": "segments",
+          "description": "`segments` {`string | number`} - Set the number of segments\n\nProperty: segments",
+          "values": []
+        },
+        {
+          "name": "hide-segment-labels",
+          "description": "`hide-segment-labels` {string} - PROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: hide-segment-labels"
+        },
+        {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "syntax-highlight",
-      "description": "Events:\n\n  * `syntax-highlight:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `syntax-highlight:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `syntax-highlight:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `auto` {} - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `jsonData` - \n\n  * `json` - Element.json = {...} to show the json object\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - Container contents\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `auto` {} - \n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `jsonData` - \n\n  * `json` - Element.json = {...} to show the json object\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
+          "name": "inherit-style",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
+          "values": []
+        },
+        {
           "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
         },
         {
           "name": "auto",
           "description": "`auto` {} - \n\n"
-        },
-        {
-          "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
-          "values": []
-        },
-        {
-          "name": "onsyntax-highlight:connected",
-          "description": "`syntax-highlight:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "onsyntax-highlight:disconnected",
-          "description": "`syntax-highlight:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onsyntax-highlight:attribChanged",
-          "description": "`syntax-highlight:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
         }
       ]
     },
     {
       "name": "component-template",
-      "description": "Events:\n\n  * `visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - No slot\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `colors` {object} - \n\n  * `bgColors` {object} - \n\n  * `icons` {object} - \n\n  * `wrapper` - \n\n  * `originalConsole` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - No slot\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `nativeConsole` {`{ assert(condition?: boolean | undefined, ...data: any[]): void; assert(value: any, message?: string | undefined, ...optionalParams: any[]): void; clear(): void; clear(): void; count(label?: string | undefined): void; count(label?: string | undefined): void; ... 19 more ...; profileEnd(label?: string | undefined): v...`} - \n\n  * `colors` {`{ log: string; error: string; warn: string; }`} - \n\n  * `bgColors` {`{ info: string; warn: string; error: string; }`} - \n\n  * `icons` {`{ log: string; info: string; debug: string; trace: string; warn: string; error: string; }`} - \n\n  * `wrapper` - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "onvisible-console:connected",
-          "description": "`visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "onvisible-console:disconnected",
-          "description": "`visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onvisible-console:attribChanged",
-          "description": "`visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
         }
       ]
     },
     {
       "name": "visible-console",
-      "description": "Events:\n\n  * `visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.\n\n  * `component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes\n\n  * `visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.\n\n  * `visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):\n\nSlots:\n\n  * ` ` {} - No slot\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `colors` {object} - \n\n  * `bgColors` {object} - \n\n  * `icons` {object} - \n\n  * `wrapper` - \n\n  * `originalConsole` - \n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Placeholder for the optional name attribute\n\n  * `opts` {object} - Runtime configuration settings",
+      "description": "Slots:\n\n  * ` ` {} - No slot\n\nSee https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc\n\nAttributes:\n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperties:\n\n  * `componentVersion` {`string`} - Component version\n\n  * `nativeConsole` {`{ assert(condition?: boolean | undefined, ...data: any[]): void; assert(value: any, message?: string | undefined, ...optionalParams: any[]): void; clear(): void; clear(): void; count(label?: string | undefined): void; count(label?: string | undefined): void; ... 19 more ...; profileEnd(label?: string | undefined): v...`} - \n\n  * `colors` {`{ log: string; error: string; warn: string; }`} - \n\n  * `bgColors` {`{ info: string; warn: string; error: string; }`} - \n\n  * `icons` {`{ log: string; info: string; debug: string; trace: string; warn: string; error: string; }`} - \n\n  * `wrapper` - \n\n  * `inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n  * `baseVersion` {`string`} - Component version\n\n  * `_iCount` {`number`} - Holds a count of how many instances of this component are on the page that don't have their own id\nUsed to ensure a unique id if needing to add one dynamically\n\n  * `uib` {`boolean`} - Is UIBUILDER for Node-RED loaded?\n\n  * `uibuilder` - \n\n  * `$` {function(string): Element} - Mini jQuery-like shadow dom selector (see constructor)\n\n  * `$$` {function(string): NodeList} - Mini jQuery-like shadow dom multi-selector (see constructor)\n\n  * `connected` {`boolean`} - True when instance finishes connecting.\nAllows initial calls of attributeChangedCallback to be\nignored if needed.\n\n  * `name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\n  * `opts` {object} - Runtime configuration settings",
       "attributes": [
         {
-          "name": "name",
-          "description": "`name` {string} - Placeholder for the optional name attribute\n\nProperty: name"
-        },
-        {
           "name": "inherit-style",
-          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\n",
+          "description": "`inherit-style` {string|boolean} - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.\n\nProperty: inherit-style",
           "values": []
         },
         {
-          "name": "onvisible-console:connected",
-          "description": "`visible-console:connected` {} - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "oncomponent-template:ready",
-          "description": "`component-template:ready` {} - Alias for connected. The instance can handle property & attribute changes"
-        },
-        {
-          "name": "onvisible-console:disconnected",
-          "description": "`visible-console:disconnected` {} - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element."
-        },
-        {
-          "name": "onvisible-console:attribChanged",
-          "description": "`visible-console:attribChanged` {} - When a watched attribute changes. `evt.details` contains the details of the change.\nNOTE that listeners can be attached either to the `document` or to the specific element instance.\n\nStandard watched attributes (common across all my components):"
+          "name": "name",
+          "description": "`name` {string} - Optional. HTML name attribute. Included in output _meta prop.\n\nOther watched attributes:\nNone\n\nPROPS FROM BASE: (see TiBaseComponent)\nOTHER STANDARD PROPS:\n\nProperty: name"
         }
       ]
     }

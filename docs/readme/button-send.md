@@ -4,46 +4,28 @@ A Zero dependency button web component that sends a msg or a document event when
 Contains relevant data from data-*, topic and payload attributes (or properties),
 includes a _meta object showing whether any modifier keys were used, the element id/name
 
-## Attributes
-
-| Attribute       | Type              | Description                                      |
-|-----------------|-------------------|--------------------------------------------------|
-| `inherit-style` | `string\|boolean` | Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load. |
-
 ## Properties
 
-| Property     | Attribute | Type                         | Default | Description                                      |
-|--------------|-----------|------------------------------|---------|--------------------------------------------------|
-| `$`          |           | `function(string): Element`  |         | Mini jQuery-like shadow dom selector (see constructor) |
-| `$$`         |           | `function(string): NodeList` |         | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `connected`  |           | `boolean`                    | false   | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
-| `name`       | `name`    | `string`                     |         | Placeholder for the optional name attribute      |
-| `opts`       |           | `object`                     | {}      | Runtime configuration settings                   |
-| `payload`    | `payload` | `any\|string`                |         | Can be an attribute or property. If used as property, must not use payload attribute in html, aAllows any data to be attached to payload. As an attribute, allows a string only.<br />By default, all attributes are also created as properties |
-| `sendEvents` |           | `boolean`                    | true    |                                                  |
-| `topic`      | `topic`   | `string\|undefined`          |         | The topic to include in the output               |
-| `uib`        |           | `boolean`                    | false   | Is UIBUILDER for Node-RED loaded?                |
+| Property  | Attribute | Type     | Description                                      |
+|-----------|-----------|----------|--------------------------------------------------|
+| `data-*`  |           | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `id`      |           | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `name`    |           | `string` | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload` | `payload` | `string` | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `topic`   | `topic`   | `string` | Optional. Topic string to use. Mostly for node-red messages |
 
 ## Methods
 
-| Method                  | Type                               | Description                                      |
-|-------------------------|------------------------------------|--------------------------------------------------|
-| `config`                | `(config: object\|undefined): any` | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createShadowSelectors` | `(): void`                         | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                | Optionally apply an external linked style sheet (called from connectedCallback)<br /><br />**url**: The URL for the linked style sheet |
-| `ensureId`              | `(): void`                         | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `handleClick`           | `(evt: PointerEvent): void`        | fn to run when the button is clicked<br /><br />**evt**: The event object |
+| Method | Type                                             | Description                                      |
+|--------|--------------------------------------------------|--------------------------------------------------|
+| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement \| HTMLDivElement \| HTMLSlotElement \| HTMLObjectElement \| ... 59 more ... \| null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
 
 ## Events
 
-| Event                       | Type       | Description                                      |
-|-----------------------------|------------|--------------------------------------------------|
-| `button-send:attribChanged` |            | When a watched attribute changes. `evt.details` contains the details of the change. |
-| `button-send:click`         |            | Document object event. evt.details contains the data |
-| `button-send:connected`     |            | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `button-send:disconnected`  |            | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
-| `button-send:ready`         |            | Alias for connected. The instance can handle property & attribute changes |
-| `uibuilder.send`            | `function` | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
+| Event               | Type                                             | Description                                      |
+|---------------------|--------------------------------------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
+| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
 
 ## Slots
 
@@ -55,4 +37,214 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 | Part     | Description                                      |
 |----------|--------------------------------------------------|
-| `button` | Uses the uib-styles.css uibuilder master for variables where available.<br /><br />See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc |
+| `button` | Uses the uib-styles.css uibuilder master for variables where available.<br /><br />See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document |
+
+
+# definition-list
+
+A Zero dependency button web component that sends a msg or a document event when clicked.
+Contains relevant data from data-*, topic and payload attributes (or properties),
+includes a _meta object showing whether any modifier keys were used, the element id/name
+
+## Properties
+
+| Property  | Attribute | Type     | Description                                      |
+|-----------|-----------|----------|--------------------------------------------------|
+| `data-*`  |           | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `id`      |           | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `name`    |           | `string` | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload` | `payload` | `string` | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `topic`   | `topic`   | `string` | Optional. Topic string to use. Mostly for node-red messages |
+
+## Methods
+
+| Method | Type                                             | Description                                      |
+|--------|--------------------------------------------------|--------------------------------------------------|
+| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement \| HTMLDivElement \| HTMLSlotElement \| HTMLObjectElement \| ... 59 more ... \| null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+
+## Events
+
+| Event               | Type                                             | Description                                      |
+|---------------------|--------------------------------------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
+| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+
+## Slots
+
+| Name      | Description                                      |
+|-----------|--------------------------------------------------|
+| `default` | Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags). |
+
+## CSS Shadow Parts
+
+| Part     | Description                                      |
+|----------|--------------------------------------------------|
+| `button` | Uses the uib-styles.css uibuilder master for variables where available.<br /><br />See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document |
+
+
+# button-send
+
+A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.
+Contains relevant data from data-*, topic and payload attributes (or properties),
+includes a _meta object showing whether any modifier keys were used, the element id/name
+
+## Properties
+
+| Property       | Type                                             | Default                                          | Description                                      |
+|----------------|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+| `data-*`       | `string`                                         |                                                  | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `displayMode`  | `string`                                         | "default"                                        | What is the current display mode?                |
+| `id`           | `string`                                         |                                                  | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `maxset`       | `string \| 999`                                  |                                                  |                                                  |
+| `minset`       | `string \| -999`                                 |                                                  |                                                  |
+| `mode`         | `string`                                         |                                                  |                                                  |
+| `modes`        | `{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }` | {"heating":{"label":"heating","icon":"🔥"},"cooling":{"label":"cooling","icon":"❄️"},"off":{"label":"off","icon":"⛔"}} |                                                  |
+| `name`         | `string`                                         |                                                  | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload`      | `string`                                         | ""                                               | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `props`        | `Array<string>`                                  | ["name","id","temperature","setpoint","mode"]    | List of watched HtML Attributes                  |
+| `setincrement` | `string \| 0.1`                                  |                                                  |                                                  |
+| `setpoint`     | `string`                                         |                                                  |                                                  |
+| `switchState`  | `string`                                         | "off"                                            |                                                  |
+| `temperature`  | `string`                                         |                                                  |                                                  |
+| `topic`        | `string`                                         | ""                                               | Optional. Topic string to use. Mostly for node-red messages |
+
+## Methods
+
+| Method      | Type                                         | Description                                      |
+|-------------|----------------------------------------------|--------------------------------------------------|
+| `$`         | `(selection: string): HTMLElement \| null`   | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+| `checkMode` | `(): void`                                   | When the temp or setpoint changes, check the heating/cooling mode and change if needed |
+| `doNote`    | `(note: string, lblNote: HTMLElement): void` | Set the note label if required<br /><br />**note**: The text to display<br />**lblNote**: Reference to the SVG <text> element containing the text |
+| `str2bool`  | `(strvalue: *): boolean`                     | Convert a string 'true' or 'false' to a boolean true/false<br /><br />**strvalue**: The string representation of the boolean |
+| `uibSend`   | `(): void`                                   | uibuilder send                                   |
+
+## Events
+
+| Event               | Type                                             | Description                                      |
+|---------------------|--------------------------------------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
+| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+
+## Slots
+
+| Name      | Description                                      |
+|-----------|--------------------------------------------------|
+| `default` | Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags). |
+
+## CSS Shadow Parts
+
+| Part     | Description                                      |
+|----------|--------------------------------------------------|
+| `button` | Uses the uib-styles.css uibuilder master for variables where available.<br /><br />See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document |
+
+
+# ghost-thermometer
+
+A Zero dependency button web component that will display a circular thermometer display and controller for heating systems.
+Contains relevant data from data-*, topic and payload attributes (or properties),
+includes a _meta object showing whether any modifier keys were used, the element id/name
+
+## Properties
+
+| Property       | Type                                             | Default                                          | Description                                      |
+|----------------|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
+| `data-*`       | `string`                                         |                                                  | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `displayMode`  | `string`                                         | "default"                                        | What is the current display mode?                |
+| `id`           | `string`                                         |                                                  | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `maxset`       | `string \| 999`                                  |                                                  |                                                  |
+| `minset`       | `string \| -999`                                 |                                                  |                                                  |
+| `mode`         | `string`                                         |                                                  |                                                  |
+| `modes`        | `{ heating: { label: string; icon: string; }; cooling: { label: string; icon: string; }; off: { label: string; icon: string; }; }` | {"heating":{"label":"heating","icon":"🔥"},"cooling":{"label":"cooling","icon":"❄️"},"off":{"label":"off","icon":"⛔"}} |                                                  |
+| `name`         | `string`                                         |                                                  | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload`      | `string`                                         | ""                                               | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `props`        | `Array<string>`                                  | ["name","id","temperature","setpoint","mode"]    | List of watched HtML Attributes                  |
+| `setincrement` | `string \| 0.1`                                  |                                                  |                                                  |
+| `setpoint`     | `string`                                         |                                                  |                                                  |
+| `switchState`  | `string`                                         | "off"                                            |                                                  |
+| `temperature`  | `string`                                         |                                                  |                                                  |
+| `topic`        | `string`                                         | ""                                               | Optional. Topic string to use. Mostly for node-red messages |
+
+## Methods
+
+| Method      | Type                                         | Description                                      |
+|-------------|----------------------------------------------|--------------------------------------------------|
+| `$`         | `(selection: string): HTMLElement \| null`   | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+| `checkMode` | `(): void`                                   | When the temp or setpoint changes, check the heating/cooling mode and change if needed |
+| `doNote`    | `(note: string, lblNote: HTMLElement): void` | Set the note label if required<br /><br />**note**: The text to display<br />**lblNote**: Reference to the SVG <text> element containing the text |
+| `str2bool`  | `(strvalue: *): boolean`                     | Convert a string 'true' or 'false' to a boolean true/false<br /><br />**strvalue**: The string representation of the boolean |
+| `uibSend`   | `(): void`                                   | uibuilder send                                   |
+
+## Events
+
+| Event               | Type                                             | Description                                      |
+|---------------------|--------------------------------------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
+| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+
+## Slots
+
+| Name      | Description                                      |
+|-----------|--------------------------------------------------|
+| `default` | Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags). |
+
+## CSS Shadow Parts
+
+| Part     | Description                                      |
+|----------|--------------------------------------------------|
+| `button` | Uses the uib-styles.css uibuilder master for variables where available.<br /><br />See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document |
+
+
+# button-send
+
+A Zero dependency button web component that sends a msg or a document event when clicked.
+Contains relevant data from data-*, topic and payload attributes (or properties),
+includes a _meta object showing whether any modifier keys were used, the element id/name
+
+## Example
+
+```html
+<button-send id="myButton">
+     Click me to send a message
+ </button-send>
+
+See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
+```
+
+## Properties
+
+| Property        | Attribute       | Type                         | Default               | Description                                      |
+|-----------------|-----------------|------------------------------|-----------------------|--------------------------------------------------|
+| `$`             |                 | `function(string): Element`  |                       | Mini jQuery-like shadow dom selector (see constructor) |
+| `$$`            |                 | `function(string): NodeList` |                       | Mini jQuery-like shadow dom multi-selector (see constructor) |
+| `connected`     |                 | `boolean`                    | false                 | True when instance finishes connecting.<br />Allows initial calls of attributeChangedCallback to be<br />ignored if needed. |
+| `inherit-style` | `inherit-style` | `string\|boolean`            |                       | Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load. |
+| `name`          | `name`          | `string`                     |                       | Optional. HTML name attribute. Included in output _meta prop.<br /><br />Other watched attributes: |
+| `opts`          |                 | `object`                     | {}                    | Runtime configuration settings                   |
+| `payload`       | `payload`       | `string`                     |                       | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below<br /><br />PROPS FROM BASE: (see TiBaseComponent)<br />OTHER STANDARD PROPS: |
+| `sendEvents`    |                 | `boolean`                    | true                  |                                                  |
+| `topic`         | `topic`         | `string`                     |                       | Optional. Topic string to use. Mostly for node-red messages |
+| `uib`           |                 | `boolean`                    | false                 | Is UIBUILDER for Node-RED loaded?                |
+| `uibuilder`     |                 |                              | "window['uibuilder']" |                                                  |
+
+## Methods
+
+| Method                  | Type                                      | Description                                      |
+|-------------------------|-------------------------------------------|--------------------------------------------------|
+| `config`                | `(config: object\|undefined): object`     | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createShadowSelectors` | `(): void`                                | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                       | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `handleClick`           | `(evt: MouseEvent \| PointerEvent): void` | fn to run when the button is clicked<br /><br />**evt**: The event object |
+| `uibSend`               | `(evtName: string, data: string): void`   | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+
+## Slots
+
+| Name      | Description                                      |
+|-----------|--------------------------------------------------|
+| `default` | Button label. Allows text, inline and most block tags to be included (unlike the standard button tag which only allows inline tags). |
+
+## CSS Shadow Parts
+
+| Part     | Description                                      |
+|----------|--------------------------------------------------|
+| `button` | Uses the uib-styles.css uibuilder master for variables where available. |

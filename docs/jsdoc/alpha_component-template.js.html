@@ -33,8 +33,8 @@
  *
  * Version: See the class code
  *
- **/
-/** Copyright (c) 2022-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -48,9 +48,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
-import TiBaseComponent from '../libs/ti-base-component'
+import TiBaseComponent from '../../libs/ti-base-component'
 
 /** Only use a template if you want to isolate the code and CSS */
 const template = document.createElement('template')
@@ -76,53 +76,49 @@ template.innerHTML = /*html*/`
  * @element component-template
  * @memberOf Alpha
 
- * METHODS FROM BASE:
- * @method config Update runtime configuration, return complete config
- * @method createShadowSelectors Creates the jQuery-like $ and $$ methods
- * @method deepAssign Object deep merger
- * @method doInheritStyles If requested, add link to an external style sheet
- * @method ensureId Adds a unique ID to the tag if no ID defined.
- * @method _uibMsgHandler Not yet in use
- * @method _event(name,data) Standardised custom event dispatcher
- * @method _ready Call from end of connectedCallback. Sets connected prop and outputs events
+ * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
 
  * OTHER METHODS:
- * None
+  * None
 
- * @fires component-template:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires component-template:ready - Alias for connected. The instance can handle property &amp; attribute changes
- * @fires component-template:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires component-template:attribChanged - When a watched attribute changes. `evt.details.data` contains the details of the change.
- * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+ * CUSTOM EVENTS:
+  * "component-template:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "component-template:ready" - Alias for connected. The instance can handle property &amp; attribute changes
+  * "component-template:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "component-template:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
- * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
- * None
+  * None
 
- * Standard props (common across all my components):
- * @property {number} _iCount Static. The component version string (date updated)
- * @property {boolean} uib True if UIBUILDER for Node-RED is loaded
- * @property {function(string): Element} $ jQuery-like shadow dom selector
- * @property {function(string): NodeList} $$  jQuery-like shadow dom multi-selector
- * @property {boolean} connected False until connectedCallback finishes
- * @property {string} name Placeholder for the optional name attribute
- * @property {object} opts This components controllable options - get/set using the `config()` method
- *
- * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * By default, all attributes are also created as properties
+  * By default, all attributes are also created as properties
+
+ NB: properties marked with 💫 are dynamic and have getters/setters.
 
  * @slot Container contents
+
+ * @example
+  * &lt;component-template name="myComponent" inherit-style="./myComponent.css">&lt;/component-template>
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2024-10-06'
+    static componentVersion = '2025-05-30'
 
     /** Makes HTML attribute change watched
      * @returns {Array&lt;string>} List of all of the html attribs (props) listened to
@@ -139,10 +135,12 @@ class ComponentTemplate extends TiBaseComponent {
     constructor() {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
-        this._construct(template.content.cloneNode(true))
+        if (template &amp;&amp; template.content) this._construct(template.content.cloneNode(true))
     }
 
-    /** Runs when an instance is added to the DOM */
+    /** Runs when an instance is added to the DOM
+     * Runs AFTER the initial attributeChangedCallback's
+     */
     connectedCallback() {
         this._connect() // Keep at start.
 
@@ -155,6 +153,8 @@ class ComponentTemplate extends TiBaseComponent {
     }
 
     /** Runs when an observed attribute changes - Note: values are always strings
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML.
+     *       and BEFORE connectedCallback is called.
      * @param {string} attrib Name of watched attribute that has changed
      * @param {string} oldVal The previous attribute value
      * @param {string} newVal The new attribute value
@@ -174,7 +174,7 @@ class ComponentTemplate extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 } // ---- end of Class ---- //
 
@@ -199,13 +199,13 @@ customElements.define('component-template', ComponentTemplate)
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Oct 06 2024 17:24:45 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 30 2025 15:15:23 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

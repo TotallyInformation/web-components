@@ -45,263 +45,16 @@
     <section>
         <article><h1>web-components by TotallyInformation</h1>
 <p><a href="https://www.jsdelivr.com/package/gh/TotallyInformation/web-components"><img src="https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge" alt=""></a></p>
-<p>A repository of simple W3C Web Components. These may have extra capabilities for use with node-red-contrib-uibuilder but all work independently as well.</p>
-<p>Additional documentation is available in the docs folder which is also exposed as a website at https://totallyinformation.github.io/web-components/.</p>
-<h2>Useage</h2>
-<p>Install locally using npm or access via <a href="https://www.jsdelivr.com/package/gh/totallyinformation/web-components">jsdelivr</a>.</p>
-<p>See the <a href="docs">component documentation</a> for specific usage information for each component.</p>
-<details>
-<summary><b>Useage details</b></summary>
-<h3>File locations</h3>
-<p>Files for live use are in the <code>dist</code> folder. The alpha quality components are in the <code>dist/alpha</code> folder.</p>
-<p>Each component has 4 files but you only need 1 of them.</p>
-<p>If using traditional JavaScript or just HTML, use the <code>*.iife.min.js</code> files in deferred links in your <code>&lt;head&gt;</code>.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script defer src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components/dist/visible-console.iife.min.js&quot;>&lt;/script>
-</code></pre>
-<p>If using ES Modules, import the <code>*.esm.min.js</code> files in your module code.</p>
-<pre class="prettyprint source lang-javascript"><code>import 'https://cdn.jsdelivr.net/gh/totallyinformation/web-components/dist/visible-console.esm.min.js'
-</code></pre>
-<p>Each component self-registers its custom HTML tag. They also globally self-register their class name so that you can access static variables and functions if needed. The tag name and global name are both listed in the tables below.</p>
-<p>When using your browser's developer tools, the matching <code>.map</code> file will be loaded. This ensures that reported line numbers and full variable/function names are reported.</p>
-<p>The source for the components is in the <code>src</code> folder for the main components and in the <code>alpha</code> folder for the alpha quality components.</p>
-<h3>Useage with UIBUILDER for Node-RED</h3>
-<ul>
-<li>You can install the components library using UIBUILDER's library manager.</li>
-<li>In your front-end HTML, load the components <em>after</em> the uibuilder client library so that the components register that uibuilder is in use and becomes responsive to it.</li>
-</ul>
-<p>If using with Node-RED, you can install the components with the help of node-red-contrib-uibuilder. The uibuilder node has a library manager feature and you should use that to install the repository direct from GitHub (requires uibuilder v5+). In that case, uibuilder adds the repository to its web server and you can access them as: <code>../uibuilder/vendor/@totallyinformation/web-components/dist/button-send.js</code>. See below for details.</p>
-<h3>Local installation</h3>
-<p>If you wish to install locally, you can npm install from the GitHub repository with <code>npm install totallyinformation/web-components</code>. If these ever get published to npm, you would install with <code>npm install @totallyinformation/web-components</code>. However, note that, at this point, I am not intending to publish them quickly as they are still evolving quite rapidly.</p>
-<p>If installing locally, you will need to make the installed <code>web-components/components/</code> folder available to your web server as a static resource folder.</p>
-<h3>Loading components into your web page</h3>
-<p>The individual component documentation contains details on how to load the component files. In general, however, there are two choices on how to load them.</p>
-<h4>Load as an ECMA module</h4>
-<p>This is the preferred method. However, it is generally best to load via a script module. While you can load them via your HTML as a script link, you loose some capability this way.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async>
-   import '../uibuilder/vendor/@totallyinformation/web-components/components/simple-container.js'
-&lt;/script>
-</code></pre>
-<h4>Load from HTML with a script tag</h4>
-<p>They <strong>must</strong> be loaded as a type &quot;module&quot;.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot; async src=&quot;https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js&quot;>&lt;/script>
-</code></pre>
-<p>Or from the local resource of course. Note that this is not recommended. It is better to load them from a script module and then you can use an import statement.</p>
-<h4>Load from a standard script</h4>
-<p>Alternatively, you can load them in your main JavaScript script using dynamic imports as:</p>
-<pre class="prettyprint source lang-html"><code>&lt;script defer async>
-   import('https://cdn.jsdelivr.net/gh/totallyinformation/web-components@main/components/button-send.js')
-&lt;/script>
-</code></pre>
-<p>The disadvantage of this method is that the import function is asynchronous and so your own code may try to execute before the module has loaded. Generally, this won't matter if you aren't assigning the import to a variable. If you are, you may need to use top-level async or the promise-style then/catch.</p>
-<p>The potential advantage of this approach is that you can access exported variables and methods from the component if any are available (see the syntax-highlight component for an example).</p>
-<h3>Visual Studio Code (VSCode) Intelligence</h3>
-<p>VSCode supposts the use of HTML and CSS Custom Data JSON files that describe custom web components and CSS in a way that gives some intelligence to the editor when writing HTML and CSS code.</p>
-<p>This collection of web components uses <a href="https://github.com/runem/web-component-analyzer">Web Component Analyzer</a> to help document the components. It is also used to create an html custom data file that can be added to VSCode or to a specific workspace or folder settings to provide additional Intellisense help for the components.</p>
-<p>To do so, find the html custom data setting in VSCode settings and add:</p>
-<pre class="prettyprint source"><code>/path/to/totallyinformation/web-components/vscode-descriptors/ti-web-components.html-data.json
-</code></pre>
-</details>
-<h3>Demos</h3>
+<p>A repository of simple W3C Web Components. These may have extra capabilities for use with UIBUILDER for Node-RED but all work independently as well.</p>
+<p>Additional documentation is available in the docs folder which is also exposed as a website at https://wc.totallyinformation.net/.</p>
+<h3>Demos &amp; Documentation</h3>
 <p>To see the web components in action, go to <a href="https://wc.totallyinformation.net"><code>https://wc.totallyinformation.net</code></a>.</p>
+<p>Documentation is available on the same website. You can also view the documentation in the <code>docs/</code> folder of this repository.</p>
 <p>Alternatively, there is a built-in Node.js mini web server. Running the npm script <code>npm run tests</code> will start the server on port <code>8788</code>. Opening <code>http://127.0.0.1:8788</code> in your browser will give a list of all available demos and links to documentation and source code. Note that the mini-server has to download the Cloudflare <code>wrangler</code> server, you will be asked if you wish to continue.</p>
 <h2>Components</h2>
-<p>These components can be considered <code>beta</code> quality or better. They may not be complete but they should have basic usefulness.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>button-send</code> (ButtonSend)</td>
-<td>A simple button that outputs key info either via a custom document event or as a message back to Node-RED (when used with UIBUILDER for Node-RED). Allows block contents on the button.</td>
-</tr>
-<tr>
-<td><code>call-out</code> (CallOut)</td>
-<td>Displays nicely formatted callout boxes.</td>
-</tr>
-<tr>
-<td><code>collapsible-headings</code> (CollapsibleHeadings)</td>
-<td>Turns a section of Hn headings and block contents into collapsible content around the heading levels.</td>
-</tr>
-<tr>
-<td><code>html-include</code> (HtmlInclude)</td>
-<td>Dynamically load external HTML content very easily without needing an iFrame.</td>
-</tr>
-<tr>
-<td><code>syntax-highlight</code> (SyntaxHighlight)</td>
-<td>A simple, easy to use JSON object highlight element.</td>
-</tr>
-<tr>
-<td><code>visible-console</code> (VisibleConsole)</td>
-<td>Reflects <code>console</code> log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console.</td>
-</tr>
-</tbody>
-</table>
-<h2>Alpha Components</h2>
-<blockquote>
-<p>[!NOTE]</p>
-<p>Currently, all of the alpha components should be considered <em>experimental</em>. Most will work fine though may be overly simplistic in places. However, all are subject to significant change.</p>
-<p>Also note that the documentation is incomplete and may be wrong in places.</p>
-<p>However, please do give them a go and let me have some feedback.</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>Name (tag/global)</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em><code>component-template</code></em></td>
-<td><em>Unlike the other entries, this is complete. It can be used as a base for new components.</em></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>chart-frappe</code> (ChartFrappe)</td>
-<td>A chart component using the Frappe chart library</td>
-</tr>
-<tr>
-<td><code>chart-high</code> (ChartHigh)</td>
-<td>A chart component using the HighCharts library</td>
-</tr>
-<tr>
-<td><code>container-br</code> (ContainerBr)</td>
-<td>Like <code>&lt;br&gt;</code> for flex layouts. Forces a new row in a <code>simple-container</code> (or any other flex row container)</td>
-</tr>
-<tr>
-<td><code>data-list</code> (DataList)</td>
-<td>Data-driven UL/OL. Takes a JSON or JavaScript object or array of objects and outputs a formatted list.</td>
-</tr>
-<tr>
-<td><code>definition-list</code> (DefinitionList)</td>
-<td>Similar to <code>data-list</code> but outputs a DL instead.</td>
-</tr>
-<tr>
-<td><code>gauge-steel</code> (GaugeSteel)</td>
-<td>A gauge component using the Steel Series library</td>
-</tr>
-<tr>
-<td><code>ghost-thermometer</code> (GhostThermometer)</td>
-<td>A thermometer style gauge</td>
-</tr>
-<tr>
-<td><code>labelled-value</code> (LabelledValue)</td>
-<td>Text output with a label.</td>
-</tr>
-<tr>
-<td><code>multi-way-switch</code> (MultiWaySwitch)</td>
-<td>A flexible multi-switch that can display in several styles (buttons, rotary, etc)</td>
-</tr>
-<tr>
-<td><code>nav-bar</code> (NavBar)</td>
-<td>A standardised navigation menu bar</td>
-</tr>
-<tr>
-<td><code>simple-card</code> (SimpleCard)</td>
-<td>A card container with optional header and footer.</td>
-</tr>
-<tr>
-<td><code>simple-container</code> (SimpleContainer)</td>
-<td>A UI container for easy, automated layout of contained elements (specifically cards).</td>
-</tr>
-<tr>
-<td><code>simple-gauge</code> (SimpleGauge)</td>
-<td>A simple gauge style display component.</td>
-</tr>
-<tr>
-<td><code>simple-switch</code> (SimpleSwitch)</td>
-<td>A simple 2-way latching switch.</td>
-</tr>
-<tr>
-<td><code>state-timeline</code> (StateTimeline)</td>
-<td>A horizontal timeline display designed to show status/state.</td>
-</tr>
-<tr>
-<td><code>uib-theme-changer</code> (UibThemeChanger)</td>
-<td>This only works with the <code>uib-brand</code> stylesheet or something crafted to be like it. Switch between light/dark/auto schemes, shift the base hue, contrast ratio, and 2 accent colours.</td>
-</tr>
-</tbody>
-</table>
-<p>There is also an <code>alpha/not-complete</code> folder. This contains some components not yet even considered alpha quality.</p>
-<table>
-<thead>
-<tr>
-<th>Name (tag/global)</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>chart-apex</code> (ChartApex)</td>
-<td>Charts using the Apex.js chart library.</td>
-</tr>
-<tr>
-<td><code>chart-js</code> (ChartJs)</td>
-<td>Charts using the Chart.js chart library.</td>
-</tr>
-<tr>
-<td><code>chart-plotly</code> (ChartPlotly)</td>
-<td>Charts using the Plotly.js chart library.</td>
-</tr>
-<tr>
-<td><code>component-template</code> (ComponentTemplate)</td>
-<td>A template for new components. Containing core standard features and JSDoc documentation.</td>
-</tr>
-<tr>
-<td><code>floor-plan</code> (FloorPlan)</td>
-<td>Display a floor-plan image and add dynamic icons. For example, showing lighting status.</td>
-</tr>
-<tr>
-<td><code>hello-world</code> (HelloWorld)</td>
-<td>A simplistic example web component.</td>
-</tr>
-<tr>
-<td><code>simple-tree</code> (SimpleTree)</td>
-<td>Output's a collapsible tree-style list display.</td>
-</tr>
-<tr>
-<td><code>super-star</code> (SuperStar)</td>
-<td>A simple animated star emoji that twinkles when clicked or hovered over.</td>
-</tr>
-<tr>
-<td><code>uib-wrap</code> (UibWrap)</td>
-<td>Makes 3rd-party web components responsive to UIBUILDER for Node-RED.</td>
-</tr>
-</tbody>
-</table>
-<h2>Other supporting files and folders</h2>
-<ul>
-<li>
-<p><code>docs/</code> - documentation.</p>
-</li>
-<li>
-<p><code>tests/</code> - stand-alone web pages that demonstrate the components.</p>
-<p>Note that to test these from within Node-RED, you will need to use a URL something like:</p>
-<p><code>http://localhost:1880/uibuilder/vendor/@totallyinformation/web-components/tests/simple-card.html</code></p>
-<p>Note that loading direct like this, the uibuilder connection will not work unless you change the <code>uibuilder.start()</code> parameters to match a deployed uibuilder instance. It is better to copy the test files into the <code>src</code> folder of a deployed uibuilder node and to adjust the URL's accordingly. The normal urls for the components when copied to your own uibuilder instance will be <code>../uibuilder/vendor/@totallyinformation/web-components/components/simple-card.js</code>, <code>../uibuilder/vendor/@totallyinformation/web-components/libs/uibuilder.module.js</code>, etc.</p>
-<p>If you want to use the files with CDN versions of the modules, you will need to copy them and change all of the URL's. The test files are set up to work from having the repo installed under uibuilder in Node-RED.</p>
-</li>
-<li>
-<p><code>vscode-descriptors/ti-web-components.html-data.json</code></p>
-<p>Enables IntelliSense for the components while editing HTML in VSCode.</p>
-<p>May not always be in step with the code until everything is finalised.</p>
-</li>
-<li>
-<p><code>libs/uibuilder.module.js</code> - an alternative, uibuilder v5+ compatible client library specifically designed for use as an ECMA module. Not quite feature comparible with the standard <code>uibuilderfe.js</code> library but is the future direction of the client. Written as a class, self-loads the correct socket.io client library, has brand new logging features. Provides a simple, jQuery like <code>$</code> selector function.</p>
-<p>Most importantly, it contains a new, data-driven UI creator that lets you send configuration messages to build a UI dynamically.</p>
-<p>Still a work in progress but quite usable already.</p>
-</li>
-<li>
-<p><code>libs/uib-brand.css</code> - a copy of the alternate (new) stylesheet from uibuilder that these components can use.</p>
-</li>
-</ul>
+<p>Please see the <a href="docs">documentation</a> for details of each component. Online documentation is available at <a href="https://wc.totallyinformation.net/docs"><code>https://wc.totallyinformation.net/docs</code></a>.</p>
+<h2>Development and building</h2>
+<p>Please see the <a href="docs/dev.md">development documentation</a> for details on how to develop and build the components. <a href="https://wc.totallyinformation.net/docs/#/dev">Online</a>.</p>
 <h2>Discussions and suggestions</h2>
 <p>The best place to ask questions, or suggest improvements about these components is the <a href="https://github.com/TotallyInformation/web-components/discussions">GitHub discussion board for this repository</a>.</p>
 <h2>Contributing</h2>
@@ -325,13 +78,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#DEPRECATED_uibMsgHandler">DEPRECATED_uibMsgHandler</a></li><li><a href="global.html#_setVariant">_setVariant</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sun Oct 06 2024 17:24:45 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 30 2025 15:15:23 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
