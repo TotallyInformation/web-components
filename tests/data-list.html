@@ -6,7 +6,7 @@
     <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
 
     <script defer src="../dist/call-out.iife.min.js"></script>
-    <script defer src="../dist/alpha/data-list.iife.min.js"></script>
+    <script defer src="../dist/data-list.iife.min.js"></script>
 
 </head><body>
     <header>
@@ -15,40 +15,67 @@
     </header>
     <main>
         <section>
-            <call-out type="caution" title="Status: Alpha">
-                Experimental. Documentation: <a href="/docs/#/components/data-list">data-list</a>.
+            <call-out type="tip" title="Status: Live" icon="✅">
+                Ready for extended use. Documentation: <a href="/docs/#/components/data-list">data-list</a>.
                 Version: <output id="op2">--</output>.
             </call-out>
+            <p>
+                Data is updated dynamically using JavaScript. 
+                Some addition changes happen after a 4, 6, and 8 second delays.
+            </p>
         </section>
 
         <article>
-            <h2>Items added dynamically using JavaScript</h2>
-            <data-list id="dl1">Items added by JavaScript</data-list>
+            <h2>Items added dynamically using JavaScript with object input</h2>
+            <!-- override bullet type -->
+            <data-list id="dl1" style="--list-style: disclosure-closed">
+                Items added by JavaScript
+            </data-list>
         </article>
 
         <article>
-            <h2>Items added dynamically from a global variable</h2>
-            <data-list id="dl2" listvar="mylist">Items added by global variable</data-list>
+            <h2>Items added dynamically from a global object variable</h2>
+            <!-- Using object input, override separator between key and value -->
+            <data-list id="dl2" listvar="mylist1" type="ol" keyvalueseparator=" - ">
+                Items added by global object variable
+            </data-list>
+        </article>
+
+        <article>
+            <h2>Items added dynamically from a global array variable</h2>
+            <!-- Using array input, override list style (don't forget to wrap custom entries with quotes) -->
+            <data-list id="dl3" listvar="mylist2" liststyle="'➡️'">
+                Items added by global array variable
+            </data-list>
         </article>
     </main>
 
     <script>
-        // List variable to use in dl2 - it MUST be global
-        mylist = {
+        // List variable to use in dl2 - it MUST be global (window or globalThis)
+        window.mylist1 = {
             "Alpha": "Entry one",
             "Beta": "Entry two",
             "Gamma": "Entry three",
             "Delta": "Entry four",
             "Epsilon": "Entry five",
         }
+        // List variable to use in dl3 - it MUST be global (window or globalThis)
+        globalThis.mylist2 = [
+            "Entry one",
+            "Entry two",
+            "Entry three",
+            "Entry four",
+            "Entry five",
+        ]
 
-        /** We need to wait for everything to be loaded before using components from JavaScript */
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
             document.getElementById('op2').value = DataList.version
 
             // Get a reference to your data-list tag
             const dl1 = document.querySelector('#dl1')
+            const dl2 = document.querySelector('#dl2')
 
             // Initialise the data-list.
             dl1.data = {
@@ -57,12 +84,31 @@
                 "three": "This is the third list entry",
             }
 
-            // Change one of the entries in the list after 4 seconds
+            // Change entries in lists after 4 seconds
             setTimeout(function(){
+                console.info('Updating entries in dl1 and dl3')
 
                 dl1.entry('two', 'This is the second entry amended')
+                dl1.entry('twentytwo', 'This is a new entry added')
 
+                dl3.entry(2, 'This is the third entry amended')
+                dl3.entry(10, 'This is actually a new 10th entry (off the end of the list so actually entry index 5)')
             }, 4000)
+
+            // Change dl2 list from ol to ul after 6 seconds
+            setTimeout(function(){
+                console.info('Changing dl1 and dl2 list types')
+
+                dl1.type = 'ol'
+                dl2.type = 'ul'
+            }, 6000)
+
+            setTimeout(function(){
+                console.info('Changing dl1 and dl2 list styles')
+
+                dl1.liststyle = 'upper-roman'
+                dl2.liststyle = 'disclosure-open'
+            }, 8000)
         })
     </script>
 </body></html>
