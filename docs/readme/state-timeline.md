@@ -17,19 +17,19 @@
 
 ## Methods
 
-| Method            | Type                                             | Description                                      |
-|-------------------|--------------------------------------------------|--------------------------------------------------|
-| `config`          | `(config: object\|undefined): { states: { undefined: { name: string; label: string; color: string; }; offline: { name: string; label: string; color: string; }; }; timespan: number; maxEntries: number; }` | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `doInheritStyles` | `(url: *): Promise<void>`                        | Optionally apply an external linked style sheet (called from connectedCallback)<br /><br />**url**: The URL for the linked style sheet |
-| `updateState`     | `(stateName: string): void`                      | Updates the timeline with a new state<br /><br />**stateName**: Name of the state |
+| Method            | Type                                  | Description                                      |
+|-------------------|---------------------------------------|--------------------------------------------------|
+| `config`          | `(config: object\|undefined): object` | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `doInheritStyles` | `(url: *): Promise<void>`             | Optionally apply an external linked style sheet (called from connectedCallback)<br /><br />**url**: The URL for the linked style sheet |
+| `updateState`     | `(stateName: string): void`           | Updates the timeline with a new state<br /><br />**stateName**: Name of the state |
 
 ## Events
 
-| Event                          | Type                                             | Description                                      |
-|--------------------------------|--------------------------------------------------|--------------------------------------------------|
-| `state-timeline:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
-| `state-timeline:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `state-timeline:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
+| Event                          | Type                                             |
+|--------------------------------|--------------------------------------------------|
+| `state-timeline:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` |
+| `state-timeline:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
+| `state-timeline:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
 
 ## Slots
 

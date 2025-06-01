@@ -18,24 +18,16 @@
 
 ## Methods
 
-| Method                   | Type                                    | Description                                      |
-|--------------------------|-----------------------------------------|--------------------------------------------------|
-| `config`                 | `(config: object\|undefined): object`   | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createAxisLine`         | `(): HTMLDivElement`                    |                                                  |
-| `createShadowSelectors`  | `(): void`                              | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`        | `(): Promise<void>`                     | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`               | `(): void`                              | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `uibSend`                | `(evtName: string, data: string): void` | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
-| `updateMinMaxTimestamps` | `(): void`                              |                                                  |
-
-## Events
-
-| Event                            | Description                                      |
-|----------------------------------|--------------------------------------------------|
-| `chart-statetrail:attribChanged` | When a watched attribute changes. `evt.details.data` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance.<br /><br />Standard watched attributes (common across all my components): |
-| `chart-statetrail:connected`     | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `chart-statetrail:disconnected`  | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
-| `chart-statetrail:ready`         | Alias for connected. The instance can handle property & attribute changes |
+| Method                   | Type                                         | Description                                      |
+|--------------------------|----------------------------------------------|--------------------------------------------------|
+| `config`                 | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createAxisLine`         | `(): HTMLDivElement`                         |                                                  |
+| `createShadowSelectors`  | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`        | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`               | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `prependStylesheet`      | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `uibSend`                | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| `updateMinMaxTimestamps` | `(): void`                                   |                                                  |
 
 ## Slots
 

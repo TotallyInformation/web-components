@@ -23,13 +23,14 @@ See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-d
 
 ## Methods
 
-| Method                  | Type                                    | Description                                      |
-|-------------------------|-----------------------------------------|--------------------------------------------------|
-| `config`                | `(config: object\|undefined): object`   | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createShadowSelectors` | `(): void`                              | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                     | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                              | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `uibSend`               | `(evtName: string, data: string): void` | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 
@@ -54,8 +55,7 @@ A uibuilder for Node-RED Theme Changer component
 |--------------------|--------------------------------------------------|--------------|--------------------------------------------------|
 | `$`                | `function(string): Element`                      |              | Mini jQuery-like shadow dom selector (see constructor) |
 | `$$`               | `function(string): NodeList`                     |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `data-*`           | `string} name - Optional. Will be used to synthesize an ID if no ID is provided.<br />attr {string` |              | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
-| `name`             | `string`                                         |              | Sync'd from name attribute<br /><br />slot Container contents |
+| `data-*`           | `string} name - Optional. Will be used to synthesize an ID if no ID is provided.<br />attr {string` |              | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.<br /><br />slot Container contents |
 | `opts`             | `object`                                         | {}           | Runtime configuration settings                   |
 | `scheme`           | `undefined`                                      | "undefined"  | What is the current scheme? 'light', 'dark' or 'auto' |
 | `uib`              | `boolean`                                        | false        | Is UIBUILDER for Node-RED loaded?                |
@@ -68,20 +68,19 @@ A uibuilder for Node-RED Theme Changer component
 |--------------------|---------------------------------------|--------------------------------------------------|
 | `config`           | `(config: object\|undefined): object` | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
 | `doInheritStyles`  | `(url: *): Promise<void>`             | Optionally apply an external linked style sheet (called from connectedCallback)<br /><br />**url**: The URL for the linked style sheet |
-| `evtClickChooser`  | `(evt: MouseEvent): void`             | Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html<br /><br />**evt**: undefined |
+| `evtClickChooser`  | `(evt: MouseEvent): void`             | Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html<br /><br />**evt**: _ |
 | `evtClickContrast` | `(evt: MouseEvent): void`             | Handle contrast click. Override contrast css variables and set appropriate class on html<br /><br />**evt**: Click event |
-| `evtClickReset`    | `(evt: MouseEvent): void`             | Handle reset button. Override contrast css variables and set appropriate class on html<br /><br />**evt**: undefined |
-| `evtClickToggle`   | `(evt: MouseEvent): void`             | TODO Handle the icon<br /><br />**evt**: undefined |
-| `setTheme`         | `(theme: *): any`                     | **theme**: undefined                             |
+| `evtClickReset`    | `(evt: MouseEvent): void`             | Handle reset button. Override contrast css variables and set appropriate class on html<br /><br />**evt**: _ |
+| `evtClickToggle`   | `(evt: MouseEvent): void`             | TODO Handle the icon<br /><br />**evt**: _       |
+| `setTheme`         | `(theme: *): string`                  | **theme**: _                                     |
 
 ## Events
 
-| Event                             | Type                                             | Description                                      |
-|-----------------------------------|--------------------------------------------------|--------------------------------------------------|
-| `uib-theme-changer:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance. |
-| `uib-theme-changer:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `uib-theme-changer:construction`  |                                                  | Document object event. evt.details contains the data |
-| `uib-theme-changer:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
+| Event                             | Type                                             |
+|-----------------------------------|--------------------------------------------------|
+| `uib-theme-changer:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` |
+| `uib-theme-changer:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
+| `uib-theme-changer:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
 
 ## CSS Shadow Parts
 
@@ -106,8 +105,7 @@ A uibuilder for Node-RED Theme Changer component
 |--------------------|--------------------------------------------------|--------------|--------------------------------------------------|
 | `$`                | `function(string): Element`                      |              | Mini jQuery-like shadow dom selector (see constructor) |
 | `$$`               | `function(string): NodeList`                     |              | Mini jQuery-like shadow dom multi-selector (see constructor) |
-| `data-*`           | `string} name - Optional. Will be used to synthesize an ID if no ID is provided.<br />attr {string` |              | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
-| `name`             | `string`                                         |              | Sync'd from name attribute<br /><br />slot Container contents |
+| `data-*`           | `string} name - Optional. Will be used to synthesize an ID if no ID is provided.<br />attr {string` |              | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object.<br /><br />slot Container contents |
 | `opts`             | `object`                                         | {}           | Runtime configuration settings                   |
 | `scheme`           | `undefined`                                      | "undefined"  | What is the current scheme? 'light', 'dark' or 'auto' |
 | `uib`              | `boolean`                                        | false        | Is UIBUILDER for Node-RED loaded?                |
@@ -120,20 +118,19 @@ A uibuilder for Node-RED Theme Changer component
 |--------------------|---------------------------------------|--------------------------------------------------|
 | `config`           | `(config: object\|undefined): object` | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
 | `doInheritStyles`  | `(url: *): Promise<void>`             | Optionally apply an external linked style sheet (called from connectedCallback)<br /><br />**url**: The URL for the linked style sheet |
-| `evtClickChooser`  | `(evt: MouseEvent): void`             | Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html<br /><br />**evt**: undefined |
+| `evtClickChooser`  | `(evt: MouseEvent): void`             | Handle the light/dark theme chooser. Override contrast css variables and set appropriate class on html<br /><br />**evt**: _ |
 | `evtClickContrast` | `(evt: MouseEvent): void`             | Handle contrast click. Override contrast css variables and set appropriate class on html<br /><br />**evt**: Click event |
-| `evtClickReset`    | `(evt: MouseEvent): void`             | Handle reset button. Override contrast css variables and set appropriate class on html<br /><br />**evt**: undefined |
-| `evtClickToggle`   | `(evt: MouseEvent): void`             | TODO Handle the icon<br /><br />**evt**: undefined |
-| `setTheme`         | `(theme: *): any`                     | **theme**: undefined                             |
+| `evtClickReset`    | `(evt: MouseEvent): void`             | Handle reset button. Override contrast css variables and set appropriate class on html<br /><br />**evt**: _ |
+| `evtClickToggle`   | `(evt: MouseEvent): void`             | TODO Handle the icon<br /><br />**evt**: _       |
+| `setTheme`         | `(theme: *): string`                  | **theme**: _                                     |
 
 ## Events
 
-| Event                             | Type                                             | Description                                      |
-|-----------------------------------|--------------------------------------------------|--------------------------------------------------|
-| `uib-theme-changer:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance. |
-| `uib-theme-changer:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `uib-theme-changer:construction`  |                                                  | Document object event. evt.details contains the data |
-| `uib-theme-changer:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
+| Event                             | Type                                             |
+|-----------------------------------|--------------------------------------------------|
+| `uib-theme-changer:attribChanged` | `CustomEvent<{ id: string; name: string \| null \| undefined; attribute: string; newVal: string; oldVal: string; }>` |
+| `uib-theme-changer:connected`     | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
+| `uib-theme-changer:disconnected`  | `CustomEvent<{ id: string; name: string \| null \| undefined; }>` |
 
 ## CSS Shadow Parts
 
@@ -172,17 +169,18 @@ METHODS FROM BASE:
 
 ## Methods
 
-| Method                  | Type                                    | Description                                      |
-|-------------------------|-----------------------------------------|--------------------------------------------------|
-| `checkType`             | `(input: *): string`                    | Find out the input JavaScript var type<br /><br />**input**: The JavaScript var to type |
-| `config`                | `(config: object\|undefined): object`   | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createHTMLVisualizer`  | `(input: *): HTMLDivElement`            | Creates an HTML visualisation of the input<br /><br />**input**: Input data value to visualise |
-| `createShadowSelectors` | `(): void`                              | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                     | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                              | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `newLog`                | `(type: string, args: string): void`    | Creates a new HTML log entry<br /><br />**type**: The log type<br />**args**: The arguments to log |
-| `redirectConsole`       | `(): void`                              | Capture console.xxxx and write to the div<br />NB: Cannot use bind here and so console output will have the wrong file/line number |
-| `uibSend`               | `(evtName: string, data: string): void` | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `checkType`             | `(input: *): string`                         | Find out the input JavaScript var type<br /><br />**input**: The JavaScript var to type |
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createHTMLVisualizer`  | `(input: *): HTMLDivElement`                 | Creates an HTML visualisation of the input<br /><br />**input**: Input data value to visualise |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `newLog`                | `(type: string, args: string): void`         | Creates a new HTML log entry<br /><br />**type**: The log type<br />**args**: The arguments to log |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `redirectConsole`       | `(): void`                                   | Capture console.xxxx and write to the div<br />NB: Cannot use bind here and so console output will have the wrong file/line number |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 
@@ -221,17 +219,18 @@ METHODS FROM BASE:
 
 ## Methods
 
-| Method                  | Type                                    | Description                                      |
-|-------------------------|-----------------------------------------|--------------------------------------------------|
-| `checkType`             | `(input: *): string`                    | Find out the input JavaScript var type<br /><br />**input**: The JavaScript var to type |
-| `config`                | `(config: object\|undefined): object`   | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createHTMLVisualizer`  | `(input: *): HTMLDivElement`            | Creates an HTML visualisation of the input<br /><br />**input**: Input data value to visualise |
-| `createShadowSelectors` | `(): void`                              | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                     | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                              | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `newLog`                | `(type: string, args: string): void`    | Creates a new HTML log entry<br /><br />**type**: The log type<br />**args**: The arguments to log |
-| `redirectConsole`       | `(): void`                              | Capture console.xxxx and write to the div<br />NB: Cannot use bind here and so console output will have the wrong file/line number |
-| `uibSend`               | `(evtName: string, data: string): void` | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `checkType`             | `(input: *): string`                         | Find out the input JavaScript var type<br /><br />**input**: The JavaScript var to type |
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createHTMLVisualizer`  | `(input: *): HTMLDivElement`                 | Creates an HTML visualisation of the input<br /><br />**input**: Input data value to visualise |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `newLog`                | `(type: string, args: string): void`         | Creates a new HTML log entry<br /><br />**type**: The log type<br />**args**: The arguments to log |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `redirectConsole`       | `(): void`                                   | Capture console.xxxx and write to the div<br />NB: Cannot use bind here and so console output will have the wrong file/line number |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 

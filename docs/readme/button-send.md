@@ -6,26 +6,25 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 ## Properties
 
-| Property  | Attribute | Type     | Description                                      |
-|-----------|-----------|----------|--------------------------------------------------|
-| `data-*`  |           | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
-| `id`      |           | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
-| `name`    |           | `string` | Optional. HTML name attribute. Included in output _meta prop. |
-| `payload` | `payload` | `string` | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
-| `topic`   | `topic`   | `string` | Optional. Topic string to use. Mostly for node-red messages |
+| Property  | Attribute | Type     | Default     | Description                                      |
+|-----------|-----------|----------|-------------|--------------------------------------------------|
+| `data`    |           | `string` |             | * - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `id`      |           | `string` |             | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `name`    |           | `string` |             | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload` | `payload` | `string` | "undefined" | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `topic`   | `topic`   | `string` | "undefined" | Optional. Topic string to use. Mostly for node-red messages |
 
 ## Methods
 
 | Method | Type                                             | Description                                      |
 |--------|--------------------------------------------------|--------------------------------------------------|
-| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement \| HTMLDivElement \| HTMLSlotElement \| HTMLObjectElement \| ... 59 more ... \| null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement\|null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
 
 ## Events
 
-| Event               | Type                                             | Description                                      |
-|---------------------|--------------------------------------------------|--------------------------------------------------|
-| `button-send:click` | `CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
-| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+| Event               | Type                                             |
+|---------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: undefined; payload: { [x: string]: string \| undefined; }; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` |
 
 ## Slots
 
@@ -48,26 +47,25 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 ## Properties
 
-| Property  | Attribute | Type     | Description                                      |
-|-----------|-----------|----------|--------------------------------------------------|
-| `data-*`  |           | `string` | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
-| `id`      |           | `string` | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
-| `name`    |           | `string` | Optional. HTML name attribute. Included in output _meta prop. |
-| `payload` | `payload` | `string` | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
-| `topic`   | `topic`   | `string` | Optional. Topic string to use. Mostly for node-red messages |
+| Property  | Attribute | Type     | Default     | Description                                      |
+|-----------|-----------|----------|-------------|--------------------------------------------------|
+| `data`    |           | `string` |             | * - Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
+| `id`      |           | `string` |             | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
+| `name`    |           | `string` |             | Optional. HTML name attribute. Included in output _meta prop. |
+| `payload` | `payload` | `string` | "undefined" | Optional. Payload string. Mostly for node-red messages. For non-string payload, see props below |
+| `topic`   | `topic`   | `string` | "undefined" | Optional. Topic string to use. Mostly for node-red messages |
 
 ## Methods
 
 | Method | Type                                             | Description                                      |
 |--------|--------------------------------------------------|--------------------------------------------------|
-| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement \| HTMLDivElement \| HTMLSlotElement \| HTMLObjectElement \| ... 59 more ... \| null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
+| `$`    | `(selection: keyof HTMLElementTagNameMap): HTMLElement\|null` | Mini jQuery-like shadow dom selector<br /><br />**selection**: HTML element selector |
 
 ## Events
 
-| Event               | Type                                             | Description                                      |
-|---------------------|--------------------------------------------------|--------------------------------------------------|
-| `button-send:click` | `CustomEvent<{ topic: any; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
-| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+| Event               | Type                                             |
+|---------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: undefined; payload: { [x: string]: string \| undefined; }; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` |
 
 ## Slots
 
@@ -92,7 +90,6 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 | Property       | Type                                             | Default                                          | Description                                      |
 |----------------|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
-| `data-*`       | `string`                                         |                                                  | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
 | `displayMode`  | `string`                                         | "default"                                        | What is the current display mode?                |
 | `id`           | `string`                                         |                                                  | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
 | `maxset`       | `string \| 999`                                  |                                                  |                                                  |
@@ -120,10 +117,9 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 ## Events
 
-| Event               | Type                                             | Description                                      |
-|---------------------|--------------------------------------------------|--------------------------------------------------|
-| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
-| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+| Event               | Type                                             |
+|---------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` |
 
 ## Slots
 
@@ -148,7 +144,6 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 | Property       | Type                                             | Default                                          | Description                                      |
 |----------------|--------------------------------------------------|--------------------------------------------------|--------------------------------------------------|
-| `data-*`       | `string`                                         |                                                  | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
 | `displayMode`  | `string`                                         | "default"                                        | What is the current display mode?                |
 | `id`           | `string`                                         |                                                  | Optional. HTML ID, must be unique on page. Included in output _meta prop. |
 | `maxset`       | `string \| 999`                                  |                                                  |                                                  |
@@ -176,10 +171,9 @@ includes a _meta object showing whether any modifier keys were used, the element
 
 ## Events
 
-| Event               | Type                                             | Description                                      |
-|---------------------|--------------------------------------------------|--------------------------------------------------|
-| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` | Document object event. evt.details contains the data |
-| `uibuilder.send`    | `function`                                       | Sends a msg back to Node-RED if uibuilder available. topic, payload and _meta props may all be set. |
+| Event               | Type                                             |
+|---------------------|--------------------------------------------------|
+| `button-send:click` | `CustomEvent<{ topic: string; payload: any; _meta: { id: string; name: string \| null; data: { [x: string]: string \| undefined; }; }; }>` |
 
 ## Slots
 
@@ -228,14 +222,15 @@ See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-d
 
 ## Methods
 
-| Method                  | Type                                      | Description                                      |
-|-------------------------|-------------------------------------------|--------------------------------------------------|
-| `config`                | `(config: object\|undefined): object`     | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createShadowSelectors` | `(): void`                                | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                       | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                                | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `handleClick`           | `(evt: MouseEvent \| PointerEvent): void` | fn to run when the button is clicked<br /><br />**evt**: The event object |
-| `uibSend`               | `(evtName: string, data: string): void`   | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `handleClick`           | `(evt: MouseEvent \| PointerEvent): void`    | fn to run when the button is clicked<br /><br />**evt**: The event object |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 

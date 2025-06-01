@@ -6,16 +6,7 @@
 |----------|-----------|--------------------------------------------------|-------------|--------------------------------------------------|
 | `$`      |           |                                                  |             | Mini jQuery-like shadow dom selector (see constructor) |
 | `data-*` |           | `string} name - Optional. Will be used to synthesize an ID if no ID is provided.<br />attr {string` |             | Optional. All data-* attributes are returned in the _meta prop as a _meta.data object. |
-| `name`   | `name`    | `string`                                         | "undefined" | Sync'd from name attribute                       |
-
-## Events
-
-| Event                            | Description                                      |
-|----------------------------------|--------------------------------------------------|
-| `simple-container:attribChanged` | When a watched attribute changes. `evt.details` contains the details of the change.<br />NOTE that listeners can be attached either to the `document` or to the specific element instance. |
-| `simple-container:connected`     | When an instance of the component is attached to the DOM. `evt.details` contains the details of the element. |
-| `simple-container:construction`  | Document object event. evt.details contains the data |
-| `simple-container:disconnected`  | When an instance of the component is removed from the DOM. `evt.details` contains the details of the element. |
+| `name`   | `name`    | `undefined`                                      | "undefined" | Holds the name for this instance of the component |
 
 ## Slots
 
@@ -55,13 +46,14 @@ See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-d
 
 ## Methods
 
-| Method                  | Type                                    | Description                                      |
-|-------------------------|-----------------------------------------|--------------------------------------------------|
-| `config`                | `(config: object\|undefined): object`   | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createShadowSelectors` | `(): void`                              | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                     | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                              | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `uibSend`               | `(evtName: string, data: string): void` | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 
