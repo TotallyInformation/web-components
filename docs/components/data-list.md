@@ -32,6 +32,22 @@ status: live # alpha, beta, live
 <data-list type="ol" liststyle="upper-roman"></data-list>
 ```
 
+Note that input data can be either an array or an object. If it is an object, then the keys will be displayed as well as the values. The `keyvalueseparator` attribute can be used to change the separator between the key and value. If you set it to `"NULL"`, then the keys will not be displayed.
+
+You can create nested lists simply by using arrays or objects as list entries. A nested list will have a list-entry heading if the parent is an object and `keyvalueseparator` is not "NULL".
+
+> [!TIP]
+> Nested lists will start with the same type and styles.
+>
+> If you want to style a sub-list separately, you can use the class `nested-list` and the `data-depth` attribute to target specific CSS
+>
+> ```css
+> data-list .nested-list[data-depth="2"] {
+>     --list-style: square;
+>     background-color: var(--warning);
+> }
+> ```
+
 ## Attributes & Properties
 
 ### Attributes
@@ -42,7 +58,7 @@ All of the attributes are optional.
 
   * `keyvalueseparator` - OPTIONAL. The separator to use between the key and value when input is an object rather than an array. Defaults to `" :: "`. Set to `"NULL"` to disable display of the keys.
   * 💫`listvar` - OPTIONAL. The name of a global variable to use to generate the list. If not specified, the component will use the `data` property which you will need to set directly using JavaScript. No default.
-  * 💫`listStyle` - OPTIONAL. The style type to use for the list. Default is `disc` for `ul` and `decimal` for `ol`. May contain any valid CSS list-style string value. When set, will change the `--list-style` CSS variable.
+  * 💫`liststyle` - OPTIONAL. The style type to use for the list. Default is `disc` for `ul` and `decimal` for `ol`. May contain any valid CSS list-style string value. When set, will change the `--list-style` CSS variable.
   * 💫`type` - OPTIONAL. The type of list to create. Either `ul` (unordered) or `ol` (ordered). Defaults to `ul`.
 
   > [!TIP]
@@ -85,7 +101,7 @@ Each attribute has a corresponding property. You can set the property directly i
 
 ## Slots
 
-The component has a main slot that can be used to provide additional content. The slot content will be displayed above the list.
+This component uses the light (main) DOM and so does not have a slot. However, the list is generated _below_ any existing content.
 
 > [!NOTE]
 > Slots are used to allow the component to accept HTML content. By default, the main slot, if defined, will contain any content between the opening and closing tags of the component. You can also define named slots to allow for more complex content arrangements.
@@ -94,13 +110,28 @@ The component has a main slot that can be used to provide additional content. Th
 
 ### Inheriting Styles
 
-This component uses the Shadow DOM to encapsulate its styles. This means that the component will not inherit styles from the main document. However, you can still style the component using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties). You can also use the `inherit-styles` attribute to allow the component to inherit styles from a style link (usually the same as the main page's style sheet).
+This component uses the light (main) DOM. This means that the component will inherit styles from the main document.
+
+It adds its own stylesheet to the TOP of the document's `<head>` so that it can be overridden by your own styles. This is useful for styling nested lists. Its styles are constrained to the `data-list` element and its children.
 
 ### CSS Variables
 
 The following CSS variables are available for styling:
 
-* `--list-style` - Maps directly to the `list-style` CSS property. Defaults to `disc` for unordered lists and `decimal` for ordered lists. This is set by the `listStyle` attribute. However, you can override it in your own stylesheets and/or HTML if you wish.
+* `--list-style` - Maps directly to the `list-style` CSS property. Defaults to `disc` for unordered lists and `decimal` for ordered lists. This is set by the `listStyle` attribute.
+
+   > [!TIP]
+   > It is better to use the `listStyle` attribute to set the list style rather than using this variable directly. This is because the attribute will also update the component's internal state and trigger a rebuild of the list if necessary.
+   >
+   > However, you can use this variable to set a nested list style but it will be overridden if the list gets rebuilt. You can set a watch for this event though and re-apply the variable as needed.
+
+* `--nested-indent` - The indentation for nested lists. Defaults to `40px` which is the default for all browsers. Try setting to `1em` for a less extreme and more responsive indentation.
+
+You can override these variables either in your main CSS file or by using the `style` attribute on the component itself. For example:
+
+```html
+<data-list style="--nested-indent: 1em;"></data-list>
+```
 
 ## Events
 
@@ -183,10 +214,9 @@ The standard message format is:
 
 ## Nice-to-have features
 
-Possibly in future versions.
-
 * [x] Allow direct update of data from a uibuilder msg.
-
+* [x] Allow for nested lists to be created from arrays or objects.
+* [x] Allow for nested lists to be styled separately.
 
 ## Design References
 
