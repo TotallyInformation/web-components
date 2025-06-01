@@ -91,7 +91,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-05-30'
+    static componentVersion = '2025-06-01'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -109,6 +109,8 @@ class ComponentTemplate extends TiBaseComponent {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         if (template && template.content) this._construct(template.content.cloneNode(true))
+        // Otherwise, if component styles are needed, use the following instead:
+        // this.prependStylesheet(styles, 0)
     }
 
     /** Runs when an instance is added to the DOM
