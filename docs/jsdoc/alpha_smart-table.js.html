@@ -26,10 +26,11 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** A zero dependency custom lightweight web component that builds a table from data
+            <pre class="prettyprint source linenums"><code>// @ts-nocheck
+/** A zero dependency custom lightweight web component that builds a table from data
  * Version: See the class code
- **/
-/** Copyright (c) 2024-2024 Julian Knight (Totally Information)
+ */
+/** Copyright (c) 2024-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -43,7 +44,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- **/
+ */
 
 /** TODO
  * - Add row ID (R1, ...) - add col ID (C1, ...)
@@ -121,16 +122,16 @@ import TiBaseComponent from '../../libs/ti-base-component'
  * OTHER METHODS:
  * @function getCellById Get an HTML element reference to a cell using `RxCx` referencing
  * @function getValueByCellId Get the data value of a cell using `RxCx` referencing
- * @function getValueByOffset(obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
+ * @function getValueByOffset (obj,rowOffset,colOffset) Get the data value of a cell in an tabular array/object using row/column numbers
 
- * @fires smart-table:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires smart-table:ready - Alias for connected. The instance can handle property &amp; attribute changes
- * @fires smart-table:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires smart-table:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires smart-table:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires smart-table:ready - Alias for connected. The instance can handle property &amp; attribute changes
+ * fires smart-table:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires smart-table:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
- * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+ * property {string} name - Optional. HTML name attribute. Included in output _meta prop.
 
  * Other watched attributes:
  * None
@@ -144,7 +145,7 @@ import TiBaseComponent from '../../libs/ti-base-component'
  * @property {string} version Static. The component version string (date updated). Also has a getter that returns component and base version strings.
 
  * Other props:
- * @property {object|array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
+ * @property {object|Array} data Data to build table. Can be an array of objects, an object of objects or an array of arrays. Must be 2d (tabular)
  * @property {object} cols Override the column metadata. If not supplied, cols is built from the first entry of the data array/object
  *
  * @property {HTMLTableElement} elThead Reference to the thead element
@@ -201,13 +202,15 @@ class SmartTable extends TiBaseComponent {
         // this.setAttribute('value', val)
     }
 
-    /** Get the current shown value */
+    /** Get the current shown value
+     * @returns {object|Array} The data used to build the table
+    */
     get data() {
         return this.#data
     }
 
     /** NB: Attributes not available here - use connectedCallback to reference */
-    constructor() { // eslint-disable-line no-useless-constructor
+    constructor() {
         super()
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         // this._construct(template.content.cloneNode(true))
@@ -248,11 +251,11 @@ class SmartTable extends TiBaseComponent {
         // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
 
         // Keep at end. Let everyone know that an attribute has changed for this instance of the component
-        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal })
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
     /** Allows access to a cell using numeric row/col offsets
-     * @param {object|array} obj The 2d object to search
+     * @param {object|Array} obj The 2d object to search
      * @param {number} rowOffset The row offset
      * @param {number} colOffset The column offset
      * @returns {*} Cell value
@@ -285,7 +288,7 @@ class SmartTable extends TiBaseComponent {
      * @returns {*} The value of the cell if found else Null or Undefined
      */
     getValueByCellId(cellId) {
-        let [, row, col,] = cellId.split(/^R(\d+)C(\d+)$/ig)
+        let [, row, col] = cellId.split(/^R(\d+)C(\d+)$/ig)
         // @ts-ignore
         row = Number(row) - 1
         // @ts-ignore
@@ -308,10 +311,10 @@ class SmartTable extends TiBaseComponent {
                     if (parentKey !== null) {
                         console.warn(`[${this.localName}:_createProxy:${this.id}] Data is >2d. Can only deal with 2d (tabular) data.`)
                         return value
-                    } else return this._createProxy(value, prop)
-                } else {
-                    return value
+                    }
+                    return this._createProxy(value, prop)
                 }
+                return value
             },
 
             set: (target, prop, value) => {
@@ -340,7 +343,7 @@ class SmartTable extends TiBaseComponent {
                 }
 
                 return success
-            }
+            },
         })
     }
 
@@ -478,13 +481,13 @@ customElements.define('smart-table', SmartTable)
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#styles">styles</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 30 2025 15:15:23 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Jun 01 2025 13:12:05 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -26,10 +26,12 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// ts-nocheck
+            <pre class="prettyprint source linenums"><code>// @ts-nocheck
+/* eslint-disable jsdoc/no-undefined-types */
+// ts-nocheck
 /** A zero dependency web component that will display JavaScript console output on-page.
  *
- * @version - see class var
+ * version - see class var
  *
  * @example
  *  &lt;div id="more">
@@ -125,9 +127,9 @@ template.innerHTML = /*html*/`
  * @function deepAssign Object deep merger
  * method _uibMsgHandler If UIBUILDER for Node-RED is active, auto-handle incoming messages targetted at instance id
  *
- * @fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * @fires state-timeline:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * @fires state-timeline:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
+ * fires state-timeline:connected - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * fires state-timeline:disconnected - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * fires state-timeline:attribChanged - When a watched attribute changes. `evt.details` contains the details of the change.
  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
  *
  * Standard watched attributes (common across all my components):
@@ -198,8 +200,8 @@ class StateTimeline extends HTMLElement {
     }
 
     static defaultStates = {
-        'undefined': { name: 'undefined', label: 'Undefined', color: 'darkslategray' },
-        'offline': { name: 'offline', label: 'Offline', color: 'grey' },
+        'undefined': { name: 'undefined', label: 'Undefined', color: 'darkslategray', },
+        'offline': { name: 'offline', label: 'Offline', color: 'grey', },
     }
 
     /** Runtime configuration settings */
@@ -226,7 +228,9 @@ class StateTimeline extends HTMLElement {
         return ['inherit-style']
     }
 
-    /** Report the current component version string */
+    /** Report the current component version string
+     * @returns {string} The component version string
+    */
     get version() {
         return StateTimeline.version
     }
@@ -237,7 +241,7 @@ class StateTimeline extends HTMLElement {
     constructor() {
         super()
 
-        this.attachShadow({ mode: 'open', delegatesFocus: true })
+        this.attachShadow({ mode: 'open', delegatesFocus: true, })
             // Only append the template if code and style isolation is needed
             .append(template.content.cloneNode(true))
 
@@ -295,7 +299,7 @@ class StateTimeline extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -308,7 +312,7 @@ class StateTimeline extends HTMLElement {
             composed: true,
             detail: {
                 id: this.id,
-                name: this.name
+                name: this.name,
             },
         } ) )
     }
@@ -317,8 +321,8 @@ class StateTimeline extends HTMLElement {
      * NOTE: On initial startup, this is called for each watched attrib set in HTML - BEFORE connectedCallback is called.
      * Attribute values can only ever be strings
      * @param {string} attrib The name of the attribute that is changing
-     * @param {string} newVal The new value of the attribute
      * @param {string} oldVal The old value of the attribute
+     * @param {string} newVal The new value of the attribute
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
         // Don't bother if the new value same as old
@@ -339,12 +343,13 @@ class StateTimeline extends HTMLElement {
                 attribute: attrib,
                 newVal: newVal,
                 oldVal: oldVal,
-            }
+            },
         } ) )
     }
 
     /** OPTIONAL. Update runtime configuration, return complete config
      * @param {object|undefined} config If present, partial or full set of options. If undefined, fn returns the current full option settings
+     * @returns {object} The current full option settings
      */
     config(config) {
         // Merge config but ensure that default states always present
@@ -377,6 +382,7 @@ class StateTimeline extends HTMLElement {
 
         // date/time of new entry
         const ts = new Date()
+        // @ts-ignore
         const stateDuration = ts - this.prevTs
 
         // Get a reference to the PREVIOUS entry
@@ -448,7 +454,7 @@ class StateTimeline extends HTMLElement {
             for (let k in source) { // eslint-disable-line prefer-const
                 const vs = source[k]
                 const vt = target[k]
-                if (Object(vs) == vs &amp;&amp; Object(vt) === vt) { // eslint-disable-line eqeqeq
+                if (Object(vs) == vs &amp;&amp; Object(vt) === vt) {
                     target[k] = StateTimeline.deepAssign(vt, vs)
                     continue
                 }
@@ -483,13 +489,13 @@ if (timeline) {
 
     // Define possible states
     const statesConfig = {
-        'true': { name: 'true', label: 'ON', color: 'green' },
-        'false': { name: 'false', label: 'OFF', color: 'red' }
+        'true': { name: 'true', label: 'ON', color: 'green', },
+        'false': { name: 'false', label: 'OFF', color: 'red', },
     }
 
     // Set config for the component (e.g., 30 seconds span)
     // ts-ignore
-    timeline.config({ states: statesConfig, timespan: 30 })
+    timeline.config({ states: statesConfig, timespan: 30, })
 
     // Randomly add "true" and "false" states every 3 seconds
     setInterval(() => {
@@ -516,13 +522,13 @@ if (timeline) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Alpha.html">Alpha</a></li><li><a href="Beta.html">Beta</a></li><li><a href="Live.html">Live</a></li></ul><h3>Classes</h3><ul><li><a href="Alpha.UibThemeChanger.html">UibThemeChanger</a></li><li><a href="ButtonSend.html">ButtonSend</a></li><li><a href="CallOut.html">CallOut</a></li><li><a href="ChartStatetrail.html">ChartStatetrail</a></li><li><a href="CollapsibleHeadings.html">CollapsibleHeadings</a></li><li><a href="ComponentTemplate.html">ComponentTemplate</a></li><li><a href="DataList.html">DataList</a></li><li><a href="HtmlInclude.html">HtmlInclude</a></li><li><a href="LabelledValue.html">LabelledValue</a></li><li><a href="LedGauge.html">LedGauge</a></li><li><a href="SimpleCard.html">SimpleCard</a></li><li><a href="SimpleContainer.html">SimpleContainer</a></li><li><a href="SmartTable.html">SmartTable</a></li><li><a href="StateTimeline.html">StateTimeline</a></li><li><a href="SyntaxHighlight.html">SyntaxHighlight</a></li><li><a href="TodoApp.html">TodoApp</a></li><li><a href="VisibleConsole.html">VisibleConsole</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#$">$</a></li><li><a href="global.html#_uibMsgHandler">_uibMsgHandler</a></li><li><a href="global.html#attributeChangedCallback">attributeChangedCallback</a></li><li><a href="global.html#categoryMap">categoryMap</a></li><li><a href="global.html#checkMode">checkMode</a></li><li><a href="global.html#color">color</a></li><li><a href="global.html#componentName">componentName</a></li><li><a href="global.html#data">data</a></li><li><a href="global.html#doNote">doNote</a></li><li><a href="global.html#floatRound">floatRound</a></li><li><a href="global.html#getStackTrace">getStackTrace</a></li><li><a href="global.html#itemMap">itemMap</a></li><li><a href="global.html#maxEntries">maxEntries</a></li><li><a href="global.html#states">states</a></li><li><a href="global.html#str2bool">str2bool</a></li><li><a href="global.html#styles">styles</a></li><li><a href="global.html#template">template</a></li><li><a href="global.html#timespan">timespan</a></li><li><a href="global.html#uibSend">uibSend</a></li><li><a href="global.html#window%255Bundefined%255D">window[undefined]</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri May 30 2025 15:15:23 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sun Jun 01 2025 13:12:05 GMT+0100 (British Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
