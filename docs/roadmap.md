@@ -8,13 +8,18 @@ lastUpdated: 2025-05-30 20:02:39
 
 ## Next
 
-* ?
+* data-list
+  *  Allow nested lists
+* Base and template
+  * Add JSDoc `@private` to private methods and properties.
 
 ## Other thoughts
 
 * Expand _uibMsgHandler to allow for msg.payload.attributes. Use a uibuilder fn instead of a local one.
 
 * Use a packaged version of uib-brand.css instead of the one in the `dist` folder.
+
+* Allow an option on base to listen for specific events - only with uibuilder, send the events to Node-RED.
 
 * Some way to create a visual layout based on an input JSON. With a way to dynamically change the layout. The idea being to enable an entire page to be laid out using configuration instead of code with input msgs/events allowing real-time changes.
 

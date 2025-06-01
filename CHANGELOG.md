@@ -6,6 +6,23 @@
 * Tidy up and rationalise the docs home page, roadmap and ideas pages.
 * Start to document the standard Node-RED/UIBUILDER to browser remote-control integration.
 * A few minor documentation fixes.
+* Website homepage correction - thanks to [Paul Reed](https://github.com/Paul-Reed) for spotting the issue.
+
+### `data-list` Component
+
+* No longer uses the shadow DOM. Specific styles prepended to the `head`.
+
+  This now makes it possible to style the inner parts of nested lists.
+
+* For nested lists, sub-lists are given a class of `nested-list` and a `data-depth` attribute so that they can be styled separately.
+
+### Base Component
+
+* **NEW** - `prependStylesheet(styletext, order)` method added. This allows you to prepend a stylesheet to the component. This is useful for adding styles that need to be applied before the page's own styles. Especially useful for components that don't use the Shadow DOM.
+
+### Component Template
+
+* Added comment to `constructor` to remind that `this.prependStylesheet` can be used to add styles before the page's own styles. when the component does not use the Shadow DOM.
 
 ## v1.1.0
 
