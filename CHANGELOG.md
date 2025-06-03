@@ -2,7 +2,9 @@
 
 ## v1.3.0
 
+### `data-list` Component
 
+* Updated documentation and demo/test page to illustrate how to use the `nested-list` class and `data-depth` attribute to style nested lists.
 
 ## v1.2.0
 
