@@ -26,25 +26,7 @@ import TiBaseComponent from '../libs/ti-base-component'
  *       topic (uib)
  */
 
-const styles = `
-    data-list {
-        --list-style: disc; /* Default list style type */
-        --nested-indent: 40px; /* Default nested list indent - all browsers use 40px by default */
-    }
-    data-list ul {
-        list-style: var(--list-style);
-    }
-    /* Nested list indentation */
-    data-list ul ul {
-        padding-inline-start: var(--nested-indent);
-        margin-inline-start: 0;
-    }
-    data-list .nested-container {
-        /* No list bullet on an li containing a nested lists unless the key text is shown */
-        list-style: none;
-    }
-`
-/** Only use a template if you want to isolate the code and CSS */
+/** Only use a template if you want to isolate the code and CSS using the Shadow DOM */
 // const template = document.createElement('template')
 // template.innerHTML = /*html*/`
 //     <style>
@@ -70,6 +52,25 @@ const styles = `
 //     <slot></slot>
 //     <!-- <ul></ul> -->
 // `
+/** Only use this if using Light DOM but want scoped styles */
+const styles = `
+    data-list {
+        --list-style: disc; /* Default list style type */
+        --nested-indent: 40px; /* Default nested list indent - all browsers use 40px by default */
+    }
+    data-list ul {
+        list-style: var(--list-style);
+    }
+    /* Nested list indentation */
+    data-list ul ul {
+        padding-inline-start: var(--nested-indent);
+        margin-inline-start: 0;
+    }
+    data-list .nested-container {
+        /* No list bullet on an li containing a nested lists unless the key text is shown */
+        list-style: none;
+    }
+`
 
 /** Namespace
  * @namespace Live
@@ -129,7 +130,7 @@ const styles = `
  */
 class DataList extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-05-31'
+    static componentVersion = '2025-06-03'
 
     /** The top-level list element - this is created in the shadow DOM */
     #list = null
@@ -163,11 +164,13 @@ class DataList extends TiBaseComponent {
         // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
         // if (template && template.content) this._construct(template.content.cloneNode(true))
 
-        this.prependStylesheet(styles)
+        // Otherwise, if component styles are needed, use the following instead:
+        this.prependStylesheet(styles, 0)
     }
 
     /** Runs when an instance is added to the DOM
      * Runs AFTER the initial attributeChangedCallback's
+     * @private
      */
     connectedCallback() {
         // console.info(`[DataList] ${this.id} connectedCallback (${this.tagName})`)
@@ -189,7 +192,9 @@ class DataList extends TiBaseComponent {
         this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
-    /** Runs when an instance is removed from the DOM */
+    /** Runs when an instance is removed from the DOM
+     * @private
+     */
     disconnectedCallback() {
         this._disconnect() // Keep at end.
     }
@@ -200,6 +205,7 @@ class DataList extends TiBaseComponent {
      * @param {string} attrib Name of watched attribute that has changed
      * @param {string} oldVal The previous attribute value
      * @param {string} newVal The new attribute value
+     * @private
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
         // console.info(`[DataList] ${this.id} attributeChangedCallback: ${attrib} changed from "${oldVal}" to "${newVal}"`)
@@ -220,32 +226,6 @@ class DataList extends TiBaseComponent {
         this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
     }
 
-    /** Updates the list attributes based on the current type and style
-     * @param {HTMLElement} listEl The list element to update
-     * @param {"ol"|"ul"} listType The type of list to use, either 'ol' for ordered or 'ul' for unordered
-     */
-    updateListAttributes(listEl, listType) {
-        if (listEl) {
-            if (listEl) {
-                // Update CSS classes/attributes instead of recreating element
-                listEl.setAttribute('data-list-type', listType)
-
-                // Update ARIA attributes for accessibility
-                if (listType === 'ol') {
-                    this.listStyle = 'decimal'
-                    listEl.setAttribute('aria-label', 'Ordered list')
-                } else {
-                    this.listStyle = 'disc'
-                    listEl.setAttribute('aria-label', 'Unordered list')
-                }
-            }
-            if (this.#listStyle) {
-                // Update the CSS variable for the list style
-                listEl.style.setProperty('--list-style', this.#listStyle)
-            }
-        }
-    }
-
     // Getter/setter for the `type` public property - maps to this.#type
     set type(val) {
         if (!['ul', 'ol'].includes(val)) {
@@ -255,7 +235,7 @@ class DataList extends TiBaseComponent {
 
         this.#type = val
 
-        this.updateListAttributes(this.#list, this.#type)
+        this._updateListAttributes(this.#list, this.#type)
     }
     get type() {
         return this.#type
@@ -264,7 +244,7 @@ class DataList extends TiBaseComponent {
     // Getter/setter for the `listStyle` public property - maps to this.#listStyle
     set liststyle(val) {
         this.#listStyle = val
-        this.updateListAttributes(this.#list, this.#type)
+        this._updateListAttributes(this.#list, this.#type)
     }
     get liststyle() {
         return this.#listStyle
@@ -279,10 +259,10 @@ class DataList extends TiBaseComponent {
 
         // Dynamically build the content of the ul/ol
         // Object.keys(this.#entries).forEach( this.buildListItem.bind(this))
-        this.buildList(this.#entries, this, this.#type, 1)
+        this._buildList(this.#entries, this, this.#type, 1)
 
         this.#list = this.querySelector('ul')
-        this.updateListAttributes(this.#list, this.#type)
+        this._updateListAttributes(this.#list, this.#type)
 
         // Issue a custom event to notify that the data has changed
         this._event('dataChanged', this.#entries)
@@ -305,13 +285,16 @@ class DataList extends TiBaseComponent {
         this.data = this.#entries
     }
 
+    // #region ---- Private methods ---- //
+
     /** Builds a list from input data
      * @param {Array|object} listData Source data for the list, can be an array or an object
      * @param {HTMLElement|ShadowRoot} parentEl The parent element to append the list to
      * @param {"ol"|"ul"} type  The type of list to create, either 'ol' for ordered or 'ul' for unordered
      * @param {number} depth  Recursion depth. Defaults to 1. Used to limit recursion depth for nested objects/arrays.
+     * @private
      */
-    buildList(listData, parentEl, type, depth) {
+    _buildList(listData, parentEl, type, depth) {
         if (depth === undefined) depth = 1
         // console.log(`[DataList] ${this.id} buildList: listData=${listData}, listEl=${parentEl}, depth=${depth}`)
 
@@ -334,7 +317,7 @@ class DataList extends TiBaseComponent {
                     // If depth is too high, just show the key and value as a string
                     listEl.insertAdjacentHTML(
                         'beforeend',
-                        this.buildLIhtml({ arrayType: Array.isArray(listData), key, value: JSON.stringify(value), i, })
+                        this._buildLIhtml({ arrayType: Array.isArray(listData), key, value: JSON.stringify(value), i, })
                     )
                     console.warn(`[DataList] ${this.id} buildList: Depth limit reached for key "${key}", showing as string.`)
                     return
@@ -354,8 +337,8 @@ class DataList extends TiBaseComponent {
                 }
 
                 // recurse to create a nested list
-                this.buildList(value, li, type, ++depth)
-                this.updateListAttributes(li, type)
+                this._buildList(value, li, type, ++depth)
+                this._updateListAttributes(li, type)
                 // add the new list item to its parent element
                 listEl.appendChild(li)
             } else {
@@ -363,7 +346,7 @@ class DataList extends TiBaseComponent {
                 // console.log(`[DataList] ${this.id} buildList: key=${key}, value=${value}, i=${i}`)
                 listEl.insertAdjacentHTML(
                     'beforeend',
-                    this.buildLIhtml({ arrayType: Array.isArray(listData), key, value, i, })
+                    this._buildLIhtml({ arrayType: Array.isArray(listData), key, value, i, })
                 )
             }
         })
@@ -379,8 +362,9 @@ class DataList extends TiBaseComponent {
      * @param {string} options.value The value for the list item, displayed as the text
      * @param {number} options.i The index of the item in the list, used for data-index attribute
      * @returns {string} The HTML string for the list item
+     * @private
      */
-    buildLIhtml({ arrayType, key, value, i, }) {
+    _buildLIhtml({ arrayType, key, value, i, }) {
         // check if this.#entries is an array
         if (arrayType) {
             return `<li id="${this.id}-${key}" data-index="${i}">${value}</li>`
@@ -389,6 +373,35 @@ class DataList extends TiBaseComponent {
         // otherwise, show the key followed by the separator
         return `<li id="${this.id}-${key}" data-index="${i}">${this.keyvalueseparator === 'NULL' ? '' : `${key}${this.keyvalueseparator}`}${value}</li>`
     }
+
+    /** Updates the list attributes based on the current type and style
+     * @param {HTMLElement} listEl The list element to update
+     * @param {"ol"|"ul"} listType The type of list to use, either 'ol' for ordered or 'ul' for unordered
+     * @private
+     */
+    _updateListAttributes(listEl, listType) {
+        if (listEl) {
+            if (listEl) {
+                // Update CSS classes/attributes instead of recreating element
+                listEl.setAttribute('data-list-type', listType)
+
+                // Update ARIA attributes for accessibility
+                if (listType === 'ol') {
+                    this.listStyle = 'decimal'
+                    listEl.setAttribute('aria-label', 'Ordered list')
+                } else {
+                    this.listStyle = 'disc'
+                    listEl.setAttribute('aria-label', 'Unordered list')
+                }
+            }
+            if (this.#listStyle) {
+                // Update the CSS variable for the list style
+                listEl.style.setProperty('--list-style', this.#listStyle)
+            }
+        }
+    }
+
+    // #endregion ---- Private methods ---- //
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
