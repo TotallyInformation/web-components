@@ -24,7 +24,7 @@
 
 import TiBaseComponent from '../../libs/ti-base-component'
 
-/** Only use a template if you want to isolate the code and CSS */
+/** Only use a template if you want to isolate the code and CSS using the Shadow DOM */
 const template = document.createElement('template')
 template.innerHTML = /*html*/`
     <style>
@@ -35,6 +35,12 @@ template.innerHTML = /*html*/`
     </style>
     <slot></slot>
 `
+/** Only use this if using Light DOM but want scoped styles */
+// const styles = `
+//     component-template {
+//         /* Scoped to this component */
+//     }
+// `
 
 /** Namespace
  * @namespace Alpha
@@ -91,7 +97,7 @@ template.innerHTML = /*html*/`
  */
 class ComponentTemplate extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-06-01'
+    static componentVersion = '2025-06-03'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -115,6 +121,7 @@ class ComponentTemplate extends TiBaseComponent {
 
     /** Runs when an instance is added to the DOM
      * Runs AFTER the initial attributeChangedCallback's
+     * @private
      */
     connectedCallback() {
         this._connect() // Keep at start.
@@ -122,7 +129,9 @@ class ComponentTemplate extends TiBaseComponent {
         this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
-    /** Runs when an instance is removed from the DOM */
+    /** Runs when an instance is removed from the DOM
+     * @private
+     */
     disconnectedCallback() {
         this._disconnect() // Keep at end.
     }
@@ -133,6 +142,7 @@ class ComponentTemplate extends TiBaseComponent {
      * @param {string} attrib Name of watched attribute that has changed
      * @param {string} oldVal The previous attribute value
      * @param {string} newVal The new attribute value
+     * @private
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
         /** Optionally ignore attrib changes until instance is fully connected

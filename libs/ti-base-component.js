@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-06-01'
+    static baseVersion = '2025-06-03'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -162,7 +162,7 @@ class TiBaseComponent extends HTMLElement {
         return target
     }
 
-    /** Optionally apply an external linked style sheet (called from connectedCallback)
+    /** Optionally apply an external linked style sheet for Shadow DOM (called from connectedCallback)
      * param {*} url The URL for the linked style sheet
      */
     async doInheritStyles() {
@@ -195,8 +195,7 @@ class TiBaseComponent extends HTMLElement {
         }
     }
 
-    /**
-     * Attaches a new stylesheet before all other stylesheets in the light DOM
+    /** Attaches a new stylesheet before all other stylesheets in the light DOM
      * @param {string} cssText - CSS text to inject directly
      * @param {number} order - Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0.
      * @returns {Element} The created or existing style element
@@ -253,6 +252,7 @@ class TiBaseComponent extends HTMLElement {
     }
 
     // #region ---- Methods private to extended classes ----
+    // These are called from a class that extends this base class but should not be called directly by the user.
 
     /** Standardised connection. Call from the start of connectedCallback fn */
     _connect() {
