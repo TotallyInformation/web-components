@@ -27,22 +27,22 @@ import TiBaseComponent from '../libs/ti-base-component'
  */
 
 const styles = `
-        data-list {
-            --list-style: disc; /* Default list style type */
-            --nested-indent: 40px; /* Default nested list indent - all browsers use 40px by default */
-        }
-        data-list ul {
-            list-style: var(--list-style);
-        }
-        /* Nested list indentation */
-        data-list ul ul {
-            padding-inline-start: var(--nested-indent);
-            margin-inline-start: 0;
-        }
-        data-list .nested-container {
-            /* No list bullet on an li containing a nested lists unless the key text is shown */
-            list-style: none;
-        }
+    data-list {
+        --list-style: disc; /* Default list style type */
+        --nested-indent: 40px; /* Default nested list indent - all browsers use 40px by default */
+    }
+    data-list ul {
+        list-style: var(--list-style);
+    }
+    /* Nested list indentation */
+    data-list ul ul {
+        padding-inline-start: var(--nested-indent);
+        margin-inline-start: 0;
+    }
+    data-list .nested-container {
+        /* No list bullet on an li containing a nested lists unless the key text is shown */
+        list-style: none;
+    }
 `
 /** Only use a template if you want to isolate the code and CSS */
 // const template = document.createElement('template')
