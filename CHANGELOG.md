@@ -1,5 +1,9 @@
 # Totally Information Web Components - Change Log
 
+## v1.3.0
+
+
+
 ## v1.2.0
 
 * Lots of ESLINT fixes.
@@ -18,7 +22,7 @@
 
 ### Base Component
 
-* **NEW** - `prependStylesheet(styletext, order)` method added. This allows you to prepend a stylesheet to the component. This is useful for adding styles that need to be applied before the page's own styles. Especially useful for components that don't use the Shadow DOM.
+* **NEW** - `prependStylesheet(styletext, order)` method added. This allows you to prepend a stylesheet for the component to the web page. This is useful for adding styles that need to be applied before the page's own styles. Especially useful for components that don't use the Shadow DOM.
 
 ### Component Template
 
