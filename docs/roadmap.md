@@ -3,15 +3,14 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-lastUpdated: 2025-05-30 20:02:39
+lastUpdated: 2025-06-03 09:56:55
 ---
 
 ## Next
 
 * data-list
-  *  Allow nested lists
-* Base and template
-  * Add JSDoc `@private` to private methods and properties.
+  *  [x] Allow nested lists
+  *  [ ] Allow lists to have tickbox inputs instead of bullets (or allow both - esp. for numbered lists). (un)tick action sends a message to uibuilder and outputs a custom event.
 
 ## Other thoughts
 
