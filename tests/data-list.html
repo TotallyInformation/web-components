@@ -4,6 +4,12 @@
     <title>Testing TotallyInformation's web-components - data-list</title>
 
     <link type="text/css" rel="stylesheet" href="./resources/style.css" media="all">
+    <style>
+        /* Override style for level 3 nested lists */
+        ul[data-depth="3"] {
+            --list-style: '➡️';
+        }
+    </style>
 
     <script defer src="../dist/call-out.iife.min.js"></script>
     <script defer src="../dist/data-list.iife.min.js"></script>

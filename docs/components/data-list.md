@@ -133,6 +133,16 @@ You can override these variables either in your main CSS file or by using the `s
 <data-list style="--nested-indent: 1em;"></data-list>
 ```
 
+### Styling Nested Lists
+Nested lists will start with the same type and styles as the parent list. If you want to style a sub-list separately, you can use the class `nested-list` and the `data-depth` attribute to target specific CSS.
+
+```css
+data-list .nested-list[data-depth="2"] {
+    --list-style: '➡️';
+    background-color: var(--warning);
+}
+```
+
 ## Events
 
 The standard events for this library of components are also available:
