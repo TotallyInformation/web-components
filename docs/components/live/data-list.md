@@ -231,6 +231,7 @@ The standard message format is:
 * [x] Allow for nested lists to be styled separately.
 * [x] Use Light DOM rather than Shadow DOM so that styles can be more easily controlled.
 * [ ] Add attribute to turn on list item click events. This will allow for the list items to be clickable and trigger an event (and messge back to Node-RED if using UIBUILDER).
+* [ ] Add option to make sub-lists collapsible. This will allow for nested lists to be expanded or collapsed by clicking on the parent list item.
 * ~~Add checkbox option to allow for checkboxes to be added to list items.~~ No, use a separate `checkbox-list` component instead.
 
 ## Design References
@@ -241,12 +242,6 @@ The standard message format is:
 
 Import this flow into Node-RED.
 
-```json
-[{"id":"2c47031326e8fd01","type":"tab","label":"data-list test page","disabled":false,"info":""}]
-```
-
-```json
-[{"id":"baf98201102ea713","type":"link in","z":"2c47031326e8fd01","name":"link in 56","links":["349a99ecf4a3ad8a"],"x":64,"y":400,"wires":[["b6221e56cb4d6652"]]}]
 ```json
 [{"id":"349a99ecf4a3ad8a","type":"group","z":"2c47031326e8fd01","name":"If the data-list test page is showing. Update the first list. New HTML text content is sent first and then a new list.","style":{"fill":"#e3f3d3","fill-opacity":"0.2","label":true,"color":"#000000"},"nodes":["b6221e56cb4d6652","fd5456075222084c","625003b509fdb71d","f6378b50eef90925","f9139d2d46e53071"],"x":64,"y":359,"w":702,"h":122},{"id":"b6221e56cb4d6652","type":"link out","z":"2c47031326e8fd01","g":"349a99ecf4a3ad8a","name":"link out 56","mode":"link","links":["baf98201102ea713"],"x":725,"y":400,"wires":[]},{"id":"fd5456075222084c","type":"inject","z":"2c47031326e8fd01","g":"349a99ecf4a3ad8a","name":"data-list:","props":[{"p":"str","v":"$formatNumber($random()*100, \"0.0\")\t\t","vt":"jsonata"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","x":170,"y":400,"wires":[["625003b509fdb71d","f9139d2d46e53071"]]},{"id":"625003b509fdb71d","type":"uib-update","z":"2c47031326e8fd01","g":"349a99ecf4a3ad8a","name":"Change dl1 text","topic":"","mode":"update","modeSourceType":"update","cssSelector":"#dl1","cssSelectorType":"str","slotSourceProp":"<p>List is replaced by a message from Node-RED.</p>","slotSourcePropType":"str","attribsSource":"","attribsSourceType":"msg","slotPropMarkdown":false,"x":370,"y":400,"wires":[["b6221e56cb4d6652"]]},{"id":"f6378b50eef90925","type":"change","z":"2c47031326e8fd01","g":"349a99ecf4a3ad8a","name":"Change dl1 list","rules":[{"t":"set","p":"payload","pt":"msg","to":"{\"keyvalueseparator\":\" 💠 \",\"liststyle\":\"'😎 '\",\"data\":{\"xxx\":\"Triple x\",\"yyy\":\"Triple y\",\"zzz\":\"triple z\"},\"style\":\"background-color: var(--surface4);\"}","tot":"json"},{"t":"set","p":"topic","pt":"msg","to":"data-list::dl1","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":560,"y":440,"wires":[["b6221e56cb4d6652"]]},{"id":"f9139d2d46e53071","type":"delay","z":"2c47031326e8fd01","g":"349a99ecf4a3ad8a","name":"","pauseType":"delay","timeout":"1","timeoutUnits":"milliseconds","rate":"1","nbRateUnits":"1","rateUnits":"second","randomFirst":"1","randomLast":"5","randomUnits":"seconds","drop":false,"allowrate":false,"outputs":1,"x":390,"y":440,"wires":[["f6378b50eef90925"]]}]
 ```
