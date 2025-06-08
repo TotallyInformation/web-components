@@ -3,14 +3,12 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-lastUpdated: 2025-06-03 09:56:55
+updated: 2025-06-08 13:49:08
 ---
 
 ## Next
 
-* data-list
-  *  [x] Allow nested lists
-  *  [ ] Allow lists to have tickbox inputs instead of bullets (or allow both - esp. for numbered lists). (un)tick action sends a message to uibuilder and outputs a custom event.
+* [ ] NEW: check-list
 
 ## Other thoughts
 
@@ -36,16 +34,6 @@ lastUpdated: 2025-06-03 09:56:55
 
 * Ideas from [elements-x](https://elements-x.com/?path=/docs/getting-started--docs)
 
-
-## Components started but not yet ready for use
-
-See also the [Home](/) page.
-
-| Name            | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| `chart-frappe`  | Frappe Charts. Basic display works |
-| `nav-bar`       | Top navbar menu |
-| `gauge-steel`   | Steelseries gauges |
 
 ## On-hold
 
@@ -79,7 +67,7 @@ See the `not-complete` folder.
 | `simple-slider` | |
 | `simple-switch` | https://web.dev/building-a-switch-component/ |
 | `simple-table`  | Takes a JSON or JavaScript object or array and displays the contents in a simple table format. |
-| `switch-list    | https://web.dev/building-a-switch-component/ |
+| `switch-list`   | https://web.dev/building-a-switch-component/ |
 | `toast-msg`     | |
 | `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
 | status          | List view with colour indication of status (e.g. on/off or RAG) |

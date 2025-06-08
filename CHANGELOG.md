@@ -2,9 +2,16 @@
 
 ## v1.3.0
 
+### Test/demo pages
+
+* Re-organised into sub-folders for experiments, alpha, beta and live components.
+* New experimental pages.
+
 ### `data-list` Component
 
 * Updated documentation and demo/test page to illustrate how to use the `nested-list` class and `data-depth` attribute to style nested lists.
+* Improved warning/error messages - all prefixed with `data-list:` and the instance id.
+* Added Node-RED flow example to the documentation to illustrate how to use the `data-list` component with UIBUILDER for Node-RED.
 
 ## v1.2.0
 
