@@ -35,17 +35,30 @@
         <section>
             <article>
                 <h2>1) Items added dynamically using JavaScript with object input</h2>
-                <!-- override bullet type -->
                 <data-list id="dl1" style="--list-style: disclosure-closed">
-                    Items added by JavaScript
+                    <p>
+                        Bullet style is set manually to <code>disclosure-closed</code> using a <code>style</code> attribute to set the <code>--list-style</code> CSS variable.
+                    </p>
+                    <p>
+                        Data is added dynamically by script once the page has fully loaded.
+                    </p>
+                    <p>
+                        After 4 seconds, the second entry is amended and a new entry is added.
+                        After 6 seconds, the list type is changed to <code>ol</code> and after 8 seconds, the list style is changed to <code>upper-roman</code>.
+                    </p>
                 </data-list>
             </article>
 
             <article>
                 <h2>2) Items added dynamically from a global object variable</h2>
-                <!-- Using object input, override separator between key and value -->
                 <data-list id="dl2" listvar="mylist1" type="ol" keyvalueseparator=" - ">
-                    Items added by global object variable
+                    <p>
+                        Data is added dynamically using a global object variable.
+                        Attributes are used to set the <code>type</code> to <code>ol</code> and the key/value separator to "<code>&nbsp;-&nbsp;</code>".
+                    </p>
+                    <p>
+                        The list type is changed to <code>ul</code> after 6 seconds and the list style is changed to <code>disclosure-open</code> after 8 seconds.
+                    </p>
                 </data-list>
             </article>
 
@@ -53,13 +66,29 @@
                 <h2>3) Items added dynamically from a global array variable</h2>
                 <!-- Using array input, override list style (don't forget to wrap custom entries with quotes) -->
                 <data-list id="dl3" listvar="mylist2" liststyle="'➡️'">
-                    Items added by global array variable
+                    <p>
+                        Data is added dynamically using a global object variable.
+                        Attributes are used to set the list style to a custom style of "<code>'➡️'</code>".
+                    </p>
+                    <p>
+                        After 4 seconds, the third entry is amended and a new 10th entry is added.
+                    </p>
                 </data-list>
             </article>
 
             <article>
                 <h2>4) Nested lists</h2>
-                <data-list id="dl4" listvar="mylist3"></data-list>
+                <data-list id="dl4" listvar="mylist3">
+                    <p>
+                        Data is added dynamically using a global object variable.
+                    </p>
+                    <p>
+                        This list contains nested entries. The third entry is an object with sub-entries (depth=2) itself containing an array of sub-entries (depth=3).
+                    </p>
+                    <p>
+                        The level 3 sub-list has a custom list style set to "<code>➡️</code>" by a CSS style definition in the page's <code>head</code> section.
+                    </p>
+                </data-list>
             </article>
         </section>
     </main>
@@ -142,7 +171,7 @@
                 "three": "This is the third list entry",
             }
 
-            // Change entries in lists after 4 seconds
+            // Change entries in lists 1 & 3 after 4 seconds
             setTimeout(function(){
                 console.info('Updating entries in #1 and #3 after 2 seconds')
 
