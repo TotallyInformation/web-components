@@ -22,6 +22,7 @@
   "devDependencies": {
     "@eslint/js": "^9.20.0",
     "@playwright/test": "^1.52.0",
+    "@stylistic/eslint-plugin": "^4.0.1",
     "@types/node": "^22.5.5",
     "docsify": "^4.13.1",
     "docsify-copy-code": "^3.0.0",
@@ -36,7 +37,8 @@
     "eslint-plugin-jsdoc": "^50.6.3",
     "eslint-plugin-promise": "^7.2.1",
     "globals": "^16.0.0",
-    "jsdoc": "^4.0.3"
+    "jsdoc": "^4.0.3",
+    "plotly.js-dist": "^3.0.1"
   },
   "directories": {
     "example": "./tests",
@@ -68,8 +70,5 @@
   "bugs": {
     "url": "https://github.com/TotallyInformation/web-components/issues"
   },
-  "homepage": "https://totallyinformation.github.io/web-components/#/",
-  "dependencies": {
-    "@stylistic/eslint-plugin": "^4.0.1"
-  }
+  "homepage": "https://totallyinformation.github.io/web-components/#/"
 }
