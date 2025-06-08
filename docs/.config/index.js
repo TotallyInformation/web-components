@@ -86,22 +86,45 @@ window.$docsify = { //  eslint-disable-line no-undef
                 footer[5] = ''
 
                 if (vm.frontmatter) { // vm only exists per page, requires plugin
-                    const fm = vm.frontmatter
                     //#region --- Add front-matter (YAML) standard metadata to each page if present ---
+                    const fm = vm.frontmatter
+                    let statusType = ''
+                    let locn = ''
+                    let status = 'Unknown'
                     if (fm.status) {
-                        const statusType = {
-                            'live': 'Ready for extended use',
-                            'beta': 'Ready for basic use',
-                            'alpha': 'Experimental, still in early development',
+                        status = fm.status
+                        const statusLc = status.toLowerCase()
+                        const statusText = {
+                            'live': 'Ready for extended use.',
+                            'beta': 'Ready for basic use.',
+                            'alpha': 'Experimental, still in early development.',
+                            'pre-alpha': 'Early development, not ready for use.',
+                            'experiments': 'Early development, not ready for use.',
                         }
-                        content = `> [!NOTE]
-                         > STATUS: _${fm.status}_. ${statusType[fm.status.toLowerCase()]}. [Demo](https://wc.totallyinformation.net/tests/${fm.title}).
+                        if (statusText[statusLc]) {
+                            statusType = statusText[statusLc]
+                        }
 
-                        ${content}`
+                        if (fm.demo) {
+                            locn = `[Demo](${window.location.origin}/${fm.demo}).`
+                        } else {
+                            if (statusLc === `pre-alpha`) {
+                                locn = `experiments`
+                            } else {
+                                locn = statusLc
+                            }
+                            locn = `[Demo](${window.location.origin}/tests/${locn}/${fm.title}).`
+                        }
                     }
+                    content = `> [!NOTE]\n> STATUS: _${status}_. ${statusType} ${locn}\n\n${content}`
 
                     if (fm.description) {
                         content = `${fm.description}\n\n${content}`
+                        // Update the output page's description meta tag
+                        const desc = document.querySelector('meta[name="description"]')
+                        if (desc) {
+                            desc.setAttribute('content', fm.description)
+                        }
                     }
 
                     if (fm.title) {
