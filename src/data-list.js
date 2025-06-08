@@ -55,19 +55,23 @@ import TiBaseComponent from '../libs/ti-base-component'
 /** Only use this if using Light DOM but want scoped styles */
 const styles = `
     data-list {
+        --base-margin: var(--base-margin, 1rem);
         --list-style: disc; /* Default list style type */
         --nested-indent: 40px; /* Default nested list indent - all browsers use 40px by default */
     }
+    
     data-list ul {
         list-style: var(--list-style);
     }
+    
     /* Nested list indentation */
     data-list ul ul {
         padding-inline-start: var(--nested-indent);
         margin-inline-start: 0;
     }
+    
+    /* No list bullet on an li containing a nested lists unless the key text is shown */
     data-list .nested-container {
-        /* No list bullet on an li containing a nested lists unless the key text is shown */
         list-style: none;
     }
 `
@@ -130,7 +134,7 @@ const styles = `
  */
 class DataList extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-06-03'
+    static componentVersion = '2025-06-08'
 
     /** The top-level list element - this is created in the shadow DOM */
     #list = null
@@ -173,19 +177,15 @@ class DataList extends TiBaseComponent {
      * @private
      */
     connectedCallback() {
-        // console.info(`[DataList] ${this.id} connectedCallback (${this.tagName})`)
         this._connect() // Keep at start.
 
+        // If a listvar is specified, make sure it exists globally, if it does, use it to set the data property
         if ( this.listvar && window[this.listvar] ) {
             if ( window[this.listvar] ) {
                 this.data = window[this.listvar]
-                // window.dataList.instances[this.id] = window[newVal]
-                // console.log('>> listvar change >>', this.id, this.#entries, window.dataList.instances[this.id])
-                //window[newVal] = new Proxy()
             } else {
-                console.warn(`[DataList] ${this.id} window.${this.listvar} does not exist, ignoring.`)
+                console.warn(`[${this.localName}] ${this.id} window.${this.listvar} does not exist, ignoring.`)
             }
-
             return
         }
 
@@ -208,7 +208,6 @@ class DataList extends TiBaseComponent {
      * @private
      */
     attributeChangedCallback(attrib, oldVal, newVal) {
-        // console.info(`[DataList] ${this.id} attributeChangedCallback: ${attrib} changed from "${oldVal}" to "${newVal}"`)
         /** Optionally ignore attrib changes until instance is fully connected
          * Otherwise this can fire BEFORE everthing is fully connected.
          */
@@ -229,7 +228,7 @@ class DataList extends TiBaseComponent {
     // Getter/setter for the `type` public property - maps to this.#type
     set type(val) {
         if (!['ul', 'ol'].includes(val)) {
-            console.warn(`[DataList] ${this.id} Invalid type "${val}" specified, defaulting to "ul".`)
+            console.warn(`[${this.localName}] ${this.id} Invalid type "${val}" specified, defaulting to "ul".`)
             val = 'ul'
         }
 
@@ -258,10 +257,8 @@ class DataList extends TiBaseComponent {
         if (this.#list) this.#list.remove()
 
         // Dynamically build the content of the ul/ol
-        // Object.keys(this.#entries).forEach( this.buildListItem.bind(this))
-        this._buildList(this.#entries, this, this.#type, 1)
+        this.#list = this._buildList(this.#entries, this, this.#type, 1)
 
-        this.#list = this.querySelector('ul')
         this._updateListAttributes(this.#list, this.#type)
 
         // Issue a custom event to notify that the data has changed
@@ -292,11 +289,11 @@ class DataList extends TiBaseComponent {
      * @param {HTMLElement|ShadowRoot} parentEl The parent element to append the list to
      * @param {"ol"|"ul"} type  The type of list to create, either 'ol' for ordered or 'ul' for unordered
      * @param {number} depth  Recursion depth. Defaults to 1. Used to limit recursion depth for nested objects/arrays.
+     * @returns {HTMLElement} The created list element
      * @private
      */
     _buildList(listData, parentEl, type, depth) {
         if (depth === undefined) depth = 1
-        // console.log(`[DataList] ${this.id} buildList: listData=${listData}, listEl=${parentEl}, depth=${depth}`)
 
         // Create a new list element (all lists are created as ul, numbering is done via CSS)
         const listEl = document.createElement('ul')
@@ -319,7 +316,7 @@ class DataList extends TiBaseComponent {
                         'beforeend',
                         this._buildLIhtml({ arrayType: Array.isArray(listData), key, value: JSON.stringify(value), i, })
                     )
-                    console.warn(`[DataList] ${this.id} buildList: Depth limit reached for key "${key}", showing as string.`)
+                    console.warn(`[${this.localName}] ${this.id} buildList: Depth limit reached for key "${key}", showing as string.`)
                     return
                 }
 
@@ -343,7 +340,6 @@ class DataList extends TiBaseComponent {
                 listEl.appendChild(li)
             } else {
                 // Otherwise, just create a list item with the key and value
-                // console.log(`[DataList] ${this.id} buildList: key=${key}, value=${value}, i=${i}`)
                 listEl.insertAdjacentHTML(
                     'beforeend',
                     this._buildLIhtml({ arrayType: Array.isArray(listData), key, value, i, })
@@ -352,7 +348,7 @@ class DataList extends TiBaseComponent {
         })
 
         // Attach the list as the last child of the parent element
-        parentEl.appendChild(listEl)
+        return parentEl.appendChild(listEl)
     }
 
     /** Builds a list item HTML string based on the provided options.
