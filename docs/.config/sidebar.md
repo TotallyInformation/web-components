@@ -2,26 +2,32 @@
 
 * Live: Ready for extended use
 
-  * [`button-send`](components/button-send)
-  * [`call-out`](components/call-out)
-  * [`collapsible-headings`](components/collapsible-headings)
-  * [`data-list`](components/data-list)
-  * [`html-include`](components/html-include)
-  * [`led-gauge`](components/led-gauge)
+  * [`button-send`](components/live/button-send)
+  * [`call-out`](components/live/call-out)
+  * [`collapsible-headings`](components/live/collapsible-headings)
+  * [`data-list`](components/live/data-list)
+  * [`html-include`](components/live/html-include)
+  * [`led-gauge`](components/live/led-gauge)
 
 * Beta: Ready for basic use
 
-  * [`labelled-value`](components/labelled-value)
-  * [`syntax-highlight`](components/syntax-highlight)
-  * [`visible-console`](components/visible-console)
+  * [`labelled-value`](components/beta/labelled-value)
+  * [`syntax-highlight`](components/beta/syntax-highlight)
+  * [`visible-console`](components/beta/visible-console)
 
 * Alpha: Experimental, in early development
 
-  * [`chart-statetrail`](components/chart-statetrail)
-  * [`simple-card`](components/simple-card)
-  * [`simple-container`](components/simple-container)
-  * [`smart-table`](components/smart-table)
-  * [`todo-app`](components/todo-app)
+  * [`simple-card`](components/alpha/simple-card)
+  * [`simple-container`](components/alpha/simple-container)
+  * [`smart-table`](components/alpha/smart-table)
+
+* Pre-Alpha: Probably not yet usable
+
+  * [`chart-statetrail`](components/experiments/chart-statetrail)
+  * [`on-off`](components/experiments/on-off)
+  * [`edgewise-meter`](components/experiments/edgewise-meter)
+  * [`todo-app`](components/experiments/todo-app)
+
 
 - [Live Demos](https://wc.totallyinformation.net/tests)
 - [Roadmap](./roadmap)
