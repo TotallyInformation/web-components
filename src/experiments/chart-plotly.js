@@ -1,0 +1,215 @@
+/** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+ *
+ * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'ChartPlotly' and 'chart-plotly'
+ * For better formatting of HTML in template strings, use VSCode's "ES6 String HTML" extension
+ *
+ * Version: See the class code
+ *
+ */
+/** Copyright (c) 2025-2025 Julian Knight (Totally Information)
+ * https://it.knightnet.org.uk, https://github.com/TotallyInformation
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import TiBaseComponent from '../../libs/ti-base-component.js'
+// Need to `npm install plotly.js-dist --save-dev`
+import Plotly from 'plotly.js-dist'
+
+/** Only use a template if you want to isolate the code and CSS using the Shadow DOM */
+const template = document.createElement('template')
+template.innerHTML = /*html*/`
+    <style>
+        :host {
+            display: block;   /* default is inline */
+            contain: content; /* performance boost */
+        }
+        /* Overrides for UIUILDER's default styles */
+        .js-plotly-plot .plotly .main-svg {
+            margin:0;
+            background-color: unset;
+        }
+        .js-plotly-plot .plotly .modebar-btn svg {
+            background-color: unset;
+            margin: unset;
+        }
+    </style>
+    <slot></slot>
+    <div class="plotly-chart"></div>
+`
+/** Only use this if using Light DOM but want scoped styles */
+const styles = `
+    /* Overrides for UIUILDER's default styles */
+    .js-plotly-plot .plotly .main-svg {
+        margin:0;
+        background-color: unset;
+    }
+    .js-plotly-plot .plotly .modebar-btn svg {
+        background-color: unset;
+        margin: unset;
+    }
+`
+
+/** Namespace
+ * @namespace Alpha
+ */
+
+/**
+ * @class
+ * @augments TiBaseComponent
+ * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
+ *
+ * @element chart-plotly
+ * @memberOf Alpha
+ * @license Apache-2.0
+
+ * METHODS FROM BASE: (see TiBaseComponent)
+ * STANDARD METHODS:
+  * @function attributeChangedCallback Called when an attribute is added, removed, updated or replaced
+  * @function connectedCallback Called when the element is added to a document
+  * @function constructor Construct the component
+  * @function disconnectedCallback Called when the element is removed from a document
+
+ * OTHER METHODS:
+  * None
+
+ * CUSTOM EVENTS:
+  * "chart-plotly:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "chart-plotly:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "chart-plotly:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "chart-plotly:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * NOTE that listeners can be attached either to the `document` or to the specific element instance.
+
+ * Standard watched attributes (common across all my components):
+  * @property {string|boolean} inherit-style - Optional. Load external styles into component (only useful if using template). If present but empty, will default to './index.css'. Optionally give a URL to load.
+  * @property {string} name - Optional. HTML name attribute. Included in output _meta prop.
+
+ * Other watched attributes:
+  * None
+
+ * PROPS FROM BASE: (see TiBaseComponent)
+ * OTHER STANDARD PROPS:
+  * @property {string} componentVersion Static. The component version string (date updated). Also has a getter that returns component and base version strings.
+
+ * Other props:
+  * By default, all attributes are also created as properties
+
+ NB: properties marked with 💫 are dynamic and have getters/setters.
+
+ * @slot Container contents
+
+ * @example
+  * <chart-plotly name="myComponent" inherit-style="./myComponent.css"></chart-plotly>
+
+ * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
+ */
+class ChartPlotly extends TiBaseComponent {
+    /** Component version */
+    static componentVersion = '2025-06-07'
+
+    /** Makes HTML attribute change watched
+     * @returns {Array<string>} List of all of the html attribs (props) listened to
+     */
+    static get observedAttributes() {
+        return [
+            // Standard watched attributes:
+            'inherit-style', 'name',
+            // Other watched attributes:
+        ]
+    }
+
+    /** NB: Attributes not available here - use connectedCallback to reference */
+    constructor() {
+        super()
+        // Only attach the shadow dom if code and style isolation is needed - comment out if shadow dom not required
+        // if (template && template.content) this._construct(template.content.cloneNode(true))
+        // Otherwise, if component styles are needed, use the following instead:
+        this.prependStylesheet(styles, 0)
+
+        // const plotlyChart = this.shadowRoot.querySelector('.plotly-chart')
+        const plotlyChart = this
+        if (plotlyChart) {
+            const plotlyData = [{
+                x: [1, 2, 3, 4, 5],
+                y: [1, 2, 4, 8, 16],
+            }]
+            const plotlyLayout = {
+                title: {
+                    text: 'Responsive to window\'s size!',
+                },
+                font: {size: 18,},
+            }
+            const plotlyConfig = {
+                responsive: true, // Make the chart responsive
+                margin: { t: 0, },
+            }
+            // @ts-ignore
+            Plotly.newPlot( plotlyChart, plotlyData, plotlyLayout, plotlyConfig )
+        }
+    }
+
+    /** Runs when an instance is added to the DOM
+     * Runs AFTER the initial attributeChangedCallback's
+     * @private
+     */
+    connectedCallback() {
+        this._connect() // Keep at start.
+
+        this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
+    }
+
+    /** Runs when an instance is removed from the DOM
+     * @private
+     */
+    disconnectedCallback() {
+        this._disconnect() // Keep at end.
+    }
+
+    /** Runs when an observed attribute changes - Note: values are always strings
+     * NOTE: On initial startup, this is called for each watched attrib set in HTML.
+     *       and BEFORE connectedCallback is called.
+     * @param {string} attrib Name of watched attribute that has changed
+     * @param {string} oldVal The previous attribute value
+     * @param {string} newVal The new attribute value
+     * @private
+     */
+    attributeChangedCallback(attrib, oldVal, newVal) {
+        /** Optionally ignore attrib changes until instance is fully connected
+         * Otherwise this can fire BEFORE everthing is fully connected.
+         */
+        // if (!this.connected) return
+
+        // Don't bother if the new value same as old
+        if ( oldVal === newVal ) return
+        // Create a property from the value - WARN: Be careful with name clashes
+        this[attrib] = newVal
+
+        // Add other dynamic attribute processing here.
+        // If attribute processing doesn't need to be dynamic, process in connectedCallback as that happens earlier in the lifecycle
+
+        // Keep at end. Let everyone know that an attribute has changed for this instance of the component
+        this._event('attribChanged', { attribute: attrib, newVal: newVal, oldVal: oldVal, })
+    }
+} // ---- end of Class ---- //
+
+// Make the class the default export so it can be used elsewhere
+export default ChartPlotly
+
+/** Self register the class to global
+ * Enables new data lists to be dynamically added via JS
+ * and lets the static methods be called
+ */
+window['ChartPlotly'] = ChartPlotly
+
+// Self-register the HTML tag
+customElements.define('chart-plotly', ChartPlotly)

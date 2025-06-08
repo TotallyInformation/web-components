@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>Testing TotallyInformation's web-components - chart-plotly</title>
+    <meta name="description" content="chart-plotly - Testing TotallyInformation's web-components">
+
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+    
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <script defer src="../../dist/experiments/chart-plotly.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - chart-plotly</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="Caution" title="Status: Experimental" icon="🟥">
+                Feasibility testing. Documentation: <a href="/docs/#/components/chart-plotly">chart-plotly</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+            <p>
+                Sadly, it looks like Plotly will not be usable in a web component any time soon.
+            </p>
+            <p>
+                This has been raised with the project but there doesn't seem any incentive for them to fix it.
+            </p>
+            <p>
+                It does not work correctly either in Shadow DOM or in light DOM configuration but with different issues.
+                In Shadow DOM, the chart does not show its title and the action bar is squashed to the left.
+                In light DOM, the chart shows the title and acton bar but is not size responsive.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>Basic test</h2>
+                <!-- override bullet type -->
+                <chart-plotly id="cp1"></chart-plotly>
+            </article>
+        </section>
+    </main>
+    <chart-plotly id="cp2"></chart-plotly>
+
+    <script>
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = ChartPlotly.version
+
+            // Get a reference to the chart-plotly elements
+            const cp1 = document.querySelector('#cp1')
+        })
+    </script>
+</body></html>

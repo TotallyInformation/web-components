@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing TotallyInformation's web-components - syntax-highlight</title>
+    <meta name="description" content="syntax-highlight - Testing TotallyInformation's web-components">
+
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <script defer src="../../dist/syntax-highlight.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - syntax-highlight</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="warning" title="Status: Beta">
+                Ready for basic use. <a href="/docs/#/syntax-highlight">Documentation</a>.
+                Component Version: <output id="op2">--</output>.
+            </call-out>
+
+            <p>
+                Uses the <code>json</code> property of the element to dynamically convert the JSON input into
+                HTML formatted output.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>syntax-highlight - Simple JSON string</h2>
+                <syntax-highlight id="sh2"></syntax-highlight>
+            </article>
+
+            <article>
+                <h2>syntax-highlight - fetched complex JSON file</h2>
+                <syntax-highlight></syntax-highlight>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        /** We need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = SyntaxHighlight.version
+        })
+
+        console.info('Dynamic content test ...')
+
+        const highlighters = document.getElementsByTagName('syntax-highlight')
+        
+        const sh2 = highlighters[0]
+        // const sh2 = document.getElementById('sh2')
+        if (sh2) {
+            // The event on the instance itself may be easier to work with when multiple instances exist on-page.
+            // We will test with a JSON string for this test. But 1st, wait till ready.
+            sh2.addEventListener('syntax-highlight:connected', (data) => {
+                sh2.json = '{"a":42,"b":"Hello","c":{"x":12,"y":"99 red balloons"}}'
+                console.info('... sh2 complete')
+            })
+
+            // Wait a couple of seconds and then change the data again
+            setTimeout(async () => {
+                sh2.json = 42
+                console.info('... sh2 changed')
+            }, 2000)
+            // And again
+            setTimeout(async () => {
+                sh2.json = 'We are now 4 seconds in'
+                console.info('... sh2 changed')
+            }, 4000)
+        } else {
+            console.error('syntax-highlight sh2 tag not found')
+        }
+
+        const sh1 = highlighters[1]
+        if (sh1) {
+            // For interest, we will wait a few seconds so we can see the effect.
+            // We will load some external JSON from a file for this test.
+            setTimeout(async () => {
+                const response = await fetch('/tests/resources/include-3.json')
+                
+                if (!response.ok) {
+                    throw new Error(`[syntax-highlight] Fetch of url "${url}" failed: ${response.statusText}`)
+                }
+
+                json = await response.json()
+
+                sh1.json = json
+
+                console.info('... sh1 complete')
+            }, 5000)
+        } else {
+            console.error('syntax-highlight sh1 tag not found')
+        }
+    </script>
+
+</body></html>

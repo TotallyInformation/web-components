@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" class="dark"><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Testing Totally Information's web-components - collapsible-headings</title>
+    <title>Testing Totally Information's web-components - edgewise-meter</title>
+    <meta name="description" content="edgewise-meter - Testing TotallyInformation's web-components">
 
-    <link type="text/css" rel="stylesheet" href="./resources/uib-brand.css" media="all">
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <script defer src="../../dist/experiments/edgewise-meter.iife.min.js"></script>
 
     <style>
         .gauge-container {
@@ -59,29 +63,46 @@
         }
     </style>
 </head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - edgewise-meter</h1>
+    </header>
+
     <main>
-        <h1>ChatGPT Interpretation of an edgewise gauge</h1>
+        <section>
+            <call-out type="Caution" title="Status: Experimental" icon="🟥">
+                Feasibility testing. Documentation: <a href="/docs/#/components/experiments/edgewise-meter">edgewise-meter</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+            <p>
+                Component not yet built. This is a ChatGPT Interpretation of an edgewise gauge!
+            </p>
+        </section>
 
-        <article>
-            <edgewise-gauge min="5" max="10" value="7" label="T-out °C"></edgewise-gauge>
-        </article>
+        <section>
+            <article>
+                <h2>Basic test</h2>
+                <edgewise-gauge min="5" max="10" value="7" label="T-out °C"></edgewise-gauge>
+            </article>
 
-        <article>
-            <div class="gauge-container" aria-labelledby="gaugeLabel">
-                <div class="gauge" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="7" aria-live="polite">
-                    <div class="scale">
-                        <span>0</span>
-                        <span>2</span>
-                        <span>4</span>
-                        <span>5</span>
-                        <span>8</span>
-                        <span>10</span>
+            <article>
+                <h2>ChatGPT's Attempt</h2>
+                <div class="gauge-container" aria-labelledby="gaugeLabel">
+                    <div class="gauge" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="7" aria-live="polite">
+                        <div class="scale">
+                            <span>0</span>
+                            <span>2</span>
+                            <span>4</span>
+                            <span>5</span>
+                            <span>8</span>
+                            <span>10</span>
+                        </div>
+                        <div class="needle"></div>
                     </div>
-                    <div class="needle"></div>
+                    <div id="gaugeLabel" class="gauge-label">T-out °C</div>
                 </div>
-                <div id="gaugeLabel" class="gauge-label">T-out °C</div>
-            </div>
-        </article>
+            </article>
+        </section>
     </main>
 
     <script>
@@ -156,5 +177,14 @@
                 console.log('not found')
             }
         }, 2000);
+
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('oo1').value = EdgewiseMeter.version
+
+            // Get a reference to the on-off elements
+            const oo1 = document.querySelector('#oo1')
+        })
     </script>
 </body></html>

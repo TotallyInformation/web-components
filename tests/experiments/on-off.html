@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>Testing TotallyInformation's web-components - on-off</title>
+    <meta name="description" content="on-off - Testing TotallyInformation's web-components">
+
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+    
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <script defer src="../../dist/experiments/on-off.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - on-off</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="Caution" title="Status: Experimental" icon="🟥">
+                Feasibility testing. Documentation: <a href="/docs/#/components/experiments/on-off">on-off</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+            <p>
+                Component not yet built.
+            </p>
+        </section>
+
+        <section>
+            <article>
+                <h2>Basic test</h2>
+                <!-- override bullet type -->
+                <on-off id="oo1"></on-off>
+            </article>
+        </section>
+    </main>
+    <on-off id="cp2"></on-off>
+
+    <script>
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('oo1').value = OnOff.version
+
+            // Get a reference to the on-off elements
+            const oo1 = document.querySelector('#oo1')
+        })
+    </script>
+</body></html>
