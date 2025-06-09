@@ -1,7 +1,10 @@
 /** Default Styles for uibuilder - Light & Dark options ...
  *
  * TODO: Add darker/lighter shades for variant colours for headers, etc.
+ *       Remove shadows for dark mode.
  *
+ * 1em ~= 16px
+ * 
  * Recommended @media breakpoints:
  * Tablet:        48em @ 16pt   = 768px
  * Tablet Wide:   62em @ 16pt   = 992px
@@ -17,7 +20,7 @@
  * https://unifyned.com/colors.html extends the above
  * https://chromatichq.com/insights/understanding-and-using-hsl-your-css gives calculations for the color wheel
  *
- * @version: 1.33 2024-03-28
+ * @version: 2025-06-09
  * @author: Julian Knight (TotallyInformation)
  * @license: Apache 2.0
  * @created: 2022-05-02
@@ -37,14 +40,10 @@
  * - Include in your index.css file as `@import url("./uib-brand.min.css");`
  */
 
-/* @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); */
-
 /* :root applies to everything, :root.light is for manually selected light mode */
-:root, :root.light, body.light {
+:root, :root.light {
     color-scheme: light dark;
     --mode: light;
-
-    interpolate-size: allow-keywords;
 
     /* Create a checkable var - helps web components know if this stylesheet is loaded
      * Use this from general code: 
@@ -53,10 +52,16 @@
      *    window.getComputedStyle(this, null).getPropertyValue('--uib-css') === 'uib-brand'
      * NOTE: no space between : and text!
      */
-    --uib-css:uib-brand;
+    --uib-css: uib-brand;
+
+    /* For nicer emoji's use this as the font-family */
+    --emoji-fonts: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Twemoji Mozilla", "EmojiOne Color", "Android Emoji";
+
     /* Sans-serif is much easier to read on-screen */
-    /* --font-family: "lato", sans-serif; */
-    --font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    /* Update 2025-04-28 to use https://github.com/system-fonts/modern-font-stacks - incl better emoji's as well */
+    --font-family: system-ui, sans-serif, var(--emoji-fonts);
+    --code-font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace, var(--emoji-fonts);
+    --cursive-font-family: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive, var(--emoji-fonts);
 
     --brand-hue: 200;
     --text-hue: var(--brand-hue);
@@ -83,16 +88,8 @@
     --border-pad: 0.5rem;
     --border-margin: 0;
 
-    --link-color: hsl(var(--primary-hue) 100% 36%);
-    --visited-color: hsl(var(--primary-hue) 100% 28%);
-
     /* For the .grid-fit class, the minimum child element size */
     --grid-fit-min: 15rem;
-
-    /* For nicer emoji's use this as the font-family */
-    --emoji-fonts: "Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji",
-        "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji",
-        sans-serif;
 
     /*#region --- Brand --- */
     --brand: hsl(
@@ -382,14 +379,11 @@
 
         --surfaces-factor: var(--dark-surfaces-factor);
         --surfaces-lightness: var(--dark-surfaces-lightness);
-
-        --link-color: hsl(var(--primary-hue) 51% 67%);
-        --visited-color: hsl(var(--primary-hue) 100% 43%);
     }
 }
 
 /* Or if the user manually requests a dark colour theme by setting class="dark" on html tag */
-:root.dark, body.dark {
+:root.dark {
     color-scheme: dark light;
     --mode: dark;
 
@@ -404,9 +398,6 @@
 
     --surfaces-factor: var(--dark-surfaces-factor);
     --surfaces-lightness: var(--dark-surfaces-lightness);
-
-    --link-color: hsl(var(--primary-hue) 51% 77%);
-    --visited-color: hsl(var(--primary-hue) 100% 43%);
 }
 
 /*#region --- Surface & std colour classes --- */
@@ -508,6 +499,7 @@ html {
     color: var(--text2);
     accent-color: var(--brand);
 }
+
 body {
     margin-left: var(--base-margin);
     margin-right: var(--base-margin);
@@ -618,9 +610,6 @@ body > main {
 footer {
     margin-top: 1em;
 }
-main > article {
-    margin: .1em 0;
-}
 /* Put asides inside a main to one side
    Or, use a section or div to wrap multiple */
 main > article, main .left {
@@ -634,17 +623,6 @@ summary > h2, summary > h3, summary > h4, summary > div, summary > p {
     display: inline-block;
 }
 
-a, a:link {
-    color: var(--link-color);
-}
-a:visited {
-    text-decoration-style: dotted;
-    color: var(--visited-color);
-}
-a:hover, a:focus {
-    text-decoration-line: none;
-}
-/* a:active {} */
 /*#endregion --- Basic reset --- */
 
 /*#region --- Tables --- */
@@ -653,7 +631,7 @@ table {
     border: 1px solid var(--text3);
     margin-top: 1rem;
     margin-bottom: 1rem;
-    font-variant-numeric: tabular-nums; /* better alignment of numbers */
+    font-variant-numeric: tabular-nums; /* OpenType: better alignment of numbers */
 }
 thead th, thead td {
     color: var(--text2);
