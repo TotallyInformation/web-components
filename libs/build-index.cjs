@@ -87,4 +87,4 @@ function generateIndex() {
 }
 
 // Run the function to generate the index
-generateIndex()
+// generateIndex()
