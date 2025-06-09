@@ -1,5 +1,10 @@
 # Totally Information Web Components - Change Log
 
+## v1.3.1
+
+* Fix documentation - no status box for pages with no status front matter.
+* Fix test/demo index page - `h1-title` is live.
+
 ## v1.3.0
 
 ### Test/demo pages
