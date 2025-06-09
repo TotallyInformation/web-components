@@ -1,12 +1,12 @@
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'ComponentTemplate' and 'component-template'
+ * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'XxxxXxxx' and 'xxxx-xxxx'
  * For better formatting of HTML in template strings, use VSCode's "ES6 String HTML" extension
  *
  * Version: See the class code
  *
  */
-/** Copyright (c) 2022-2025 Julian Knight (Totally Information)
+/** Copyright (c) 2025-2025 Julian Knight (Totally Information)
  * https://it.knightnet.org.uk, https://github.com/TotallyInformation
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
@@ -43,7 +43,7 @@ template.innerHTML = /*html*/`
 // `
 
 /** Namespace
- * @namespace Alpha
+ * @namespace PreAlpha
  */
 
 /**
@@ -52,7 +52,7 @@ template.innerHTML = /*html*/`
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * @element component-template
- * @memberOf Alpha
+ * @memberOf PreAlpha
  * @license Apache-2.0
 
  * METHODS FROM BASE: (see TiBaseComponent)
@@ -66,10 +66,10 @@ template.innerHTML = /*html*/`
   * None
 
  * CUSTOM EVENTS:
-  * "component-template:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
-  * "component-template:ready" - Alias for connected. The instance can handle property & attribute changes
-  * "component-template:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
-  * "component-template:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+  * "xxxx-xxxx:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+  * "xxxx-xxxx:ready" - Alias for connected. The instance can handle property & attribute changes
+  * "xxxx-xxxx:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+  * "xxxx-xxxx:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
   * NOTE that listeners can be attached either to the `document` or to the specific element instance.
 
  * Standard watched attributes (common across all my components):
@@ -91,13 +91,13 @@ template.innerHTML = /*html*/`
  * @slot Container contents
 
  * @example
-  * <component-template name="myComponent" inherit-style="./myComponent.css"></component-template>
+  * <xxxx-xxxx name="myComponent" inherit-style="./myComponent.css"></xxxx-xxxx>
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class ComponentTemplate extends TiBaseComponent {
+class XxxxXxxx extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-06-03'
+    static componentVersion = '2025-06-09'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -164,13 +164,13 @@ class ComponentTemplate extends TiBaseComponent {
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default ComponentTemplate
+export default XxxxXxxx
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['ComponentTemplate'] = ComponentTemplate
+window['XxxxXxxx'] = XxxxXxxx
 
 // Self-register the HTML tag
-customElements.define('component-template', ComponentTemplate)
+customElements.define('xxxx-xxxx', XxxxXxxx)
