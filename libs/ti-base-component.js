@@ -66,7 +66,7 @@
  */
 class TiBaseComponent extends HTMLElement {
     /** Component version */
-    static baseVersion = '2025-06-03'
+    static baseVersion = '2025-06-09'
 
     /** Holds a count of how many instances of this component are on the page that don't have their own id
      * Used to ensure a unique id if needing to add one dynamically
@@ -193,6 +193,24 @@ class TiBaseComponent extends HTMLElement {
             // @ts-ignore
             this.id = `${this.localName}-${++this.constructor._iCount}`
         }
+    }
+
+    /** Check if slot has meaningful content (not just whitespace)
+     * @returns {boolean} True if slot has non-empty content
+     */
+    hasSlotContent() {
+        const slot = this.shadowRoot.querySelector('slot')
+        const assignedNodes = slot.assignedNodes()
+
+        return assignedNodes.some(node => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                return true
+            }
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node.textContent.trim().length > 0
+            }
+            return false
+        })
     }
 
     /** Attaches a new stylesheet before all other stylesheets in the light DOM
