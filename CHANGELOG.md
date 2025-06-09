@@ -1,5 +1,7 @@
 # Totally Information Web Components - Change Log
 
+## v1.4.0
+
 ## v1.3.1
 
 * Fix documentation - no status box for pages with no status front matter.
