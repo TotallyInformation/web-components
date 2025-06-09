@@ -6,6 +6,7 @@
   * [`call-out`](components/live/call-out)
   * [`collapsible-headings`](components/live/collapsible-headings)
   * [`data-list`](components/live/data-list)
+  * [`h1-title`](components/live/h1-title)
   * [`html-include`](components/live/html-include)
   * [`led-gauge`](components/live/led-gauge)
 

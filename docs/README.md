@@ -46,6 +46,7 @@ These components can be considered `live` and ready for extended use.
 | [`call-out`](components/live/call-out)         | Displays nicely formatted GitHub/Obsidian style call-out information boxes. Colour coded with an icon and over-ridable default title. | `CallOut` |
 | [`collapsible-headings`](components/live/collapsible-headings) | Turns a section of Hn headings and block contents into collapsible content around the heading levels. | `CollapsibleHeadings` |
 | [`data-list`](components/live/data-list)       | Create a list from a data object.                                                     | `DataList`    |
+| [`h1-title`](components/live/h1-title)         | Uses the page's `<title>`, inserts as an `<h1>` tag. Optionally with slot content as sub-title. | `H1Title` |
 | [`html-include`](components/live/html-include) | Dynamically load external HTML content very easily without needing an iFrame.         | `HtmlInclude` |
 | [`led-gauge`](components/live/led-gauge)       | A simple LED-style gauge widget with easily controlled colours and responsive layout. | `LedGauge`    |
 

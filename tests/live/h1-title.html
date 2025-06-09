@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>h1-title - Testing TotallyInformation's web-components</title>
+    <meta name="description" content="Testing TotallyInformation's web-components - h1-title">
+
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <script defer src="../../dist/h1-title.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>h1-title - Testing Totally Information's web-components</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="tip" title="Status: Live" icon="🟥">
+                Ready for extended use. Documentation: <a href="/docs/#/components/live/h1-title">h1-title</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+        </section>
+
+        <section>
+            <article>
+                <h2>Simple test</h2>
+                <h1-title id="wc01">
+                    This becomes the sub-title.
+                </h1-title>
+                <p>
+                    Note that in reality, you should only ever have a SINGLE <code>&lt;h1&gt;</code> element on a page.
+                </p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = H1Title.version
+
+            // Get references to the elements
+            const wc01 = document.querySelector('#wc01')
+        })
+    </script>
+</body></html>
