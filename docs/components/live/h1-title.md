@@ -151,7 +151,8 @@ N/A
 
 Possibly in future versions.
 
-* [ ] Use a MutationObserver to watch for changes to the <slot> content and update the h1 class if needed
+* [ ] Use a MutationObserver to watch for changes to the <slot> content and update the h1 class if needed.
+* [ ] Add a check and warning to discourage the use of multiple `h1-title` components on the same page. This is not a good practice for accessibility and SEO.
 
 
 ## Design References

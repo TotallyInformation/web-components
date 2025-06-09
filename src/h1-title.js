@@ -24,6 +24,7 @@
 import TiBaseComponent from '../libs/ti-base-component'
 
 /** TODO/IDEAS
+ * - Add a check to disuade people from using >1 <h1-title> on a page
  * - Use a MutationObserver to watch for changes to the <slot> content and update the h1 class if needed
  */
 
