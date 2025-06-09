@@ -88,10 +88,12 @@ window.$docsify = { //  eslint-disable-line no-undef
                 if (vm.frontmatter) { // vm only exists per page, requires plugin
                     //#region --- Add front-matter (YAML) standard metadata to each page if present ---
                     const fm = vm.frontmatter
-                    let statusType = ''
-                    let locn = ''
-                    let status = 'Unknown'
+
                     if (fm.status) {
+                        let statusType = ''
+                        let locn = ''
+                        let status = 'Unknown'
+
                         status = fm.status
                         const statusLc = status.toLowerCase()
                         const statusText = {
@@ -115,8 +117,9 @@ window.$docsify = { //  eslint-disable-line no-undef
                             }
                             locn = `[Demo](${window.location.origin}/tests/${locn}/${fm.title.split(' ')[0]}).`
                         }
+
+                        content = `> [!NOTE]\n> STATUS: _${status}_. ${statusType} ${locn}\n\n${content}`
                     }
-                    content = `> [!NOTE]\n> STATUS: _${status}_. ${statusType} ${locn}\n\n${content}`
 
                     if (fm.description) {
                         content = `${fm.description}\n\n${content}`
