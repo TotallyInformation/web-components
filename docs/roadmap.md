@@ -52,6 +52,7 @@ See the `not-complete` folder.
 | --------------- | ------------------------------------------------------------ |
 | `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. A more complex version of `simple-card` |
 | `data-table`    | Similar to `simple-table` but with more options such as nested tables and multiple headers/bodies. Probably also with CRUD controls. Search, col groups. |
+| `date-time`     | Outputs a controllable date and/or time string with formatting. |
 | `grid-view`     | A controllable grid layout.                                  |
 | `multi-select`  | https://web.dev/building-a-multi-select-component/ |
 | `on-off`        | A dedicated on/off button.    |
@@ -70,8 +71,8 @@ See the `not-complete` folder.
 | `switch-list`   | https://web.dev/building-a-switch-component/ |
 | `toast-msg`     | |
 | `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
-| status          | List view with colour indication of status (e.g. on/off or RAG) |
-| checklist       | List view with checkboxes (for multi input) or radio buttons (for single selection) |
+| `status-list`   | List view with colour indication of status (e.g. on/off or RAG) |
+| `check-list`    | List view with checkboxes (for multi input) or radio buttons (for single selection) |
 
 ## Possible future components
 
@@ -117,10 +118,6 @@ If using uibuilder, updates will be returned to Node-RED.
   <for-item><li><for-var col="colId"></for-var><li></for-item>
 </for-next></ol>
 ```
-
-### `h1-title` - Use the page's title tag as the `<h1>`
-
-Maybe with optional sub-title. Also option to use different string instead.
 
 ### `image-meta` - access to image exif metadata
 

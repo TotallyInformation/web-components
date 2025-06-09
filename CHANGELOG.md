@@ -7,11 +7,29 @@
 * Re-organised into sub-folders for experiments, alpha, beta and live components.
 * New experimental pages.
 
-### `data-list` Component
+### **NEW** `h1-title` component
+
+A simple component that uses the page's `<title>` tag as the main heading for the page.
+
+Any slot content is added as a sub-heading with italic, slightly smaller text.
+
+### `data-list` component
 
 * Updated documentation and demo/test page to illustrate how to use the `nested-list` class and `data-depth` attribute to style nested lists.
 * Improved warning/error messages - all prefixed with `data-list:` and the instance id.
 * Added Node-RED flow example to the documentation to illustrate how to use the `data-list` component with UIBUILDER for Node-RED.
+
+### Default styling
+
+* `uib-brand.css` has beeen updated to version `2025-06-09` in line with UIBUILDER for Node-RED.
+
+### Base component
+
+- **NEW** `hasSlotContent()` method added. This allows you to check if the components `slot` has any content from the light DOM. This is useful for components that may or may not have such content and where you want to apply different styles or behaviour based on that.
+
+### General development
+
+* New script to create new components along with their documentation and test/demo pages. `npm run new-component` or `npm run new-component my-component`.
 
 ## v1.2.0
 
