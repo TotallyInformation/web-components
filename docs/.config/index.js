@@ -113,7 +113,7 @@ window.$docsify = { //  eslint-disable-line no-undef
                             } else {
                                 locn = statusLc
                             }
-                            locn = `[Demo](${window.location.origin}/tests/${locn}/${fm.title}).`
+                            locn = `[Demo](${window.location.origin}/tests/${locn}/${fm.title.split(' ')[0]}).`
                         }
                     }
                     content = `> [!NOTE]\n> STATUS: _${status}_. ${statusType} ${locn}\n\n${content}`
