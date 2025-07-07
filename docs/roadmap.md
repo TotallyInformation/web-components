@@ -3,12 +3,15 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-updated: 2025-06-08 13:49:08
+updated: 2025-07-07 10:50:27
 ---
+
+You can find the current list of components on the main [README](./README.md) page.
 
 ## Next
 
 * [ ] NEW: check-list
+* [ ] Allow override of the gauge values for led-gauge. [Ref](https://discourse.nodered.org/t/horizontal-bar-graph/98000/2?u=totallyinformation).
 
 ## Other thoughts
 
@@ -51,11 +54,12 @@ See the `not-complete` folder.
 | Name            | Description                                                  |
 | --------------- | ------------------------------------------------------------ |
 | `data-card`     | A data-driven card with headers, footers, etc. Also acts as a container for other HTML as part of a grid view. A more complex version of `simple-card` |
+| `data-filter` | A filter component that allows you to filter data based on a set of criteria. This could be used with `data-list`, `data-table`, etc. Should work with data objects and directly with DOM tables and lists. |
 | `data-table`    | Similar to `simple-table` but with more options such as nested tables and multiple headers/bodies. Probably also with CRUD controls. Search, col groups. |
-| `date-time`     | Outputs a controllable date and/or time string with formatting. |
+| `date-time`     | Outputs a controllable date and/or time string with formatting. Possibly allow input as well. |
 | `grid-view`     | A controllable grid layout.                                  |
 | `multi-select`  | https://web.dev/building-a-multi-select-component/ |
-| `on-off`        | A dedicated on/off button.    |
+| `on-off`        | A dedicated on/off button. [Possible ref](https://discourse.nodered.org/t/new-info-page-for-my-home-dashboard/97549/7?u=totallyinformation)    |
 | `progress-bar`  | https://web.dev/building-a-loading-bar-component/ |
 | `rag-list`      | A list with a RAG status icon for each entry |
 | `simple-button` | A button that triggers a custom document event and sends to uibuilder (if available). Automatically includes attrib and prop data, id, name, etc. Includes basic formatting and a slot for text (which allows some HMTL formatting). |
@@ -69,6 +73,7 @@ See the `not-complete` folder.
 | `simple-switch` | https://web.dev/building-a-switch-component/ |
 | `simple-table`  | Takes a JSON or JavaScript object or array and displays the contents in a simple table format. |
 | `switch-list`   | https://web.dev/building-a-switch-component/ |
+| `table-chart`   | A simple, css driven chart component that uses a table as the data source. [ref](https://dev.to/madsstoumann/charts-in-css-1di1) |
 | `toast-msg`     | |
 | `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
 | `status-list`   | List view with colour indication of status (e.g. on/off or RAG) |
