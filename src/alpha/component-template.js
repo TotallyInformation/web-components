@@ -37,7 +37,7 @@ template.innerHTML = /*html*/`
 `
 /** Only use this if using Light DOM but want scoped styles */
 // const styles = `
-//     component-template {
+//     xxxx-xxxx {
 //         /* Scoped to this component */
 //     }
 // `
@@ -51,7 +51,7 @@ template.innerHTML = /*html*/`
  * @augments TiBaseComponent
  * @description Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
- * @element component-template
+ * @element xxxx-xxxx
  * @memberOf PreAlpha
  * @license Apache-2.0
 
@@ -97,7 +97,7 @@ template.innerHTML = /*html*/`
  */
 class XxxxXxxx extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-06-09'
+    static componentVersion = '2025-08-28'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
