@@ -10,10 +10,15 @@ You can find the current list of components on the main [README](./README.md) pa
 
 ## Next
 
+* [ ] Rename source files from *.js to *.mjs for better clarity and linting
 * [ ] NEW: check-list
 * [ ] Allow override of the gauge values for led-gauge. [Ref](https://discourse.nodered.org/t/horizontal-bar-graph/98000/2?u=totallyinformation).
 
 ## Other thoughts
+
+* Add "all" load library for simplified use (loads all live and beta components).
+
+* Incorporate hotnipi's gauge component.
 
 * Expand _uibMsgHandler to allow for msg.payload.attributes. Use a uibuilder fn instead of a local one.
 
@@ -36,6 +41,7 @@ You can find the current list of components on the main [README](./README.md) pa
 * Extended input. Refs: [1](https://stackoverflow.com/questions/25495849/can-a-custom-element-extend-an-input-element), [2](https://elements-x.com/?path=/docs/getting-started--docs), [3](https://medium.com/@andresander/extending-html-inputs-in-a-framework-agnostic-way-with-web-components-9227532b6139), [4](https://blog.revillweb.com/extending-native-dom-elements-with-web-components-233350c8e86a).
 
 * Ideas from [elements-x](https://elements-x.com/?path=/docs/getting-started--docs)
+* [More gauges from hotnipi](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template)
 
 
 ## On-hold
@@ -74,7 +80,7 @@ See the `not-complete` folder.
 | `simple-table`  | Takes a JSON or JavaScript object or array and displays the contents in a simple table format. |
 | `switch-list`   | https://web.dev/building-a-switch-component/ |
 | `table-chart`   | A simple, css driven chart component that uses a table as the data source. [ref](https://dev.to/madsstoumann/charts-in-css-1di1) |
-| `toast-msg`     | |
+| `toast-msg`     | Creates an OS-style toast message. |
 | `visual-log`    | Creates a log element on-page that expands to a set number of lines then drops from the start |
 | `status-list`   | List view with colour indication of status (e.g. on/off or RAG) |
 | `check-list`    | List view with checkboxes (for multi input) or radio buttons (for single selection) |
@@ -129,6 +135,28 @@ If using uibuilder, updates will be returned to Node-RED.
 * [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
 * [ref](https://jsdev.space/howto/javascript-exif-parser/)
 
+### `labelled-input` - Simple input structured in wrapped div with a label
+
+```html
+<labelled-input type="text" label-pos="above" label="My Label" value="My Value"></labelled-input>
+```
+
+* `type` - The type of input, e.g. text, number, etc.
+* `label-pos` - The position of the label, e.g. above, below, inline
+* `label` - The label text to use (maybe allow HTML?)
+* `value` - The value of the input
+* `placeholder` - The placeholder text for the input
+* `required` - Whether the input is required
+* `minlength` - The minimum length of the input value
+* `maxlength` - The maximum length of the input value
+* `pattern` - The regex pattern to validate the input value
+* `step` - The granularity that the value must adhere to for number inputs
+* `autocomplete` - Whether to enable autocomplete for the input
+* `inputmode` - The virtual keyboard layout to use for the input
+* `autofocus` - Whether to focus the input on page load
+* `readonly` - Whether the input is read-only
+* `disabled` - Whether the input is disabled
+
 ### `layout-area` - Switch between a few core layouts such as blog & dash
 
 #### `area-*` - Define an area for a layout, e.g. `area-main`, `area-head`, `area-foot`, `area-sidebar` - all included in the parent component's package.
@@ -152,9 +180,20 @@ If using uibuilder, updates will be returned to Node-RED.
 
 Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-template/85955), Discourse vert indicators.
 
-### `todo-list` - A managable list of TODO items or shopping list
+### `object-tree` - A collapsible tree view for displaying nested objects
 
-[ref](https://discourse.nodered.org/t/convert-dashboard-shopping-list-to-v2/96553)
+* Allows for easy navigation and exploration of complex object structures
+* Supports custom templates for rendering each node
+* Optional search/filter functionality
+* Optional editing capabilities
+* Optional "simple" view - more compact representation of the object tree
+* Copy object paths and values to clipboard
+* [Ref](https://localhost:3001/test/json-editor.html)
+
+### `range-image` - A range slider that uses an image such as a star rating
+
+* [Reference](https://css-tricks.com/a-css-only-star-rating-component-and-more-part-1/), [2](https://css-tip.com/star-rating/)
+* Can even be used to create a stepped volume control
 
 ### `simple-timeline`
 
@@ -200,6 +239,14 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 
 ### `tab-view` - A tabbed view
 
+* A simple tabbed view that allows you to switch between different tab "pages"
+* Uses a `data` property to store the current tab
+* Has a `tab-page` sub-component that wraps the content of each tab
+
+### `todo-list` - A managable list of TODO items or shopping list
+
+[ref](https://discourse.nodered.org/t/convert-dashboard-shopping-list-to-v2/96553)
+
 ### Other ideas
 
 * Steppper - step through a form
@@ -208,6 +255,11 @@ Refs: [1](https://discourse.nodered.org/t/gauges-for-dashboard-2-0-made-with-ui-
 * Data tree - show a tree of data
 * Guitar Chord - show a guitar chord diagram [ref](https://dev.to/madsstoumann/guitar-chords-in-css-3hk8)
 * Scheduler - show/edit a schedule of events [ref](https://discourse.nodered.org/t/announce-scheduler-node-for-dashboard-2-0/95076)
+* [Theme builder](https://kelpui.com/docs/tools/theme-builder/)
+* Wrapper components:
+  * [Heading Anchors](https://kelpui.com/docs/components/heading-anchors/)
+  * [Table of Contents](https://kelpui.com/docs/components/toc/)
+  * [Toggle Password](https://kelpui.com/docs/components/toggle-pw/)
 
 ## Probably not
 
