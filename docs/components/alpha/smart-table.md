@@ -3,7 +3,7 @@ title: smart-table
 description: |
   A Zero dependency web component that displays an HTML table from input data
 created: 2024-10-06 22:32:05
-updated: 2025-05-30 19:59:40
+updated: 2025-08-31 15:39:54
 status: alpha # alpha, beta, live
 ---
 
@@ -185,13 +185,20 @@ None.
 
 * [x] Build from data
 * [x] Optional columns data - if not provided, auto-build from content
+* [ ] Notification events (and uibuilder eventSend) for row, column, and cell clicks
 
 ## Nice-to-have features
 
 Possibly in future versions.
 
-* [ ] Save altered data
-* [ ] Custom event on changed data
+* [ ] Save to local storage and auto load on page load.
+* [ ] Multi-row headings.
+* [ ] Save altered data.
+* [ ] Custom event on changed data.
+* [ ] Cell edits.
+* [ ] Row add/remove.
+* [ ] Column add/remove.
+* [ ] More complex tables.
 
 
 ## Design References
