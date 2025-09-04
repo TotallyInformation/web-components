@@ -1,6 +1,7 @@
 # web-components by TotallyInformation
 
-[![](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge)](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
+[![JSDelivr](https://data.jsdelivr.com/v1/package/gh/totallyinformation/web-components/badge "Load the components without needing a local install")](https://www.jsdelivr.com/package/gh/TotallyInformation/web-components)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg "Learn more about these web components via the DeepWiki AI")](https://deepwiki.com/TotallyInformation/web-components)
 
 A repository of simple W3C Web Components. These may have extra capabilities for use with UIBUILDER for Node-RED but all work independently as well.
 
