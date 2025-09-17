@@ -122,7 +122,7 @@ Shadow dom elements can be selectively styled based on a class or other identifi
 
 ## Development workflow
 
-1. Copy the `./src/alpha/component-template.js` file to a new file in the `./src/alpha` folder.
+1. Copy the `./src/alpha/component-template.mjs` file to a new file in the `./src/alpha` folder.
 2. Update the class name, component name, and file name to match the new component.
 3. Create a matching document file in the `./docs` folder. Use `./docs/_component-doc-template.md` as a template.
 

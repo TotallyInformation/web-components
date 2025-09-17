@@ -30,8 +30,8 @@ The script creates three new files based on templates:
    - Replaces `xxxx-xxxx` with the component name
    - Replaces `XxxxXxxx` with the PascalCase component name
 
-3. **JavaScript Component** (`src/experiments/[component-name].js`)
-   - Uses `src/alpha/component-template.js` as template
+3. **JavaScript Component** (`src/experiments/[component-name].mjs`)
+   - Uses `src/alpha/component-template.mjs` as template
    - Replaces `xxxx-xxxx` with the component name
    - Replaces `XxxxXxxx` with the PascalCase component name
    - Also replaces `component-template` and `ComponentTemplate`

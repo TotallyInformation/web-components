@@ -1,8 +1,8 @@
 {
     "source": {
         "include": ["src", "alpha"],
-        "xx_includePattern": "component-template.js",
-        "includePattern": ".+\\.js(doc|x)?$",
+        "xx_includePattern": "component-template.mjs",
+        "includePattern": ".+\\.mjs(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
