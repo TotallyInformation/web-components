@@ -159,7 +159,7 @@ async function createHtmlFile(componentName, pascalName) {
  * @param {string} pascalName - The component name in PascalCase
  */
 async function createJavaScriptFile(componentName, pascalName) {
-    const templatePath = join(rootDir, 'src', 'alpha', 'component-template.mjs')
+    const templatePath = join(rootDir, 'src', 'templates', 'component-template.mjs')
     const outputPath = join(rootDir, 'src', 'experiments', `${componentName}.mjs`)
 
     if (await fileExists(outputPath)) {

@@ -1,4 +1,7 @@
 // @ts-nocheck
+
+console.group('Starting esbuild builds...')
+
 // const esbuild = require('esbuild')
 import * as esbuild from 'esbuild'
 import configs from './esbuild-configs.mjs'
@@ -23,3 +26,5 @@ console.log('experiments/*.js ESM results: ', result5)
 
 const result6 = await esbuild.build(configs.preAlphaIIFE)
 console.log('experiments/*.js IIFE results: ', result6)
+
+console.groupEnd('esbuild builds complete')

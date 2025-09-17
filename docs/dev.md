@@ -3,7 +3,7 @@ title: Developer documentation
 description: |
   The standards and processes used in the development of these web components.
 created: 2024-09-22 14:34:00
-updated: 2025-05-29 16:30:10
+updated: 2025-09-17 14:18:24
 ---
 
 ## Standards
@@ -122,7 +122,10 @@ Shadow dom elements can be selectively styled based on a class or other identifi
 
 ## Development workflow
 
-1. Copy the `./src/alpha/component-template.mjs` file to a new file in the `./src/alpha` folder.
+> [!NOTE]
+> `npm run new-component [component-name]` will create a new component in the `./src/experiments` folder, a matching doc file in the `./docs` folder and a matching test/demo HTML page in the `./tests` folder. It will also update the sidebar and index files in the `./docs` folder.
+
+1. Copy the `./src/templates/component-template.mjs` file to a new file in the `./src/experiments` folder.
 2. Update the class name, component name, and file name to match the new component.
 3. Create a matching document file in the `./docs` folder. Use `./docs/_component-doc-template.md` as a template.
 
