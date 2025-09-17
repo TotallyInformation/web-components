@@ -11,12 +11,16 @@ You can find the current list of components on the main [README](./README.md) pa
 ## Next
 
 * [ ] Rename source files from *.js to *.mjs for better clarity and linting
+* [ ] New experiment: ECHarts and Plot - Core component/class + selection of simple charts. Expose library to allow full control.
 * [ ] NEW: check-list
 * [ ] Allow override of the gauge values for led-gauge. [Ref](https://discourse.nodered.org/t/horizontal-bar-graph/98000/2?u=totallyinformation).
+* [ ] Add optional status div to <button-send>. See uibuilder example flow.
 
 ## Other thoughts
 
 * Add "all" load library for simplified use (loads all live and beta components).
+
+* Add a config fragment to each component that can be used by a configuration component. This would allow a visual configuration component to be created (a-la Node-RED Dashboard).
 
 * Incorporate hotnipi's gauge component.
 
