@@ -34,7 +34,7 @@ window.$docsify = { //  eslint-disable-line no-undef
     search: {
         depth: 3,
         noData: 'No results!',
-        placeholder: 'Search...'
+        placeholder: 'Search...',
     },
     pagination: {
         crossChapter: true,
@@ -78,7 +78,7 @@ window.$docsify = { //  eslint-disable-line no-undef
 
             // Runs against the raw markdown for each page
             hook.beforeEach(function (content) {
-                content = content.replace(/-UIBUILDER-/g, '<span class="uib-name"><span class="uib-red">UI</span>BUILDER</span>')
+                // content = content.replace(/-UIBUILDER-/g, '<span class="uib-name"><span class="uib-red">UI</span>BUILDER</span>')
                 let mydate = new Date()
                 let strYr = mydate.getFullYear()
                 let yearFrom = 2017
