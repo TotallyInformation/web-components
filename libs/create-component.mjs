@@ -160,7 +160,7 @@ async function createHtmlFile(componentName, pascalName) {
  */
 async function createJavaScriptFile(componentName, pascalName) {
     const templatePath = join(rootDir, 'src', 'alpha', 'component-template.mjs')
-    const outputPath = join(rootDir, 'src', 'experiments', `${componentName}.js`)
+    const outputPath = join(rootDir, 'src', 'experiments', `${componentName}.mjs`)
 
     if (await fileExists(outputPath)) {
         console.log(`⚠️  JavaScript file already exists: ${outputPath}`)
