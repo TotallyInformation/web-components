@@ -11,7 +11,7 @@ Automatically creates an HTML table layout from input data. The purpose of this 
 
 Data has to be set using JavaScript since HTML attributes do not allow complex data. Optionally can also provide column meta-data to improve the table display.
 
-Rows, columns and cells are all labelled to allow for fine-grained styling and calculations.
+Rows, columns and cells are all labeled to allow for fine-grained styling and calculations.
 
 The table is created in the light (main page) DOM for easy styling and further manipulation if desired.
 
