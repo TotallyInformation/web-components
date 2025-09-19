@@ -34,18 +34,16 @@ See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-d
 
 ## Methods
 
-| Method                  | Type                                             | Description                                      |
-|-------------------------|--------------------------------------------------|--------------------------------------------------|
-| `buildLIhtml`           | `({ arrayType, key, value, i, }: { arrayType: boolean; key: string; value: string; i: number; }): string` | Builds a list item HTML string based on the provided options.<br /><br />**options.arrayType**: True if the list is an array, false if it is an object |
-| `buildList`             | `(listData: Array\|object, parentEl: HTMLElement \| ShadowRoot, type: "ol" \| "ul", depth: number): void` | Builds a list from input data<br /><br />**listData**: Source data for the list, can be an array or an object<br />**parentEl**: The parent element to append the list to<br />**type**: The type of list to create, either 'ol' for ordered or 'ul' for unordered<br />**depth**: Recursion depth. Defaults to 1. Used to limit recursion depth for nested objects/arrays. |
-| `config`                | `(config: object\|undefined): object`            | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
-| `createShadowSelectors` | `(): void`                                       | Creates the $ and $$ fns that do css selections against the shadow dom |
-| `doInheritStyles`       | `(): Promise<void>`                              | Optionally apply an external linked style sheet (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
-| `ensureId`              | `(): void`                                       | Ensure that the component instance has a unique ID & check again if uib loaded |
-| `entry`                 | `(key: string \| number, val: string): void`     | Dynamically change/add list entries - rebuilds the list DOM element<br /><br />**key**: Object key or array index to change/add<br />**val**: Updates/new list text (can be HTML) |
-| `prependStylesheet`     | `(cssText: string, order?: number): Element`     | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
-| `uibSend`               | `(evtName: string, data: string): void`          | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
-| `updateListAttributes`  | `(listEl: HTMLElement, listType: "ol" \| "ul"): void` | Updates the list attributes based on the current type and style<br /><br />**listEl**: The list element to update<br />**listType**: The type of list to use, either 'ol' for ordered or 'ul' for unordered |
+| Method                  | Type                                         | Description                                      |
+|-------------------------|----------------------------------------------|--------------------------------------------------|
+| `config`                | `(config: object\|undefined): object`        | OPTIONAL. Update runtime configuration, return complete config<br /><br />**config**: If present, partial or full set of options. If undefined, fn returns the current full option settings |
+| `createShadowSelectors` | `(): void`                                   | Creates the $ and $$ fns that do css selections against the shadow dom |
+| `doInheritStyles`       | `(): Promise<void>`                          | Optionally apply an external linked style sheet for Shadow DOM (called from connectedCallback)<br />param {*} url The URL for the linked style sheet |
+| `ensureId`              | `(): void`                                   | Ensure that the component instance has a unique ID & check again if uib loaded |
+| `entry`                 | `(key: string \| number, val: string): void` | Dynamically change/add list entries - rebuilds the list DOM element<br /><br />**key**: Object key or array index to change/add<br />**val**: Updates/new list text (can be HTML) |
+| `hasSlotContent`        | `(): boolean`                                | Check if slot has meaningful content (not just whitespace) |
+| `prependStylesheet`     | `(cssText: string, order?: number): Element` | Attaches a new stylesheet before all other stylesheets in the light DOM<br /><br />**cssText**: CSS text to inject directly<br />**order**: Optional order/priority for stylesheet placement. Lower numbers = higher priority (inserted first). Defaults to 0. |
+| `uibSend`               | `(evtName: string, data: string): void`      | Send a message to the Node-RED server via uibuilder if available<br />NB: These web components are NEVER dependent on Node-RED or uibuilder.<br /><br />**evtName**: The event name to send<br />**data**: The data to send |
 
 ## Slots
 

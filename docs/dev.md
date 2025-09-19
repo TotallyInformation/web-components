@@ -142,8 +142,8 @@ Shadow dom elements can be selectively styled based on a class or other identifi
 NB: Prior to final push, run `npm run buildDocBundle` to update the documentation bundle script.
 
 * See https://github.com/runem/web-component-analyzer#-how-to-document-your-components-using-jsdoc on how to document
-* Use `npx web-component-analyzer ./components/button-send.js` to create/update the documentation  or paste into https://runem.github.io/web-component-analyzer/
-* Use `npx web-component-analyzer ./components/*.js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json` to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
+* Use `npx web-component-analyzer ./src/button-send.js` (or `.mjs`) to create/update the documentation  or paste into https://runem.github.io/web-component-analyzer/
+* Use `npm run vscode-custom` (`npx web-component-analyzer ./{src,libs}/**/*.*js --format vscode --outFile ./vscode-descriptors/ti-web-components.html-data.json`) to generate/update vscode custom data files. See https://github.com/microsoft/vscode-custom-data/tree/main/samples/webcomponents
 
 
 Pushing to GitHub will trigger the Cloudflare Pages build and deployment process for the `https://wc.totallyinformation.net` website.

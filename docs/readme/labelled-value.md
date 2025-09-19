@@ -1,4 +1,4 @@
-# labelled-value
+# labeled-value
 
 ## Properties
 
