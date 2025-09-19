@@ -3,23 +3,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Testing TotallyInformation's web-components - labelled-value</title>
-    <meta name="description" content="labelled-value - Testing TotallyInformation's web-components">
+    <title>Testing TotallyInformation's web-components - labeled-value</title>
+    <meta name="description" content="labeled-value - Testing TotallyInformation's web-components">
 
     <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
 
     <script defer src="../../dist/call-out.iife.min.js"></script>
-    <script defer src="../../dist/labelled-value.iife.min.js"></script>
+    <script defer src="../../dist/labeled-value.iife.min.js"></script>
 
 </head><body>
     <header>
         <div><a href="../"><img src="../resources/home.svg"></a></div>
-        <h1>Testing Totally Information's web-components - labelled-value</h1>
+        <h1>Testing Totally Information's web-components - labeled-value</h1>
     </header>
     <main>
         <section>
             <call-out type="warning" title="Status: Beta">
-                Ready for basic use. <a href="/docs/#/labelled-value">Documentation</a>.
+                Ready for basic use. <a href="/docs/#/components/beta/labeled-value">Documentation</a>.
                 Component Version: <output id="op2">--</output>.
             </call-out>
 
@@ -34,18 +34,18 @@
         <section class="grid-2">
             <article>
                 <h2>Simplest use. Manual label and value</h2>
-                <labelled-value label="My Label" value="A static value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labelled-value>
+                <labeled-value label="My Label" value="A static value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labeled-value>
                 <p><i>We override one of the style variables to change the font of the label.</i></p>
             </article>
 
             <article>
                 <h2>No label</h2>
-                <labelled-value value="42"></labelled-value>
+                <labeled-value value="42"></labeled-value>
             </article>
 
             <article>
                 <h2>No value</h2>
-                <labelled-value label="Label but no value" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labelled-value>
+                <labeled-value label="Label but no value" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labeled-value>
                 <p><i>We override one of the style variables to add some text before and after the label.
                     You can do the same with the output by using <code>--output-before</code> and <code>--output-after</code> CSS variables.
                 </i></p>
@@ -53,7 +53,7 @@
 
             <article>
                 <h2>Controlled by JavaScript managed variable</h2>
-                <labelled-value id="lv4" label="Value changed in script"></labelled-value>
+                <labeled-value id="lv4" label="Value changed in script"></labeled-value>
                 <p><i>Start with no value. Initial value is set in JavaScript and then updated a few seconds later.</i></p>
             </article>
         </section>
@@ -63,7 +63,7 @@
         /** We need to wait for everything to be loaded before using components from JavaScript */
         addEventListener("DOMContentLoaded", (event) => {
             // What version are we using? This is static so we use the class global reference
-            document.getElementById('op2').value = LabelledValue.version
+            document.getElementById('op2').value = labeledValue.version
 
             // Sets the value early on, overriding what is set in the HTML.
             lv4.value = 'DOMContentLoaded'
@@ -71,7 +71,7 @@
         })
 
         // First get a reference to 1 or more of the custom components
-        // const lv4 = document.getElementsByTagName('labelled-value')[3]
+        // const lv4 = document.getElementsByTagName('labeled-value')[3]
         const lv4 = document.getElementById('lv4')
         
         // DON'T DO THIS! Trying to set the value too early prevents later updates - a component standards limitation

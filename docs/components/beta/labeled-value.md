@@ -1,5 +1,5 @@
 ---
-title: labelled-value
+title: labeled-value
 description: |
   A Zero dependency web component that Displays a value with a label prefix.
 created: 2022-04-07 21:05:42
@@ -22,7 +22,7 @@ The value output uses an `<output>` tag so that screen-readers will automaticall
 ## Useage
 
 ```html
-<labelled-value label="My Label" value="My Value"></labelled-value>
+<labeled-value label="My Label" value="My Value"></labeled-value>
 ```
 
 ## Attributes & Properties
@@ -38,12 +38,12 @@ The value output uses an `<output>` tag so that screen-readers will automaticall
 Both `label` and `value` can be set from JavaScript.
 
 ```js
-const myLV = document.getElementsByTagName('labelled-value')[0]
+const myLV = document.getElementsByTagName('labeled-value')[0]
 myLV.value = 'Some new value'
 myLV.label = 'Some new label'
 ```
 
-As for all of the components in this library, if you do not explicitly set an `id` attribute, one will be auto-created in the format `id="labelled-value-1"`. Where the number is unique on-page. Please note that changing the order of `labelled-value` elements on the HTML page will change the numbering. It is always best to add your own unique id's.
+As for all of the components in this library, if you do not explicitly set an `id` attribute, one will be auto-created in the format `id="labeled-value-1"`. Where the number is unique on-page. Please note that changing the order of `labeled-value` elements on the HTML page will change the numbering. It is always best to add your own unique id's.
 
 ## Slots
 
@@ -72,8 +72,8 @@ The following CSS variables are set.
 Each can be overriden either for all instances on page - by setting the variables in a page-level style sheet. Or for a specific instance by setting a style override:
 
 ```html
-<labelled-value label="My Label" value="My Value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labelled-value>
-<labelled-value label="No value label" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labelled-value>
+<labeled-value label="My Label" value="My Value" style="--label-font: italic small-caps bold 16px/2 cursive;"></labeled-value>
+<labeled-value label="No value label" style="--label-before: '>> ℹ️ &quot;';--label-after: '&quot;';"></labeled-value>
 ```
 
 See the demo page for examples.
@@ -85,17 +85,17 @@ As with all of the components in this library that make use of the shadow dom (w
 The `inherit-style` attribute must contain a URL pointing to a loadable CSS resource. If no URL is provided, `./index.css` will be used (in line with UIBUILDER for Node-RED standards).
 
 ```html
-<labelled-value label="My Label" value="My Value" inherit-style="https://example.com/path/to/mystyles.css"></labelled-value>
+<labeled-value label="My Label" value="My Value" inherit-style="https://example.com/path/to/mystyles.css"></labeled-value>
 ```
 
 ## Events
 
 The standard events for this library of components are available:
 
- * "labelled-value:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
- * "labelled-value:ready" - Alias for connected. The instance can handle property & attribute changes
- * "labelled-value:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
- * "labelled-value:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
+ * "labeled-value:connected" - When an instance of the component is attached to the DOM. `evt.details` contains the details of the element.
+ * "labeled-value:ready" - Alias for connected. The instance can handle property & attribute changes
+ * "labeled-value:disconnected" - When an instance of the component is removed from the DOM. `evt.details` contains the details of the element.
+ * "labeled-value:attribChanged" - When a watched attribute changes. `evt.details.data` contains the details of the change.
 
 > [!NOTE]
 > Listeners can be attached either to the `document` or to the specific element instance.
@@ -104,7 +104,7 @@ All events contain `evt.details.id` and `evt.details.name`. Some events contain 
 
 ## Methods
 
-`LabelledValue.version` will return the version numbers of the component and the base component.
+`labeledValue.version` will return the version numbers of the component and the base component.
 
 ## Extensions for UIBUILDER for Node-RED
 

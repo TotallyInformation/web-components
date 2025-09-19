@@ -83,7 +83,7 @@ template.innerHTML = /*html*/`
         }
     </style>
     <!--<div id="label"></div>-->
-    <!--<div id="value" class="value" aria-labelledby="label"></div>-->
+    <!--<div id="value" class="value" aria-labeledby="label"></div>-->
     <label></label>
     <output></output>
     <div><slot></slot></div>
@@ -99,7 +99,7 @@ template.innerHTML = /*html*/`
  * @augments TiBaseComponent
  * @description A zero dependency custom web component that displays a value with a label
  *
- * @element labelled-value
+ * @element labeled-value
  * @memberOf Beta
 
  * METHODS FROM BASE: (see TiBaseComponent)
@@ -137,7 +137,7 @@ template.innerHTML = /*html*/`
 
  * See https://github.com/runem/web-component-analyzer?tab=readme-ov-file#-how-to-document-your-components-using-jsdoc
  */
-class LabelledValue extends TiBaseComponent {
+class labeledValue extends TiBaseComponent {
     /** Component version */
     static componentVersion = '2025-02-25'
 
@@ -248,13 +248,13 @@ class LabelledValue extends TiBaseComponent {
 } // ---- end of Class ---- //
 
 // Make the class the default export so it can be used elsewhere
-export default LabelledValue
+export default labeledValue
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
  * and lets the static methods be called
  */
-window['LabelledValue'] = LabelledValue
+window['labeledValue'] = labeledValue
 
 // Self-register the HTML tag
-customElements.define('labelled-value', LabelledValue)
+customElements.define('labeled-value', labeledValue)
