@@ -56,7 +56,7 @@ These components can be considered `beta` quality or better. They may not be ful
 
 | Name                                                   | Description                                                  | Class Name        |
 | ------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
-| [`labelled-value`](components/beta/labelled-value)     | A simple label and value pair with easy styling.             | `LabelledValue`   |
+| [`labeled-value`](components/beta/labeled-value)     | A simple label and value pair with easy styling.             | `labeledValue`   |
 | [`syntax-highlight`](components/beta/syntax-highlight) | Show JSON or JavaScript object data as highlighted HTML.     | `SyntaxHighlight` |
 | [`visible-console`](components/beta/visible-console)   | Reflects (clones) browser `console` log outputs to an on-screen visible block. Useful if needing to debug web apps on mobile devices with no access to the dev tools console. | `VisibleConsole` |
 
@@ -73,6 +73,8 @@ These components can be considered `beta` quality or better. They may not be ful
 
 | Component                                               | Description                                                                           | Class Name        |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------- |
+| [`grouped-input`](components/alpha/grouped-input)       | Wrapper for grouping multiple labeled inputs together with a form or fieldset.        | `GroupedInput`    |
+| [`labeled-input`](components/alpha/labeled-input)       | Accessible input component with associated labels.                                    | `LabeledInput`    |
 | [`simple-card`](components/alpha/simple-card)           | A card container with optional header and footer.                                     | `SimpleCard`      |
 | [`simple-container`](components/alpha/simple-container) | A UI container for easy, automated layout of contained elements (specifically cards). | `SimpleContainer` |
 | [`smart-table`](components/alpha/smart-table)           | Turns array or object data into an HTML table with optional column definitions.       | `SmartTable`      |
