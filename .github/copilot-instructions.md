@@ -12,6 +12,7 @@
 
 ### JavaScript/TypeScript
 
+- None of my code is written in TypeScript, but I do use JSDoc comments and sometimes use .d.ts files to provide type information and help with editor intellisense
 - For node.js, use features available to the latest LTS version but warn if using features not available to v18
 - For browsers, use features available to 90%+ browsers/users
 - No trailing semicolons
@@ -24,6 +25,8 @@
 - Add JSDoc if missing
 - Add TypeScript types/interfaces
 - Assume the use of ESLINT v9
+- Prefer async/await over .then() syntax
+- Prefer native CSS over JavaScript styling where possible
 
 ### Documentation
 
@@ -46,6 +49,7 @@
 - Include print styles
 - Always use hsl colors
 - Indent code blocks with 4 spaces
+- Prefer native CSS over JavaScript styling where possible
 
 ## Testing
 
