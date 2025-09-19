@@ -3,7 +3,7 @@ title: Developer documentation
 description: |
   The standards and processes used in the development of these web components.
 created: 2024-09-22 14:34:00
-updated: 2025-09-17 14:18:24
+updated: 2025-09-19 18:21:11
 ---
 
 ## Standards

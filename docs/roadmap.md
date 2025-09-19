@@ -3,7 +3,7 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-updated: 2025-07-07 10:50:27
+updated: 2025-09-19 18:21:32
 ---
 
 You can find the current list of components on the main [README](./README.md) page.
@@ -138,28 +138,6 @@ If using uibuilder, updates will be returned to Node-RED.
 
 * [exiftool-vendored](https://github.com/photostructure/exiftool-vendored.js)
 * [ref](https://jsdev.space/howto/javascript-exif-parser/)
-
-### `labelled-input` - Simple input structured in wrapped div with a label
-
-```html
-<labelled-input type="text" label-pos="above" label="My Label" value="My Value"></labelled-input>
-```
-
-* `type` - The type of input, e.g. text, number, etc.
-* `label-pos` - The position of the label, e.g. above, below, inline
-* `label` - The label text to use (maybe allow HTML?)
-* `value` - The value of the input
-* `placeholder` - The placeholder text for the input
-* `required` - Whether the input is required
-* `minlength` - The minimum length of the input value
-* `maxlength` - The maximum length of the input value
-* `pattern` - The regex pattern to validate the input value
-* `step` - The granularity that the value must adhere to for number inputs
-* `autocomplete` - Whether to enable autocomplete for the input
-* `inputmode` - The virtual keyboard layout to use for the input
-* `autofocus` - Whether to focus the input on page load
-* `readonly` - Whether the input is read-only
-* `disabled` - Whether the input is disabled
 
 ### `layout-area` - Switch between a few core layouts such as blog & dash
 
