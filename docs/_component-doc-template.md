@@ -2,8 +2,8 @@
 title: xxxx-xxxx
 description: >
   A Zero dependency web component that ...
-created: 2025-05-29 09:41:39
-updated: 2025-05-30 14:18:31
+created: 2025-09-19 15:48:04
+updated: 2025-09-19 15:48:09
 author: Julian Knight (Totally Information)
 status: pre-alpha # alpha, beta, live
 ---
@@ -12,6 +12,8 @@ status: pre-alpha # alpha, beta, live
 ## Useage
 
 ```html
+<script defer src="../../dist/experiments/xxxx-xxxx.iife.min.js"></script>
+...
 <xxxx-xxxx></xxxx-xxxx>
 ```
 
