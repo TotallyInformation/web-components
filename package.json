@@ -4,7 +4,8 @@
   "description": "A repository of simple W3C Web Components. These have specific capabilities for use with node-red-contrib-uibuilder but will work independently as well.",
   "scripts": {
     "new-component": "node ./libs/create-component.mjs",
-    "watch": "node ./libs/esbuild.watch.mjs",
+    "watch-esbuild": "node ./libs/esbuild.watch.mjs",
+    "watch": "node ./libs/watch-build.mjs",
     "build": "node ./libs/esbuild.build.mjs",
     "buildDocBundle": "node ./libs/doc-bundle/build.mjs",
     "test": "npx wrangler pages dev ./ --live-reload --show-interactive-dev-session",
@@ -35,7 +36,7 @@
     "esbuild": "^0.25.0",
     "eslint": "^9.20.1",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jsdoc": "^58.1.1",
+    "eslint-plugin-jsdoc": "^59.0.2",
     "eslint-plugin-promise": "^7.2.1",
     "globals": "^16.0.0",
     "jsdoc": "^4.0.3",
