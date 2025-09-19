@@ -55,6 +55,8 @@ export default [
             'jsdoc/no-undefined-types': ['error', {
                 'definedTypes': ['NodeListOf'],
             }],
+            'jsdoc/reject-any-type': 'off',
+            'jsdoc/reject-function-type': 'off',
             'jsdoc/tag-lines': 'off',
 
             '@stylistic/comma-dangle': ['error', {
