@@ -165,6 +165,9 @@ The standard message format is:
 Possibly in future versions.
 
 * [ ] If child `labeled-input` components do not have a `name` attribute, auto-generate using the `input-group` id.
+* [ ] Form wrapper:
+  * [ ] Should have auto-generated submit and reset buttons.
+  * [ ] Should have validation support.
 
 ## Design References
 

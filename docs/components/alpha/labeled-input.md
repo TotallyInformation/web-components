@@ -214,6 +214,11 @@ The standard message format is:
 Possibly in future versions.
 
 * [x] Frames (uses outer `<input-group type="frame">`).
+* [ ] Button input type: No label, put text inside the button.
+* [ ] Add `inputmode` attribute support.
+* [ ] Add `spellcheck` attribute support.
+* [ ] Add `autocapitalize` attribute support.
+* [ ] Add mobile size breakpoints.
 * [ ] Error messages - *div and grid area has been added but no functionality yet.*
 * [ ] Inner `error-message` component.
   * [ ] Standard way to show error messages.
