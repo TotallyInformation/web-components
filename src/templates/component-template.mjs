@@ -1,3 +1,4 @@
+// @ts-nocheck
 /** Define a new zero dependency custom web component ECMA module that can be used as an HTML tag
  *
  * TO USE THIS TEMPLATE: CHANGE ALL INSTANCES OF 'XxxxXxxx' and 'xxxx-xxxx'
@@ -97,7 +98,7 @@ template.innerHTML = /*html*/`
  */
 class XxxxXxxx extends TiBaseComponent {
     /** Component version */
-    static componentVersion = '2025-08-28'
+    static componentVersion = '2025-09-19'
 
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
@@ -165,6 +166,7 @@ class XxxxXxxx extends TiBaseComponent {
 
 // Make the class the default export so it can be used elsewhere
 export default XxxxXxxx
+export { XxxxXxxx }
 
 /** Self register the class to global
  * Enables new data lists to be dynamically added via JS
