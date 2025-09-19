@@ -1,5 +1,5 @@
 {
-  "source": "./src/alpha",
+  "source": "./src",
   "destination": "./docs/esdoc",
   "plugins": [
     {"name": "esdoc-standard-plugin"},
