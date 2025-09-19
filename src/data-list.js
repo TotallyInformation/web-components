@@ -53,7 +53,7 @@ import TiBaseComponent from '../libs/ti-base-component'
 //     <!-- <ul></ul> -->
 // `
 /** Only use this if using Light DOM but want scoped styles */
-const styles = `
+const styles = /*css*/`
     data-list {
         --base-margin: var(--base-margin, 1rem);
         --list-style: disc; /* Default list style type */
