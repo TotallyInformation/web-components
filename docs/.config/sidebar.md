@@ -12,12 +12,14 @@
 
 * Beta: Ready for basic use
 
-  * [`labelled-value`](components/beta/labelled-value)
+  * [`labeled-value`](components/beta/labeled-value)
   * [`syntax-highlight`](components/beta/syntax-highlight)
   * [`visible-console`](components/beta/visible-console)
 
 * Alpha: Experimental, in early development
 
+  * [`input-group`](components/alpha/input-group)
+  * [`labeled-input`](components/alpha/labeled-input)
   * [`simple-card`](components/alpha/simple-card)
   * [`simple-container`](components/alpha/simple-container)
   * [`smart-table`](components/alpha/smart-table)

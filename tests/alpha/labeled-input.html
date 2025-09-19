@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en" class="dark"><head>
+    <meta charset="utf-8">
+    <title>labeled-input & input-group - Testing TotallyInformation's web-components</title>
+    <meta name="description" content="Testing TotallyInformation's web-components - labeled-input & input-group">
+
+    <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
+
+    <script defer src="../../dist/call-out.iife.min.js"></script>
+    <!-- NB: Loads <labeled-input> AND <input-group> -->
+    <script defer src="../../dist/alpha/labeled-input.iife.min.js"></script>
+
+</head><body>
+    <header>
+        <div><a href="../"><img src="../resources/home.svg"></a></div>
+        <h1>Testing Totally Information's web-components - labeled-input & input-group</h1>
+    </header>
+    <main>
+        <section>
+            <call-out type="Caution" title="Status: Experimental" icon="🟥">
+                Feasibility testing. Documentation: <a href="/docs/#/components/alpha/labeled-input">labeled-input</a>, <a href="/docs/#/components/alpha/input-group">input-group</a>.
+                Version: <output id="op2">--</output>.
+            </call-out>
+        </section>
+
+        <section>
+            <article>
+                <h2>Simple inputs</h2>
+                <fieldset>
+                    <legend>Change layout</legend>
+                    <button onclick="changeLayout('top')">Top</button>
+                    <button onclick="changeLayout('right')">Right</button>
+                    <button onclick="changeLayout('below')">Below</button>
+                    <button onclick="changeLayout('left')">Left</button>
+                </fieldset>
+                <fieldset>
+                    <legend>Toggles</legend>
+                    <button onclick="toggleLabelAfter(' 🖊️')">Content after label (🖊️)</button>
+                </fieldset>
+
+                <labeled-input id="wc01" placeholder="Enter any text here">Text</labeled-input>
+                <labeled-input id="wc02" type="button">Button</labeled-input>
+                <labeled-input id="wc03" type="checkbox">Checkbox</labeled-input>
+                <labeled-input id="wc04" type="color" value="#229966">Color</labeled-input>
+                <labeled-input id="wc05" type="date">Date</labeled-input>
+                <labeled-input id="wc06" type="email">Email</labeled-input>
+                <labeled-input id="wc07" type="file" disabled>File (disabled)</labeled-input>
+                <labeled-input id="wc08" type="radio">Radio</labeled-input>
+                <labeled-input id="wc09" type="range">Range (0-100)</labeled-input>
+            </article>
+            <article>
+                <h2>Grouped inputs (form)</h2>
+                <input-group id="wc10" type="form" title="This is an automatic form using labeled-input">
+                    <labeled-input id="wc11">Text</labeled-input>
+                    <labeled-input id="wc12" type="button">Button</labeled-input>
+                    <labeled-input id="wc13" type="checkbox">Checkbox</labeled-input>
+                    <labeled-input id="wc14" type="color">Color</labeled-input>
+                    <labeled-input id="wc15" type="date">Date</labeled-input>
+                    <labeled-input id="wc16" type="email">Email</labeled-input>
+                    <labeled-input id="wc17" type="file">File</labeled-input>
+                    <input-group id="wc18" type="frame" class="right" frame-title="Choose your radio">
+                        <labeled-input id="wc18a" name="wc18" type="radio">Radio 1</labeled-input>
+                        <labeled-input id="wc18b" name="wc18" type="radio">Radio 2</labeled-input>
+                    </input-group>
+                    <labeled-input id="wc19" type="range">Range (0-100)</labeled-input>
+                </input-group>
+            </article>
+            <article>
+                <h2>Grouped inputs (frame)</h2>
+                <!-- Inputs in groups should have the same name attribute but unique IDs -->
+                <input-group id="wc20" type="frame" class="left" frame-title="Mixed Group Frame">
+                    <!-- Check the live HTML to see the auto-generated name attribute -->
+                    <labeled-input id="wc21">Name</labeled-input>
+                    <labeled-input id="wc22" type="password">Password</labeled-input>
+                    <labeled-input id="wc23" type="email">Email Address (Very Long Label)</labeled-input>
+                </input-group>
+                <input-group id="wc30" type="frame" class="right" frame-title="Radio Group Frame">
+                    <labeled-input id="wc31" name="radio-group" type="radio">Radio 1</labeled-input>
+                    <labeled-input id="wc32" name="radio-group" type="radio">Radio 2</labeled-input>
+                    <labeled-input id="wc33" name="radio-group" type="radio">Radio 3</labeled-input>
+                </input-group>
+                <input-group id="wc40" type="frame" class="left" frame-title="Checkbox Group Frame">
+                    <labeled-input id="wc41" name="checkbox-group" type="checkbox">Checkbox 1</labeled-input>
+                    <labeled-input id="wc42" name="checkbox-group" type="checkbox">Checkbox 2</labeled-input>
+                    <labeled-input id="wc43" name="checkbox-group" type="checkbox">Checkbox 3</labeled-input>
+                </input-group>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        let all = null
+        let simpleGroup = null
+        // These functions have to be global to the page to be callable from the HTML
+        function changeLayout(position, group = 'article > labeled-input') {
+            const elGroup = document.querySelectorAll(group)
+            if (!elGroup || elGroup.length === 0) return
+            elGroup.forEach((item, index) => {
+                item.setAttribute('class', position) // Change layout to the specified position
+            })
+        }
+        function toggleLabelAfter(txt, group = 'article > labeled-input') {
+            const elGroup = document.querySelectorAll(group)
+            if (!elGroup || elGroup.length === 0) return
+            elGroup.forEach((item, index) => {
+                if (item.hasAttribute('style')) {
+                    item.removeAttribute('style')
+                } else {
+                    item.setAttribute('style', `--label-after-content: "${txt}";`)
+                }
+            })
+        }
+
+        /** We usually need to wait for everything to be loaded before using components from JavaScript */
+        addEventListener("DOMContentLoaded", (event) => {
+            // What version are we using? This is static so we use the class global reference
+            document.getElementById('op2').value = labeledInput.version
+
+            // Get references to the elements
+            const wc01 = document.querySelector('#wc01')
+
+            all = document.querySelectorAll('labeled-input')
+            simpleGroup = document.querySelectorAll('article > labeled-input')
+
+            /** This listens for change events from across the whole page.
+             * If you need to target specific inputs, don't forget that the <labeled-input> elements
+             * each contain an input element with the ID `<the-labeled-input-id>-input`.
+             * Or use a CSS selector `<the-labeled-input-id> > input`.
+             */
+            document.addEventListener('change', (event) => {
+                console.log(`Change event for "${event?.target?.id}", new value: "${event?.target?.value}"`)
+                // NB: For checkbox and radio, `value` is meaningless, use `checked` instead.
+            })
+            // Target a specific input (checkbox)
+            document.querySelector('#wc03-input').addEventListener('change', (event) => {
+                console.log(`Change event for "${event?.target?.id}", new checked status: "${event?.target?.checked}"`)
+                // NB: For checkbox and radio, `value` is meaningless, use `checked` instead.
+            })
+            
+            // If using within Node-RED/UIBUILDER, you can use uibuilder's eventSend function
+            // document.addEventListener('change', uibuilder.eventSend)
+        })
+    </script>
+</body></html>
