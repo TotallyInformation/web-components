@@ -3,7 +3,7 @@ title: xxxx-xxxx
 description: >
   A Zero dependency web component that ...
 created: 2025-09-19 15:48:04
-updated: 2025-09-19 15:48:09
+updated: 2025-09-20 17:26:54
 author: Julian Knight (Totally Information)
 status: pre-alpha # alpha, beta, live
 ---
@@ -130,7 +130,8 @@ The standard message format is:
   // The payload is the data to set for the component.
   "payload": {
     // Each property of the payload must match a property or attribute name of the component.
-    // The value will be set against the property or attribute.
+    // class, style, data-*, and value are all applied as attributes.
+    // Anything else is applied as a property of the element rather than an attribute.
     // ...
   }
 }
