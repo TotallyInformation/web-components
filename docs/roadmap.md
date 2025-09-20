@@ -18,6 +18,8 @@ You can find the current list of components on the main [README](./README.md) pa
 
 ## Other thoughts
 
+For v2.x, change `dist` such that all components are in the root rather than being split into alpha, beta and live. Making it easier for people to use them.
+
 * Add "all" load library for simplified use (loads all live and beta components).
 
 * Add a config fragment to each component that can be used by a configuration component. This would allow a visual configuration component to be created (a-la Node-RED Dashboard).

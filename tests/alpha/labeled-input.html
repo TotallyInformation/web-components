@@ -6,9 +6,14 @@
 
     <link type="text/css" rel="stylesheet" href="../resources/style.css" media="all">
 
+    <!-- For stand-alone use -->
     <script defer src="../../dist/call-out.iife.min.js"></script>
-    <!-- NB: Loads <labeled-input> AND <input-group> -->
-    <script defer src="../../dist/alpha/labeled-input.iife.min.js"></script>
+    <script defer src="../../dist/alpha/labeled-input.iife.min.js">/* NB: Loads <labeled-input> AND <input-group> */</script>
+    <!-- For uibuilder use -->
+    <!-- <script defer src="../../../uibuilder/uibuilder.iife.min.js">/* THE UIBUILDER LIBRARY MUST BE IN THE HTML! DO NOT REMOVE */</script>
+    <script defer src="../../../uibuilder/vendor/@totallyinformation/web-components/dist/call-out.iife.min.js"></script>
+    <script defer src="../../../uibuilder/vendor/@totallyinformation/web-components/dist/alpha/labeled-input.iife.min.js"></script> -->
+    <!-- <script defer src="./index.js">/* OPTIONAL: Put your custom code in that */</script> -->
 
 </head><body>
     <header>
@@ -16,6 +21,10 @@
         <h1>Testing Totally Information's web-components - labeled-input & input-group</h1>
     </header>
     <main>
+        <section>
+            <!-- '#more' is used as a default parent for dynamic HTML content in UIBUILDER for Node-RED examples -->
+            <div id="more" uib-topic="more"></div>
+        </section>
         <section>
             <call-out type="Caution" title="Status: Experimental" icon="🟥">
                 Feasibility testing. Documentation: <a href="/docs/#/components/alpha/labeled-input">labeled-input</a>, <a href="/docs/#/components/alpha/input-group">input-group</a>.

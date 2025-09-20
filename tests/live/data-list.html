@@ -12,8 +12,14 @@
         }
     </style>
 
+    <!-- For stand-alone use -->
     <script defer src="../../dist/call-out.iife.min.js"></script>
     <script defer src="../../dist/data-list.iife.min.js"></script>
+    <!-- For uibuilder use -->
+    <!-- <script defer src="../../../uibuilder/uibuilder.iife.min.js">/* THE UIBUILDER LIBRARY MUST BE IN THE HTML! DO NOT REMOVE */</script>
+    <script defer src="../../../uibuilder/vendor/@totallyinformation/web-components/dist/call-out.iife.min.js"></script>
+    <script defer src="../../../uibuilder/vendor/@totallyinformation/web-components/dist/data-list.iife.min.js"></script> -->
+    <!-- <script defer src="./index.js">/* OPTIONAL: Put your custom code in that */</script> -->
 
 </head><body>
     <header>
@@ -21,6 +27,11 @@
         <h1>Testing Totally Information's web-components - data-list</h1>
     </header>
     <main>
+        <section>
+            <!-- '#more' is used as a default parent for dynamic HTML content in UIBUILDER for Node-RED examples -->
+            <div id="more" uib-topic="more"></div>
+        </section>
+
         <section>
             <call-out type="tip" title="Status: Live" icon="✅">
                 Ready for extended use. Documentation: <a href="/docs/#/components/data-list">data-list</a>.
@@ -33,8 +44,7 @@
         </section>
 
         <section>
-            <article>
-                <h2>1) Items added dynamically using JavaScript with object input</h2>
+            <article><h2>1) Items added dynamically using JavaScript with object input</h2>
                 <data-list id="dl1" style="--list-style: disclosure-closed">
                     <p>
                         Bullet style is set manually to <code>disclosure-closed</code> using a <code>style</code> attribute to set the <code>--list-style</code> CSS variable.
@@ -49,8 +59,7 @@
                 </data-list>
             </article>
 
-            <article>
-                <h2>2) Items added dynamically from a global object variable</h2>
+            <article><h2>2) Items added dynamically from a global object variable</h2>
                 <data-list id="dl2" listvar="mylist1" type="ol" keyvalueseparator=" - ">
                     <p>
                         Data is added dynamically using a global object variable.
@@ -62,8 +71,7 @@
                 </data-list>
             </article>
 
-            <article>
-                <h2>3) Items added dynamically from a global array variable</h2>
+            <article><h2>3) Items added dynamically from a global array variable</h2>
                 <!-- Using array input, override list style (don't forget to wrap custom entries with quotes) -->
                 <data-list id="dl3" listvar="mylist2" liststyle="'➡️'">
                     <p>
@@ -76,8 +84,7 @@
                 </data-list>
             </article>
 
-            <article>
-                <h2>4) Nested lists</h2>
+            <article><h2>4) Nested lists</h2>
                 <data-list id="dl4" listvar="mylist3">
                     <p>
                         Data is added dynamically using a global object variable.

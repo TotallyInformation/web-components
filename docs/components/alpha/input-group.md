@@ -141,7 +141,8 @@ The standard message format is:
   // The payload is the data to set for the component.
   "payload": {
     // Each property of the payload must match a property or attribute name of the component.
-    // The value will be set against the property or attribute.
+    // class, style, data-*, and value are all applied as attributes.
+    // Anything else is applied as a property of the element rather than an attribute.
     // ...
   }
 }
@@ -165,6 +166,9 @@ The standard message format is:
 Possibly in future versions.
 
 * [ ] If child `labeled-input` components do not have a `name` attribute, auto-generate using the `input-group` id.
+* [ ] Form wrapper:
+  * [ ] Should have auto-generated submit and reset buttons.
+  * [ ] Should have validation support.
 
 ## Design References
 
