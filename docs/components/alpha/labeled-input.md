@@ -3,7 +3,7 @@ title: labeled-input
 description: >
   A Zero dependency web component that creates a self-aligning, grouped input element with an integrated label.
 created: 2025-09-17 17:35:34
-updated: 2025-09-19 17:51:55
+updated: 2025-09-20 17:35:28
 author: Julian Knight (Totally Information)
 status: alpha # alpha, beta, live
 ---
@@ -150,7 +150,35 @@ None.
 
 ### Browser to Node-RED
 
-None.
+As long as the component is **not inside a form**, any changes to the input value will be sent immediately to Node-RED via UIBUILDER for Node-RED.
+
+If the component is inside a form, you should add buttons to the form to submit or reset the form as needed. Noting that UIBUILDER has the `uibuilder.eventSend(event)` function that will capture and return all of the form's data as a single message. Simply attach that as the click action of a button inside the form.
+
+The message format is:
+
+```json
+{
+  "topic": "labeled-input/change/name-or-id",
+  "payload": "new-value",
+  "_meta": {
+    "type": "input-type",
+    "id": "element-id",
+    "name": "element-name",
+    "previous": "previous-value"
+  }
+}
+```
+
+Where:
+* `name-or-id` is the `name` attribute of the input if set, otherwise the `id` attribute of the component.
+* `new-value` is the new value of the input. If the input type is numeric, this will be a number, otherwise a string.
+* `input-type` is the type of input, e.g. `text`, `number`, `checkbox`, etc.
+* `element-id` is the `id` attribute of the component's input element.
+* `element-name` is the `name` attribute of the input element if set, otherwise the `id` attribute of the component.
+* `previous-value` is the previous value of the input, or `null` if not previously set.
+
+> [!TIP]
+> Prioritising the `name` attribute over the `id` attribute allows you to have multiple inputs with the same name (e.g. radio buttons) and have them all send messages with the same topic.
 
 ### Node-RED to Browser
 
@@ -168,7 +196,8 @@ The standard message format is:
   // The payload is the data to set for the component.
   "payload": {
     // Each property of the payload must match a property or attribute name of the component.
-    // The value will be set against the property or attribute.
+    // class, style, data-*, and value are all applied as attributes.
+    // Anything else is applied as a property of the element rather than an attribute.
     // ...
   }
 }
@@ -207,7 +236,7 @@ The standard message format is:
   * [x] step
   * [x] type
   * [x] value
-* [ ] If used in UIBUILDER for Node-RED, support for sending input to Node-RED. If not in a form, send on change.
+* [x] If used in UIBUILDER for Node-RED, support for sending input to Node-RED. If not in a form, send on change.
 
 ## Nice-to-have features
 

@@ -31,7 +31,7 @@
 
 import TiBaseComponent from '../../libs/ti-base-component'
 
-const version = '2025-09-19'
+const version = '2025-09-20'
 
 /** Only use this if using Light DOM but want scoped styles */
 const styles = /*css*/`
@@ -203,6 +203,9 @@ class labeledInput extends TiBaseComponent {
     /** Holds the previous values of the component's properties */
     oldValues = {}
 
+    chgCount = 0
+    isInForm = false
+
     /** Makes HTML attribute change watched
      * @returns {Array<string>} List of all of the html attribs (props) listened to
      */
@@ -214,6 +217,7 @@ class labeledInput extends TiBaseComponent {
             'type', 'value', 'placeholder', 'disabled', 'readonly', 'required',
             'min', 'max', 'minlength', 'maxlength', 'size', 'autocomplete',
             'autofocus', 'form', 'list', 'pattern', 'step', 'multiple',
+            'value'
         ]
     }
 
@@ -265,6 +269,18 @@ class labeledInput extends TiBaseComponent {
             this.elInput.setAttribute('name', parentGroup.id || parentGroup.name)
         }
 
+        // Check if this is in a form - if not, we won't send changes immediately
+        const parentForm = this.closest('form')
+        this.isInForm = !!parentForm
+
+        // Re-check for uibuilder
+        this.uib = !!window['uibuilder']
+
+        // If uibuilder is present and we are NOT inside a form, send changes back to node-red
+        if (this.uib && !this.isInForm) {
+            this.elInput.addEventListener('change', this._valueChanged.bind(this), true)
+        }
+
         this._ready() // Keep at end. Let everyone know that a new instance of the component has been connected & is ready
     }
 
@@ -272,6 +288,10 @@ class labeledInput extends TiBaseComponent {
      * @private
      */
     disconnectedCallback() {
+        if (this.uib && !this.isInForm) {
+            this.elInput.removeEventListener('change', this._valueChanged.bind(this), true)
+        }
+
         this._disconnect() // Keep at end.
     }
 
@@ -327,6 +347,37 @@ class labeledInput extends TiBaseComponent {
      */
     _updateType(type) {
         this.elInput?.setAttribute('type', type || 'text')
+    }
+
+    /** Handles changes to the input value
+     * @param {Event} evt Input change event
+     */
+    _valueChanged(evt) {
+        // Debounce rapid changes
+        ++this.chgCount
+        setTimeout(() => {
+            this.chgCount = 0
+        }, 20)
+        if (this.chgCount > 1) return
+
+        // If this.elInput is a checkbox or radio, send checked state instead of value
+        let payload
+        if (['checkbox', 'radio'].includes(this.elInput.type)) {
+            payload = this.elInput.checked
+        } else {
+            payload = isNaN(this.elInput.valueAsNumber) ? this.elInput.value : this.elInput.valueAsNumber
+        }
+        window['uibuilder'].send({
+            topic: `labeled-input/change/${this.name || this.elInput.id}`,
+            payload: payload,
+            _meta: {
+                type: this.elInput.type,
+                id: this.elInput.id,
+                name: this.elInput.name,
+                previous: this.oldValues['value'] || null,
+            },
+        })
+        this.oldValues['value'] = this.elInput.value
     }
 } // ---- end of Class ---- //
 
@@ -500,7 +551,6 @@ class InputGroup extends TiBaseComponent {
         this.title = title
         const el = this.elFrame.querySelector('div') || this.elFrame.querySelector('legend')
         // const el = this.elFrame.querySelector('legend, div')
-        console.log('el', el, this.elFrame)
         el.innerText = title
     }
 } // ---- end of Class ---- //
