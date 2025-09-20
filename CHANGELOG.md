@@ -1,6 +1,45 @@
 # Totally Information Web Components - Change Log
 
+## v1.5.0
+
+* **MAJOR UPDATE** - The base component has been update to handle more uibuilder message inputs.
+  You can send a msg with the msg.topic set to `component-name::id` to set any property or attribute of the component. This update now allows you to set *classes, styles, data-attributes*, and *values*. Any other property is added as a *property* of the element rather than an attribute.
+
+
+* **UPDATE** - `labeled-input` component
+  * Added auto change event to send changes immediately to Node-RED via uibuilder when the input value changes. Only if uibuilder is present and **the input is not inside a form**. The documentation has been updated to reflect this. The returned message topic is `labeled-input/change/name` where `name` is the name of the input. The payload contains the changed value. `msg._meta` contains additional data that may be of use including: the previous value, id, name and type of input.
+
+* `button-send` - Add uibuilder message sending demo.
+
+* Start to add uibuilder-specific HTML. Commented out but making it easier to incorporate into uibuilder pages.
+  * `_test-template.html`
+  * `live/button-send.html`
+  * `live/call-out.html`
+  * `live/collapsible-headings.html`
+  * `live/data-list.html`
+  * `live/h1-title.html`
+  * `live/html-include.html`
+  * `live/led-gauge.html`
+  * `alpha/labeled-input.html`
+
+To use the demo/test pages with uibuilder for Node-RED, copy the whole `pages` folder into your uibuilder instance folder and set the node to use that folder using the advanced tab. Then uncomment the relevant lines in the HTML head section for any page you want to use and comment out the stand-alone lines.
+
 ## v1.4.0
+
+* **NEW** - `input-group` component (alpha)
+* **NEW** - `labeled-input` component (alpha)
+* Re-arranged the source and dist folders.
+* Update the build scripts & new component template script to reflect the new folder structure.
+* Add a sponsor & DeepWIKI badges to the README.md file.
+* Resync the `uib-brand.css` file with the latest version in UIBUILDER for Node-RED.
+* Dependency updates.
+* Documentation updates and improvements.
+* Minor code improvements and fixes.
+* ESBUILD config changed to allow *.mjs source files.
+* Begin move of *.js source files to *.mjs.
+* New watch script to auto-build on source file changes. `npm run watch`.
+* Add named exports as well as default exports to the sources.
+
 
 ## v1.3.1
 
