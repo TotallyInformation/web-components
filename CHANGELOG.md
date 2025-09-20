@@ -2,7 +2,7 @@
 
 ## v1.5.0
 
-* **MAJOR UPDATE** - The base component has been update to handle more uibuilder message inputs.
+* **MAJOR UPDATE** - The base component has been updated to handle more uibuilder message inputs.
   You can send a msg with the msg.topic set to `component-name::id` to set any property or attribute of the component. This update now allows you to set *classes, styles, data-attributes*, and *values*. Any other property is added as a *property* of the element rather than an attribute.
 
 
