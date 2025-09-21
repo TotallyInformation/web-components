@@ -1,4 +1,14 @@
+/* Site styles */
+
+/* Clone of UIBUILDER for Node-RED styles */
 @import url('./uib-brand.css');
+
+a {
+    color: hsl(240, 100%, 81%);
+}
+a:visited {
+    color: hsl(271, 69%, 81%);
+}
 
 header {
     display: flex;
