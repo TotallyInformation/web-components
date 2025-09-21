@@ -3,13 +3,16 @@ title: Totally Information web-components Roadmap
 description: >
   This page outlines the future direction of the components. Including specific things that will almost certainly happen as well as more speculative ideas.
 created: 2022-04-08 17:12:11
-updated: 2025-09-19 18:21:32
+updated: 2025-09-21 11:24:30
 ---
 
 You can find the current list of components on the main [README](./README.md) page.
 
 ## Next
 
+* [ ] input-group
+  * [ ] Add submit/reset buttons. Allow click event to trigger a function. Maybe allow url form submission option.
+  * [ ] Demo page: add comments re names for framed inputs.
 * [ ] Rename source files from *.js to *.mjs for better clarity and linting
 * [ ] New experiment: ECHarts and Plot - Core component/class + selection of simple charts. Expose library to allow full control.
 * [ ] NEW: check-list
@@ -18,7 +21,7 @@ You can find the current list of components on the main [README](./README.md) pa
 
 ## Other thoughts
 
-For v2.x, change `dist` such that all components are in the root rather than being split into alpha, beta and live. Making it easier for people to use them.
+**For v2.x, change `dist` such that all components are in the root rather than being split into alpha, beta and live. Making it easier for people to use them.**
 
 * Add "all" load library for simplified use (loads all live and beta components).
 

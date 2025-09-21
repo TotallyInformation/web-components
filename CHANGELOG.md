@@ -1,5 +1,11 @@
 # Totally Information Web Components - Change Log
 
+## v1.6.0
+
+* Amended site pages to use the `style.css` file in the `tests/resources` folder.
+* Ammended the `style.css` to add link styles.
+
+
 ## v1.5.0
 
 * **MAJOR UPDATE** - The base component has been updated to handle more uibuilder message inputs.
